@@ -1,19 +1,35 @@
 const customerButton = document.getElementById('customer_button');
 const performerButton = document.getElementById('performer_button');
+const registerButton = document.getElementById('register_button');
+const rateInput = document.getElementById('rate_input');
+const rateLabel = document.getElementById('rate_label');
+const experienceInput = document.getElementById('experience_input');
+const experienceLabel = document.getElementById('experience_label');
 
 
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
+registerButton.addEventListener('click', register);
 
 
 function chooseCustomer() {
     if (performerButton.disabled) {
         performerButton.disabled = false;
         performerButton.style.backgroundColor = '';
+
+        rateInput.disabled = true;
+        rateLabel.style.color = 'darkgrey';
+        experienceInput.disabled = true;
+        experienceLabel.style.color = 'darkgrey';
     } else {
         performerButton.disabled = false;
         performerButton.style.backgroundColor = '';
         customerButton.style.backgroundColor = 'darkgrey';
+
+        rateInput.disabled = true;
+        rateLabel.style.color = 'darkgrey';
+        experienceInput.disabled = true;
+        experienceLabel.style.color = 'darkgrey';
     }
     customerButton.disabled = !performerButton.disabled;
     customerButton.style.backgroundColor = customerButton.disabled ? 'darkgrey' : '';
@@ -24,6 +40,11 @@ function choosePerformer() {
     if (customerButton.disabled) {
         customerButton.disabled = false;
         customerButton.style.backgroundColor = '';
+
+        rateInput.disabled = false;
+        rateLabel.style.color = '';
+        experienceInput.disabled = false;
+        experienceLabel.style.color = '';
     } else {
         customerButton.disabled = false;
         customerButton.style.backgroundColor = '';
@@ -34,16 +55,16 @@ function choosePerformer() {
 };
 
 
-const registerButton = document.getElementById('register_button');
-
-
-registerButton.addEventListener('click', register);
-
-
 function register() {
     const role = customerButton.disabled ? 'customer' : 'performer';
     const name = document.getElementById('name_input').value;
     const rate = document.getElementById('rate_input').value;
     const experience = document.getElementById('experience_input').value;
-    console.log(role, name, rate, experience)
-}
+    
+    if (role == 'customer') {
+        rate = 0;
+        experience = 0;
+    };
+
+    
+};

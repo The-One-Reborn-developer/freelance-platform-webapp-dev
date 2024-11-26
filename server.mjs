@@ -34,7 +34,9 @@ app.post('/register', (req, res) => {
     );
     const insertUserInfo = insertUser.run(role, name, rate, experience);
     res.status(201).json({
-        message: 'Пользователь с ID ' + insertUserInfo.lastInsertRowid + ' успешно зарегистрирован'
+        message: 'Пользователь ' + name +
+        ' с ID ' + insertUserInfo.lastInsertRowid +
+        ' успешно зарегистрирован'
     });
 })
 

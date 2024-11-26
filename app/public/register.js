@@ -79,6 +79,7 @@ function register() {
     .then(data => {
         if (data.message) {
             console.log(data.message);
+            alert(data.message);
         }
     })
     .catch(error => {

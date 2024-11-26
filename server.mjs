@@ -18,7 +18,7 @@ app.post('/register', (req, res) => {
     const { role, name, rate, experience } = req.body;
 
     const checkName = db.prepare(
-        'SELECT * FROM users WHERE name = ?'
+        'SELECT COUNT(*) as count FROM users WHERE name = ?'
     );
     const result = checkName.get(name);
 

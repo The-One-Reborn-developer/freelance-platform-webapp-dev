@@ -60,11 +60,28 @@ function register() {
     const name = document.getElementById('name_input').value;
     const rate = document.getElementById('rate_input').value;
     const experience = document.getElementById('experience_input').value;
-    
-    if (role == 'customer') {
-        rate = 0;
-        experience = 0;
-    };
 
+    const data = {
+        role,
+        name,
+        rate,
+        experience
+    };
     
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            console.log(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 };

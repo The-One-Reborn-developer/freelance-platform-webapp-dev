@@ -24,6 +24,7 @@ console.log('Users table created');
 
 
 app.use(express.json());
+app.use(express.static('app/public'));
 
 
 app.get('/', (req, res) => {
@@ -58,5 +59,4 @@ app.post('/register', (req, res) => {
 })
 
 
-app.use(express.static('app/public'));
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

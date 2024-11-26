@@ -9,8 +9,9 @@ function chooseCustomer() {
         performerButton.disabled = false;
         performerButton.style.backgroundColor = '';
     } else {
-        performerButton.disabled = true;
-        performerButton.style.backgroundColor = 'darkgrey';
+        performerButton.disabled = false;
+        performerButton.style.backgroundColor = '';
+        customerButton.style.backgroundColor = 'darkgrey';
     }
     customerButton.disabled = !performerButton.disabled;
     customerButton.style.backgroundColor = customerButton.disabled ? 'darkgrey' : '';
@@ -21,8 +22,9 @@ function choosePerformer() {
         customerButton.disabled = false;
         customerButton.style.backgroundColor = '';
     } else {
-        customerButton.disabled = true;
-        customerButton.style.backgroundColor = 'darkgrey';
+        customerButton.disabled = false;
+        customerButton.style.backgroundColor = '';
+        performerButton.style.backgroundColor = 'darkgrey';
     }
     performerButton.disabled = !customerButton.disabled;
     performerButton.style.backgroundColor = performerButton.disabled ? 'darkgrey' : '';

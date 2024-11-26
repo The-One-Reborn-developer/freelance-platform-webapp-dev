@@ -1,0 +1,15 @@
+{
+  "name": "freelance-platform-webapp",
+  "version": "1.0.0",
+  "description": "A [TG WebApp]() bot for customers to post bids and performers to respond.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^11.6.0"
+  }
+}

@@ -1,8 +1,10 @@
 const customerButton = document.getElementById('customer_button');
 const performerButton = document.getElementById('performer_button');
 
+
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
+
 
 function chooseCustomer() {
     if (performerButton.disabled) {
@@ -15,7 +17,8 @@ function chooseCustomer() {
     }
     customerButton.disabled = !performerButton.disabled;
     customerButton.style.backgroundColor = customerButton.disabled ? 'darkgrey' : '';
-}
+};
+
 
 function choosePerformer() {
     if (customerButton.disabled) {
@@ -28,4 +31,19 @@ function choosePerformer() {
     }
     performerButton.disabled = !customerButton.disabled;
     performerButton.style.backgroundColor = performerButton.disabled ? 'darkgrey' : '';
+};
+
+
+const registerButton = document.getElementById('register_button');
+
+
+registerButton.addEventListener('click', register);
+
+
+function register() {
+    const role = customerButton.disabled ? 'customer' : 'performer';
+    const name = document.getElementById('name_input').value;
+    const rate = document.getElementById('rate_input').value;
+    const experience = document.getElementById('experience_input').value;
+    console.log(role, name, rate, experience)
 }

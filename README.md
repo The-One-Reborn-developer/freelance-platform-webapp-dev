@@ -19,6 +19,7 @@ A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bid
 * [certbot](https://certbot.eff.org/)
 * [python3-certbot-nginx](https://github.com/certbot/certbot/tree/main/certbot-nginx)
 * [docker](https://www.docker.com/)
+* [docker-compose](https://docs.docker.com/compose/)
 
 ## Running
 

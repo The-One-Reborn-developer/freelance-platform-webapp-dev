@@ -1,6 +1,6 @@
 # Freelance Platform
 
-A [TG WebApp]() bot for customers to post bids and performers to respond.
+A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bids and performers to respond.
 
 ## Features
 
@@ -10,7 +10,15 @@ A [TG WebApp]() bot for customers to post bids and performers to respond.
 
 ## Dependencies
 
+* [node.js](https://nodejs.org/en/)
+* [express](https://expressjs.com/)
+* [better-sqlite3](https://github.com/JoshuaWise/better-sqlite3)
 * [aiogram](https://github.com/aiogram/aiogram)
+* [python-dotenv](https://github.com/theskumar/python-dotenv)
+* [nginx](https://nginx.org/en/)
+* [certbot](https://certbot.eff.org/)
+* [python3-certbot-nginx](https://github.com/certbot/certbot/tree/main/certbot-nginx)
+* [docker](https://www.docker.com/)
 
 ## Running
 

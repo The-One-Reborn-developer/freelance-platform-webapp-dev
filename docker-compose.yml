@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - app/database.db:db:app/app/database.db
+      - app/database.db:app/app/database.db
 
   nginx:
     image: nginx:1.24.0

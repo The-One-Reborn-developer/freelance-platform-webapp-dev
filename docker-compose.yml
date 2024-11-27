@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile.nodejs
     ports:
       - "3000:3000"
-    volumes:
-      - app/database.db:app/app/database.db
+    volumes: 
+      - ./app/database.db:/app/app/database.db
 
   nginx:
     image: nginx:1.24.0

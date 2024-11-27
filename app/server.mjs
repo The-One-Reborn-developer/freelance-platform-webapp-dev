@@ -5,7 +5,7 @@ import express from "express";
 const app = express();
 console.log('Express app created');
 
-const db = new Database('./database.db', { verbose: console.log });
+const db = new Database('./app/database.db', { verbose: console.log });
 console.log('Database created');
 
 

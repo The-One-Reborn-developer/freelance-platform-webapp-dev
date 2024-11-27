@@ -8,4 +8,4 @@ RUN rm -rf node_modules && npm install
 
 EXPOSE 3000
 
-#CMD ["node", "app/server.mjs"]
+CMD ["node", "app/server.mjs"]

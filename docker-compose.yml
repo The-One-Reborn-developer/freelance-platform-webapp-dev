@@ -1,6 +1,5 @@
 services:
   nodejs:
-    image: node:20.18.0
     build:
       context: .
       dockerfile: Dockerfile.nodejs

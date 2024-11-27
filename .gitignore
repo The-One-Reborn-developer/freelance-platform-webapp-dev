@@ -1,2 +1,5 @@
 node_modules
 database.db
+.venv
+.env
+__pycache__

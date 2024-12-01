@@ -39,8 +39,6 @@ app.post('/register', (req, res) => {
     const { role, name, rate, experience } = req.body;
     const telegram_data = req.body.telegram_data;
 
-    console.log('Telegram data:', telegram_data);
-
     if (typeof telegram_data !== 'string') {
         res.status(400).json({
             message: 'Телеграм-данные не в корректном формате.'
@@ -60,7 +58,6 @@ app.post('/register', (req, res) => {
         'sha256',
         'WebAppData'
     ).update(botToken).digest();
-    console.log('Secret key:', secretKey.toString('hex'));
 
     const dataCheckString = telegram_data.split('&')
     .filter(pair => pair.split('=')[0] !== 'hash')  // Exclude the hash itself
@@ -68,15 +65,12 @@ app.post('/register', (req, res) => {
     .map(pair => pair.split('=')[0] + '=' + decodeURIComponent(pair.split('=')[1]))  // Decode the values
     .join('\n');  // Format as key=value\n
 
-    console.log('Data check string:', dataCheckString);
-
     const computedHash = crypto.createHmac(
         'sha256',
         secretKey
     ).update(dataCheckString).digest('hex');
 
     const receivedHash = new URLSearchParams(telegram_data).get('hash');
-    console.log('Received hash:', receivedHash);
 
     if (computedHash !== receivedHash) {
         res.status(400).json({
@@ -95,11 +89,23 @@ app.post('/register', (req, res) => {
         return;
     }
 
+    // Check if the user is already registered
+    const checkUser = db.prepare(
+        'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
+    );
+    const checkUserResult = checkUser.get(telegram_id);
+    if (checkUserResult.count > 0) {
+        res.status(400).json({
+            message: 'Вы уже зарегистрированы.'
+        });
+        return;
+    }
+
     // Check for duplicate name
     const checkName = db.prepare(
         'SELECT COUNT(*) as count FROM users WHERE name = ?'
     );
-    const result = checkName.get(name);
+    const checkNameResult = checkName.get(name);
 
     if (result.count > 0) {
         res.status(400).json({
@@ -108,13 +114,14 @@ app.post('/register', (req, res) => {
         return;
     };
 
+    // Insert the new user
     const insertUser = db.prepare(
-        'INSERT INTO users (role, name, rate, experience) VALUES (?, ?, ?, ?)'
+        'INSERT INTO users (role, name, rate, experience, telegram_id) VALUES (?, ?, ?, ?, ?)'
     );
-    const insertUserInfo = insertUser.run(role, name, rate, experience);
+    const insertUserResult = insertUser.run(role, name, rate, experience);
     res.status(201).json({
         message: 'Пользователь ' + name +
-        ' с ID ' + insertUserInfo.lastInsertRowid +
+        ' с ID ' + insertUserResult.lastInsertRowid +
         ' успешно зарегистрирован.'
     });
 })

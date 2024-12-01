@@ -39,6 +39,8 @@ app.post('/register', (req, res) => {
     const { role, name, rate, experience } = req.body;
     const telegram_data = req.body.telegram_data;
 
+    console.log('Telegram data:', telegram_data);
+
     if (typeof telegram_data !== 'string') {
         res.status(400).json({
             message: 'Телеграм-данные не в корректном формате.'
@@ -54,16 +56,19 @@ app.post('/register', (req, res) => {
     };
 
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
-    console.log('Bot token: ' + botToken);
     const secretKey = crypto.createHmac(
         'sha256',
         'WebAppData'
     ).update(botToken).digest();
+    console.log('Secret key:', secretKey.toString('hex'));
 
     const dataCheckString = telegram_data.split('&')
-        .filter(pair => pair.split('=')[0] !== 'hash')  // Exclude the hash itself
-        .sort()
-        .join('\n');  // Format as key=value\n
+    .filter(pair => pair.split('=')[0] !== 'hash')  // Exclude the hash itself
+    .sort()
+    .map(pair => pair.split('=')[0] + '=' + decodeURIComponent(pair.split('=')[1]))  // Decode the values
+    .join('\n');  // Format as key=value\n
+
+    console.log('Data check string:', dataCheckString);
 
     const computedHash = crypto.createHmac(
         'sha256',
@@ -71,6 +76,7 @@ app.post('/register', (req, res) => {
     ).update(dataCheckString).digest('hex');
 
     const receivedHash = new URLSearchParams(telegram_data).get('hash');
+    console.log('Received hash:', receivedHash);
 
     if (computedHash !== receivedHash) {
         res.status(400).json({

@@ -11,7 +11,11 @@ customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
-console.log(window.Telegram.WebApp.initData);
+if (window.Telegram.WebApp) {
+    console.log(window.Telegram.WebApp.initData);
+} else {
+    console.log('Telegram WebApp is not available');
+}
 function chooseCustomer() {
     if (performerButton.disabled) {
         performerButton.disabled = false;

@@ -33,13 +33,11 @@ function chooseCustomer() {
     customerButton.disabled = !performerButton.disabled;
     customerButton.style.backgroundColor = customerButton.disabled ? 'darkgrey' : '';
 
-    if (window.Telegram.WebApp) {
+    if (window.Telegram && window.Telegram.WebApp) {
         console.log(window.Telegram.WebApp.initData);
     } else {
         console.log('Telegram WebApp is not available');
     }
-
-    console.log('Customer button clicked');
 };
 
 

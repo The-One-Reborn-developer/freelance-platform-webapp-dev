@@ -42,6 +42,8 @@ app.post('/register', (req, res) => {
         return;
     };
 
+    console.log(telegram_data);
+
     const botToken = process.env.BOT_TOKEN;
     const secretKey = crypto.createHmac(
         'sha256',

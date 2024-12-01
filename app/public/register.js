@@ -1,10 +1,3 @@
-if (window.Telegram && window.Telegram.WebApp) {
-    console.log('Telegram WebApp object is accessible in register.js');
-    console.log('initData:', window.Telegram.WebApp.initData);
-} else {
-    console.error('Telegram WebApp is not accessible in register.js');
-}
-
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');
@@ -66,6 +59,7 @@ function register() {
     const name = document.getElementById('name-input').value;
     const rate = document.getElementById('rate-input').value;
     const experience = document.getElementById('experience-input').value;
+    const telegram_data = window.Telegram.WebApp.initData;
 
     if (!role || !name) {
         showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
@@ -80,7 +74,7 @@ function register() {
         name,
         rate,
         experience,
-        telegram_data: window.Telegram.WebApp.initData
+        telegram_data
     };
     
     fetch('/register', {

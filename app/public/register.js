@@ -11,8 +11,6 @@ customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
-console.log(window.Telegram.WebApp.initDataUnsafe);
-
 
 function chooseCustomer() {
     if (performerButton.disabled) {
@@ -75,7 +73,8 @@ function register() {
         role,
         name,
         rate,
-        experience
+        experience,
+        telegram_data: window.Telegram.WebApp.initData
     };
     
     fetch('/register', {

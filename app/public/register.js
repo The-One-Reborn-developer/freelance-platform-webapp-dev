@@ -38,6 +38,8 @@ function chooseCustomer() {
     } else {
         console.log('Telegram WebApp is not available');
     }
+
+    console.log('Customer button clicked');
 };
 
 

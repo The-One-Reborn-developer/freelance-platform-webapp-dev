@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-COPY .env app/
-
 RUN rm -rf node_modules && npm install
 
 EXPOSE 3000

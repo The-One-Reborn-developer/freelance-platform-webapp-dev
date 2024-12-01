@@ -1,6 +1,9 @@
 import Database from "better-sqlite3";
 import express from "express";
 import crypto from "crypto";
+import dotenv from "dotenv";
+
+dotenv.config({ path: '/app/.env' });
 
 const app = express();
 console.log('Express app created');

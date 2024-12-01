@@ -40,6 +40,11 @@ app.post('/register', (req, res) => {
     const { role, name, rate, experience } = req.body;
     const telegram_data = req.body.telegram_data;
 
+    // Get Telegram ID
+    const userDataString = new URLSearchParams(telegram_data).get('user');
+    const userData = JSON.parse(decodeURIComponent(userDataString));
+    const telegram_id = userData.id;
+
     if (typeof telegram_data !== 'string') {
         res.status(400).json({
             message: 'Телеграм-данные не в корректном формате.'
@@ -113,11 +118,6 @@ app.post('/register', (req, res) => {
         });
         return;
     };
-
-    // Get Telegram ID
-    const userDataString = new URLSearchParams(telegram_data).get('user');
-    const userData = JSON.parse(decodeURIComponent(userDataString));
-    const telegram_id = userData.id;
 
     // Insert the new user
     const insertUser = db.prepare(

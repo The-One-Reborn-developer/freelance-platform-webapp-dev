@@ -78,11 +78,27 @@ function register() {
     .then(response => response.json())
     .then(data => {
         if (data.message) {
-            console.log(data.message);
-            alert(data.message);
+            showModal(data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
     });
+};
+
+
+function showModal(message) {
+    const modal = document.getElementById('registration_modal');
+    modal.style.display = 'block';
+    document.getElementById('modal-message').textContent = message;
+
+    modalOkButton.onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
 };

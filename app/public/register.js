@@ -1,3 +1,10 @@
+if (window.Telegram && window.Telegram.WebApp) {
+    console.log('Telegram WebApp object is accessible in register.js');
+    console.log('initData:', window.Telegram.WebApp.initData);
+} else {
+    console.error('Telegram WebApp is not accessible in register.js');
+}
+
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');

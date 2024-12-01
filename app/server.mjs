@@ -33,16 +33,22 @@ app.get('/', (req, res) => {
 
 
 app.post('/register', (req, res) => {
-    const { role, name, rate, experience, telegram_data } = req.body;
-    
-    if (!telegram_data) {
+    const { role, name, rate, experience } = req.body;
+    const telegram_data = req.body.telegram_data;
+
+    if (typeof telegram_data !== 'string') {
         res.status(400).json({
-            message: 'Телеграм-данные не переданы'
+            message: 'Телеграм-данные не в корректном формате.'
         });
         return;
     };
 
-    console.log(telegram_data);
+    if (!telegram_data) {
+        res.status(400).json({
+            message: 'Телеграм-данные не переданы.'
+        });
+        return;
+    };
 
     const botToken = process.env.BOT_TOKEN;
     const secretKey = crypto.createHmac(
@@ -64,7 +70,7 @@ app.post('/register', (req, res) => {
 
     if (computedHash !== receivedHash) {
         res.status(400).json({
-            message: 'Неверные телеграм-данные'
+            message: 'Неверные телеграм-данные.'
         });
         return;
     };
@@ -74,7 +80,7 @@ app.post('/register', (req, res) => {
     const now = Math.floor(Date.now() / 1000);
     if (now - authDate > 86400) {  // 24 hours
         res.status(400).json({
-            message: 'Телеграм-данные устарели'
+            message: 'Телеграм-данные устарели.'
         });
         return;
     }
@@ -87,7 +93,7 @@ app.post('/register', (req, res) => {
 
     if (result.count > 0) {
         res.status(400).json({
-            message: 'Пользователь с таким именем уже зарегистрирован'
+            message: 'Пользователь с таким именем уже зарегистрирован.'
         });
         return;
     };
@@ -99,7 +105,7 @@ app.post('/register', (req, res) => {
     res.status(201).json({
         message: 'Пользователь ' + name +
         ' с ID ' + insertUserInfo.lastInsertRowid +
-        ' успешно зарегистрирован'
+        ' успешно зарегистрирован.'
     });
 })
 

@@ -1,8 +1,6 @@
 import Database from "better-sqlite3";
 import express from "express";
-
-const crypto = require('crypto');
-console.log('Crypto loaded');
+import crypto from "crypto";
 
 const app = express();
 console.log('Express app created');

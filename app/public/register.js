@@ -11,7 +11,7 @@ customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
-
+console.log(window.Telegram.WebApp.initData);
 function chooseCustomer() {
     if (performerButton.disabled) {
         performerButton.disabled = false;

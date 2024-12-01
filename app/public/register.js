@@ -1,6 +1,6 @@
 if (window.Telegram && window.Telegram.WebApp) {
     console.log('Telegram WebApp object is accessible in register.js');
-    console.log('initData:', window.Telegram.WebApp.WebAppUser);
+    console.log('initData:', window.Telegram.WebApp.WebAppInitData);
 } else {
     console.error('Telegram WebApp is not accessible in register.js');
 }

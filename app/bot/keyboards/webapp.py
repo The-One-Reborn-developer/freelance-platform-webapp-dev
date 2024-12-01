@@ -1,14 +1,13 @@
-from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.types.web_app_info import WebAppInfo
 
 
 def webapp_keyboard():
-    return ReplyKeyboardMarkup(
-        keyboard=[
+    return InlineKeyboardMarkup(
+        inline_keyboard = [
             [
-                KeyboardButton(text='Открыть приложение 📱',
-                               web_app=WebAppInfo(url='https://servisplus.publicvm.com/'))
+                InlineKeyboardButton(text='Открыть приложение 📱',
+                                     web_app=WebAppInfo(url='https://servisplus.publicvm.com/'))
             ]
-        ],
-        resize_keyboard=True
+        ]
     )

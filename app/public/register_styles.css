@@ -132,4 +132,6 @@ body {
 
 .modal-message-text {
 	padding: 20px;
+	text-align: center;
+	word-wrap: break-word;
 }

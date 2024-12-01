@@ -1,10 +1,10 @@
-const customerButton = document.getElementById('customer_button');
-const performerButton = document.getElementById('performer_button');
-const registerButton = document.getElementById('register_button');
-const rateInput = document.getElementById('rate_input');
-const rateLabel = document.getElementById('rate_label');
-const experienceInput = document.getElementById('experience_input');
-const experienceLabel = document.getElementById('experience_label');
+const customerButton = document.getElementById('customer-button');
+const performerButton = document.getElementById('performer-button');
+const registerButton = document.getElementById('register-button');
+const rateInput = document.getElementById('rate-input');
+const rateLabel = document.getElementById('rate-label');
+const experienceInput = document.getElementById('experience-input');
+const experienceLabel = document.getElementById('experience-label');
 
 
 customerButton.addEventListener('click', chooseCustomer);
@@ -56,10 +56,18 @@ function choosePerformer() {
 
 
 function register() {
-    const role = customerButton.disabled ? 'customer' : 'performer';
-    const name = document.getElementById('name_input').value;
-    const rate = document.getElementById('rate_input').value;
-    const experience = document.getElementById('experience_input').value;
+    const role = customerButton.disabled ? 'customer' : (performerButton.disabled ? 'performer' : null);
+    const name = document.getElementById('name-input').value;
+    const rate = document.getElementById('rate-input').value;
+    const experience = document.getElementById('experience-input').value;
+
+    if (!role || !name) {
+        showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
+        return;
+    } else if (role === 'performer' && (!rate || !experience)) {
+        showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
+        return;
+    }
 
     const data = {
         role,
@@ -88,17 +96,14 @@ function register() {
 
 
 function showModal(message) {
-    const modal = document.getElementById('registration_modal');
-    modal.style.display = 'block';
-    document.getElementById('modal-message').textContent = message;
+    const modal = document.getElementById('registration-modal');
+    const modalOkButton = document.getElementById('modal-button');
+    const modalMessage = document.getElementById('modal-message')
+
+    modal.style.visibility = 'visible';
+    modalMessage.textContent = message;
 
     modalOkButton.onclick = () => {
-        modal.style.display = 'none';
-    };
-
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
-        }
+        modal.style.visibility = 'hidden';
     };
 };

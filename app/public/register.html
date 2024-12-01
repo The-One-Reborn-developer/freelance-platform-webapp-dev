@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="register.css">
     
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script>
+        if (window.Telegram && window.Telegram.WebApp) {
+            console.log('Telegram WebApp script loaded successfully');
+        } else {
+            console.error('Telegram WebApp is not available');
+        }
+    </script>
     <script src="register.js" defer></script>
     
     <title>Сервис+Услуги</title>

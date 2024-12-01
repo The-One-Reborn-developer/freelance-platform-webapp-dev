@@ -16,6 +16,7 @@ db.exec(
     `
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        telegram_id BIGINT NOT NULL,
         role TEXT NOT NULL,
         name TEXT NOT NULL,
         rate INTEGER NOT NULL,
@@ -106,19 +107,23 @@ app.post('/register', (req, res) => {
         'SELECT COUNT(*) as count FROM users WHERE name = ?'
     );
     const checkNameResult = checkName.get(name);
-
-    if (result.count > 0) {
+    if (checkNameResult.count > 0) {
         res.status(400).json({
             message: 'Пользователь с таким именем уже зарегистрирован.'
         });
         return;
     };
 
+    // Get Telegram ID
+    const userDataString = new URLSearchParams(telegram_data).get('user');
+    const userData = JSON.parse(decodeURIComponent(userDataString));
+    const telegram_id = userData.id;
+
     // Insert the new user
     const insertUser = db.prepare(
-        'INSERT INTO users (role, name, rate, experience, telegram_id) VALUES (?, ?, ?, ?, ?)'
+        'INSERT INTO users (telegram_id, role, name, rate, experience) VALUES (?, ?, ?, ?, ?)'
     );
-    const insertUserResult = insertUser.run(role, name, rate, experience);
+    const insertUserResult = insertUser.run(telegram_id, role, name, rate, experience);
     res.status(201).json({
         message: 'Пользователь ' + name +
         ' с ID ' + insertUserResult.lastInsertRowid +

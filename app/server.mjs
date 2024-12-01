@@ -50,7 +50,7 @@ app.post('/register', (req, res) => {
         return;
     };
 
-    const botToken = process.env.BOT_TOKEN;
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const secretKey = crypto.createHmac(
         'sha256',
         'WebAppData'

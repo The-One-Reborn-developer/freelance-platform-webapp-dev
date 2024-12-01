@@ -1,6 +1,6 @@
 from aiogram import Router
 from aiogram.filters import CommandStart
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 
 from app.bot.keyboards.webapp import webapp_keyboard
 
@@ -13,4 +13,4 @@ webapp_router = Router()
 @webapp_router.message(CommandStart())
 async def start(message: Message):
     await message.answer(welcome_webapp_button(),
-                         reply_markup=ReplyKeyboardRemove())
+                         reply_markup=webapp_keyboard())

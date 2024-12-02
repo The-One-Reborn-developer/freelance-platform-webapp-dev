@@ -12,6 +12,28 @@ performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
 
+window.onload = function () {
+    const telegramData = window.Telegram.WebApp.initData;
+
+    // Check if the user is already registered
+    checkIfUserIsRegistered(telegramData);
+}
+
+
+function checkIfUserIsRegistered(telegramData) {
+    fetch(`/register?telegram_data=${telegramData}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = 'main.html';
+        };
+    })
+    .catch(error => {
+        console.error(`Error in checkIfUserIsRegistered: ${error}`);
+    });
+};
+
+
 function chooseCustomer() {
     if (performerButton.disabled) {
         performerButton.disabled = false;
@@ -78,7 +100,7 @@ function register() {
         telegram_data
     };
     
-    fetch('/register', {
+    fetch('/registration-attempt', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

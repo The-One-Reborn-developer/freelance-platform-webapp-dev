@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { createTables } from "./create_tables.mjs";
 import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
+import { checkUserTelegram } from "./check_user_telegram.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -25,7 +26,31 @@ app.get('/', (req, res) => {
 });
 
 
-app.post('/register', async (req, res) => {
+app.get('/register', (req, res) => {
+    try {
+        // Check telegram data
+        const checkTelegramDataResult = checkTelegramData(req, res);
+
+        if (!checkTelegramDataResult) {
+            return;
+        } else {
+            // Check if the user is already registered
+            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegram_id);
+
+            if (checkUserTelegramResult.count > 0) {
+                return res.status(200).json({ registered: true });
+            } else {
+                return res.status(200).json({ registered: false });
+            }
+        };
+    } catch (error) {
+        console.error('Error in /check-registration:', error);
+        res.status(500).json({ message: 'Произошла ошибка при проверке регистрации пользователя.' });
+    };
+});
+
+
+app.post('/registration-attempt', async (req, res) => {
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);

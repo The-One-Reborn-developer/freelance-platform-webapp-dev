@@ -80,10 +80,8 @@ app.post('/registration-attempt', async (req, res) => {
 app.post('/get-user-data', async (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
-        console.log('Telegram ID:', telegramID);
         // Get user data
         const userData = getUser(db, telegramID);
-        console.log('User data:', userData);
         res.status(200).json({ success: true, userData });
     } catch (error) {
         console.error('Error in /get-user-data:', error);

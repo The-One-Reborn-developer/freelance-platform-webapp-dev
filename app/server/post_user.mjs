@@ -1,15 +1,22 @@
 export function postUser(db, res, telegram_id, role, name, rate, experience) {
     try {
         // Check if the user is already registered
-        const checkUser = db.prepare(
-            'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? OR name = ?'
+        const checkUserTelegram = db.prepare(
+            'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
         );
-        const checkUserResult = checkUser.get(telegram_id, name);
-        if (checkUserResult) {
-            const message = checkUserResult.telegram_id === telegram_id
-                                ? 'Вы уже зарегистрированы.'
-                                : 'Пользователь с таким именем уже зарегистрирован.';
-            res.status(400).json({ message });
+        const checkUserTelegramResult = checkUserTelegram.get(telegram_id);
+        if (checkUserTelegramResult.count > 0) {
+            res.status(409).json({ message: 'Вы уже зарегистрированы.' });
+            return;
+        };
+
+        // Check if the name is already taken
+        const checkUserName = db.prepare(
+            'SELECT COUNT(*) as count FROM users WHERE name = ?'
+        );
+        const checkUserNameResult = checkUserName.get(name);
+        if (checkUserNameResult.count > 0) {
+            res.status(409).json({ message: 'Имя ' + name + ' уже занято.' });
             return;
         };
 

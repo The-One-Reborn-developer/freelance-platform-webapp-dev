@@ -27,9 +27,11 @@ app.get('/', (req, res) => {
 
 
 app.get('/check-registration', (req, res) => {
+    console.log('/check-registration called');
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);
+        console.log(checkTelegramDataResult);
 
         if (!checkTelegramDataResult) {
             return;
@@ -38,8 +40,10 @@ app.get('/check-registration', (req, res) => {
             const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegram_id);
 
             if (checkUserTelegramResult.count > 0) {
+                console.log('User is already registered');
                 return res.status(200).json({ registered: true });
             } else {
+                console.log('User is not registered');
                 return res.status(200).json({ registered: false });
             }
         };

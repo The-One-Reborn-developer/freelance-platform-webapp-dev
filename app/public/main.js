@@ -17,7 +17,7 @@ function getQueryParameter(name) {
 function getUserData(telegram_id) {
     try {
         fetch('/get-user-data', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

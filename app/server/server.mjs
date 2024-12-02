@@ -79,8 +79,8 @@ app.post('/registration-attempt', async (req, res) => {
 
 app.post('/get-user-data', async (req, res) => {
     try {
-        const telegramID = req.body.telegram_id;
-
+        const telegramID = req.body.telegramID;
+        console.log('Telegram ID:', telegramID);
         // Get user data
         const userData = getUser(db, telegramID);
         console.log('User data:', userData);

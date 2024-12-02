@@ -14,14 +14,15 @@ function getQueryParameter(name) {
 };
 
 
-function getUserData(telegram_id) {
+function getUserData(telegramID) {
     try {
+        console.log('sending to get-user-data');
         fetch('/get-user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ telegram_id: telegram_id })  // Send the Telegram ID as JSON
+            body: JSON.stringify({ telegram_id: telegramID })  // Send the Telegram ID as JSON
         })
         .then(response => response.json())
         .then(data => {

@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/check-registration', (req, res) => {
+app.post('/check-registration', (req, res) => {
     console.log('/check-registration called');
     try {
         // Check telegram data

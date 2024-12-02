@@ -2,9 +2,9 @@ import Database from "better-sqlite3";
 import express from "express";
 import dotenv from "dotenv";
 
-import { createTables } from "./create_tables.js";
-import { checkTelegramData } from "./check_telegram_data.js";
-import { postUser } from "./post_user.js";
+import { createTables } from "app/server/create_tables.js";
+import { checkTelegramData } from "app/server/check_telegram_data.js";
+import { postUser } from "app/server/post_user.js";
 
 
 dotenv.config({ path: '/app/.env' });

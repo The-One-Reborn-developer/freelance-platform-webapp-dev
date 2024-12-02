@@ -24,7 +24,6 @@ function getUserData(telegramID) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             return data;
         })
         .catch(error => {

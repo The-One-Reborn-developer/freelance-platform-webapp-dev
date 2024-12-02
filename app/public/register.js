@@ -87,8 +87,12 @@ function register() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.message) {
-            showModal(data.message);
+        if (data.success) {
+            // Registration is successful
+            showModal(data.message, true);
+        } else {
+            // Registration failed
+            showModal(data.message, false);
         }
     })
     .catch(error => {
@@ -97,7 +101,7 @@ function register() {
 };
 
 
-function showModal(message) {
+function showModal(message, isSuccess) {
     const modal = document.getElementById('registration-modal');
     const modalOkButton = document.getElementById('modal-button');
     const modalMessage = document.getElementById('modal-message')
@@ -107,5 +111,10 @@ function showModal(message) {
 
     modalOkButton.onclick = () => {
         modal.style.visibility = 'hidden';
+
+        // If registration is successful, redirect
+        if (isSuccess) {
+            window.location.href = './main.html';
+        };
     };
 };

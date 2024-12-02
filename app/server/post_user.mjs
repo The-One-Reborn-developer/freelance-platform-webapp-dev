@@ -26,6 +26,7 @@ export function postUser(db, res, telegram_id, role, name, rate, experience) {
         );
         const insertUserResult = insertUser.run(telegram_id, role, name, rate, experience);
         res.status(201).json({
+            success: true,
             message: 'Пользователь ' + name +
             ' с ID ' + insertUserResult.lastInsertRowid +
             ' успешно зарегистрирован.'

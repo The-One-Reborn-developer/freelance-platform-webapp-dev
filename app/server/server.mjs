@@ -6,6 +6,7 @@ import { createTables } from "./create_tables.mjs";
 import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
+import { getUser } from "./get_user.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -21,12 +22,12 @@ console.log('Database created');
 createTables(db);
 
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     res.sendFile('app/public/register.html', { root: './' });    
 });
 
 
-app.post('/check-registration', (req, res) => {
+app.post('/check-registration', async (req, res) => {
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);
@@ -38,7 +39,7 @@ app.post('/check-registration', (req, res) => {
             const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegram_id);
 
             if (checkUserTelegramResult.count > 0) {
-                return res.status(200).json({ registered: true });
+                return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegram_id });
             } else {
                 return res.status(200).json({ registered: false });
             }
@@ -72,6 +73,21 @@ app.post('/registration-attempt', async (req, res) => {
     } catch (error) {
         console.error('Error in /register:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
+    };
+});
+
+
+app.get('/get-user-data', async (req, res) => {
+    try {
+        const telegramID = req.body.telegram_id;
+
+        // Get user data
+        const userData = getUser(db, telegramID);
+        console.log('User data:', userData);
+        res.status(200).json({ success: true, userData });
+    } catch (error) {
+        console.error('Error in /get-user-data:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении данных пользователя.' });
     };
 });
 

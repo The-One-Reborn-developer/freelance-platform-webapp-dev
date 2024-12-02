@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.get('/register', (req, res) => {
+app.get('/check-registration', (req, res) => {
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);

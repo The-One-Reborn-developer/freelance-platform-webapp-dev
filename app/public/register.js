@@ -21,12 +21,18 @@ window.onload = function () {
 
 
 function checkIfUserIsRegistered(telegramData) {
-    fetch(`/register?telegram_data=${telegramData}`)
+    fetch('/check-registration', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ telegram_data: telegramData })  // Send the Telegram data as JSON
+    })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            window.location.href = 'main.html';
-        };
+            window.location.href = 'main.html';  // Redirect if the user is registered
+        }
     })
     .catch(error => {
         console.error(`Error in checkIfUserIsRegistered: ${error}`);

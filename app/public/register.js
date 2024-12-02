@@ -15,7 +15,10 @@ registerButton.addEventListener('click', register);
 window.onload = function () {
     const telegramData = window.Telegram.WebApp.initData;
 
+    console.log('Telegram data:', telegramData);
+
     // Check if the user is already registered
+    console.log('Checking if user is registered...');
     checkIfUserIsRegistered(telegramData);
 }
 

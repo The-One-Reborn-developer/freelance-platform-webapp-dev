@@ -1,5 +1,5 @@
-import getQueryParameter from "./utils/get_query_parameter.js";
-import getUserData from "./utils/get_user_data.js";
+import getQueryParameter from "./utils/get_query_parameter.mjs";
+import getUserData from "./utils/get_user_data.mjs";
 
 
 window.onload = function () {

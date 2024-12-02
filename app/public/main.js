@@ -1,6 +1,5 @@
 window.onload = function () {
     const telegramID = getQueryParameter('telegram_id');
-    console.log(telegramID);
     if (telegramID) {
         const userData = getUserData(telegramID);
         console.log(userData);
@@ -16,7 +15,6 @@ function getQueryParameter(name) {
 
 function getUserData(telegramID) {
     try {
-        console.log('sending to get-user-data');
         fetch('/get-user-data', {
             method: 'POST',
             headers: {
@@ -26,6 +24,7 @@ function getUserData(telegramID) {
         })
         .then(response => response.json())
         .then(data => {
+            console.log(response.json());
             return data;
         })
         .catch(error => {

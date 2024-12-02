@@ -22,12 +22,12 @@ console.log('Database created');
 createTables(db);
 
 
-app.get('/', async (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile('app/public/register.html', { root: './' });    
 });
 
 
-app.post('/check-registration', async (req, res) => {
+app.post('/check-registration', (req, res) => {
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);
@@ -51,7 +51,7 @@ app.post('/check-registration', async (req, res) => {
 });
 
 
-app.post('/registration-attempt', async (req, res) => {
+app.post('/registration-attempt', (req, res) => {
     try {
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);
@@ -77,7 +77,7 @@ app.post('/registration-attempt', async (req, res) => {
 });
 
 
-app.post('/get-user-data', async (req, res) => {
+app.post('/get-user-data', (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
         // Get user data

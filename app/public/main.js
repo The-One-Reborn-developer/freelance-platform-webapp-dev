@@ -31,5 +31,6 @@ function getUserData(telegramID) {
         });
     } catch (error) {
         console.error('Error in getUserData:', error);
+        return null
     };
 };

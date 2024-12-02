@@ -11,6 +11,7 @@ customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
+
 function chooseCustomer() {
     if (performerButton.disabled) {
         performerButton.disabled = false;

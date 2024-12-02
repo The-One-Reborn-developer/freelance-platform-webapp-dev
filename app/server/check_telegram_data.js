@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 
-function checkTelegramData(req, res) {
+export function checkTelegramData(req, res) {
     try {
         const { role, name, rate, experience } = req.body;
         const telegram_data = req.body.telegram_data;
@@ -63,6 +63,3 @@ function checkTelegramData(req, res) {
         return;
     };
 };
-
-
-export { checkTelegramData };

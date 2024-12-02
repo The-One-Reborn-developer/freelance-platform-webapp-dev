@@ -1,4 +1,4 @@
-function createTables(db) {
+export function createTables(db) {
     try {
         db.exec(`
             CREATE TABLE IF NOT EXISTS users (
@@ -13,5 +13,5 @@ function createTables(db) {
         console.log('Users table check or creation executed successfully');
     } catch (error) {
         console.error('Error creating users table:', error);
-    }
-}
+    };
+};

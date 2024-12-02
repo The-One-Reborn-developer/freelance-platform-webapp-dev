@@ -22,7 +22,7 @@ createTables(db);
 
 app.get('/', (req, res) => {
     res.sendFile('app/public/register.html', { root: './' });    
-})
+});
 
 
 app.post('/register', async (req, res) => {
@@ -47,7 +47,7 @@ app.post('/register', async (req, res) => {
     } catch (error) {
         console.error('Error in /register:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
-    }
+    };
 });
 
 

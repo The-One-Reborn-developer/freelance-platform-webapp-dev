@@ -1,4 +1,4 @@
-function postUser(db, res, telegram_id, role, name, rate, experience) {
+export function postUser(db, res, telegram_id, role, name, rate, experience) {
     try {
         // Check if the user is already registered
         const checkUser = db.prepare(
@@ -26,8 +26,5 @@ function postUser(db, res, telegram_id, role, name, rate, experience) {
     } catch (error) {
         console.error('Error in postUser:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
-    }
+    };
 };
-
-
-export { postUser };

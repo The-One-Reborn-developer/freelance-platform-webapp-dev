@@ -51,7 +51,12 @@ function insertCustomerLabel(role, fullName) {
     } else {
         const label = document.createElement('customer-label');
         label.className = 'customer-label';
-        label.textContent = `(${role}\n${fullName}`;
+
+        if (role === 'customer') {
+            label.textContent = `Заказчик<br>${fullName}`;
+        } else {
+            label.textContent = `Мастер<br>${fullName}`;
+        }
 
         headerNav.appendChild(label);
     };

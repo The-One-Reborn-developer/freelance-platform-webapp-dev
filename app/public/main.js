@@ -4,13 +4,13 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             if (userData) {
+                insertCustomerButtons();
+
                 role = userData.userData.role;
                 fullName = userData.userData.name;
                 rate = userData.userData.rate;
                 experience = userData.userData.experience;
                 insertCustomerLabel(role, fullName);
-
-                insertCustomerButtons();
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -72,12 +72,23 @@ function insertCustomerButtons() {
         console.error('Header navigation element not found');
         return;
     } else {
-        const button = document.createElement('');
-        button.className = 'customer-button';
-        button.textContent = 'Заказы';
-        button.addEventListener('click', () => {
-            window.location.href = 'orders.html';
-        });
-        headerNav.appendChild(button);
+        const createBidButton = document.createElement('create-bid-button');
+        button.className = 'create-bid';
+        button.id = 'create-bid';
+        button.textContent = 'Опубликовать новый заказ 🏷️';
+
+        const myBidsButton = document.createElement('my-bids-button');
+        button.className = 'my-bids';
+        button.id = 'my-bids';
+        button.textContent = 'Просмотреть мои заказы 📂';
+
+        const lookChatsButton = document.createElement('look-chats-button');
+        button.className = 'look-chats';
+        button.id = 'look-chats';
+        button.textContent = 'Просмотреть мои переписки с мастерами 📨';
+
+        headerNav.appendChild(createBidButton);
+        headerNav.appendChild(myBidsButton);
+        headerNav.appendChild(lookChatsButton);
     };
 };

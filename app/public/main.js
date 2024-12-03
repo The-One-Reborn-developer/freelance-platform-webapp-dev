@@ -5,6 +5,7 @@ window.onload = async function () {
             const userData = await getUserData(telegramID);
             if (userData) {
                 const { role, name, rate, experience } = userData;
+                console.log (`User data: ${role}, ${name}, ${rate}, ${experience}`);
 
                 if (role === 'customer') {
                     insertCustomerLabel(role, name)

@@ -9,6 +9,8 @@ window.onload = async function () {
                 rate = userData.userData.rate;
                 experience = userData.userData.experience;
                 insertCustomerLabel(role, fullName);
+
+                insertCustomerButtons();
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -53,11 +55,29 @@ function insertCustomerLabel(role, fullName) {
         label.className = 'customer-label';
 
         if (role === 'customer') {
-            label.textContent = `Заказчик<br>${fullName}`;
+            label.innerHTML = `Заказчик<br>${fullName}`;
         } else {
-            label.textContent = `Мастер<br>${fullName}`;
+            label.innerHTML = `Мастер<br>${fullName}`;
         }
 
         headerNav.appendChild(label);
+    };
+};
+
+
+function insertCustomerButtons() {
+    const headerNav = document.getElementById('header-nav');
+
+    if (!headerNav) {
+        console.error('Header navigation element not found');
+        return;
+    } else {
+        const button = document.createElement('');
+        button.className = 'customer-button';
+        button.textContent = 'Заказы';
+        button.addEventListener('click', () => {
+            window.location.href = 'orders.html';
+        });
+        headerNav.appendChild(button);
     };
 };

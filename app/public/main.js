@@ -72,23 +72,27 @@ function insertCustomerButtons() {
         console.error('Header navigation element not found');
         return;
     } else {
-        const createBidButton = document.createElement('create-bid-button');
-        button.className = 'create-bid';
-        button.id = 'create-bid';
-        button.textContent = 'Опубликовать новый заказ 🏷️';
+        try {
+            const createBidButton = document.createElement('create-bid-button');
+            button.className = 'create-bid';
+            button.id = 'create-bid';
+            button.textContent = 'Опубликовать новый заказ 🏷️';
 
-        const myBidsButton = document.createElement('my-bids-button');
-        button.className = 'my-bids';
-        button.id = 'my-bids';
-        button.textContent = 'Просмотреть мои заказы 📂';
+            const myBidsButton = document.createElement('my-bids-button');
+            button.className = 'my-bids';
+            button.id = 'my-bids';
+            button.textContent = 'Просмотреть мои заказы 📂';
 
-        const lookChatsButton = document.createElement('look-chats-button');
-        button.className = 'look-chats';
-        button.id = 'look-chats';
-        button.textContent = 'Просмотреть мои переписки с мастерами 📨';
+            const lookChatsButton = document.createElement('look-chats-button');
+            button.className = 'look-chats';
+            button.id = 'look-chats';
+            button.textContent = 'Просмотреть мои переписки с мастерами 📨';
 
-        headerNav.appendChild(createBidButton);
-        headerNav.appendChild(myBidsButton);
-        headerNav.appendChild(lookChatsButton);
+            headerNav.appendChild(createBidButton);
+            headerNav.appendChild(myBidsButton);
+            headerNav.appendChild(lookChatsButton);
+        } catch (error) {
+            console.error(`Error in insertCustomerButtons: ${error}`);
+        };
     };
 };

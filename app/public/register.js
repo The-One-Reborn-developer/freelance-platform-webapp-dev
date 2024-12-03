@@ -117,7 +117,7 @@ function register() {
     .then(data => {
         if (data.success) {
             // Registration is successful
-            console.log(data.telegramID)
+            console.log(response);
             showModal(data.message, true, data.telegramID);
         } else {
             // Registration failed

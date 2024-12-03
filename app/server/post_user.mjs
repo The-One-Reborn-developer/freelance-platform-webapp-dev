@@ -1,10 +1,10 @@
-export function postUser(db, res, telegram_id, role, name, rate, experience) {
+export function postUser(db, res, telegramID, role, name, rate, experience) {
     try {
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
             'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
         );
-        const checkUserTelegramResult = checkUserTelegram.get(telegram_id);
+        const checkUserTelegramResult = checkUserTelegram.get(telegramID);
         if (checkUserTelegramResult.count > 0) {
             res.status(409).json({ message: 'Вы уже зарегистрированы.' });
             return;
@@ -24,12 +24,13 @@ export function postUser(db, res, telegram_id, role, name, rate, experience) {
         const insertUser = db.prepare(
             'INSERT INTO users (telegram_id, role, name, rate, experience) VALUES (?, ?, ?, ?, ?)'
         );
-        const insertUserResult = insertUser.run(telegram_id, role, name, rate, experience);
+        const insertUserResult = insertUser.run(telegramID, role, name, rate, experience);
         res.status(201).json({
             success: true,
             message: 'Пользователь ' + name +
             ' с ID ' + insertUserResult.lastInsertRowid +
-            ' успешно зарегистрирован.'
+            ' успешно зарегистрирован.',
+            telegram_id: telegramID
         });
     } catch (error) {
         console.error('Error in postUser:', error);

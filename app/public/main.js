@@ -1,8 +1,12 @@
-window.onload = function () {
+window.onload = async function () {
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
-        const userData = getUserData(telegramID);
-        console.log(userData);
+        try {
+            const userData = await getUserData(telegramID);
+            console.log(userData);
+        } catch (error) {
+            console.error(`Error in window.onload: ${error}`);
+        }
     };
 };
 
@@ -13,25 +17,20 @@ function getQueryParameter(name) {
 };
 
 
-function getUserData(telegramID) {
+async function getUserData(telegramID) {
     try {
-        fetch('/get-user-data', {
+        const response = await fetch('/get-user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ telegram_id: telegramID })  // Send the Telegram ID as JSON
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            return data;
-        })
-        .catch(error => {
-            console.error(`Error in getUserData: ${error}`);
-        });
+        
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error('Error in getUserData:', error);
+        console.error(`Error in getUserData: ${error}`);
         return null
     };
 };

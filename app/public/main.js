@@ -2,7 +2,9 @@ window.onload = async function () {
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
         try {
+            console.log(`Telegram ID: ${telegramID}`);
             const userData = await getUserData(telegramID);
+            console.log(userData);
             if (userData) {
                 insertCustomerButtons();
 

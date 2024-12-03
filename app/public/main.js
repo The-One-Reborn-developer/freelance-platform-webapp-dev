@@ -51,7 +51,7 @@ function insertCustomerLabel(role, fullName) {
         console.error('Header navigation element not found');
         return;
     } else {
-        const label = document.createElement('customer-label');
+        const label = document.createElement('label');
         label.className = 'customer-label';
 
         if (role === 'customer') {
@@ -73,17 +73,17 @@ function insertCustomerButtons() {
         return;
     } else {
         try {
-            const createBidButton = document.createElement('create-bid-button');
+            const createBidButton = document.createElement('button');
             createBidButton.className = 'create-bid';
             createBidButton.id = 'create-bid';
             createBidButton.textContent = 'Опубликовать новый заказ 🏷️';
 
-            const myBidsButton = document.createElement('my-bids-button');
+            const myBidsButton = document.createElement('button');
             myBidsButton.className = 'my-bids';
             myBidsButton.id = 'my-bids';
             myBidsButton.textContent = 'Просмотреть мои заказы 📂';
 
-            const lookChatsButton = document.createElement('look-chats-button');
+            const lookChatsButton = document.createElement('button');
             lookChatsButton.className = 'look-chats';
             lookChatsButton.id = 'look-chats';
             lookChatsButton.textContent = 'Просмотреть мои переписки с мастерами 📨';

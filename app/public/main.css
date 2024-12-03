@@ -110,5 +110,7 @@ body {
 }
 
 .display {
+	display: flex;
+	flex-shrink: 1;
 	padding: 10px;
 }

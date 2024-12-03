@@ -104,7 +104,7 @@ function register() {
         name,
         rate,
         experience,
-        telegramData
+        telegram_data: telegramData
     };
     
     fetch('/registration-attempt', {

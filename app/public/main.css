@@ -81,8 +81,8 @@ body {
 }
 
 .header-button {
-    width: 20%;
-	height: 10%;
+    width: 100%;
+	height: 100%;
 	border-radius: 10px;
 	border: solid 2px grey;
 	cursor: pointer;
@@ -101,7 +101,6 @@ body {
 }
 
 .display-container {
-    flex-grow: 1;
     padding: 20px;
-    background-color: lightskyblue;
+    background-color: lightsteelblue;
 }

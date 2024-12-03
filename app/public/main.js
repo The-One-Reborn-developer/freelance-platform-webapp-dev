@@ -2,10 +2,8 @@ window.onload = async function () {
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
         try {
-            console.log(`Telegram ID: ${telegramID}`);
             const userData = await getUserData(telegramID);
-            console.log(userData);
-            if (userData) {
+            if (userData.userData.role === 'customer') {
                 insertCustomerButtons();
 
                 role = userData.userData.role;
@@ -13,7 +11,9 @@ window.onload = async function () {
                 rate = userData.userData.rate;
                 experience = userData.userData.experience;
                 insertCustomerLabel(role, fullName);
-            };
+            } else {
+                insertPerformerButtons();
+            }
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
@@ -88,13 +88,46 @@ function insertCustomerButtons() {
             const lookChatsButton = document.createElement('button');
             lookChatsButton.className = 'header-button';
             lookChatsButton.id = 'look-chats';
-            lookChatsButton.textContent = 'Просмотреть мои переписки с мастерами 📨';
+            lookChatsButton.textContent = 'Переписки по активным заказам 📨';
 
             headerNav.appendChild(createBidButton);
             headerNav.appendChild(myBidsButton);
             headerNav.appendChild(lookChatsButton);
         } catch (error) {
             console.error(`Error in insertCustomerButtons: ${error}`);
+        };
+    };
+};
+
+
+function insertPerformerButtons() {
+    const headerNav = document.getElementById('header-nav');
+
+    if (!headerNav) {
+        console.error('Header navigation element not found');
+        return;
+    } else {
+        try {
+            const searchBidsButton = document.createElement('button');
+            searchBidsButton.className = 'header-button';
+            searchBidsButton.id = 'search-bids';
+            searchBidsButton.textContent = 'Искать заказы 🔎';
+
+            const lookChatsButton = document.createElement('button');
+            lookChatsButton.className = 'header-button';
+            lookChatsButton.id = 'look-chats';
+            lookChatsButton.textContent = 'Переписки по активным заказам 📨';
+
+            const changeProfileInfoButton = document.createElement('button');
+            changeProfileInfoButton.className = 'header-button';
+            changeProfileInfoButton.id = 'change-profile-info';
+            changeProfileInfoButton.textContent = 'Изменить информацию профиля 👤';
+
+            headerNav.appendChild(searchBidsButton);
+            headerNav.appendChild(lookChatsButton);
+            headerNav.appendChild(changeProfileInfoButton);
+        } catch (error) {
+            console.error(`Error in insertPerformerButtons: ${error}`);
         };
     };
 };

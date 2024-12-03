@@ -31,8 +31,9 @@ function checkIfUserIsRegistered(telegramData) {
     .then(response => response.json())
     .then(data => {
         if (data.registered) {
+            console.log(data);
             window.location.href = `main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
-        }
+        };
     })
     .catch(error => {
         console.error(`Error in checkIfUserIsRegistered: ${error}`);
@@ -121,7 +122,7 @@ function register() {
         } else {
             // Registration failed
             showModal(data.message, false, null);
-        }
+        };
     })
     .catch(error => {
         console.error('Error:', error);

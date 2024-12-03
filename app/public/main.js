@@ -8,8 +8,9 @@ window.onload = async function () {
                 const name = userData.data.name;
                 const rate = userData.data.rate;
                 const experience = userData.data.experience;
-                
-                console.log (`User data: ${role}, ${name}, ${rate}, ${experience}`);
+
+                console.log(userData);
+                console.log(userData.data);
 
                 if (role === 'customer') {
                     insertCustomerLabel(role, name)

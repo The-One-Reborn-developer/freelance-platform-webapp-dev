@@ -142,7 +142,7 @@ function showModal(message, isSuccess) {
 
         // If registration is successful, redirect
         if (isSuccess) {
-            window.location.href = 'main.html';
+            window.location.href = `main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         };
     };
 };

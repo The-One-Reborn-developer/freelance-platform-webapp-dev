@@ -69,6 +69,8 @@ app.post('/registration-attempt', (req, res) => {
                 checkTelegramDataResult.rate,
                 checkTelegramDataResult.experience,
             );
+
+            return checkTelegramDataResult.telegram_id;
         };
     } catch (error) {
         console.error('Error in /register:', error);

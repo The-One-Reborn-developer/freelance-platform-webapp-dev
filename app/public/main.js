@@ -5,12 +5,6 @@ window.onload = async function () {
             const userData = await getUserData(telegramID);
             if (userData.userData.role === 'customer') {
                 insertCustomerButtons();
-
-                role = userData.userData.role;
-                fullName = userData.userData.name;
-                rate = userData.userData.rate;
-                experience = userData.userData.experience;
-                insertCustomerLabel(role, fullName);
             } else {
                 insertPerformerButtons();
             }
@@ -42,27 +36,6 @@ async function getUserData(telegramID) {
     } catch (error) {
         console.error(`Error in getUserData: ${error}`);
         return null
-    };
-};
-
-
-function insertCustomerLabel(role, fullName) {
-    const headerNav = document.getElementById('header-nav');
-
-    if (!headerNav) {
-        console.error('Header navigation element not found');
-        return;
-    } else {
-        const label = document.createElement('label');
-        label.className = 'header-label';
-
-        if (role === 'customer') {
-            label.innerHTML = `Заказчик<br>${fullName}`;
-        } else {
-            label.innerHTML = `Мастер<br>${fullName}`;
-        }
-
-        headerNav.appendChild(label);
     };
 };
 

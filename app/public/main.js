@@ -4,7 +4,7 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             if (userData) {
-                const { role, name, rate, experience } = userData;
+                const { role, name, rate, experience } = userData.data;
                 console.log (`User data: ${role}, ${name}, ${rate}, ${experience}`);
 
                 if (role === 'customer') {

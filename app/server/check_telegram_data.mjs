@@ -14,7 +14,7 @@ export function checkTelegramData(req, res) {
         // Decode and parse user data
         const userDataString = new URLSearchParams(telegramData).get('user');
         const userData = JSON.parse(decodeURIComponent(userDataString));
-        const telegram_id = userData.id;
+        const telegramID = userData.id;
 
         // Check environment variable
         const botToken = process.env.TELEGRAM_BOT_TOKEN;

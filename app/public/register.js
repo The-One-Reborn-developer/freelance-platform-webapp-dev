@@ -117,6 +117,7 @@ function register() {
     .then(data => {
         if (data.success) {
             // Registration is successful
+            console.log(telegram_id)
             showModal(data.message, true, data.telegram_id);
         } else {
             // Registration failed
@@ -142,7 +143,7 @@ function showModal(message, isSuccess, telegram_id) {
 
         // If registration is successful, redirect
         if (isSuccess) {
-            window.location.href = `main.html?telegram_id=${encodeURIComponent(telegram_id)}`;  // Redirect if the user is registered
+            //window.location.href = `main.html?telegram_id=${encodeURIComponent(telegram_id)}`;  // Redirect if the user is registered
         };
     };
 };

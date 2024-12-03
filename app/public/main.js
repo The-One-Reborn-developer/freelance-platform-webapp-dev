@@ -5,7 +5,7 @@ window.onload = async function () {
             console.log(`Telegram ID: ${telegramID}`);
             const userData = await getUserData(telegramID);
             console.log(userData);
-            if (userData) {
+            if (userData.role === 'customer') {
                 insertCustomerButtons();
 
                 role = userData.userData.role;

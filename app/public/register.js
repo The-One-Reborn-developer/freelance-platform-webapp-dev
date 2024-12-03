@@ -88,7 +88,7 @@ function register() {
     const name = document.getElementById('name-input').value;
     const rate = document.getElementById('rate-input').value;
     const experience = document.getElementById('experience-input').value;
-    const telegram_data = window.Telegram.WebApp.initData;
+    const telegramData = window.Telegram.WebApp.initData;
 
     if (!role || !name) {
         showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
@@ -103,7 +103,7 @@ function register() {
         name,
         rate,
         experience,
-        telegram_data
+        telegramData
     };
     
     fetch('/registration-attempt', {
@@ -117,7 +117,7 @@ function register() {
     .then(data => {
         if (data.success) {
             // Registration is successful
-            console.log(telegram_id)
+            console.log(data.telegram_id)
             showModal(data.message, true, data.telegram_id);
         } else {
             // Registration failed

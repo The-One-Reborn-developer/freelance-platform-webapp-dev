@@ -4,9 +4,15 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             if (userData.userData.role === 'customer') {
-                insertCustomerButtons();
+                const name = userData.userData.name;
+
+                insertCustomerButtons(name);
             } else {
-                insertPerformerButtons();
+                const name = userData.userData.name;
+                const rate = userData.userData.rate;
+                const experience = userData.userData.experience;
+
+                insertPerformerButtons(name, rate, experience);
             }
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -40,14 +46,17 @@ async function getUserData(telegramID) {
 };
 
 
-function insertCustomerButtons() {
+function insertCustomerButtons(name) {
     const headerNav = document.getElementById('header-nav');
+    const headerInfo = document.getElementById('header-user-info');
 
-    if (!headerNav) {
+    if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;
     } else {
         try {
+            headerInfo.innerHTML = `Заказчик ${name}`;
+
             const createBidButton = document.createElement('button');
             createBidButton.className = 'header-button';
             createBidButton.id = 'create-bid';
@@ -73,14 +82,17 @@ function insertCustomerButtons() {
 };
 
 
-function insertPerformerButtons() {
+function insertPerformerButtons(name, rate, experience) {
     const headerNav = document.getElementById('header-nav');
+    const headerInfo = document.getElementById('header-user-info');
 
-    if (!headerNav) {
+    if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;
     } else {
         try {
+            headerInfo.innerHTML = `Мастер ${name} (Ставка ${rate} ₽/час, ${experience} лет опыта)`;
+
             const searchBidsButton = document.createElement('button');
             searchBidsButton.className = 'header-button';
             searchBidsButton.id = 'search-bids';

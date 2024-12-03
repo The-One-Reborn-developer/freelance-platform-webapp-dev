@@ -75,6 +75,10 @@ body {
     flex-shrink: 0;
 }
 
+.header-user-info {
+	font-weight: bold;
+}
+
 .header-nav {
     display: flex;
     gap: 10px;

@@ -36,10 +36,10 @@ app.post('/check-registration', (req, res) => {
             return;
         } else {
             // Check if the user is already registered
-            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegram_id);
+            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegramID);
 
             if (checkUserTelegramResult.count > 0) {
-                return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegram_id });
+                return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegramID });
             } else {
                 return res.status(200).json({ registered: false });
             }

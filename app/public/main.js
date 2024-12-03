@@ -4,17 +4,8 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             if (userData) {
-                const role = userData.data.role;
-                const name = userData.data.name;
-                const rate = userData.data.rate;
-                const experience = userData.data.experience;
-
                 console.log(userData);
                 console.log(userData.data);
-
-                if (role === 'customer') {
-                    insertCustomerLabel(role, name)
-                };
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);

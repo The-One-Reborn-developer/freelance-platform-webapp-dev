@@ -1,0 +1,108 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: "Montserrat";
+	font-size: 18px;
+}
+
+.container {
+	width: 100wv;
+	height: 100vh;
+	display: flex;
+    flex-direction: column;
+	background-color: slategrey;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: lightgrey;
+    border-bottom: 2px solid black;
+    flex-shrink: 0;
+}
+
+.header-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.header-button {
+    width: 20%;
+	height: 10%;
+	border-radius: 10px;
+	border: solid 2px grey;
+	cursor: pointer;
+}
+
+.header-button:hover {
+    background-color: lightgrey;
+}
+
+.header-button:active {
+    background-color: darkgrey;
+}
+
+.header-label {
+    font-weight: bold;
+}
+
+.display-container {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: lightskyblue;
+}

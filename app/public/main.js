@@ -52,7 +52,7 @@ function insertCustomerLabel(role, fullName) {
         return;
     } else {
         const label = document.createElement('label');
-        label.className = 'customer-label';
+        label.className = 'header-label';
 
         if (role === 'customer') {
             label.innerHTML = `Заказчик<br>${fullName}`;
@@ -74,17 +74,17 @@ function insertCustomerButtons() {
     } else {
         try {
             const createBidButton = document.createElement('button');
-            createBidButton.className = 'create-bid';
+            createBidButton.className = 'header-button';
             createBidButton.id = 'create-bid';
             createBidButton.textContent = 'Опубликовать новый заказ 🏷️';
 
             const myBidsButton = document.createElement('button');
-            myBidsButton.className = 'my-bids';
+            myBidsButton.className = 'header-button';
             myBidsButton.id = 'my-bids';
             myBidsButton.textContent = 'Просмотреть мои заказы 📂';
 
             const lookChatsButton = document.createElement('button');
-            lookChatsButton.className = 'look-chats';
+            lookChatsButton.className = 'header-button';
             lookChatsButton.id = 'look-chats';
             lookChatsButton.textContent = 'Просмотреть мои переписки с мастерами 📨';
 

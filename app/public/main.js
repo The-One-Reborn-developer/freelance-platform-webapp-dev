@@ -3,10 +3,16 @@ window.onload = async function () {
     if (telegramID) {
         try {
             const userData = await getUserData(telegramID);
-            console.log(userData);
+            if (userData) {
+                const { role, name, rate, experience } = userData;
+
+                if (role === 'customer') {
+                    insertCustomerLabel(role, name)
+                };
+            };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
-        }
+        };
     };
 };
 
@@ -32,5 +38,21 @@ async function getUserData(telegramID) {
     } catch (error) {
         console.error(`Error in getUserData: ${error}`);
         return null
+    };
+};
+
+
+function insertCustomerLabel(role, name) {
+    const headerNav = document.getElementById('header-nav');
+
+    if (!headerNav) {
+        console.error('Header navigation element not found');
+        return;
+    } else {
+        const label = document.createElement('customer-label');
+        label.className = 'customer-label';
+        label.textContent = `(${role}\n${name}`;
+
+        headerNav.appendChild(label);
     };
 };

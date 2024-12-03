@@ -4,15 +4,15 @@ import crypto from 'crypto';
 export function checkTelegramData(req, res) {
     try {
         const { role, name, rate, experience } = req.body;
-        const telegram_data = req.body.telegram_data;
+        const telegramData = req.body.telegramData;
 
-        if (typeof telegram_data !== 'string' || !telegram_data) {
+        if (typeof telegramData !== 'string' || !telegramData) {
             res.status(400).json({ message: 'Телеграм-данные не в корректном формате.' });
             return;
         };
 
         // Decode and parse user data
-        const userDataString = new URLSearchParams(telegram_data).get('user');
+        const userDataString = new URLSearchParams(telegramData).get('user');
         const userData = JSON.parse(decodeURIComponent(userDataString));
         const telegram_id = userData.id;
 
@@ -30,7 +30,7 @@ export function checkTelegramData(req, res) {
             .digest();
 
         // Create data check string
-        const dataCheckString = telegram_data.split('&')
+        const dataCheckString = telegramData.split('&')
             .filter(pair => pair.split('=')[0] !== 'hash') // Exclude hash
             .sort()
             .map(pair => pair.split('=')[0] + '=' + decodeURIComponent(pair.split('=')[1]))
@@ -42,21 +42,21 @@ export function checkTelegramData(req, res) {
             .digest('hex');
 
         // Compare hashes
-        const receivedHash = new URLSearchParams(telegram_data).get('hash');
+        const receivedHash = new URLSearchParams(telegramData).get('hash');
         if (computedHash !== receivedHash) {
             res.status(400).json({ message: 'Неверные телеграм-данные.' });
             return;
         };
 
         // Check timestamp
-        const authDate = parseInt(new URLSearchParams(telegram_data).get('auth_date'), 10);
+        const authDate = parseInt(new URLSearchParams(telegramData).get('auth_date'), 10);
         const now = Math.floor(Date.now() / 1000);
         if (now - authDate > 86400) { // 24 hours
             res.status(400).json({ message: 'Телеграм-данные устарели.' });
             return;
         };
 
-        return { telegram_id, role, name, rate, experience };
+        return { telegramID, role, name, rate, experience };
     } catch (error) {
         console.error('Error in checkTelegramData:', error);
         res.status(400).json({ message: 'Ошибка обработки телеграм-данных.' });

@@ -63,14 +63,14 @@ app.post('/registration-attempt', (req, res) => {
             postUser(
                 db,
                 res,
-                checkTelegramDataResult.telegram_id,
+                checkTelegramDataResult.telegramID,
                 checkTelegramDataResult.role,
                 checkTelegramDataResult.name,
                 checkTelegramDataResult.rate,
                 checkTelegramDataResult.experience,
             );
 
-            return checkTelegramDataResult.telegram_id;
+            return checkTelegramDataResult.telegramID;
         };
     } catch (error) {
         console.error('Error in /register:', error);

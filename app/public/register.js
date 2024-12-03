@@ -117,11 +117,11 @@ function register() {
     .then(data => {
         if (data.success) {
             // Registration is successful
-            console.log(data.telegram_id)
-            showModal(data.message, true, data.telegram_id);
+            console.log(data.telegramID)
+            showModal(data.message, true, data.telegramID);
         } else {
             // Registration failed
-            showModal(data.message, false, data.telegram_id);
+            showModal(data.message, false, data.telegramID);
         }
     })
     .catch(error => {
@@ -130,7 +130,7 @@ function register() {
 };
 
 
-function showModal(message, isSuccess, telegram_id) {
+function showModal(message, isSuccess, telegramID) {
     const modal = document.getElementById('registration-modal');
     const modalOkButton = document.getElementById('modal-button');
     const modalMessage = document.getElementById('modal-message')
@@ -143,7 +143,7 @@ function showModal(message, isSuccess, telegram_id) {
 
         // If registration is successful, redirect
         if (isSuccess) {
-            //window.location.href = `main.html?telegram_id=${encodeURIComponent(telegram_id)}`;  // Redirect if the user is registered
+            //window.location.href = `main.html?telegram_id=${encodeURIComponent(telegramID)}`;  // Redirect if the user is registered
         };
     };
 };

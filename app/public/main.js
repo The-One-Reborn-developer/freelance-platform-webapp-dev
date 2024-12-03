@@ -4,8 +4,11 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             if (userData) {
-                console.log(userData);
-                console.log(userData.data);
+                role = userData.userData.role;
+                fullName = userData.userData.name;
+                rate = userData.userData.rate;
+                experience = userData.userData.experience;
+                insertCustomerLabel(role, fullName);
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -39,7 +42,7 @@ async function getUserData(telegramID) {
 };
 
 
-function insertCustomerLabel(role, name) {
+function insertCustomerLabel(role, fullName) {
     const headerNav = document.getElementById('header-nav');
 
     if (!headerNav) {
@@ -48,7 +51,7 @@ function insertCustomerLabel(role, name) {
     } else {
         const label = document.createElement('customer-label');
         label.className = 'customer-label';
-        label.textContent = `(${role}\n${name}`;
+        label.textContent = `(${role}\n${fullName}`;
 
         headerNav.appendChild(label);
     };

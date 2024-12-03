@@ -74,19 +74,19 @@ function insertCustomerButtons() {
     } else {
         try {
             const createBidButton = document.createElement('create-bid-button');
-            button.className = 'create-bid';
-            button.id = 'create-bid';
-            button.textContent = 'Опубликовать новый заказ 🏷️';
+            createBidButton.className = 'create-bid';
+            createBidButton.id = 'create-bid';
+            createBidButton.textContent = 'Опубликовать новый заказ 🏷️';
 
             const myBidsButton = document.createElement('my-bids-button');
-            button.className = 'my-bids';
-            button.id = 'my-bids';
-            button.textContent = 'Просмотреть мои заказы 📂';
+            myBidsButton.className = 'my-bids';
+            myBidsButton.id = 'my-bids';
+            myBidsButton.textContent = 'Просмотреть мои заказы 📂';
 
             const lookChatsButton = document.createElement('look-chats-button');
-            button.className = 'look-chats';
-            button.id = 'look-chats';
-            button.textContent = 'Просмотреть мои переписки с мастерами 📨';
+            lookChatsButton.className = 'look-chats';
+            lookChatsButton.id = 'look-chats';
+            lookChatsButton.textContent = 'Просмотреть мои переписки с мастерами 📨';
 
             headerNav.appendChild(createBidButton);
             headerNav.appendChild(myBidsButton);

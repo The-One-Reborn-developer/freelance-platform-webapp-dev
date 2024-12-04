@@ -107,14 +107,15 @@ body {
 
 .display {
 	display: flex;
+	flex-direction: column;
 	flex-shrink: 1;
 	padding: 10px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 	position: relative;
 	overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal overflow */
-	max-height: 80wh;
+	max-height: 80vh;
 }
 
 .create-bid-form-title {

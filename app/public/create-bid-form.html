@@ -1,5 +1,7 @@
 <form id="create-bid-form" class="create-bid-form">
-    <h2>Создать новый заказ</h2>
+    <h2 class="create-bid-form-title">Создать новый заказ</h2>
+
+    <br>
 
     <label for="city">Город</label>
     <select id="city" name="city" required>
@@ -10,19 +12,33 @@
         <option value="Kazan">Казань</option>
     </select>
     
+    <br><br>
+
     <label for="description">Описание:</label>
     <textarea id="description" name="description" required></textarea>
+
+    <br><br>
     
-    <label for="deadline">Сроки выполнения работ:</label>
-    <input type="date" id="deadline" name="deadline" required>
+    <label for="deadline-container">Сроки выполнения работ:</label>
+    <div id="deadline-container" class="deadline-container">
+        <label for="deadline-from">От</label>
+        <input type="date" id="deadline-from" name="deadline" required>
+        <br>
+        <label for="deadline-to">До</label>
+        <input type="date" id="deadline-to" name="deadline" required>
+    </div>
+
+    <br>
     
     <label for="instrument-provided-container">Предоставляете ли инструмент:</label>
     <div id="instrument-provided-container" class="instrument-provided-container">
-        <input type="radio" id="instrument-provided-true" class="instrument-provided" name="instrument-provided" value="true" required>
         <label for="instrument-provided-true">Да</label>
-        <input type="radio" id="instrument-provided-false" class="instrument-provided" name="instrument-provided" value="false" required>
+        <input type="radio" id="instrument-provided-true" class="instrument-provided" name="instrument-provided" value="true" required>
         <label for="instrument-provided-false">Нет</label>
+        <input type="radio" id="instrument-provided-false" class="instrument-provided" name="instrument-provided" value="false" required>
     </div>
+
+    <br>
     
     <button type="submit">Создать заказ</button>
 </form>

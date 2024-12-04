@@ -15,7 +15,9 @@ window.onload = async function () {
                     // Attach submit form event listener
                     const createBidForm = document.getElementById('create-bid-form');
                     if (createBidForm) {
-                        createBidForm.addEventListener('submit', handleBidFormSubmit);
+                        createBidForm.addEventListener('submit', function (event) {
+                            handleBidFormSubmit(event, telegramID);
+                        });
                     };
                 });
 
@@ -163,7 +165,7 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit(event) {
+function handleBidFormSubmit(event, telegramID) {
     event.preventDefault();
 
     const description = document.getElementById('description-textarea');

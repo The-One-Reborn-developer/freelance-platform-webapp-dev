@@ -150,7 +150,7 @@ async function showCreateBidForm() {
             display.innerHTML = formHTML;
 
             const createBidForm = document.getElementById('create-bid-form');
-            createBidForm.addEventListener('submit', handleBidFormSubmit());
+            createBidForm.addEventListener('submit', handleBidFormSubmit);
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };

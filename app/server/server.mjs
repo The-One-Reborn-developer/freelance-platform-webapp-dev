@@ -9,6 +9,7 @@ import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
+import { postBid } from "./post_bid.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -75,7 +76,7 @@ app.post('/registration-attempt', (req, res) => {
             );
         };
     } catch (error) {
-        console.error('Error in /register:', error);
+        console.error('Error in /registration-attempt:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
     };
 });
@@ -90,6 +91,31 @@ app.post('/get-user-data', (req, res) => {
     } catch (error) {
         console.error('Error in /get-user-data:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении данных пользователя.' });
+    };
+});
+
+
+app.post('/post-bid', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id;
+        const city = req.body.city;
+        const description = req.body.description;
+        const deadline = req.body.deadline;
+        const instrumentProvided = req.body.instrument_provided;
+
+        // Post the new bid
+        postBid(
+            db,
+            res,
+            customerTelegramID,
+            city,
+            description,
+            deadline,
+            instrumentProvided
+        );
+    } catch (error) {
+        console.error('Error in /post-bid:', error);
+        res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
 });
 

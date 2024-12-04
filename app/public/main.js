@@ -178,7 +178,33 @@ function handleBidFormSubmit(event) {
     if (!description.value || !deadlineFrom.value || !deadlineTo.value || !instrumentProvided) {
         showModal('Пожалуйста, заполните всю форму.');
         return;
-    }
+    } else {
+        const data = {
+            customer_telegram_id: telegramID,
+            city: city.value,
+            description: description.value,
+            deadline_from: deadlineFrom.value,
+            deadline_to: deadlineTo.value,
+            instrument_provided: instrumentProvided.value
+        };
+
+        fetch('/post-bid', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            showModal(data.message)
+            location.reload();
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+        });
+    };
 };
 
 

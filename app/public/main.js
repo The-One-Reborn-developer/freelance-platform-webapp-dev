@@ -158,7 +158,9 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit() {
+function handleBidFormSubmit(event) {
+    event.preventDefault();
+
     console.log('Form submit');
     const description = document.getElementById('description-textarea');
     const deadlineFrom = document.getElementById('deadline-from');

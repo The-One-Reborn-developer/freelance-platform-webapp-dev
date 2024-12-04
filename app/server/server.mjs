@@ -2,8 +2,9 @@ import Database from "better-sqlite3";
 import express from "express";
 import dotenv from "dotenv";
 
-import { createUsersTable } from "./create_tables.mjs";
-import { createBidsTable } from "./create_tables.mjs";
+import { createUsersTable,
+    createBidsTable,
+    createResponsesTable  } from "./create_tables.mjs";
 import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
@@ -22,6 +23,7 @@ console.log('Database created');
 
 createUsersTable(db);
 createBidsTable(db);
+createResponsesTable(db);
 
 
 app.get('/', (req, res) => {

@@ -111,6 +111,10 @@ body {
 	padding: 10px;
     align-items: center;
     justify-content: center;
+	position: relative;
+	overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal overflow */
+	max-height: 80wh;
 }
 
 .create-bid-form-title {
@@ -189,6 +193,7 @@ body {
 }
 
 .bid-card {
+	padding: 10px;
 	width: 100%;
 	height: auto;
 	border: solid 2px black;

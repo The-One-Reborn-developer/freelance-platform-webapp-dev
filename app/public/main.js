@@ -259,8 +259,11 @@ async function showMyBids(telegramID) {
 
                     bidCard.innerHTML = `
                         <h3>Заказ #${bid.id}</h3>
+                        <br>
                         <p><strong>Город:</strong> ${bid.city}</p>
+                        <br>
                         <p><strong>Описание:</strong> ${bid.description}</p>
+                        <br>
                         <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
                         <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
                     `;

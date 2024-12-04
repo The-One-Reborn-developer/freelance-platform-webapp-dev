@@ -1,0 +1,28 @@
+<form id="create-bid-form" class="create-bid-form">
+    <h2>Создать новый заказ</h2>
+
+    <label for="city">Город</label>
+    <select id="city" name="city" required>
+        <option value="Moscow">Москва</option>
+        <option value="Saint-Petersburg">Санкт-Петербург</option>
+        <option value="Novosibirsk">Новосибирск</option>
+        <option value="Ekaterinburg">Екатеринбург</option>
+        <option value="Kazan">Казань</option>
+    </select>
+    
+    <label for="description">Описание:</label>
+    <textarea id="description" name="description" required></textarea>
+    
+    <label for="deadline">Сроки выполнения работ:</label>
+    <input type="date" id="deadline" name="deadline" required>
+    
+    <label for="instrument-provided-container">Предоставляете ли инструмент:</label>
+    <div id="instrument-provided-container" class="instrument-provided-container">
+        <input type="radio" id="instrument-provided-true" class="instrument-provided" name="instrument-provided" value="true" required>
+        <label for="instrument-provided-true">Да</label>
+        <input type="radio" id="instrument-provided-false" class="instrument-provided" name="instrument-provided" value="false" required>
+        <label for="instrument-provided-false">Нет</label>
+    </div>
+    
+    <button type="submit">Создать заказ</button>
+</form>

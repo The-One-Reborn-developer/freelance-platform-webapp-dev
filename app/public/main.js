@@ -7,6 +7,12 @@ window.onload = async function () {
                 const name = userData.userData.name;
 
                 insertCustomerButtons(name);
+
+                const createBidButton = document.getElementById('create-bid');
+                const myBidsButton = document.getElementById('my-bids');
+                const lookChatsButton = document.getElementById('look-chats');
+
+                createBidButton.addEventListener('click', showCreateBidForm);
             } else {
                 const name = userData.userData.name;
                 const rate = userData.userData.rate;
@@ -108,11 +114,46 @@ function insertPerformerButtons(name, rate, experience) {
             changeProfileInfoButton.id = 'change-profile-info';
             changeProfileInfoButton.textContent = 'Изменить информацию профиля 👤';
 
+            const searchMaterialsButton = document.createElement('button');
+            searchMaterialsButton.className = 'header-button';
+            searchMaterialsButton.id = 'search-materials';
+            searchMaterialsButton.textContent = ' 🧱';
+
             headerNav.appendChild(searchBidsButton);
             headerNav.appendChild(lookChatsButton);
             headerNav.appendChild(changeProfileInfoButton);
         } catch (error) {
             console.error(`Error in insertPerformerButtons: ${error}`);
+        };
+    };
+};
+
+
+async function showCreateBidForm() {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+
+            const response = await fetch('create-bid-form.html');
+
+            if (!response.ok) {
+                throw new Error('Failed to load create-bid-form.html');
+
+                display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
+            }
+
+            const formHTML = await response.text();
+
+            display.innerHTML = formHTML;
+
+            const createBidForm = document.getElementById('create-bid-form');
+            createBidForm.addEventListener('submit', handleBidFormSubmit);
+        } catch (error) {
+            console.error(`Error in showCreateBidForm: ${error}`);
         };
     };
 };

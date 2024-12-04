@@ -1,4 +1,4 @@
-export function createTables(db) {
+export function createUsersTable(db) {
     try {
         db.exec(`
             CREATE TABLE IF NOT EXISTS users (
@@ -15,3 +15,45 @@ export function createTables(db) {
         console.error('Error creating users table:', error);
     };
 };
+
+
+export function createBidsTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS bids (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_telegram_id BIGINT NOT NULL,
+                city STRING(50) NOT NULL,
+                description TEXT NOT NULL,
+                deadline STRING(255) NOT NULL,
+                instrument_provided BOOLEAN DEFAULT 0,
+                closed BOOLEAN DEFAULT 0
+            );
+        `);
+        console.log('Bids table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating bids table:', error);
+    };
+};
+
+
+export function createResponsesTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS responses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                bid_id INTEGER NOT NULL,
+                performer_telegram_id BIGINT NOT NULL,
+                performer_full_name STRING(255) NOT NULL,
+                performer_rate INTEGER NOT NULL,
+                performer_experience INTEGER NOT NULL,
+                chat_started BOOLEAN DEFAULT 0,
+                FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
+                UNIQUE(bid_id, performer_telegram_id)
+            );
+        `);
+        console.log('Responses table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating responses table:', error);
+    }
+}

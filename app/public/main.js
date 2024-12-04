@@ -269,7 +269,7 @@ async function showMyBids(telegramID) {
                         <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
                         <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
                         <br>
-                        <p><strong>Предоставляется ли инструмент:</strong> ${bid.instrument_provided ? 'Да' : 'Нет'}</p>
+                        <p><strong>Предоставляется инструмент:</strong> ${bid.instrument_provided ? 'Да' : 'Нет'}</p>
                         <button class="bid-card-button" data-bid-id="${bid.id}">Закрыть заказ 🔐</button>
                     `;
 

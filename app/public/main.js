@@ -38,7 +38,15 @@ window.onload = async function () {
 
                 const searchBidsButton = document.getElementById('search-bids');
                 searchBidsButton.addEventListener('click', async function () {
-                    await searchBids();
+                    await showSelectCityForm();
+
+                    // Attach submit form event listener
+                    const selectCityForm = document.getElementById('select-city-form');
+                    if (selectCityForm) {
+                        selectCityForm.addEventListener('submit', function (event) {
+                            handleCityFormSubmit(event);
+                        });
+                    };
                 });
             }
         } catch (error) {
@@ -323,7 +331,7 @@ async function showMyBids(telegramID) {
 };
 
 
-async function searchBids() {
+async function showSelectCityForm() {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -332,18 +340,101 @@ async function searchBids() {
         try {
             display.innerHTML = '';
             
-            const response = await fetch('choose_city.html');
+            const response = await fetch('select_city.html');
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load choose_city.html');
+                throw new Error('Failed to load select_city.html');
             };
 
             const formHTML = await response.text();
 
             display.innerHTML = formHTML;
         } catch (error) {
-            console.error(`Error in searchBids: ${error}`);
+            console.error(`Error in showSelectCityForm: ${error}`);
+        };
+    };
+};
+
+
+function handleCityFormSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const city = formData.get('city');
+    
+    if (city) {
+
+    }
+};
+
+
+async function showBids(city) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            
+            const response = await fetch('/get-bids', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ city: city })  // Send the city as JSON
+            });
+
+            if (!response.ok) {
+                showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                throw new Error('Failed to load bids');
+            };
+
+            const bids = await response.json();
+
+            if (bids.length > 0) {
+                const bidsContainer = document.createElement('div');
+                bidsContainer.classList.add('bids-container');
+
+                bids.forEach(bid => {
+                    const bidCard = document.createElement('div');
+                    bidCard.classList.add('bid-card');
+
+                    // TODO: get customer name by Telegram ID
+
+                    bidCard.innerHTML = `
+                        <p><strong>Заказчик:</strong> ${'placeholder for customer '}</p>
+                        <br>
+                        <p><strong>Описание:</strong> ${bid.description}</p>
+                        <br>
+                        <p><strong>Срок от:</strong> ${bid.deadline_from}</p>
+                        <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
+                        <br>
+                        <p><strong>Предоставляется инструмент:</strong> ${bid.instrument_provided ? 'Да' : 'Нет'}</p>
+                        <button class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
+                    `;
+
+                    bidCard.querySelector('.bid-card-button').addEventListener('click', async (event) => {
+                        const bidID = event.target.getAttribute('data-bid-id');
+                        
+                        if (bidID) {
+                            try {
+                                // TODO: respond to bid
+                            } catch (error) {
+                                console.error(`Error in respond-to-bid: ${error}`);
+                                showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
+                            };
+                        };
+                    });
+                    bidsContainer.appendChild(bidCard);
+                });
+                display.appendChild(bidsContainer);
+            } else {
+                display.innerHTML = `<p>В данном городе нет активных заказов</p>`;
+            };
+        } catch (error) {
+            console.error(`Error in showBids: ${error}`);
         };
     };
 };

@@ -100,7 +100,8 @@ app.post('/post-bid', (req, res) => {
         const customerTelegramID = req.body.customer_telegram_id;
         const city = req.body.city;
         const description = req.body.description;
-        const deadline = req.body.deadline;
+        const deadlineFrom = req.body.deadline_from;
+        const deadlineTo = req.body.deadline_to;
         const instrumentProvided = req.body.instrument_provided;
 
         // Post the new bid
@@ -110,7 +111,8 @@ app.post('/post-bid', (req, res) => {
             customerTelegramID,
             city,
             description,
-            deadline,
+            deadlineFrom,
+            deadlineTo,
             instrumentProvided
         );
     } catch (error) {

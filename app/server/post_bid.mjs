@@ -2,6 +2,7 @@ export function postBid(
     db,
     res,
     customerTelegramID,
+    customerName,
     city,
     description,
     deadlineFrom,
@@ -9,10 +10,19 @@ export function postBid(
     instrumentProvided) {
     try {
         const postBid = db.prepare(
-            'INSERT INTO bids (customer_telegram_id, city, description, deadline_from, deadline_to, instrument_provided) VALUES (?, ?, ?, ?, ?, ?)'
+            `INSERT INTO bids (
+            customer_telegram_id,
+            customer_name,
+            city,
+            description,
+            deadline_from,
+            deadline_to,
+            instrument_provided)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`
         );
         const postBidResult = postBid.run(
             customerTelegramID,
+            customerName,
             city,
             description,
             deadlineFrom,

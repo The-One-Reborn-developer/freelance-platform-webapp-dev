@@ -18,7 +18,7 @@ window.onload = async function () {
                     const createBidForm = document.getElementById('create-bid-form');
                     if (createBidForm) {
                         createBidForm.addEventListener('submit', function (event) {
-                            handleBidFormSubmit(event, telegramID);
+                            handleBidFormSubmit(event, telegramID, name);
                         });
                     };
                 });
@@ -184,7 +184,7 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit(event, telegramID) {
+function handleBidFormSubmit(event, telegramID, name) {
     event.preventDefault();
 
     const description = document.getElementById('description-textarea');
@@ -199,6 +199,7 @@ function handleBidFormSubmit(event, telegramID) {
     } else {
         const data = {
             customer_telegram_id: telegramID,
+            customer_name: name,
             city: city.value,
             description: description.value,
             deadline_from: deadlineFrom.value,
@@ -401,10 +402,8 @@ async function showBids(city) {
                     const bidCard = document.createElement('div');
                     bidCard.classList.add('bid-card');
 
-                    // TODO: get customer name by Telegram ID
-
                     bidCard.innerHTML = `
-                        <p><strong>Заказчик:</strong> ${'placeholder for customer '}</p>
+                        <p><strong>Заказчик:</strong> ${bid.customer_name}</p>
                         <br>
                         <p><strong>Описание:</strong> ${bid.description}</p>
                         <br>

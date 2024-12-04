@@ -13,6 +13,7 @@ import { getUser } from "./get_user.mjs";
 import { postBid } from "./post_bid.mjs";
 import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
 import { closeBid } from "./close_bid.mjs";
+import { getBidsByCity } from "./get_bids_by_city.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -101,6 +102,7 @@ app.post('/get-user-data', (req, res) => {
 app.post('/post-bid', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
+        const customerName = req.body.customer_name;
         const city = req.body.city;
         const description = req.body.description;
         const deadlineFrom = req.body.deadline_from;
@@ -112,6 +114,7 @@ app.post('/post-bid', (req, res) => {
             db,
             res,
             customerTelegramID,
+            customerName,
             city,
             description,
             deadlineFrom,
@@ -148,6 +151,20 @@ app.post('/close-bid', (req, res) => {
     } catch (error) {
         console.error('Error in /close-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
+    };
+});
+
+
+app.get('/get-bids', (req, res) => {
+    try {
+        const city = req.query.city;
+
+        const bids = getBidsByCity(db, city);
+
+        res.status(200).json({ success: true, bids });
+    } catch (error) {
+        console.error('Error in /get-bids:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
     };
 });
 

@@ -23,6 +23,7 @@ export function createBidsTable(db) {
             CREATE TABLE IF NOT EXISTS bids (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 customer_telegram_id BIGINT NOT NULL,
+                customer_name STRING(255) NOT NULL,
                 city STRING(50) NOT NULL,
                 description TEXT NOT NULL,
                 deadline_from STRING(20) NOT NULL,

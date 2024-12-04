@@ -124,7 +124,7 @@ app.post('/post-bid', (req, res) => {
 });
 
 
-app.get('/my-bids', (req, res) => {
+app.post('/my-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
         console.log(`Customer Telegram ID: ${customerTelegramID}`);

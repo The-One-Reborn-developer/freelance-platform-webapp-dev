@@ -1,3 +1,5 @@
+window.Telegram.WebApp.disableVerticalSwipes()
+
 window.onload = async function () {
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {

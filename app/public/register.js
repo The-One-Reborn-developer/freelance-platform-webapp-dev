@@ -1,3 +1,5 @@
+window.Telegram.WebApp.disableVerticalSwipes()
+
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');

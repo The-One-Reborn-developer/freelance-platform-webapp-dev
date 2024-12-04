@@ -155,7 +155,7 @@ app.post('/close-bid', (req, res) => {
 });
 
 
-app.get('/get-bids', (req, res) => {
+app.post('/get-bids', (req, res) => {
     try {
         const city = req.query.city;
 

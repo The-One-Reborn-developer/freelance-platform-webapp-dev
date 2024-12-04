@@ -150,7 +150,13 @@ async function showCreateBidForm() {
             display.innerHTML = formHTML;
 
             const createBidForm = document.getElementById('create-bid-form');
-            createBidForm.addEventListener('submit', handleBidFormSubmit);
+            console.log('Attempting to attach event listener');
+            if (createBidForm) {
+                createBidForm.addEventListener('submit', handleBidFormSubmit);
+                console.log('Event listener attached');
+            } else {
+                console.error('Failed to attach event listener');
+            }
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };

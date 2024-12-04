@@ -27,8 +27,8 @@ export function createBidsTable(db) {
                 description TEXT NOT NULL,
                 deadline_from STRING(20) NOT NULL,
                 deadline_to STRING(20) NOT NULL,
-                instrument_provided BOOLEAN DEFAULT 0,
-                closed BOOLEAN DEFAULT 0
+                instrument_provided BOOLEAN NOT NULL,
+                closed BOOLEAN DEFAULT FALSE
             );
         `);
         console.log('Bids table check or creation executed successfully');
@@ -48,7 +48,7 @@ export function createResponsesTable(db) {
                 performer_full_name STRING(255) NOT NULL,
                 performer_rate INTEGER NOT NULL,
                 performer_experience INTEGER NOT NULL,
-                chat_started BOOLEAN DEFAULT 0,
+                chat_started BOOLEAN DEFAULT FALSE,
                 FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
                 UNIQUE(bid_id, performer_telegram_id)
             );

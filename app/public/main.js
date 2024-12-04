@@ -268,11 +268,43 @@ async function showMyBids(telegramID) {
                         <br>
                         <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
                         <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
+                        <button class="bid-card-button" data-bid-id="${bid.id}">Закрыть заказ 🔐</button>
                     `;
 
+                    const closeBidButton = bidCard.querySelector('.bid-card-button');
+                    closeBidButton.addEventListener('click', async (event) => {
+                        const bidID = event.target.getAttribute('data-bid-id');
+                        
+                        if (bidID) {
+                            const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
+                            if (confirmation) {
+                                try {
+                                    const response = await fetch('/close-bid', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ bid_id: bidID })  // Send the Telegram ID as JSON
+                                    });
+
+                                    if (!response.ok) {
+                                        showModal('Произошла ошибка при закрытии заказа, попробуйте перезайти в приложение');
+                                        throw new Error('Failed to close bid');
+                                    } else {
+                                        const { success, message } = await response.json();
+                                        if (success) {
+                                            showModal(message);
+                                            showMyBids(telegramID);
+                                        };
+                                    };
+                                } catch (error) {
+                                    console.error(`Error in close-bid: ${error}`);
+                                };
+                            };
+                        };
+                    });
                     bidsContainer.appendChild(bidCard);
                 });
-
                 display.appendChild(bidsContainer);
             } else {
                 display.innerHTML = `<p>У вас нет активных заказов</p>`;

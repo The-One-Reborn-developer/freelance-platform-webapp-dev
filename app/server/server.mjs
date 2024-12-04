@@ -12,6 +12,7 @@ import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
 import { postBid } from "./post_bid.mjs";
 import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
+import { closeBid } from "./close_bid.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -127,16 +128,27 @@ app.post('/post-bid', (req, res) => {
 app.post('/my-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
-        console.log(`Customer Telegram ID: ${customerTelegramID}`);
 
         const bids = getBidsByCustomerTelegramID(db, customerTelegramID);
-        console.log(`Bids: ${bids}`);
 
         res.status(200).json({ success: true, bids });
     } catch (error) {
         console.error('Error in /my-bids:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
     }
+});
+
+
+app.post('/close-bid', (req, res) => {
+    try {
+        const bidID = req.body.bid_id;
+        
+        closeBid(db, bidID);
+        res.status(200).json({ success: true, message: `Заказ №${bidID} успешно закрыт.` });
+    } catch (error) {
+        console.error('Error in /close-bid:', error);
+        res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
+    };
 });
 
 

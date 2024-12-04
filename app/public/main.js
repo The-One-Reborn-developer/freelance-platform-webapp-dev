@@ -247,9 +247,32 @@ async function showMyBids(telegramID) {
                 throw new Error('Failed to load my-bids');
             };
 
-            const bids = await response.json();
+            const { success, bids } = await response.json();
 
-            console.log(bids);
+            if (success && bids.length > 0) {
+                const bidsContainer = document.createElement('div');
+                bidsContainer.classList.add('bids-container');
+
+                bids.forEach((bid) => {
+                    const bidCard = document.createElement('div');
+                    bidCard.classList.add('bid-card');
+
+                    bidCard.innerHTML = `
+                        <h3>Заказ #${bid.id}</h3>
+                        <p><strong>Город:</strong> ${bid.city}</p>
+                        <p><strong>Описание:</strong> ${bid.description}</p>
+                        <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
+                        <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
+                        <p><strong>Закрыт:</strong> ${bid.closed ? 'Да' : 'Нет'}</p>
+                    `;
+
+                    bidsContainer.appendChild(bidCard);
+                });
+
+                display.appendChild(bidsContainer);
+            } else {
+                display.innerHTML = `<p>У вас нет активных заказов</p>`;
+            };
         } catch (error) {
             console.error(`Error in showMyBids: ${error}`);
         };

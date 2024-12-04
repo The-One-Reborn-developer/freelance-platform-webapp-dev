@@ -117,8 +117,7 @@ body {
 	font-weight: bold;
 }
 
-.create-bid-form-button,
-.modal-button {
+.create-bid-form-button {
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -171,4 +170,12 @@ body {
 .modal-message-text {
 	padding: 20px;
 	text-align: center;
+}
+
+.modal-button {
+	width: 100%;
+	height: 50px;
+	border-radius: 10px;
+	border: solid 2px grey;
+	cursor: pointer;
 }

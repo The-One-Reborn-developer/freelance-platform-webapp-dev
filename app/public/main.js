@@ -43,8 +43,8 @@ window.onload = async function () {
                     // Attach submit form event listener
                     const selectCityForm = document.getElementById('select-city-form');
                     if (selectCityForm) {
-                        selectCityForm.addEventListener('submit', function (event) {
-                            handleCityFormSubmit(event);
+                        selectCityForm.addEventListener('submit', async function (event) {
+                            await handleCityFormSubmit(event);
                         });
                     };
                 });
@@ -357,14 +357,14 @@ async function showSelectCityForm() {
 };
 
 
-function handleCityFormSubmit(event) {
+async function handleCityFormSubmit(event) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const city = formData.get('city');
     
     if (city) {
-        showBids(city);
+        await showBids(city);
     };
 };
 

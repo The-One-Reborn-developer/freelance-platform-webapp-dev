@@ -11,13 +11,13 @@ export function postBid(
     try {
         const postBid = db.prepare(
             `INSERT INTO bids (
-            customer_telegram_id,
-            customer_name,
-            city,
-            description,
-            deadline_from,
-            deadline_to,
-            instrument_provided)
+                         customer_telegram_id,
+                         customer_name,
+                         city,
+                         description,
+                         deadline_from,
+                         deadline_to,
+                         instrument_provided)
             VALUES (?, ?, ?, ?, ?, ?, ?)`
         );
         const postBidResult = postBid.run(

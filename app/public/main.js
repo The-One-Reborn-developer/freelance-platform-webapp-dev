@@ -198,7 +198,6 @@ function handleBidFormSubmit(event, telegramID) {
         .then(response => response.json())
         .then(data => {
             showModal(data.message)
-            location.reload();
         })
         .catch((error) => {
             console.error('Error:', error);

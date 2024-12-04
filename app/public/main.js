@@ -9,10 +9,18 @@ window.onload = async function () {
                 insertCustomerButtons(name);
 
                 const createBidButton = document.getElementById('create-bid');
+                createBidButton.addEventListener('click', async function () {
+                    await showCreateBidForm();
+
+                    // Attach submit form event listener
+                    const createBidForm = document.getElementById('create-bid-form');
+                    if (createBidForm) {
+                        createBidForm.addEventListener('submit', handleBidFormSubmit);
+                    };
+                });
+
                 const myBidsButton = document.getElementById('my-bids');
                 const lookChatsButton = document.getElementById('look-chats');
-
-                createBidButton.addEventListener('click', showCreateBidForm);
             } else {
                 const name = userData.userData.name;
                 const rate = userData.userData.rate;
@@ -148,15 +156,6 @@ async function showCreateBidForm() {
             const formHTML = await response.text();
 
             display.innerHTML = formHTML;
-
-            const createBidForm = document.getElementById('create-bid-form');
-            console.log('Attempting to attach event listener');
-            if (createBidForm) {
-                createBidForm.addEventListener('submit', handleBidFormSubmit);
-                console.log('Event listener attached');
-            } else {
-                console.error('Failed to attach event listener');
-            }
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };

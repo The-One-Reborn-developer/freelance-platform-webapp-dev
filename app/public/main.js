@@ -364,8 +364,8 @@ function handleCityFormSubmit(event) {
     const city = formData.get('city');
     
     if (city) {
-
-    }
+        showBids(city);
+    };
 };
 
 

@@ -180,3 +180,18 @@ body {
 	border: solid 2px grey;
 	cursor: pointer;
 }
+
+.bids-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 10px;
+}
+
+.bid-card {
+	width: 100%;
+	height: auto;
+	border: solid 2px black;
+	border-radius: 10px;
+	background-color: lightgrey;
+}

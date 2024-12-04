@@ -24,7 +24,7 @@ window.onload = async function () {
                 const myBidsButton = document.getElementById('my-bids');
                 myBidsButton.addEventListener('click', async function () {
                     await showMyBids(telegramID);
-                })
+                });
 
                 const lookChatsButton = document.getElementById('look-chats');
             } else {
@@ -263,7 +263,6 @@ async function showMyBids(telegramID) {
                         <p><strong>Описание:</strong> ${bid.description}</p>
                         <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
                         <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
-                        <p><strong>Закрыт:</strong> ${bid.closed ? 'Да' : 'Нет'}</p>
                     `;
 
                     bidsContainer.appendChild(bidCard);

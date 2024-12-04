@@ -23,7 +23,7 @@ export function postBid(
         const newBidID = postBidResult.lastInsertRowid;
         res.status(201).json({
             success: true,
-            message: `Заказ ${newBidID} успешно создан`
+            message: `Заказ №${newBidID} успешно создан`
         });
     } catch (error) {
         console.error('Error in postBid:', error);

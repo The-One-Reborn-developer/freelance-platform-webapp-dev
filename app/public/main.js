@@ -392,14 +392,13 @@ async function showBids(city) {
                 throw new Error('Failed to load bids');
             };
 
-            const bids = await response.json();
-            console.log(bids);
+            const bidsResponse = await response.json();
 
-            if (bids.length > 0) {
+            if (bidsResponse && bidsResponse.bids.length > 0) {
                 const bidsContainer = document.createElement('div');
                 bidsContainer.classList.add('bids-container');
 
-                bids.forEach(bid => {
+                bidsResponse.bids.forEach(bid => {
                     const bidCard = document.createElement('div');
                     bidCard.classList.add('bid-card');
 

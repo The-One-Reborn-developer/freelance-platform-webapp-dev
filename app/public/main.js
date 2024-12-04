@@ -27,7 +27,7 @@ window.onload = async function () {
                 myBidsButton.addEventListener('click', async function () {
                     await showMyBids(telegramID);
                 });
-
+                // TODO: chats display
                 const lookChatsButton = document.getElementById('look-chats');
             } else {
                 const name = userData.userData.name;
@@ -35,6 +35,11 @@ window.onload = async function () {
                 const experience = userData.userData.experience;
 
                 insertPerformerButtons(name, rate, experience);
+
+                const searchBidsButton = document.getElementById('search-bids');
+                searchBidsButton.addEventListener('click', async function () {
+                    await searchBids();
+                });
             }
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -313,6 +318,32 @@ async function showMyBids(telegramID) {
             };
         } catch (error) {
             console.error(`Error in showMyBids: ${error}`);
+        };
+    };
+};
+
+
+async function searchBids() {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            
+            const response = await fetch('choose_city.html');
+
+            if (!response.ok) {
+                showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                throw new Error('Failed to load choose_city.html');
+            };
+
+            const formHTML = await response.text();
+
+            display.innerHTML = formHTML;
+        } catch (error) {
+            console.error(`Error in searchBids: ${error}`);
         };
     };
 };

@@ -25,7 +25,8 @@ export function createBidsTable(db) {
                 customer_telegram_id BIGINT NOT NULL,
                 city STRING(50) NOT NULL,
                 description TEXT NOT NULL,
-                deadline STRING(255) NOT NULL,
+                deadline_from STRING(20) NOT NULL,
+                deadline_to STRING(20) NOT NULL,
                 instrument_provided BOOLEAN DEFAULT 0,
                 closed BOOLEAN DEFAULT 0
             );

@@ -22,6 +22,10 @@ window.onload = async function () {
                 });
 
                 const myBidsButton = document.getElementById('my-bids');
+                myBidsButton.addEventListener('click', async function () {
+                    await showMyBids(telegramID);
+                })
+
                 const lookChatsButton = document.getElementById('look-chats');
             } else {
                 const name = userData.userData.name;
@@ -148,11 +152,11 @@ async function showCreateBidForm() {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('create-bid-form.html');
+            const response = await fetch('create_bid_form.html');
 
             if (!response.ok) {
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
-                throw new Error('Failed to load create-bid-form.html');                
+                throw new Error('Failed to load create_bid_form.html');                
             };
 
             const formHTML = await response.text();
@@ -217,5 +221,37 @@ function showModal(message) {
 
     modalOkButton.onclick = () => {
         modal.style.visibility = 'hidden';
+    };
+};
+
+
+async function showMyBids(telegramID) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+
+            const response = await fetch('/my-bids', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ customer_telegram_id: telegramID })  // Send the Telegram ID as JSON
+            });            
+
+            if (!response.ok) {
+                showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                throw new Error('Failed to load mybids.html');
+            };
+
+            const bids = await response.json();
+
+            console.log(bids);
+        } catch (error) {
+            console.error(`Error in showMyBids: ${error}`);
+        };
     };
 };

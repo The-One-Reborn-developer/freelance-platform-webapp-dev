@@ -2,7 +2,8 @@ import Database from "better-sqlite3";
 import express from "express";
 import dotenv from "dotenv";
 
-import { createUsersTable,
+import { 
+    createUsersTable,
     createBidsTable,
     createResponsesTable  } from "./create_tables.mjs";
 import { checkTelegramData } from "./check_telegram_data.mjs";
@@ -10,6 +11,7 @@ import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
 import { postBid } from "./post_bid.mjs";
+import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -119,6 +121,20 @@ app.post('/post-bid', (req, res) => {
         console.error('Error in /post-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
+});
+
+
+app.get('/my-bids', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id
+
+        const bids = getBidsByCustomerTelegramID(db, customerTelegramID);
+
+        res.status(200).json({ success: true, bids });
+    } catch (error) {
+        console.error('Error in /my-bids:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
+    }
 });
 
 

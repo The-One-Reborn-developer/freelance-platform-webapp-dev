@@ -393,6 +393,7 @@ async function showBids(city) {
             };
 
             const bids = await response.json();
+            console.log(bids);
 
             if (bids.length > 0) {
                 const bidsContainer = document.createElement('div');

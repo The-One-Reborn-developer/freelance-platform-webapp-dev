@@ -15,7 +15,9 @@ window.onload = async function () {
                     // Attach submit form event listener
                     const createBidForm = document.getElementById('create-bid-form');
                     if (createBidForm) {
+                        console.log('Form found');
                         createBidForm.addEventListener('submit', handleBidFormSubmit);
+                        console.log('Form submit event listener attached');
                     };
                 });
 

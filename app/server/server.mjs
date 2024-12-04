@@ -157,7 +157,7 @@ app.post('/close-bid', (req, res) => {
 
 app.post('/get-bids', (req, res) => {
     try {
-        const city = req.query.city;
+        const city = req.body.city;
 
         const bids = getBidsByCity(db, city);
 

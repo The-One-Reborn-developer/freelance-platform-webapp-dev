@@ -15,9 +15,7 @@ window.onload = async function () {
                     // Attach submit form event listener
                     const createBidForm = document.getElementById('create-bid-form');
                     if (createBidForm) {
-                        console.log('Form found');
                         createBidForm.addEventListener('submit', handleBidFormSubmit);
-                        console.log('Form submit event listener attached');
                     };
                 });
 
@@ -168,7 +166,6 @@ async function showCreateBidForm() {
 function handleBidFormSubmit(event) {
     event.preventDefault();
 
-    console.log('Form submit');
     const description = document.getElementById('description-textarea');
     const deadlineFrom = document.getElementById('deadline-from');
     const deadlineTo = document.getElementById('deadline-to');
@@ -187,6 +184,7 @@ function handleBidFormSubmit(event) {
             deadline_to: deadlineTo.value,
             instrument_provided: instrumentProvided.value
         };
+        console.log(data)
 
         fetch('/post-bid', {
             method: 'POST',

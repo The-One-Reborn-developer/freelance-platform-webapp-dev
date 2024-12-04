@@ -141,19 +141,46 @@ async function showCreateBidForm() {
             const response = await fetch('create-bid-form.html');
 
             if (!response.ok) {
-                throw new Error('Failed to load create-bid-form.html');
-
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
-            }
+                throw new Error('Failed to load create-bid-form.html');                
+            };
 
             const formHTML = await response.text();
 
             display.innerHTML = formHTML;
 
             const createBidForm = document.getElementById('create-bid-form');
-            createBidForm.addEventListener('submit', handleBidFormSubmit);
+            createBidForm.addEventListener('submit', handleBidFormSubmit());
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };
+    };
+};
+
+
+function handleBidFormSubmit() {
+    const description = document.getElementById('description-textarea');
+    const deadlineFrom = document.getElementById('deadline-from');
+    const deadlineTo = document.getElementById('deadline-to');
+    const instrumentProvided = document.querySelector('input[name="instrument-provided"]:checked');
+
+    // Check if the fields are valid
+    if (!description.value || !deadlineFrom.value || !deadlineTo.value || !instrumentProvided) {
+        showModal('Пожалуйста, заполните всю форму.');
+        return;
+    }
+};
+
+
+function showModal() {
+    const modal = document.getElementById('create-bid-form-modal');
+    const modalOkButton = document.getElementById('modal-button');
+    const modalMessage = document.getElementById('modal-message')
+
+    modal.style.visibility = 'visible';
+    modalMessage.textContent = message;
+
+    modalOkButton.onclick = () => {
+        modal.style.visibility = 'hidden';
     };
 };

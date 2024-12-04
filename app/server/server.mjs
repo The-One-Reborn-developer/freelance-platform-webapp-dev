@@ -127,8 +127,10 @@ app.post('/post-bid', (req, res) => {
 app.get('/my-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
+        console.log(`Customer Telegram ID: ${customerTelegramID}`);
 
         const bids = getBidsByCustomerTelegramID(db, customerTelegramID);
+        console.log(`Bids: ${bids}`);
 
         res.status(200).json({ success: true, bids });
     } catch (error) {

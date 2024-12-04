@@ -244,7 +244,7 @@ async function showMyBids(telegramID) {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load mybids.html');
+                throw new Error('Failed to load my-bids');
             };
 
             const bids = await response.json();

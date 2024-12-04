@@ -158,8 +158,8 @@ body {
 }
 
 .modal-content {
-    width: 80%;
-	height: 20%;
+    width: 100%;
+	height: 100%;
     text-align: center;
     border: solid 4px black;
     border-radius: 10px;

@@ -122,7 +122,9 @@ body {
 	font-weight: bold;
 }
 
-.create-bid-form-button {
+.create-bid-form-button,
+.bid-card-button,
+.modal-button {
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -130,11 +132,15 @@ body {
 	cursor: pointer;
 }
 
-.create-bid-form-button:hover {
+.create-bid-form-button:hover,
+.bid-card-button:hover,
+.modal-button:hover {
 	background-color: lightgrey;
 }
 
-.create-bid-form-button:active {
+.create-bid-form-button:active,
+.bid-card-button:active,
+.modal-button:active {
 	background-color: darkgrey;
 }
 
@@ -175,15 +181,6 @@ body {
 .modal-message-text {
 	padding: 5px;
 	text-align: center;
-}
-
-.modal-button {
-	width: 100%;
-	height: auto;
-	padding: 5px;
-	border-radius: 10px;
-	border: solid 2px grey;
-	cursor: pointer;
 }
 
 .bids-container {

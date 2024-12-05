@@ -186,14 +186,21 @@ app.post('/respond-to-bid', (req, res) => {
             performerTelegramID,
             performerName,
             performerRate,
-            performerExperience);
+            performerExperience
+        );
+
+        const message = `На Ваш заказ №${bidID} откликнулся мастер ${performerName}, ставка: ${performerRate}/час, опыт: ${performerExperience} (в годах).`
 
         if (postResponseResult === true) {
-            // TODO: send message to customer
+            sendMessage(
+                performerTelegramID,
+                message
+            );
+            
             res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
         } else if (postResponseResult === false) {
             res.status(409).json({ success: true, message: 'Вы уже откликнулись на этот заказ.' });
-        }
+        };
     } catch (error) {
         console.error('Error in /respond-to-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });

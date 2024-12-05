@@ -10,7 +10,7 @@ export function saveChatMessage(
     message,
     senderType) {
     try {
-        const folderPath = path.join(process.cwd(), 'app', 'app', 'chats', String(bidID));
+        const folderPath = path.join(process.cwd(), 'app', 'chats', String(bidID));
         fs.mkdirSync(folderPath, { recursive: true });
 
         const fileName = `${customerTelegramID}_${performerTelegramID}.txt`;

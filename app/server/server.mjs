@@ -16,6 +16,8 @@ import { closeBid } from "./close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
 import { postResponse } from "./post_response.mjs";
 import { sendMessage } from "./send_message.mjs";
+import { saveChatMessage } from "./save_chat_message.mjs";
+import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
 
 dotenv.config({ path: '/app/.env' });
 
@@ -190,12 +192,25 @@ app.post('/respond-to-bid', (req, res) => {
         );
 
         const message = `На Ваш заказ №${bidID} откликнулся мастер ${performerName}, ставка: ${performerRate}/час, опыт: ${performerExperience} (в годах).`
+        const bidData = getBidByBidID(db, bidID);
+        const customerTelegramID = bidData.customer_telegram_id;
+        const customerName = bidData.customer_name;
 
         if (postResponseResult === true) {
             sendMessage(
                 performerTelegramID,
                 message
             );
+
+            saveChatMessage(
+                bidID,
+                customerTelegramID,
+                performerTelegramID,
+                customerName,
+                performerName,
+                message,
+                'performer'
+            )
             
             res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
         } else if (postResponseResult === false) {

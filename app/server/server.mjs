@@ -188,9 +188,11 @@ app.post('/respond-to-bid', (req, res) => {
             performerRate,
             performerExperience);
 
-        if (postResponseResult) {
+        if (postResponseResult === true) {
             // TODO: send message to customer
             res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
+        } else if (postResponseResult === false) {
+            res.status(409).json({ message: 'Вы уже откликнулись на этот заказ.' });
         }
     } catch (error) {
         console.error('Error in /respond-to-bid:', error);

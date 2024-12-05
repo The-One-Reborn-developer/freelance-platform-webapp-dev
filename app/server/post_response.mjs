@@ -6,7 +6,14 @@ export function postResponse(
     performerRate,
     performerExperience) {
     try {
-        console.log(`bidID: ${bidID}, performerTelegramID: ${performerTelegramID}, performerName: ${performerName}, performerRate: ${performerRate}, performerExperience: ${performerExperience}`);
+        const existingResponse = db.prepare(
+            'SELECT * FROM responses WHERE bid_id = ? AND performer_telegram_id = ?'
+        ).get(bidID, performerTelegramID);
+
+        if (existingResponse) {
+            console.log('User already responded to this bid.');
+            return false;
+        };
 
         const postResponse = db.prepare(
             `INSERT INTO responses (bid_id,
@@ -16,7 +23,7 @@ export function postResponse(
                                     performer_experience) VALUES (?, ?, ?, ?, ?)`
                                 );
         
-        const postResponseResult = postResponse.run(
+        postResponse.run(
             bidID,
             performerTelegramID,
             performerName,
@@ -24,8 +31,9 @@ export function postResponse(
             performerExperience
         );
 
-        return postResponseResult;
+        return true;
     } catch (error) {
         console.error('Error in postResponse:', error);
+        return null;
     };
 };

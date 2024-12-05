@@ -191,12 +191,20 @@ app.post('/respond-to-bid', (req, res) => {
             performerExperience
         );
 
-        const message = `На Ваш заказ №${bidID} откликнулся мастер ${performerName}, ставка: ${performerRate}/час, опыт: ${performerExperience} (в годах).`
-        const bidData = getBidByBidID(db, bidID);
-        const customerTelegramID = bidData.customer_telegram_id;
-        const customerName = bidData.customer_name;
-
         if (postResponseResult === true) {
+            const bidData = getBidByBidID(db, bidID);
+            const customerTelegramID = bidData.customer_telegram_id;
+            const customerName = bidData.customer_name;
+            const city = bidData.city;
+            const description = bidData.description;
+            const deadlineFrom = bidData.deadline_from;
+            const deadlineTo = bidData.deadline_to;
+            const instrumentProvided = bidData.instrument_provided;
+            const message = `На Ваш заказ №${bidID}: \n\nГород: ${city}\nОписание: ${description}\n
+                             Срок выполнения: от<i>${deadlineFrom} - до${deadlineTo}</i>\n
+                             Предоставляется инструмент: ${instrumentProvided ? 'да' : 'нет'}\n\n
+                             Откликнулся мастер ${performerName}, ставка: <i>${performerRate}/час</i>, опыт: <i>${performerExperience} (в годах)</i>.`
+
             sendMessage(
                 performerTelegramID,
                 message

@@ -182,7 +182,6 @@ app.post('/respond-to-bid', (req, res) => {
         
         const postResponseResult = postResponse(
             db,
-            res,
             bidID,
             performerTelegramID,
             performerName,

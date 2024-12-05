@@ -46,7 +46,7 @@ export function createResponsesTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 bid_id INTEGER NOT NULL,
                 performer_telegram_id BIGINT NOT NULL,
-                performer_full_name STRING(255) NOT NULL,
+                performer_name STRING(255) NOT NULL,
                 performer_rate INTEGER NOT NULL,
                 performer_experience INTEGER NOT NULL,
                 chat_started BOOLEAN DEFAULT FALSE,

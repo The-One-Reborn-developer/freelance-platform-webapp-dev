@@ -1,19 +1,19 @@
 export function postResponse(
     db,
-    res,
     bidID,
     performerTelegramID,
     performerName,
     performerRate,
     performerExperience) {
     try {
+        console.log(`bidID: ${bidID}, performerTelegramID: ${performerTelegramID}, performerName: ${performerName}, performerRate: ${performerRate}, performerExperience: ${performerExperience}`);
+
         const postResponse = db.prepare(
             `INSERT INTO responses (bid_id,
                                     performer_telegram_id,
-                                    performer_full_name,
+                                    performer_name,
                                     performer_rate,
-                                    performer_experience,
-                                    chat_started) VALUES (?, ?, ?, ?, ?, ?)`
+                                    performer_experience) VALUES (?, ?, ?, ?, ?)`
                                 );
         
         const postResponseResult = postResponse.run(
@@ -21,8 +21,7 @@ export function postResponse(
             performerTelegramID,
             performerName,
             performerRate,
-            performerExperience,
-            false
+            performerExperience
         );
 
         return postResponseResult;

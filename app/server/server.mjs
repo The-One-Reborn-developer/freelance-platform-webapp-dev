@@ -200,15 +200,15 @@ app.post('/respond-to-bid', (req, res) => {
             const deadlineFrom = bidData.deadline_from;
             const deadlineTo = bidData.deadline_to;
             const instrumentProvided = bidData.instrument_provided;
-            const message = `На Ваш заказ №${bidID}: 
+            const message = 'На Ваш заказ №' + bidID + ': \n\n' +
+                            'Город: ' + city + '\n' +
+                            'Описание: ' + description + '\n' +
+                            'Срок выполнения: от<i>' + deadlineFrom + ' - до' + deadlineTo + '</i>\n' +
+                            'Предоставляется инструмент: ' + (instrumentProvided ? 'да' : 'нет') + '\n\n' +
+                            'Откликнулся мастер ' + performerName + ', ставка: <i>' + performerRate +
+                            '/час</i>, опыт: <i>' + performerExperience + ' (в годах)</i>.';
 
-            Город: ${city}
-            Описание: ${description}
-            Срок выполнения: <i>от ${deadlineFrom} — до ${deadlineTo}</i>
-            Предоставляется инструмент: ${instrumentProvided ? 'да' : 'нет'}
 
-            Откликнулся мастер ${performerName}, ставка: <i>${performerRate}/час</i>, опыт: <i>${performerExperience} (в годах)</i>.`;
-            
             sendMessage(
                 performerTelegramID,
                 message

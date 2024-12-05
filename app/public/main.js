@@ -44,7 +44,7 @@ window.onload = async function () {
                     const selectCityForm = document.getElementById('select-city-form');
                     if (selectCityForm) {
                         selectCityForm.addEventListener('submit', async function (event) {
-                            await handleCityFormSubmit(event);
+                            await handleCityFormSubmit(event, telegramID);
                         });
                     };
                 });
@@ -358,19 +358,19 @@ async function showSelectCityForm() {
 };
 
 
-async function handleCityFormSubmit(event) {
+async function handleCityFormSubmit(event, telegramID) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const city = formData.get('city');
     
     if (city) {
-        await showBids(city);
+        await showBids(city, telegramID);
     };
 };
 
 
-async function showBids(city) {
+async function showBids(city, telegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -419,7 +419,24 @@ async function showBids(city) {
                         
                         if (bidID) {
                             try {
-                                // TODO: respond to bid
+                                fetch ('/respond-to-bid', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ bid_id: bidID, performer_telegram_id: telegramID })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        showModal(data.message);
+                                        showBids(city, telegramID);
+                                    };
+                                })
+                                .catch(error => {
+                                    console.error(`Error in respond-to-bid: ${error}`);
+                                    showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
+                                });
                             } catch (error) {
                                 console.error(`Error in respond-to-bid: ${error}`);
                                 showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');

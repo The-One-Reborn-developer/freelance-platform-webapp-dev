@@ -20,6 +20,7 @@ export function postBid(
                          instrument_provided)
             VALUES (?, ?, ?, ?, ?, ?, ?)`
         );
+        
         const postBidResult = postBid.run(
             customerTelegramID,
             customerName,

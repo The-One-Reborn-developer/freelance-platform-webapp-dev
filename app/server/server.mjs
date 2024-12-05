@@ -14,7 +14,8 @@ import { postBid } from "./post_bid.mjs";
 import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
 import { closeBid } from "./close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
-
+import { postResponse } from "./post_response.mjs";
+import { sendMessage } from "./send_message.mjs";
 
 dotenv.config({ path: '/app/.env' });
 
@@ -165,6 +166,36 @@ app.post('/get-bids', (req, res) => {
     } catch (error) {
         console.error('Error in /get-bids:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
+    };
+});
+
+
+app.post('/respond-to-bid', (req, res) => {
+    try {
+        const bidID = req.body.bid_id;
+        const performerTelegramID = req.body.performer_telegram_id;
+        
+        performerData = getUser(db, performerTelegramID);
+        performerName = performerData.name;
+        performerRate = performerData.rate;
+        performerExperience = performerData.experience;
+        
+        postResponseResult = postResponse(
+            db,
+            res,
+            bidID,
+            performerTelegramID,
+            performerName,
+            performerRate,
+            performerExperience);
+
+        if (postResponseResult) {
+            // TODO: send message to customer
+            res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
+        }
+    } catch (error) {
+        console.error('Error in /respond-to-bid:', error);
+        res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });
     };
 });
 

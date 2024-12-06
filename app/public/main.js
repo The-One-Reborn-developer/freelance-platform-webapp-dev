@@ -464,6 +464,11 @@ async function showChats(telegramID) {
     const performers = await fetchPerformers(telegramID);
     console.log(performers)
 
+    if (performers.length === 0) {
+        showModal('На Ваши заявки ещё никто не откликался.');
+        return;
+    };
+
     // Create the chat interface
     const display = document.getElementById('display');
     display.innerHTML = await fetch('chat_window.html')
@@ -472,11 +477,11 @@ async function showChats(telegramID) {
     const performerList = document.getElementById('performer-list');
     performers.forEach((performer) => {
         const button = document.createElement('button');
-        button.innerHTML = `<strong>${performer.name}</strong><br>`;
+        button.innerHTML = `<strong>${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience}</strong><br>`;
         button.addEventListener('click', () => loadChatHistory(telegramID, performer));
         performerList.appendChild(button);
     });
-}
+};
 
 
 async function loadChatHistory(telegramID, performer) {
@@ -519,5 +524,8 @@ async function loadChatHistory(telegramID, performer) {
 
 async function fetchPerformers(telegramID) {
     const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
-    return response.json();
+    const data = await response.json();
+
+    // Return the array of performers
+    return data.success ? data.performers : [];
 };

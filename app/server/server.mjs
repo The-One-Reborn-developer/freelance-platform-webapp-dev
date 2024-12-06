@@ -19,6 +19,7 @@ import { sendMessage } from "./send_message.mjs";
 import { saveChatMessage } from "./save_chat_message.mjs";
 import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
 import { getChatMessages } from "./get_chat_messages.mjs";
+import { getRespondedPerformers } from "./get_responded_performers.mjs";
 
 
 dotenv.config({ path: '/app/.env' });

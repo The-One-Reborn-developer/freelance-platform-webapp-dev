@@ -124,7 +124,8 @@ body {
 
 .submit-form-button,
 .bid-card-button,
-.modal-button {
+.modal-button,
+.performer-list button {
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -134,13 +135,15 @@ body {
 
 .submit-form-button:hover,
 .bid-card-button:hover,
-.modal-button:hover {
+.modal-button:hover,
+.performer-list button:hover {
 	background-color: lightgrey;
 }
 
 .submit-form-button:active,
 .bid-card-button:active,
-.modal-button:active {
+.modal-button:active,
+.performer-list button:active {
 	background-color: darkgrey;
 }
 
@@ -212,23 +215,6 @@ body {
     border-right: 1px solid #ccc;
     overflow-y: auto;
     padding: 10px;
-}
-
-.performer-list button {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    padding: 10px;
-    text-align: left;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.performer-list button:hover {
-    background-color: #e0e0e0;
 }
 
 .chat-window {

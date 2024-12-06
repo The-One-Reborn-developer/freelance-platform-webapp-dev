@@ -271,6 +271,9 @@ app.post('/send-message', (req, res) => {
 
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
 
+        formattedMessage = senderType === 'customer' ? 
+            `Заказчик ${customerName}:\n${message}` :
+            `Мастер ${performerName}:\n${message}`;
         sendMessage(
             recipientTelegramID,
             message

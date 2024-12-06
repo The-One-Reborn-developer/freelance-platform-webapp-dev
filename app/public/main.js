@@ -523,9 +523,25 @@ async function loadChatHistory(telegramID, performer) {
 
 
 async function fetchPerformers(telegramID) {
-    const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
-    const data = await response.json();
+    try {
+        const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
+        const data = await response.json();
 
-    // Return the array of performers
-    return data.success ? data.performers : [];
+        console.log(data)
+
+        if (data.success) {
+            return data.responses.map((res) => ({
+                name: res.performer_name,
+                rate: res.performer_rate,
+                experience: res.performer_experience,
+                bidID: res.bid_id,
+                telegramID: res.performer_telegram_id
+            }));
+        } else {
+            return [];
+        };
+    } catch (error) {
+        console.error(`Error in fetchPerformers: ${error}`);
+        return [];
+    };
 };

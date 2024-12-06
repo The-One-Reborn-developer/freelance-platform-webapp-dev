@@ -271,12 +271,12 @@ app.post('/send-message', (req, res) => {
 
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
 
-        formattedMessage = senderType === 'customer' ? 
+        const formattedMessage = senderType === 'customer' ? 
             `Заказчик ${customerName}:\n${message}` :
             `Мастер ${performerName}:\n${message}`;
         sendMessage(
             recipientTelegramID,
-            message
+            formattedMessage
         );
 
         res.status(200).json({ success: true, message: 'Сообщение успешно отправлено.' });

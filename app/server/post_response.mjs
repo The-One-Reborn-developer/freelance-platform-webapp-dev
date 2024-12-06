@@ -5,7 +5,7 @@ export function postResponse(
     performerName,
     performerRate,
     performerExperience) {
-    try {/*
+    try {
         const existingResponse = db.prepare(
             'SELECT * FROM responses WHERE bid_id = ? AND performer_telegram_id = ?'
         ).get(bidID, performerTelegramID);
@@ -14,7 +14,7 @@ export function postResponse(
             console.log('User already responded to this bid.');
             return false;
         };
-        */
+        
         const postResponse = db.prepare(
             `INSERT INTO responses (bid_id,
                                     performer_telegram_id,

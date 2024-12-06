@@ -476,7 +476,7 @@ async function showChats(telegramID) {
     const performerList = document.getElementById('performer-list');
     performers.forEach((performer) => {
         const button = document.createElement('button');
-        button.innerHTML = `<strong>${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience}</strong><br>`;
+        button.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
         button.addEventListener('click', () => loadChatHistory(telegramID, performer));
         performerList.appendChild(button);
     });
@@ -485,17 +485,25 @@ async function showChats(telegramID) {
 
 async function loadChatHistory(telegramID, performer) {
     const chatHistory = document.getElementById('chat-history');
+
+    // Clear the chat history
+    chatHistory.innerHTML = '';
     chatHistory.innerHTML = 'Загрузка...';
 
-    const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${performer.telegramID}`);
-    const data = await response.json();
+    try {
+        const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${performer.telegramID}`);
+        const data = await response.json();
 
-    if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
-        chatHistory.innerHTML = data.chatMessages
-            .map((msg) => `<div class="chat-message">${msg}</div>`)
-            .join('');
-    } else {
-        chatHistory.innerHTML = 'Нет сообщений.';
+        if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
+            chatHistory.innerHTML = data.chatMessages
+                .map((msg) => `<div class="chat-message">${msg}</div>`)
+                .join('');
+        } else {
+            chatHistory.innerHTML = 'Нет сообщений.';
+        };
+    } catch (error) {
+        console.error(`Error in loadChatHistory: ${error}`);
+        chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 
     // Attach event listener for sending messages

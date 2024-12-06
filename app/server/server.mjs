@@ -19,7 +19,7 @@ import { sendMessage } from "./send_message.mjs";
 import { saveChatMessage } from "./save_chat_message.mjs";
 import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
 import { getChatMessages } from "./get_chat_messages.mjs";
-import { getRespondedPerformers } from "./get_responded_performers.mjs";
+import { getResponses } from "./get_responses.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -288,9 +288,25 @@ app.get('/responded-performers', (req, res) => {
     const customerTelegramID = req.query.customer_telegram_id;
 
     try {
-        const performers = getRespondedPerformers(db, customerTelegramID);
+        if (!customerTelegramID) {
+            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
+            return;
+        } else {
+            const customerBids = getBidsByCustomerTelegramID(db, customerTelegramID);
 
-        res.status(200).json({ success: true, performers });
+            if (customerBids.length === 0) {
+                res.status(200).json({ success: true, performers: [] });
+                return;
+            } else {
+                const responses = getResponses(db, customerBids);
+
+                if (responses.length === 0) {
+                    res.status(200).json({ success: true, responses: [] });
+                } else {
+                    res.status(200).json({ success: true, responses });
+                };
+            };
+        };
     } catch (error) {
         console.error('Error in /responded-performers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся мастеров.' });

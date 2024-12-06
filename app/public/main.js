@@ -470,8 +470,8 @@ async function showChats(telegramID) {
     };
 
     // Create the chat interface
-    const display = document.getElementById('display');
-    display.innerHTML = await fetch('chat_window.html')
+    const response = await fetch('chat_window.html');
+    display.innerHTML = await response.text(); // Properly inject the fetched HTML content
 
     // Populate the performer buttons
     const performerList = document.getElementById('performer-list');
@@ -526,8 +526,6 @@ async function fetchPerformers(telegramID) {
     try {
         const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
         const data = await response.json();
-
-        console.log(data)
 
         if (data.success) {
             return data.responses.map((res) => ({

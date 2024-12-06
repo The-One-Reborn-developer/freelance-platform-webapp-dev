@@ -27,8 +27,11 @@ window.onload = async function () {
                 myBidsButton.addEventListener('click', async function () {
                     await showMyBids(telegramID);
                 });
-                // TODO: chats display
+                
                 const lookChatsButton = document.getElementById('look-chats');
+                lookChatsButton.addEventListener('click', async function () {
+                    await showChats(telegramID);
+                })
             } else {
                 const name = userData.userData.name;
                 const rate = userData.userData.rate;
@@ -105,7 +108,7 @@ function insertCustomerButtons(name) {
             const lookChatsButton = document.createElement('button');
             lookChatsButton.className = 'header-button';
             lookChatsButton.id = 'look-chats';
-            lookChatsButton.textContent = 'Переписки по активным заказам 📨';
+            lookChatsButton.textContent = 'Переписки по активным заказам 📩';
 
             headerNav.appendChild(createBidButton);
             headerNav.appendChild(myBidsButton);
@@ -454,3 +457,64 @@ async function showBids(city, telegramID) {
         };
     };
 };
+
+
+async function showChats(telegramID) {
+    // Fetch the list of performers who responded to the customer's bids
+    const performers = await fetchPerformers(telegramID);
+
+    // Create the chat interface
+    const display = document.getElementById('display');
+    display.innerHTML = await fetch('chat_window.html')
+
+    // Populate the performer buttons
+    const performerList = document.getElementById('performer-list');
+    performers.forEach((performer) => {
+        const button = document.createElement('button');
+        button.innerHTML = `<strong>${performer.name}</strong><br>`;
+        button.addEventListener('click', () => loadChatHistory(telegramID, performer));
+        performerList.appendChild(button);
+    });
+}
+
+async function loadChatHistory(telegramID, performer) {
+    const chatHistory = document.getElementById('chat-history');
+    chatHistory.innerHTML = 'Загрузка...';
+
+    const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_id=${telegramID}&performer_id=${performer.telegramID}`);
+    const chatMessages = await response.json();
+
+    chatHistory.innerHTML = chatMessages
+        .map((msg) => `<div class="chat-message">${msg}</div>`)
+        .join('');
+
+    // Attach event listener for sending messages
+    const sendButton = document.getElementById('send-button');
+    sendButton.onclick = async () => {
+        const messageInput = document.getElementById('message-input');
+        const message = messageInput.value.trim();
+
+        if (message) {
+            await fetch('/send-message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bid_id: performer.bidID,
+                    customer_telegram_id: telegramID,
+                    performer_telegram_id: performer.telegramID,
+                    message,
+                    sender_type: 'customer'
+                })
+            });
+
+            // Append the message to the chat window
+            chatHistory.innerHTML += `<div class="chat-message">Заказчик: ${message}</div>`;
+            messageInput.value = '';
+        }
+    };
+}
+
+async function fetchPerformers(telegramID) {
+    const response = await fetch(`/responded-performers?customer_id=${telegramID}`);
+    return response.json();
+}

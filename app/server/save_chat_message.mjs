@@ -5,8 +5,8 @@ export function saveChatMessage(
     bidID,
     customerTelegramID,
     performerTelegramID,
-    customerFullName,
-    performerFullName,
+    customerName,
+    performerName,
     message,
     senderType) {
     try {
@@ -22,9 +22,9 @@ export function saveChatMessage(
         let formattedMessage = '';
 
         if (senderType === 'customer') {
-            formattedMessage = `Заказчик ${customerFullName}:\n${message}\n${currentDate}${separator}`;
+            formattedMessage = `Заказчик ${customerName}:\n${message}\n${currentDate}${separator}`;
         } else if (senderType === 'performer') {
-            formattedMessage = `Мастер ${performerFullName}:\n${message}\n${currentDate}${separator}`;
+            formattedMessage = `Мастер ${performerName}:\n${message}\n${currentDate}${separator}`;
         } else {
             throw new Error('Invalid senderType. Must be "customer" or "performer".');
         }

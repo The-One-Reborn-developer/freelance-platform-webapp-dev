@@ -18,6 +18,8 @@ import { postResponse } from "./post_response.mjs";
 import { sendMessage } from "./send_message.mjs";
 import { saveChatMessage } from "./save_chat_message.mjs";
 import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
+import { getChatMessages } from "./get_chat_messages.mjs";
+
 
 dotenv.config({ path: '/app/.env' });
 
@@ -231,6 +233,52 @@ app.post('/respond-to-bid', (req, res) => {
     } catch (error) {
         console.error('Error in /respond-to-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });
+    };
+});
+
+
+app.get('/get-chats', (req, res) => {
+    const bidID = req.query.bid_id;
+    const customerTelegramID = req.query.customer_telegram_id;
+    const performerTelegramID = req.query.performer_telegram_id;
+    
+    const chatMessages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
+
+    res.status(200).json({ success: true, chatMessages });
+});
+
+
+app.post('/send-message', (req, res) => {
+    try {
+        const bidID = req.body.bid_id;
+        const customerTelegramID = req.body.customer_telegram_id;
+        const performerTelegramID = req.body.performer_telegram_id;
+        const customerName = getUser(db, customerTelegramID).name;
+        const performerName = getUser(db, performerTelegramID).name;
+        const message = req.body.message;
+        const senderType = req.body.sender_type;
+
+        saveChatMessage(
+            bidID,
+            customerTelegramID,
+            performerTelegramID,
+            customerName,
+            performerName,
+            message,
+            senderType
+        );
+
+        const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
+
+        sendMessage(
+            recipientTelegramID,
+            message
+        );
+
+        res.status(200).json({ success: true, message: 'Сообщение успешно отправлено.' });
+    } catch (error) {
+        console.error('Error in /send-message:', error);
+        res.status(500).json({ message: 'Произошла ошибка при отправке сообщения.' });
     };
 });
 

@@ -462,6 +462,7 @@ async function showBids(city, telegramID) {
 async function showChats(telegramID) {
     // Fetch the list of performers who responded to the customer's bids
     const performers = await fetchPerformers(telegramID);
+    console.log(performers)
 
     // Create the chat interface
     const display = document.getElementById('display');
@@ -477,11 +478,12 @@ async function showChats(telegramID) {
     });
 }
 
+
 async function loadChatHistory(telegramID, performer) {
     const chatHistory = document.getElementById('chat-history');
     chatHistory.innerHTML = 'Загрузка...';
 
-    const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_id=${telegramID}&performer_id=${performer.telegramID}`);
+    const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${performer.telegramID}`);
     const chatMessages = await response.json();
 
     chatHistory.innerHTML = chatMessages
@@ -510,11 +512,12 @@ async function loadChatHistory(telegramID, performer) {
             // Append the message to the chat window
             chatHistory.innerHTML += `<div class="chat-message">Заказчик: ${message}</div>`;
             messageInput.value = '';
-        }
+        };
     };
-}
+};
+
 
 async function fetchPerformers(telegramID) {
-    const response = await fetch(`/responded-performers?customer_id=${telegramID}`);
+    const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
     return response.json();
-}
+};

@@ -283,6 +283,20 @@ app.post('/send-message', (req, res) => {
 });
 
 
+app.get('/responded-performers', (req, res) => {
+    const customerTelegramID = req.query.customer_telegram_id;
+
+    try {
+        const performers = getRespondedPerformers(db, customerTelegramID);
+
+        res.status(200).json({ success: true, performers });
+    } catch (error) {
+        console.error('Error in /responded-performers:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся мастеров.' });
+    };    
+});
+
+
 // 404 Route
 app.use((req, res) => {
     res.status(404).json({ message: 'Route not found.' });

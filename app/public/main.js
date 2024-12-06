@@ -488,7 +488,7 @@ async function loadChatHistory(telegramID, performer) {
     chatHistory.innerHTML = 'Загрузка...';
 
     const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${performer.telegramID}`);
-    const chatMessages = await response.json();
+    const data = await response.json();
 
     if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
         chatHistory.innerHTML = data.chatMessages

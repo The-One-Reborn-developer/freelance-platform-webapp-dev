@@ -286,6 +286,7 @@ app.post('/send-message', (req, res) => {
 
 app.get('/responded-performers', (req, res) => {
     const customerTelegramID = req.query.customer_telegram_id;
+    console.log(`Customer Telegram ID: ${customerTelegramID}`);
 
     try {
         if (!customerTelegramID) {
@@ -293,12 +294,14 @@ app.get('/responded-performers', (req, res) => {
             return;
         } else {
             const customerBids = getBidsByCustomerTelegramID(db, customerTelegramID);
+            console.log(`Customer bids: ${customerBids}`);
 
             if (customerBids.length === 0) {
                 res.status(200).json({ success: true, performers: [] });
                 return;
             } else {
                 const responses = getResponses(db, customerBids);
+                console.log(`Responses: ${responses}`);
 
                 if (responses.length === 0) {
                     res.status(200).json({ success: true, responses: [] });

@@ -19,7 +19,7 @@ export function getResponses(db, customerBids) {
                     }))
                 );
 
-                console.log(`Responses for bid ${bid.id}: ${responsesForBid}`);
+                console.log(`Responses for bid ${bid.id}: ${JSON.stringify(responsesForBid)}`);
             };
         });
 

@@ -18,8 +18,6 @@ export function getResponses(db, customerBids) {
                         performerExperience: response.performer_experience
                     }))
                 );
-
-                console.log(`Responses for bid ${bid.id}: ${JSON.stringify(responsesForBid)}`);
             };
         });
 

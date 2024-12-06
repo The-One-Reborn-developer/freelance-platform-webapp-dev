@@ -293,14 +293,12 @@ app.get('/responded-performers', (req, res) => {
             return;
         } else {
             const customerBids = getBidsByCustomerTelegramID(db, customerTelegramID);
-            console.log(`Customer bids: ${JSON.stringify(customerBids)}`);
 
             if (customerBids.length === 0) {
                 res.status(200).json({ success: true, performers: [] });
                 return;
             } else {
                 const responses = getResponses(db, customerBids);
-                console.log(`Responses: ${JSON.stringify(responses)}`);
 
                 if (responses.length === 0) {
                     res.status(200).json({ success: true, responses: [] });

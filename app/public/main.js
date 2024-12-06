@@ -531,11 +531,11 @@ async function fetchPerformers(telegramID) {
 
         if (data.success) {
             return data.responses.map((res) => ({
-                name: res.performer_name,
-                rate: res.performer_rate,
-                experience: res.performer_experience,
-                bidID: res.bid_id,
-                telegramID: res.performer_telegram_id
+                name: res.performerName,
+                rate: res.performerRate,
+                experience: res.performerExperience,
+                bidID: res.bidID,
+                telegramID: res.performerTelegramID
             }));
         } else {
             return [];

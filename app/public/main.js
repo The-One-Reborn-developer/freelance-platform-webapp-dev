@@ -462,7 +462,6 @@ async function showBids(city, telegramID) {
 async function showChats(telegramID) {
     // Fetch the list of performers who responded to the customer's bids
     const performers = await fetchPerformers(telegramID);
-    console.log(performers)
 
     if (performers.length === 0) {
         showModal('На Ваши заявки ещё никто не откликался.');
@@ -491,9 +490,13 @@ async function loadChatHistory(telegramID, performer) {
     const response = await fetch(`/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${performer.telegramID}`);
     const chatMessages = await response.json();
 
-    chatHistory.innerHTML = chatMessages
-        .map((msg) => `<div class="chat-message">${msg}</div>`)
-        .join('');
+    if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
+        chatHistory.innerHTML = data.chatMessages
+            .map((msg) => `<div class="chat-message">${msg}</div>`)
+            .join('');
+    } else {
+        chatHistory.innerHTML = 'Нет сообщений.';
+    };
 
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');

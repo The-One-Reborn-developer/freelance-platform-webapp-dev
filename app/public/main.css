@@ -125,7 +125,8 @@ body {
 .submit-form-button,
 .bid-card-button,
 .modal-button,
-.performer-list button {
+.performer-list button,
+.send-button {
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -136,14 +137,16 @@ body {
 .submit-form-button:hover,
 .bid-card-button:hover,
 .modal-button:hover,
-.performer-list button:hover {
+.performer-list button:hover,
+.send-button:hover {
 	background-color: lightgrey;
 }
 
 .submit-form-button:active,
 .bid-card-button:active,
 .modal-button:active,
-.performer-list button:active {
+.performer-list button:active,
+.send-button:active {
 	background-color: darkgrey;
 }
 
@@ -209,10 +212,8 @@ body {
 }
 
 .performer-list {
-    width: 20%;
-    max-width: 30%;
-    background-color: #f4f4f4;
-    border-right: 1px solid #ccc;
+    width: 100%;
+    background-color: lightgrey;
     overflow-y: auto;
     padding: 10px;
 }
@@ -252,21 +253,9 @@ body {
 .message-input {
     flex-grow: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     margin-right: 10px;
-}
-
-.send-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.send-button:hover {
-    background-color: #0056b3;
+    width: 100%;
+	height: 30px;
+	border-radius: 10px;
+	border: solid 2px grey;
 }

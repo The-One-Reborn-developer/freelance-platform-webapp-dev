@@ -677,7 +677,7 @@ async function handleProfileInfoFormSubmit(event, telegramID) {
 async function showPerformerChats(telegramID) {
     // Fetch the list of customers who wrote to the performer
     try {
-        customers = await fetchCustomers(telegramID);
+        const customers = await fetchCustomers(telegramID);
 
         if (customers.length === 0) {
             showModal('На Ваши отклики ещё никто не написал.');
@@ -708,11 +708,11 @@ async function fetchCustomers(telegramID) {
         const data = await response.json();
         console.log(data);
 
-        if (data.success) {
-            return data.responses.map((res) => ({
-                name: res.customerName,
-                bidID: res.bidID,
-                telegramID: res.customerTelegramID
+        if (data.success && Array.isArray(data.bidsInfo)) {
+            return data.bidsInfo.map((res) => ({
+                name: res.customer_name,
+                bidID: res.id,
+                telegramID: res.customer_telegram_id
             }));
         } else {
             return [];

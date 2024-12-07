@@ -30,7 +30,6 @@ export function saveChatMessage(
         }
 
         fs.appendFileSync(filePath, formattedMessage, 'utf8');
-        console.log(`Message saved to ${filePath}`);
     } catch (error) {
         console.error('Error saving chat message:', error);
     };

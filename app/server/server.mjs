@@ -354,7 +354,7 @@ app.post('/change-profile-info', (req, res) => {
 });
 
 
-app.post('/responded-customers', (req, res) => {
+app.get('/responded-customers', (req, res) => {
     const performerTelegramID = req.query.performer_telegram_id;
 
     try {

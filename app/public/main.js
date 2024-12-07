@@ -615,7 +615,17 @@ async function handleProfileInfoFormSubmit(event, telegramID) {
                 body: JSON.stringify(data)
             });
 
-            showModal(response.body.success ? 'Информация о профиле успешно изменена' : 'Произошла ошибка при изменении информации о профиле.');
+            if (!response.ok) {
+                showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');
+                throw new Error('Failed to change profile info');
+            } else {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    showModal('Информация о профиле успешно изменена.');
+                } else {
+                    showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');
+                };
+            };
         } catch (error) {
             console.error(`Error in handleProfileInfoFormSubmit: ${error}`);
             showModal('Произошла ошибка при изменении информации о профиле.');

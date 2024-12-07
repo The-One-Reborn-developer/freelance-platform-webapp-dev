@@ -214,8 +214,8 @@ app.post('/respond-to-bid', (req, res) => {
             const message = 'На Ваш заказ №' + bidID + ': \n\n' +
                             'Город: ' + city + '\n' +
                             'Описание: ' + description + '\n' +
-                            'Срок выполнения: от<i>' + deadlineFrom + ' - до' + deadlineTo + '</i>\n' +
-                            'Предоставляется инструмент: ' + (instrumentProvided ? 'да' : 'нет') + '\n\n' +
+                            'Срок выполнения: от <i>' + deadlineFrom + ' - до ' + deadlineTo + '</i>\n' +
+                            'Предоставляется инструмент: ' + ((instrumentProvided === true || instrumentProvided === 1) ? 'да' : 'нет') + '\n\n' +
                             'Откликнулся мастер ' + performerName + ', ставка: <i>' + performerRate +
                             '/час</i>, опыт: <i>' + performerExperience + ' (в годах)</i>.';
 
@@ -233,7 +233,7 @@ app.post('/respond-to-bid', (req, res) => {
                 performerName,
                 message,
                 'performer'
-            )
+            );
             
             res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
         } else if (postResponseResult === false) {

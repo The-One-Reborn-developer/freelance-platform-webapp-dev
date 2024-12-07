@@ -292,14 +292,14 @@ async function showMyBids(telegramID) {
                     bidCard.innerHTML = `
                         <h3>Заказ #${bid.id}</h3>
                         <br>
-                        <p><strong>Город:</strong> ${bid.city}</p>
+                        <p>Город: ${bid.city}</p>
                         <br>
-                        <p><strong>Описание:</strong> ${bid.description}</p>
+                        <p>Описание: ${bid.description}</p>
                         <br>
-                        <p><strong>Срок с:</strong> ${bid.deadline_from}</p>
-                        <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
+                        <p>Срок от: ${bid.deadline_from}</p>
+                        <p>Срок до: ${bid.deadline_to}</p>
                         <br>
-                        <p><strong>Предоставляется инструмент:</strong> ${bid.instrument_provided ? 'Да' : 'Нет'}</p>
+                        <p>Предоставляется инструмент: ${(bid.instrument_provided === true || bid.instrument_provided === 1) ? 'Да' : 'Нет'}</p>
                         <button class="bid-card-button" data-bid-id="${bid.id}">Закрыть заказ 🔐</button>
                     `;
 
@@ -419,14 +419,14 @@ async function showBids(city, telegramID) {
                     bidCard.classList.add('bid-card');
 
                     bidCard.innerHTML = `
-                        <p><strong>Заказчик:</strong> ${bid.customer_name}</p>
+                        <p>Заказчик: ${bid.customer_name}</p>
                         <br>
-                        <p><strong>Описание:</strong> ${bid.description}</p>
+                        <p>Описание: ${bid.description}</p>
                         <br>
-                        <p><strong>Срок от:</strong> ${bid.deadline_from}</p>
-                        <p><strong>Срок до:</strong> ${bid.deadline_to}</p>
+                        <p>Срок от: ${bid.deadline_from}</p>
+                        <p>Срок до: ${bid.deadline_to}</p>
                         <br>
-                        <p><strong>Предоставляется инструмент:</strong> ${bid.instrument_provided ? 'Да' : 'Нет'}</p>
+                        <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
                         <button class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
                     `;
 

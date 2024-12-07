@@ -125,8 +125,9 @@ body {
 .submit-form-button,
 .bid-card-button,
 .modal-button,
-.performer-list button,
+.user-list button,
 .send-button {
+	padding: 10px;
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -137,7 +138,7 @@ body {
 .submit-form-button:hover,
 .bid-card-button:hover,
 .modal-button:hover,
-.performer-list button:hover,
+.user-list button:hover,
 .send-button:hover {
 	background-color: lightgrey;
 }
@@ -145,7 +146,7 @@ body {
 .submit-form-button:active,
 .bid-card-button:active,
 .modal-button:active,
-.performer-list button:active,
+.user-list button:active,
 .send-button:active {
 	background-color: darkgrey;
 }
@@ -211,7 +212,7 @@ body {
     overflow: hidden;
 }
 
-.performer-list {
+.user-list {
     width: 100%;
     background-color: lightgrey;
     overflow-y: auto;

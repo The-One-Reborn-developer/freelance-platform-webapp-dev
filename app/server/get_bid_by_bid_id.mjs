@@ -9,4 +9,4 @@ export function getBidByBidID(db, bidID) {
         console.error('Error in getUser:', error);
         return null;
     };
-}
+};

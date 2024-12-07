@@ -363,9 +363,18 @@ app.post('/responded-customers', (req, res) => {
             return;
         } else {
             const responses = getResponsesWithChatStarted(db, performerTelegramID);
+            console.log(responses);
             
             if (responses.length > 0) {
-                const respondedBids= getBidsByCustomerTelegramID
+                const bidIDs = responses.map((res) => res.bid_id);
+
+                // Extract customer info from bids
+                const bidsInfo = bidIDs.map((bidID) => {
+                    const bidInfo = getBidByBidID(db, bidID);
+                    return bidInfo;
+                });
+
+                res.status(200).json({ success: true, bidsInfo });
             } else {
                 res.status(200).json({ success: true, responses: [] });
             }

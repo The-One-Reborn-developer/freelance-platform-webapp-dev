@@ -49,6 +49,7 @@ export function createResponsesTable(db) {
                 performer_name STRING(255) NOT NULL,
                 performer_rate INTEGER NOT NULL,
                 performer_experience INTEGER NOT NULL,
+                chat_started BOOLEAN DEFAULT FALSE,
                 FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
                 UNIQUE(bid_id, performer_telegram_id)
             );

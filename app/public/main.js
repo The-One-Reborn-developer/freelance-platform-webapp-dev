@@ -700,3 +700,24 @@ async function showPerformerChats(telegramID) {
         console.error(`Error in showPerformerChats: ${error}`);
     };
 };
+
+
+async function fetchCustomers(telegramID) {
+    try {
+        const response = await fetch(`/responded-customers?performer_telegram_id=${telegramID}`);
+        const data = await response.json();
+
+        if (data.success) {
+            return data.responses.map((res) => ({
+                name: res.customerName,
+                bidID: res.bidID,
+                telegramID: res.customerTelegramID
+            }));
+        } else {
+            return [];
+        };
+    } catch (error) {
+        console.error(`Error in fetchCustomers: ${error}`);
+        return [];
+    };
+};

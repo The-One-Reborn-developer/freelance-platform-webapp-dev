@@ -21,6 +21,8 @@ import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
 import { getChatMessages } from "./get_chat_messages.mjs";
 import { getResponses } from "./get_responses.mjs";
 import { updateProfileInfo } from "./update_profile_info.mjs"
+import { updateResponse } from "./update_response.mjs";
+import { getResponsesWithChatStarted } from "./get_responses_with_chat_started.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -275,6 +277,15 @@ app.post('/send-message', (req, res) => {
             senderType
         );
 
+        if (senderType === 'customer') {
+            updateResponse(
+                db,
+                bidID,
+                customerTelegramID,
+                true
+            )
+        };
+
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
 
         const formattedMessage = senderType === 'customer' ? 
@@ -339,6 +350,29 @@ app.post('/change-profile-info', (req, res) => {
     } catch (error) {
         console.error('Error in /change-profile-info:', error);
         res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
+    };
+});
+
+
+app.post('/responded-customers', (req, res) => {
+    const performerTelegramID = req.query.performer_telegram_id;
+
+    try {
+        if (!performerTelegramID) {
+            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
+            return;
+        } else {
+            const responses = getResponsesWithChatStarted(db, performerTelegramID);
+            
+            if (responses.length > 0) {
+                const respondedBids= getBidsByCustomerTelegramID
+            } else {
+                res.status(200).json({ success: true, responses: [] });
+            }
+        };
+    } catch (error) {
+        console.error('Error in /responded-customers:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
     };
 });
 

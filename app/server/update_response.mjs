@@ -8,6 +8,7 @@ export function updateResponse(
             'UPDATE responses SET chat_started = ? WHERE bid_id = ? AND performer_telegram_id = ?'
         );
         const updateResponseResult = updateResponse.run(chatStarted, bidID, performerTelegramID);
+        console.log(`Response updated: ${JSON.stringify(updateResponseResult)}`);
         return updateResponseResult;
     } catch (error) {
         console.error(`Error in updateResponse: ${error}`);

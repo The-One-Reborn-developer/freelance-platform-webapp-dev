@@ -12,7 +12,7 @@ import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
 import { postBid } from "./post_bid.mjs";
 import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
-import { closeBid } from "./close_bid.mjs";
+import { updateCloseBid } from "./update_close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
 import { postResponse } from "./post_response.mjs";
 import { sendMessage } from "./send_message.mjs";
@@ -20,6 +20,7 @@ import { saveChatMessage } from "./save_chat_message.mjs";
 import { getBidByBidID } from "./get_bid_by_bid_id.mjs";
 import { getChatMessages } from "./get_chat_messages.mjs";
 import { getResponses } from "./get_responses.mjs";
+import { updateProfileInfo } from "./update_profile_info.mjs"
 
 
 dotenv.config({ path: '/app/.env' });
@@ -152,8 +153,13 @@ app.post('/close-bid', (req, res) => {
     try {
         const bidID = req.body.bid_id;
         
-        closeBid(db, bidID);
-        res.status(200).json({ success: true, message: `Заказ №${bidID} успешно закрыт.` });
+        const closeBidResult = updateCloseBid(db, bidID);
+
+        if (!closeBidResult) {
+            res.status(500).json({ success: false, message: 'Ошибка при закрытии заказа.' });
+        } else {
+            res.status(200).json({ success: true, message: `Заказ №${bidID} успешно закрыт.` });
+        };
     } catch (error) {
         console.error('Error in /close-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
@@ -314,6 +320,26 @@ app.get('/responded-performers', (req, res) => {
         console.error('Error in /responded-performers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся мастеров.' });
     };    
+});
+
+
+app.post('/change-profile-info', (req, res) => {
+    try {
+        const telegramID = req.body.telegram_id;
+        const rate = req.body.rate;
+        const experience = req.body.experience;
+
+        const updateProfileInfoResult = updateProfileInfo(db, telegramID, rate, experience);
+
+        if (!updateProfileInfoResult) {
+            res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
+        } else {
+            res.status(200).json({ success: true, message: 'Информация о профиле успешно изменена.' });
+        };
+    } catch (error) {
+        console.error('Error in /change-profile-info:', error);
+        res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
+    };
 });
 
 

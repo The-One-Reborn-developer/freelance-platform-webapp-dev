@@ -1,4 +1,4 @@
-export function closeBid(db, bidID) {
+export function updateCloseBid(db, bidID) {
     try {
         const closeBid = db.prepare(
             'UPDATE bids SET closed = TRUE WHERE id = ?'

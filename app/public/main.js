@@ -51,7 +51,20 @@ window.onload = async function () {
                         });
                     };
                 });
-            }
+
+                const changeProfileInfoButton = document.getElementById('change-profile-info');
+                changeProfileInfoButton.addEventListener('click', async function () {
+                    await showChangeProfileInfoForm();
+
+                    // Attach submit form event listener
+                    const changeProfileInfoForm = document.getElementById('change-profile-info-form');
+                    if (changeProfileInfoForm) {
+                        changeProfileInfoForm.addEventListener('submit', async function (event) {
+                            await handleProfileInfoFormSubmit(event, telegramID);
+                        });
+                    };
+                });
+            };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
@@ -146,11 +159,6 @@ function insertPerformerButtons(name, rate, experience) {
             changeProfileInfoButton.id = 'change-profile-info';
             changeProfileInfoButton.textContent = 'Изменить информацию профиля 👤';
 
-            const searchMaterialsButton = document.createElement('button');
-            searchMaterialsButton.className = 'header-button';
-            searchMaterialsButton.id = 'search-materials';
-            searchMaterialsButton.textContent = ' 🧱';
-
             headerNav.appendChild(searchBidsButton);
             headerNav.appendChild(lookChatsButton);
             headerNav.appendChild(changeProfileInfoButton);
@@ -175,11 +183,11 @@ async function showCreateBidForm() {
             if (!response.ok) {
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
                 throw new Error('Failed to load create_bid_form.html');                
-            };
+            } else {
+                const formHTML = await response.text();
 
-            const formHTML = await response.text();
-
-            display.innerHTML = formHTML;
+                display.innerHTML = formHTML;
+            };            
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };
@@ -552,5 +560,65 @@ async function fetchPerformers(telegramID) {
     } catch (error) {
         console.error(`Error in fetchPerformers: ${error}`);
         return [];
+    };
+};
+
+
+async function showChangeProfileInfoForm() {
+    display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            
+            const response = await fetch('change_profile_info.html');
+            
+            if (!response.ok) {
+                showModal('Произошла ошибка при загрузке формы профиля, попробейте перезайти в приложение');
+                throw new Error('Failed to load change_profile_info.html');
+            } else {
+                const formHTML = await response.text();
+
+                display.innerHTML = formHTML;
+            };
+        } catch (error) {
+            console.error(`Error in showChangeProfileInfoForm: ${error}`);
+        };
+    };
+};
+
+
+async function handleProfileInfoFormSubmit(event, telegramID) {
+    event.preventDefault();
+
+    const rate = document.getElementById('rate-input');
+    const experience = document.getElementById('experience-input');
+
+    if (!rate.value || !experience.value) {
+        showModal('Пожалуйста, заполните все поля.');
+        return;
+    } else {
+        const data = {
+            telegram_id: telegramID,
+            rate: rate.value,
+            experience: experience.value
+        };
+
+        try {
+            const response = await fetch('/change-profile-info', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            showModal(response.body.success ? 'Информация о профиле успешно изменена' : 'Произошла ошибка при изменении информации о профиле.');
+        } catch (error) {
+            console.error(`Error in handleProfileInfoFormSubmit: ${error}`);
+            showModal('Произошла ошибка при изменении информации о профиле.');
+        };
     };
 };

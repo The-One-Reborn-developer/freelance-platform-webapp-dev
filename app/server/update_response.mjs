@@ -4,10 +4,12 @@ export function updateResponse(
     performerTelegramID,
     chatStarted) {
     try {
+        const chatStartedInt = chatStarted ? 1 : 0;
+
         const updateResponse = db.prepare(
             'UPDATE responses SET chat_started = ? WHERE bid_id = ? AND performer_telegram_id = ?'
         );
-        const updateResponseResult = updateResponse.run(chatStarted, bidID, performerTelegramID);
+        const updateResponseResult = updateResponse.run(chatStartedInt, bidID, performerTelegramID);
         console.log(`Response updated: ${JSON.stringify(updateResponseResult)}`);
         return updateResponseResult;
     } catch (error) {

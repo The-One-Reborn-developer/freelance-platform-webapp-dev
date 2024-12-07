@@ -283,7 +283,7 @@ app.post('/send-message', (req, res) => {
                 bidID,
                 customerTelegramID,
                 true
-            )
+            );
         };
 
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;

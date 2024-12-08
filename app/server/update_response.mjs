@@ -4,6 +4,8 @@ export function updateResponse(
     performerTelegramID,
     chatStarted) {
     try {
+        const bidIDInt = parseInt(bidID, 10);
+        const performerTelegramIDInt = BigInt(performerTelegramID);
         const chatStartedInt = chatStarted ? 1 : 0;
 
         const updateResponse = db.prepare(

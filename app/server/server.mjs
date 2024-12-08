@@ -281,7 +281,7 @@ app.post('/send-message', (req, res) => {
             updateResponse(
                 db,
                 bidID,
-                customerTelegramID,
+                performerTelegramID,
                 true
             );
         };

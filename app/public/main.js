@@ -547,35 +547,28 @@ async function loadChatHistory(telegramID, user, role) {
 
         if (message) {
             // Send the message
-            if (role === 'customer') {
-                await fetch('/send-message', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        bid_id: user.bidID,
-                        customer_telegram_id: telegramID,
-                        performer_telegram_id: user.telegramID,
-                        message,
-                        sender_type: 'customer'
-                    })
-                });
-            } else {
-                await fetch('/send-message', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        bid_id: user.bidID,
-                        customer_telegram_id: user.telegramID,
-                        performer_telegram_id: telegramID,
-                        message,
-                        sender_type: 'performer'
-                    })
-                });
-            };
+            const response = await fetch('/send-message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    bid_id: user.bidID,
+                    customer_telegram_id: role === 'customer' ? telegramID : user.telegramID,
+                    performer_telegram_id: role === 'customer' ? user.telegramID : telegramID,
+                    message,
+                    sender_type: role
+                 })
+            });
 
-            // Append the message to the chat window
-            chatHistory.innerHTML += `<div class="chat-message">Заказчик: ${message}</div>`;
-            messageInput.value = '';
+            if (response.ok) {
+                // Reload the chat after the message is sent
+                await loadChatHistory(telegramID, user, role);
+
+                // Append the message to the chat window
+                chatHistory.innerHTML += `<div class="chat-message">Заказчик: ${message}</div>`;
+                messageInput.value = '';
+            };
         };
     };
 };

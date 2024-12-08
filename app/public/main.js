@@ -222,7 +222,6 @@ function handleBidFormSubmit(event, telegramID, name) {
             deadline_to: deadlineTo.value,
             instrument_provided: instrumentProvided.value
         };
-        console.log(data)
 
         fetch('/post-bid', {
             method: 'POST',
@@ -570,6 +569,8 @@ async function loadChatHistory(telegramID, user, role) {
                 const performerName = userData.userData.name;
 
                 const chatHistory = document.getElementById('chat-history');
+                console.log(user)
+                console.log(user.name)
 
                 chatHistory.innerHTML += `<div class="chat-message">
                                               ${role === 'customer' 
@@ -711,7 +712,6 @@ async function fetchCustomers(telegramID) {
     try {
         const response = await fetch(`/responded-customers?performer_telegram_id=${telegramID}`);
         const data = await response.json();
-        console.log(data);
 
         if (data.success && Array.isArray(data.bidsInfo)) {
             return data.bidsInfo.map((res) => ({

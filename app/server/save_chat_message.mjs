@@ -19,15 +19,8 @@ export function saveChatMessage(
         const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
         const separator = '\n---\n';
 
-        let formattedMessage = '';
-
-        if (senderType === 'customer') {
-            formattedMessage = `Заказчик ${customerName}:\n${message}\n${currentDate}${separator}`;
-        } else if (senderType === 'performer') {
-            formattedMessage = `Мастер ${performerName}:\n${message}\n${currentDate}${separator}`;
-        } else {
-            throw new Error('Invalid senderType. Must be "customer" or "performer".');
-        }
+        const formattedMessage = `${senderType === 'customer' ? `Заказчик ${customerName}` :
+                                 `Мастер ${performerName}`}:\n${message}\n${currentDate}${separator}`;
 
         fs.appendFileSync(filePath, formattedMessage, 'utf8');
     } catch (error) {

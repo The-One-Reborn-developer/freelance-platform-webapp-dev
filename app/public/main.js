@@ -509,30 +509,18 @@ async function loadChatHistory(telegramID, user, role) {
 
     try {
         // Fetch the chat history
-        if (role === 'customer') {
-            const response = await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${user.telegramID}`);
+        const response = role === 'customer' ?
+            await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${user.telegramID}`) :
+            await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${telegramID}`);
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
-                chatHistory.innerHTML = data.chatMessages
-                    .map((msg) => `<div class="chat-message">${msg}</div>`)
-                    .join('');
-            } else {
-                chatHistory.innerHTML = 'Нет сообщений.';
-            };
+        if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
+            chatHistory.innerHTML = data.chatMessages
+                .map((msg) => `<div class="chat-message">${msg}</div>`)
+                .join('');
         } else {
-            const response = await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${telegramID}`);
-
-            const data = await response.json();
-
-            if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
-                chatHistory.innerHTML = data.chatMessages
-                    .map((msg) => `<div class="chat-message">${msg}</div>`)
-                    .join('');
-            } else {
-                chatHistory.innerHTML = 'Нет сообщений.';
-            };
+            chatHistory.innerHTML = 'Нет сообщений.';
         };
     } catch (error) {
         console.error(`Error in loadChatHistory: ${error}`);
@@ -564,10 +552,6 @@ async function loadChatHistory(telegramID, user, role) {
             if (response.ok) {
                 // Reload the chat after the message is sent
                 await loadChatHistory(telegramID, user, role);
-
-                // Append the message to the chat window
-                chatHistory.innerHTML += `<div class="chat-message">Заказчик: ${message}</div>`;
-                messageInput.value = '';
             };
         };
     };

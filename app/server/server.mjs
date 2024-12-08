@@ -221,7 +221,7 @@ app.post('/respond-to-bid', (req, res) => {
 
 
             sendMessage(
-                performerTelegramID,
+                customerTelegramID,
                 message
             );
 

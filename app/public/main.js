@@ -571,8 +571,14 @@ async function loadChatHistory(telegramID, user, role) {
 
                 const chatHistory = document.getElementById('chat-history');
 
-                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? `Заказчик ${user.name}` :
-                                         `Мастер ${performerName}`}:\n${message}\n${currentDate}</div>`;
+                chatHistory.innerHTML += `<div class="chat-message">
+                                              ${role === 'customer' 
+                                                  ? `Заказчик ${user.name}` 
+                                                  : `Мастер ${performerName}`}:
+                                              <br>${message}
+                                              <br>${currentDate}
+                                          </div>`;
+
                 messageInput.value = '';
             };
         };

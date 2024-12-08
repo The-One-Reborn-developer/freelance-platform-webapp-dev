@@ -527,9 +527,6 @@ async function loadChatHistory(telegramID, user, role) {
         chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 
-    // Scroll to the bottom of the chat
-    chatHistory.scrollTop = chatHistory.scrollHeight;
-
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
@@ -554,10 +551,29 @@ async function loadChatHistory(telegramID, user, role) {
 
             if (response.ok) {
                 const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+                
+                // Fetch missing customer name
+                const response = await fetch('/get-user-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ telegram_id: telegramID })
+                });
+
+                if (!response.ok) {
+                    showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
+                    return;
+                };
+
+                const userData = await response.json();
+                const customerName = userData.userData.name;
+
                 const chatHistory = document.getElementById('chat-history');
-                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? 'Заказчик' : 'Мастер'}:\n${message}\n${currentDate}</div>`;
+
+                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? `Заказчик ${customerName}` :
+                                         `Мастер ${user.name}`}:\n${message}\n${currentDate}</div>`;
                 messageInput.value = '';
-                chatHistory.scrollTop = chatHistory.scrollHeight;
             };
         };
     };

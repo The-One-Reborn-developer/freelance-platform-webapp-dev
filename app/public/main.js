@@ -567,12 +567,12 @@ async function loadChatHistory(telegramID, user, role) {
                 };
 
                 const userData = await response.json();
-                const customerName = userData.userData.name;
+                const performerName = userData.userData.name;
 
                 const chatHistory = document.getElementById('chat-history');
 
-                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? `Заказчик ${customerName}` :
-                                         `Мастер ${user.name}`}:\n${message}\n${currentDate}</div>`;
+                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? `Заказчик ${user.name}` :
+                                         `Мастер ${performerName}`}:\n${message}\n${currentDate}</div>`;
                 messageInput.value = '';
             };
         };

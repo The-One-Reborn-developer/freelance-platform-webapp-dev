@@ -11,7 +11,7 @@ export function updateResponse(
         const updateResponse = db.prepare(
             'UPDATE responses SET chat_started = ? WHERE bid_id = ? AND performer_telegram_id = ?'
         );
-        const updateResponseResult = updateResponse.run(chatStartedInt, bidID, performerTelegramID);
+        const updateResponseResult = updateResponse.run(chatStartedInt, bidIDInt, performerTelegramIDInt);
         return updateResponseResult;
     } catch (error) {
         console.error(`Error in updateResponse: ${error}`);

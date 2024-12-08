@@ -550,6 +550,8 @@ async function loadChatHistory(telegramID, user, role) {
             });
 
             if (response.ok) {
+                messageInput.value = '';
+                
                 // Reload the chat after the message is sent
                 await loadChatHistory(telegramID, user, role);
             };

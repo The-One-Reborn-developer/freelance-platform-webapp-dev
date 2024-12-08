@@ -514,6 +514,8 @@ async function loadChatHistory(telegramID, user, role) {
 
         const data = await response.json();
 
+        console.log(data);
+
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
                 .map((msg) => `<div class="chat-message">${msg}</div>`)
@@ -569,15 +571,13 @@ async function loadChatHistory(telegramID, user, role) {
                 const performerName = userData.userData.name;
 
                 const chatHistory = document.getElementById('chat-history');
-                console.log(user)
-                console.log(user.name)
 
                 chatHistory.innerHTML += `<div class="chat-message">
                                               ${role === 'customer' 
                                                   ? `Заказчик ${user.name}` 
                                                   : `Мастер ${performerName}`}:
-                                              <br>${message}
-                                              <br>${currentDate}
+                                              <br><br>${message}
+                                              <br><br>${currentDate}
                                           </div>`;
 
                 messageInput.value = '';

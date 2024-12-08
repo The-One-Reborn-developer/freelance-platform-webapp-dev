@@ -527,6 +527,9 @@ async function loadChatHistory(telegramID, user, role) {
         chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 
+    // Scroll to the bottom of the chat
+    chatHistory.scrollTop = chatHistory.scrollHeight;
+
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
@@ -550,10 +553,11 @@ async function loadChatHistory(telegramID, user, role) {
             });
 
             if (response.ok) {
+                const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+                const chatHistory = document.getElementById('chat-history');
+                chatHistory.innerHTML += `<div class="chat-message">${role === 'customer' ? 'Заказчик' : 'Мастер'}:\n${message}\n${currentDate}</div>`;
                 messageInput.value = '';
-                
-                // Reload the chat after the message is sent
-                await loadChatHistory(telegramID, user, role);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
             };
         };
     };

@@ -225,6 +225,7 @@ body {
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+	position: relative;
 }
 
 .chat-history {
@@ -233,6 +234,7 @@ body {
     overflow-y: auto;
     background-color: #f9f9f9;
     border-bottom: 1px solid #ccc;
+	margin-bottom: 20px;
 }
 
 .chat-message {
@@ -258,4 +260,14 @@ body {
 	height: 30px;
 	border-radius: 10px;
 	border: solid 2px grey;
+}
+
+.chat-input {
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	border-top: 1px solid #ccc;
+	position: sticky;
+	bottom: 0;
+	z-index: 10;
 }

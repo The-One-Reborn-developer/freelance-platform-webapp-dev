@@ -534,9 +534,9 @@ async function loadChatHistory(validatedTelegramID, user, role) {
 };
 
 
-async function fetchPerformers(telegramID) {
+async function fetchPerformers(validatedTelegramID) {
     try {
-        const response = await fetch(`/responded-performers?customer_telegram_id=${telegramID}`);
+        const response = await fetch(`/responded-performers?customer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
 
         if (data.success) {
@@ -655,9 +655,9 @@ async function showPerformerChats(validatedTelegramID) {
 };
 
 
-async function fetchCustomers(telegramID) {
+async function fetchCustomers(validatedTelegramID) {
     try {
-        const response = await fetch(`/responded-customers?performer_telegram_id=${telegramID}`);
+        const response = await fetch(`/responded-customers?performer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
 
         if (data.success && Array.isArray(data.bidsInfo)) {

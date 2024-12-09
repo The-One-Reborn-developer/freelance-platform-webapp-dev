@@ -2,10 +2,13 @@ window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
     const telegramID = getQueryParameter('telegram_id');
+    console.log(`Telegram ID: ${telegramID}`);
     if (telegramID) {
         try {
             const userData = await getUserData(telegramID);
+            console.log(`User data: ${JSON.stringify(userData)}`);
             const validatedTelegramID = userData.userData.telegramID;
+            console.log(`Validated Telegram ID: ${validatedTelegramID}`);
             const role = userData.userData.role;
 
             if (role === 'customer') {

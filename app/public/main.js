@@ -5,70 +5,12 @@ window.onload = async function () {
     if (telegramID) {
         try {
             const userData = await getUserData(telegramID);
-            if (userData.userData.role === 'customer') {
-                const name = userData.userData.name;
+            const role = userData.userData.role;
 
-                insertCustomerButtons(name);
-
-                const createBidButton = document.getElementById('create-bid');
-                createBidButton.addEventListener('click', async function () {
-                    await showCreateBidForm();
-
-                    // Attach submit form event listener
-                    const createBidForm = document.getElementById('create-bid-form');
-                    if (createBidForm) {
-                        createBidForm.addEventListener('submit', function (event) {
-                            handleBidFormSubmit(event, telegramID, name);
-                        });
-                    };
-                });
-
-                const myBidsButton = document.getElementById('my-bids');
-                myBidsButton.addEventListener('click', async function () {
-                    await showMyBids(telegramID);
-                });
-                
-                const lookChatsButton = document.getElementById('look-chats');
-                lookChatsButton.addEventListener('click', async function () {
-                    await showCustomerChats(telegramID);
-                });
+            if (role === 'customer') {
+                setupCustomerInterface(telegramID, userData, socket);
             } else {
-                const name = userData.userData.name;
-                const rate = userData.userData.rate;
-                const experience = userData.userData.experience;
-
-                insertPerformerButtons(name, rate, experience);
-
-                const searchBidsButton = document.getElementById('search-bids');
-                searchBidsButton.addEventListener('click', async function () {
-                    await showSelectCityForm();
-
-                    // Attach submit form event listener
-                    const selectCityForm = document.getElementById('select-city-form');
-                    if (selectCityForm) {
-                        selectCityForm.addEventListener('submit', async function (event) {
-                            await handleCityFormSubmit(event, telegramID);
-                        });
-                    };
-                });
-
-                const lookChatsButton = document.getElementById('look-chats');
-                lookChatsButton.addEventListener('click', async function () {
-                    await showPerformerChats(telegramID);
-                });
-
-                const changeProfileInfoButton = document.getElementById('change-profile-info');
-                changeProfileInfoButton.addEventListener('click', async function () {
-                    await showChangeProfileInfoForm();
-
-                    // Attach submit form event listener
-                    const changeProfileInfoForm = document.getElementById('change-profile-info-form');
-                    if (changeProfileInfoForm) {
-                        changeProfileInfoForm.addEventListener('submit', async function (event) {
-                            await handleProfileInfoFormSubmit(event, telegramID);
-                        });
-                    };
-                });
+                setupPerformerInterface(telegramID, userData, socket);
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -471,7 +413,7 @@ async function showBids(city, telegramID) {
 };
 
 
-async function showCustomerChats(telegramID) {
+async function showCustomerChats(telegramID, socket) {
     // Fetch the list of performers who responded to the customer's bids
     try {
         const performers = await fetchPerformers(telegramID);
@@ -489,7 +431,7 @@ async function showCustomerChats(telegramID) {
             performers.forEach((performer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
-                button.addEventListener('click', () => loadChatHistory(telegramID, performer, 'customer'));
+                button.addEventListener('click', () => loadChatHistory(telegramID, performer, 'customer', socket));
                 performerList.appendChild(button);
             });
         };
@@ -499,7 +441,7 @@ async function showCustomerChats(telegramID) {
 };
 
 
-async function loadChatHistory(telegramID, user, role) {
+async function loadChatHistory(telegramID, user, role, socket) {
     const chatHistory = document.getElementById('chat-history');
 
     // Clear the chat history
@@ -508,13 +450,12 @@ async function loadChatHistory(telegramID, user, role) {
 
     try {
         // Fetch the chat history
-        const response = role === 'customer' ?
-            await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${user.telegramID}`) :
-            await fetch(`/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${telegramID}`);
-
+        const response = await fetch(
+            role === 'customer' ?
+                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${user.telegramID}` :
+                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${telegramID}`
+        );
         const data = await response.json();
-
-        console.log(data);
 
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
@@ -683,7 +624,7 @@ async function handleProfileInfoFormSubmit(event, telegramID) {
 };
 
 
-async function showPerformerChats(telegramID) {
+async function showPerformerChats(telegramID, socket) {
     // Fetch the list of customers who wrote to the performer
     try {
         const customers = await fetchCustomers(telegramID);
@@ -701,7 +642,7 @@ async function showPerformerChats(telegramID) {
             customers.forEach((customer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
-                button.addEventListener('click', () => loadChatHistory(telegramID, customer, 'performer'));
+                button.addEventListener('click', () => loadChatHistory(telegramID, customer, 'performer', socket));
                 customerList.appendChild(button);
             });
         };
@@ -729,4 +670,74 @@ async function fetchCustomers(telegramID) {
         console.error(`Error in fetchCustomers: ${error}`);
         return [];
     };
+};
+
+
+function setupCustomerInterface (telegramID, userData, socket) {
+    const name = userData.userData.name;
+
+    insertCustomerButtons(name);
+
+    const createBidButton = document.getElementById('create-bid');
+    createBidButton.addEventListener('click', async function () {
+        await showCreateBidForm();
+
+        // Attach submit form event listener
+        const createBidForm = document.getElementById('create-bid-form');
+        if (createBidForm) {
+            createBidForm.addEventListener('submit', function (event) {
+                handleBidFormSubmit(event, telegramID, name);
+            });
+        };
+    });
+
+    const myBidsButton = document.getElementById('my-bids');
+    myBidsButton.addEventListener('click', async function () {
+        await showMyBids(telegramID);
+    });
+    
+    const lookChatsButton = document.getElementById('look-chats');
+    lookChatsButton.addEventListener('click', async function () {
+        await showCustomerChats(telegramID, socket);
+    });
+};
+
+
+function setupPerformerInterface (telegramID, userData, socket) {
+    const name = userData.userData.name;
+    const rate = userData.userData.rate;
+    const experience = userData.userData.experience;
+
+    insertPerformerButtons(name, rate, experience);
+
+    const searchBidsButton = document.getElementById('search-bids');
+    searchBidsButton.addEventListener('click', async function () {
+        await showSelectCityForm();
+
+        // Attach submit form event listener
+        const selectCityForm = document.getElementById('select-city-form');
+        if (selectCityForm) {
+            selectCityForm.addEventListener('submit', async function (event) {
+                await handleCityFormSubmit(event, telegramID);
+            });
+        };
+    });
+
+    const lookChatsButton = document.getElementById('look-chats');
+    lookChatsButton.addEventListener('click', async function () {
+        await showPerformerChats(telegramID, socket);
+    });
+
+    const changeProfileInfoButton = document.getElementById('change-profile-info');
+    changeProfileInfoButton.addEventListener('click', async function () {
+        await showChangeProfileInfoForm();
+
+        // Attach submit form event listener
+        const changeProfileInfoForm = document.getElementById('change-profile-info-form');
+        if (changeProfileInfoForm) {
+            changeProfileInfoForm.addEventListener('submit', async function (event) {
+                await handleProfileInfoFormSubmit(event, telegramID);
+            });
+        };
+    });
 };

@@ -2,13 +2,10 @@ window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
     const telegramID = getQueryParameter('telegram_id');
-    console.log(`Telegram ID: ${telegramID}`);
     if (telegramID) {
         try {
             const userData = await getUserData(telegramID);
-            console.log(`User data: ${JSON.stringify(userData)}`);
             const validatedTelegramID = userData.userData.telegram_id;
-            console.log(`Validated Telegram ID: ${validatedTelegramID}`);
             const role = userData.userData.role;
 
             if (role === 'customer') {
@@ -755,7 +752,7 @@ function initializeWebSocket(validatedTelegramID) {
         console.error('Telegram ID not found, unable to initialize WebSocket');
         return;
     } else {
-        const socket = new WebSocket(`ws://${window.location.host}?telegramID=${validatedTelegramID}`);
+        const socket = new WebSocket(`wss://${window.location.host}?telegramID=${validatedTelegramID}`);
 
         socket.addEventListener('open', () => {
             console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}`);

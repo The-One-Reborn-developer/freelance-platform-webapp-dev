@@ -372,7 +372,6 @@ app.get('/responded-customers', (req, res) => {
             return;
         } else {
             const responses = getResponsesWithChatStarted(db, performerTelegramID);
-            console.log(`Responses with chat started: ${JSON.stringify(responses)}`);
             
             if (responses.length > 0) {
                 const bidIDs = responses.map((res) => res.bid_id);

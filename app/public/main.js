@@ -5,13 +5,16 @@ window.onload = async function () {
     if (telegramID) {
         try {
             const userData = await getUserData(telegramID);
+            const safeTelegramID = userData.userData.telegramID;
             const role = userData.userData.role;
 
             if (role === 'customer') {
-                setupCustomerInterface(telegramID, userData);
+                setupCustomerInterface(safeTelegramID, userData);
             } else {
-                setupPerformerInterface(telegramID, userData);
+                setupPerformerInterface(safeTelegramID, userData);
             };
+
+            initializeWebSocket(safeTelegramID);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
@@ -142,7 +145,7 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit(event, telegramID, name) {
+function handleBidFormSubmit(event, safeTelegramID, name) {
     event.preventDefault();
 
     const description = document.getElementById('description-textarea');
@@ -156,7 +159,7 @@ function handleBidFormSubmit(event, telegramID, name) {
         return;
     } else {
         const data = {
-            customer_telegram_id: telegramID,
+            customer_telegram_id: safeTelegramID,
             customer_name: name,
             city: city.value,
             description: description.value,
@@ -198,7 +201,7 @@ function showModal(message) {
 };
 
 
-async function showMyBids(telegramID) {
+async function showMyBids(safeTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -212,7 +215,7 @@ async function showMyBids(telegramID) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ customer_telegram_id: telegramID })  // Send the Telegram ID as JSON
+                body: JSON.stringify({ customer_telegram_id: safeTelegramID })  // Send the Telegram ID as JSON
             });            
 
             if (!response.ok) {
@@ -267,7 +270,7 @@ async function showMyBids(telegramID) {
                                         const { success, message } = await response.json();
                                         if (success) {
                                             showModal(message);
-                                            showMyBids(telegramID);
+                                            showMyBids(safeTelegramID);
                                         };
                                     };
                                 } catch (error) {
@@ -315,14 +318,14 @@ async function showSelectCityForm() {
 };
 
 
-async function handleCityFormSubmit(event, telegramID) {
+async function handleCityFormSubmit(event, safeTelegramID) {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const city = formData.get('city');
     
     if (city) {
-        await showBids(city, telegramID);
+        await showBids(city, safeTelegramID);
     };
 };
 
@@ -413,10 +416,10 @@ async function showBids(city, telegramID) {
 };
 
 
-async function showCustomerChats(telegramID, socket) {
+async function showCustomerChats(safeTelegramID) {
     // Fetch the list of performers who responded to the customer's bids
     try {
-        const performers = await fetchPerformers(telegramID);
+        const performers = await fetchPerformers(safeTelegramID);
 
         if (performers.length === 0) {
             showModal('На Ваши заявки ещё никто не откликался.');
@@ -431,7 +434,7 @@ async function showCustomerChats(telegramID, socket) {
             performers.forEach((performer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
-                button.addEventListener('click', () => loadChatHistory(telegramID, performer, 'customer', socket));
+                button.addEventListener('click', () => loadChatHistory(safeTelegramID, performer, 'customer'));
                 performerList.appendChild(button);
             });
         };
@@ -441,7 +444,7 @@ async function showCustomerChats(telegramID, socket) {
 };
 
 
-async function loadChatHistory(telegramID, user, role, socket) {
+async function loadChatHistory(safeTelegramID, user, role) {
     const chatHistory = document.getElementById('chat-history');
 
     // Clear the chat history
@@ -452,8 +455,8 @@ async function loadChatHistory(telegramID, user, role, socket) {
         // Fetch the chat history
         const response = await fetch(
             role === 'customer' ?
-                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${telegramID}&performer_telegram_id=${user.telegramID}` :
-                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${telegramID}`
+                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${safeTelegramID}&performer_telegram_id=${user.telegramID}` :
+                `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${user.telegramID}&performer_telegram_id=${safeTelegramID}`
         );
         const data = await response.json();
 
@@ -487,8 +490,8 @@ async function loadChatHistory(telegramID, user, role, socket) {
                 },
                 body: JSON.stringify({ 
                     bid_id: user.bidID,
-                    customer_telegram_id: role === 'customer' ? telegramID : user.telegramID,
-                    performer_telegram_id: role === 'customer' ? user.telegramID : telegramID,
+                    customer_telegram_id: role === 'customer' ? safeTelegramID : user.telegramID,
+                    performer_telegram_id: role === 'customer' ? user.telegramID : safeTelegramID,
                     message,
                     sender_type: role
                  })
@@ -503,7 +506,7 @@ async function loadChatHistory(telegramID, user, role, socket) {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ telegram_id: telegramID })
+                    body: JSON.stringify({ telegram_id: safeTelegramID })
                 });
 
                 if (!response.ok) {
@@ -580,7 +583,7 @@ async function showChangeProfileInfoForm() {
 };
 
 
-async function handleProfileInfoFormSubmit(event, telegramID) {
+async function handleProfileInfoFormSubmit(event, safeTelegramID) {
     event.preventDefault();
 
     const rate = document.getElementById('rate-input');
@@ -591,7 +594,7 @@ async function handleProfileInfoFormSubmit(event, telegramID) {
         return;
     } else {
         const data = {
-            telegram_id: telegramID,
+            telegram_id: safeTelegramID,
             rate: rate.value,
             experience: experience.value
         };
@@ -624,10 +627,10 @@ async function handleProfileInfoFormSubmit(event, telegramID) {
 };
 
 
-async function showPerformerChats(telegramID, socket) {
+async function showPerformerChats(safeTelegramID) {
     // Fetch the list of customers who wrote to the performer
     try {
-        const customers = await fetchCustomers(telegramID);
+        const customers = await fetchCustomers(safeTelegramID);
 
         if (customers.length === 0) {
             showModal('На Ваши отклики ещё никто не написал.');
@@ -642,7 +645,7 @@ async function showPerformerChats(telegramID, socket) {
             customers.forEach((customer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
-                button.addEventListener('click', () => loadChatHistory(telegramID, customer, 'performer', socket));
+                button.addEventListener('click', () => loadChatHistory(safeTelegramID, customer, 'performer'));
                 customerList.appendChild(button);
             });
         };
@@ -673,7 +676,7 @@ async function fetchCustomers(telegramID) {
 };
 
 
-function setupCustomerInterface (telegramID, userData) {
+function setupCustomerInterface (safeTelegramID, userData) {
     const name = userData.userData.name;
 
     insertCustomerButtons(name);
@@ -686,24 +689,24 @@ function setupCustomerInterface (telegramID, userData) {
         const createBidForm = document.getElementById('create-bid-form');
         if (createBidForm) {
             createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, telegramID, name);
+                handleBidFormSubmit(event, safeTelegramID, name);
             });
         };
     });
 
     const myBidsButton = document.getElementById('my-bids');
     myBidsButton.addEventListener('click', async function () {
-        await showMyBids(telegramID);
+        await showMyBids(safeTelegramID);
     });
     
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showCustomerChats(telegramID);
+        await showCustomerChats(safeTelegramID);
     });
 };
 
 
-function setupPerformerInterface (telegramID, userData) {
+function setupPerformerInterface (safeTelegramID, userData) {
     const name = userData.userData.name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
@@ -718,14 +721,14 @@ function setupPerformerInterface (telegramID, userData) {
         const selectCityForm = document.getElementById('select-city-form');
         if (selectCityForm) {
             selectCityForm.addEventListener('submit', async function (event) {
-                await handleCityFormSubmit(event, telegramID);
+                await handleCityFormSubmit(event, safeTelegramID);
             });
         };
     });
 
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showPerformerChats(telegramID);
+        await showPerformerChats(safeTelegramID);
     });
 
     const changeProfileInfoButton = document.getElementById('change-profile-info');
@@ -736,8 +739,43 @@ function setupPerformerInterface (telegramID, userData) {
         const changeProfileInfoForm = document.getElementById('change-profile-info-form');
         if (changeProfileInfoForm) {
             changeProfileInfoForm.addEventListener('submit', async function (event) {
-                await handleProfileInfoFormSubmit(event, telegramID);
+                await handleProfileInfoFormSubmit(event, safeTelegramID);
             });
         };
     });
+};
+
+
+function initializeWebSocket(safeTelegramID) {
+    if (!safeTelegramID) {
+        console.error('Telegram ID not found, unable to initialize WebSocket');
+        return;
+    } else {
+        const socket = new WebSocket(`ws://${window.location.host}?telegramID=${safeTelegramID}`);
+
+        socket.addEventListener('open', () => {
+            console.log(`WebSocket connection established for Telegram ID: ${safeTelegramID}`);
+        });
+
+        socket.addEventListener('close', () => {
+            console.log(`WebSocket connection closed for Telegram ID: ${safeTelegramID}`);
+        });
+
+        socket.addEventListener('error', (error) => {
+            console.error(`WebSocket error for Telegram ID ${safeTelegramID}: ${error}`);
+        });
+
+        socket.addEventListener('message', (event) => {
+            console.log(`Received message from Telegram ID ${safeTelegramID}: ${event.data}`);
+
+            try {
+                const messageData = JSON.parse(event.data);
+                console.log(`Parsed message data: ${JSON.stringify(messageData)}`);
+            } catch (error) {
+                console.error(`Error parsing message data: ${error}`);
+            };
+        });
+
+        return socket
+    };
 };

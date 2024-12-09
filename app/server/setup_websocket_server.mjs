@@ -1,8 +1,8 @@
-import { WebSocket } from "ws";
+import { WebSocketServer } from "ws";
 
 
 export function setupWebsocketServer(server) {
-    const wss = new WebSocket.Server({ server });
+    const wss = new WebSocketServer({ server });
 
     const users = new Map();
 

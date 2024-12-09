@@ -503,7 +503,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                     message
                 };
 
-                socket.send(messageData);
+                socket.send(JSON.stringify(messageData));
             };
 
             if (response.ok) {

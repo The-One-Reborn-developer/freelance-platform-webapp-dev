@@ -540,6 +540,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                                           </div>`;
 
                 messageInput.value = '';
+                scrollToBottom(chatHistory);
             };
         };
     };
@@ -668,7 +669,6 @@ async function showPerformerChats(validatedTelegramID, socket) {
 
 
 async function fetchCustomers(validatedTelegramID) {
-    console.log(`Fetching customers for Telegram ID: ${validatedTelegramID}`);
     try {
         const response = await fetch(`/responded-customers?performer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
@@ -796,7 +796,7 @@ function initializeWebSocket(validatedTelegramID) {
                                             <br><br>${new Date().toLocaleString()}
                                           </div>`;
 
-                                              
+                scrollToBottom(chatHistory);
             } catch (error) {
                 console.error(`Error parsing message data: ${error}`);
             };
@@ -804,4 +804,9 @@ function initializeWebSocket(validatedTelegramID) {
 
         return socket
     };
+};
+
+
+function scrollToBottom(element) {
+    element.scrollTop = element.scrollHeight;
 };

@@ -656,6 +656,7 @@ async function showPerformerChats(validatedTelegramID) {
 
 
 async function fetchCustomers(validatedTelegramID) {
+    console.log(`Fetching customers for Telegram ID: ${validatedTelegramID}`);
     try {
         const response = await fetch(`/responded-customers?performer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();

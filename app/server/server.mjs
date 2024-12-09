@@ -364,6 +364,7 @@ app.post('/change-profile-info', (req, res) => {
 
 app.get('/responded-customers', (req, res) => {
     const performerTelegramID = req.query.performer_telegram_id;
+    console.log(`Fetching responded customers for Telegram ID: ${performerTelegramID}`);
 
     try {
         if (!performerTelegramID) {

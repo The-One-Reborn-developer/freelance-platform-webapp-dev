@@ -540,8 +540,8 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                                           </div>`;
 
                 messageInput.value = '';
-                const chatContainer = document.getElementById('chat-container');
-                scrollToBottom(chatContainer);
+                const display = document.getElementById('display');
+                scrollToBottom(display);
             };
         };
     };
@@ -798,8 +798,8 @@ function initializeWebSocket(validatedTelegramID) {
                                             <br><br>${new Date().toLocaleString()}
                                           </div>`;
 
-                const chatContainer = document.getElementById('chat-container');
-                scrollToBottom(chatContainer);
+                const display = document.getElementById('display');
+                scrollToBottom(display);
             } catch (error) {
                 console.error(`Error parsing message data: ${error}`);
             };

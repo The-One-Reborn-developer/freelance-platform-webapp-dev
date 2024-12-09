@@ -496,10 +496,30 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                  })
             });
 
+            // Fetch missing performer name
+            const performerNameResponse = await fetch('/get-user-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ telegram_id: validatedTelegramID })
+            });
+
+            if (!performerNameResponse.ok) {
+                showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
+                return;
+            };
+
+            const userData = await performerNameResponse.json();
+            const performerName = userData.userData.name;
+
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
+                const senderName = role === 'customer' ? user.name : performerName;
+
                 const messageData = {
-                    recipientTelegramID: role === 'customer' ? validatedTelegramID : user.telegramID,
+                    recipient_telegram_id: role === 'customer' ? validatedTelegramID : user.telegramID,
+                    sender_name: senderName,
                     message
                 };
 
@@ -507,24 +527,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             };
 
             if (response.ok) {
-                const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
-                
-                // Fetch missing customer name
-                const response = await fetch('/get-user-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ telegram_id: validatedTelegramID })
-                });
-
-                if (!response.ok) {
-                    showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
-                    return;
-                };
-
-                const userData = await response.json();
-                const performerName = userData.userData.name;
+                const currentDate = new Date().toLocaleString();
 
                 const chatHistory = document.getElementById('chat-history');
 
@@ -780,7 +783,20 @@ function initializeWebSocket(validatedTelegramID) {
 
             try {
                 const messageData = JSON.parse(event.data);
-                console.log(`Parsed message data: ${JSON.stringify(messageData)}`);
+
+                if (!messageData || !messageData.senderName || !messageData.message) {
+                    console.error('Invalid message data received');
+                    return;
+                };
+
+                const chatHistory = document.getElementById('chat-history');
+                chatHistory.innerHTML += `<div class="chat-message">
+                                            ${messageData.senderName}
+                                            <br><br>${messageData.message}
+                                            <br><br>${new Date().toLocaleString()}
+                                          </div>`;
+
+                                              
             } catch (error) {
                 console.error(`Error parsing message data: ${error}`);
             };

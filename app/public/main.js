@@ -7,7 +7,7 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             console.log(`User data: ${JSON.stringify(userData)}`);
-            const validatedTelegramID = userData.userData.telegramID;
+            const validatedTelegramID = userData.userData.telegram_id;
             console.log(`Validated Telegram ID: ${validatedTelegramID}`);
             const role = userData.userData.role;
 

@@ -14,7 +14,7 @@ window.onload = async function () {
                 setupPerformerInterface(validatedTelegramID, userData);
             };
 
-            initializeWebSocket(validatedTelegramID);
+            const socket = initializeWebSocket(validatedTelegramID);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };

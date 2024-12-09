@@ -404,11 +404,11 @@ app.use((err, req, res, next) => {
     res.status(500).json({ message: 'Unexpected server error.' });
 });
 
-
+/*
 httpServer.listen(PORT, () => {
     console.log(`HTTPS server started on port ${PORT}`);
 });
-
+*/
 
 app.listen(PORT, () => {
     console.log(`HTTP server started on port ${PORT}`);

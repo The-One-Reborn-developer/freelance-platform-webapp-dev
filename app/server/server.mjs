@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import express from "express";
 import dotenv from "dotenv";
+import { createServer } from "http";
 
 import { 
     createUsersTable,
@@ -23,6 +24,7 @@ import { getResponses } from "./get_responses.mjs";
 import { updateProfileInfo } from "./update_profile_info.mjs"
 import { updateResponse } from "./update_response.mjs";
 import { getResponsesWithChatStarted } from "./get_responses_with_chat_started.mjs";
+import { setupWebsocketServer } from "./setup_websocket_server.mjs"
 
 
 dotenv.config({ path: '/app/.env' });
@@ -32,8 +34,14 @@ app.use(express.json());
 app.use(express.static('app/public'));
 console.log('Express app created');
 
+const httpServer = createServer(app);
+const { sendMessageToUser } = setupWebsocketServer(httpServer);
+
 const db = new Database('./app/database.db', { verbose: console.log });
-console.log('Database created');
+
+const PORT = process.env.PORT || 3000;
+console.log('HTTP server created');
+httpServer.listen(PORT, () => console.log(`HTTP server listening on port ${PORT}`));
 
 createUsersTable(db);
 createBidsTable(db);
@@ -396,9 +404,4 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ message: 'Unexpected server error.' });
-});
-
-
-app.listen(3000, () => {
-    console.log('Server started on port 3000');
 });

@@ -7,14 +7,13 @@ window.onload = async function () {
             const userData = await getUserData(telegramID);
             const validatedTelegramID = userData.userData.telegram_id;
             const role = userData.userData.role;
+            const socket = initializeWebSocket(validatedTelegramID);
 
             if (role === 'customer') {
-                setupCustomerInterface(validatedTelegramID, userData);
+                setupCustomerInterface(validatedTelegramID, userData, socket);
             } else {
-                setupPerformerInterface(validatedTelegramID, userData);
+                setupPerformerInterface(validatedTelegramID, userData, socket);
             };
-
-            const socket = initializeWebSocket(validatedTelegramID);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
@@ -416,7 +415,7 @@ async function showBids(city, telegramID) {
 };
 
 
-async function showCustomerChats(validatedTelegramID) {
+async function showCustomerChats(validatedTelegramID, socket) {
     // Fetch the list of performers who responded to the customer's bids
     try {
         const performers = await fetchPerformers(validatedTelegramID);
@@ -434,7 +433,7 @@ async function showCustomerChats(validatedTelegramID) {
             performers.forEach((performer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
-                button.addEventListener('click', () => loadChatHistory(validatedTelegramID, performer, 'customer'));
+                button.addEventListener('click', () => loadChatHistory(validatedTelegramID, performer, 'customer', socket));
                 performerList.appendChild(button);
             });
         };
@@ -444,7 +443,7 @@ async function showCustomerChats(validatedTelegramID) {
 };
 
 
-async function loadChatHistory(validatedTelegramID, user, role) {
+async function loadChatHistory(validatedTelegramID, user, role, socket) {
     const chatHistory = document.getElementById('chat-history');
 
     // Clear the chat history
@@ -496,6 +495,16 @@ async function loadChatHistory(validatedTelegramID, user, role) {
                     sender_type: role
                  })
             });
+
+            // Send the message through the WebSocket to be displayed on the other side
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const messageData = {
+                    recipientTelegramID: role === 'customer' ? user.telegramID : validatedTelegramID,
+                    message
+                };
+
+                socket.send(messageData);
+            };
 
             if (response.ok) {
                 const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
@@ -627,7 +636,7 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
 };
 
 
-async function showPerformerChats(validatedTelegramID) {
+async function showPerformerChats(validatedTelegramID, socket) {
     // Fetch the list of customers who wrote to the performer
     try {
         const customers = await fetchCustomers(validatedTelegramID);
@@ -645,7 +654,7 @@ async function showPerformerChats(validatedTelegramID) {
             customers.forEach((customer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
-                button.addEventListener('click', () => loadChatHistory(validatedTelegramID, customer, 'performer'));
+                button.addEventListener('click', () => loadChatHistory(validatedTelegramID, customer, 'performer', socket));
                 customerList.appendChild(button);
             });
         };
@@ -677,7 +686,7 @@ async function fetchCustomers(validatedTelegramID) {
 };
 
 
-function setupCustomerInterface (validatedTelegramID, userData) {
+function setupCustomerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
 
     insertCustomerButtons(name);
@@ -702,12 +711,12 @@ function setupCustomerInterface (validatedTelegramID, userData) {
     
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showCustomerChats(validatedTelegramID);
+        await showCustomerChats(validatedTelegramID, socket);
     });
 };
 
 
-function setupPerformerInterface (validatedTelegramID, userData) {
+function setupPerformerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
@@ -729,7 +738,7 @@ function setupPerformerInterface (validatedTelegramID, userData) {
 
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showPerformerChats(validatedTelegramID);
+        await showPerformerChats(validatedTelegramID, socket);
     });
 
     const changeProfileInfoButton = document.getElementById('change-profile-info');

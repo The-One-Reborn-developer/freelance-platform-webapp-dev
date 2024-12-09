@@ -771,7 +771,8 @@ function initializeWebSocket(validatedTelegramID) {
         });
 
         socket.addEventListener('close', () => {
-            console.log(`WebSocket connection closed for Telegram ID: ${validatedTelegramID}`);
+            console.log(`WebSocket connection closed for Telegram ID: ${validatedTelegramID}. Reconnecting...`);
+            setTimeout(connect, 5000); // Reconnect after 5 seconds
         });
 
         socket.addEventListener('error', (error) => {

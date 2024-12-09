@@ -408,3 +408,8 @@ app.use((err, req, res, next) => {
 httpServer.listen(PORT, () => {
     console.log(`HTTPS server started on port ${PORT}`);
 });
+
+
+app.listen(PORT, () => {
+    console.log(`HTTP server started on port ${PORT}`);
+});

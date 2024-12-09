@@ -60,14 +60,5 @@ export function setupWebsocketServer(server) {
         };
     };
 
-    setInterval(() => {
-        for (const [telegramID, ws] of users.entries()) {
-            if (ws.readyState !== WebSocket.OPEN) {
-                users.delete(telegramID);
-                console.log(`WebSocket connection closed for Telegram ID ${telegramID} due to inactivity.`);
-            };
-        };        
-    }, 30000);
-
     return { sendMessageToUser };
 };

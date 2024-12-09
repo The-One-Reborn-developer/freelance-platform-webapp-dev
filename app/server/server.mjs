@@ -2,7 +2,7 @@ import Database from "better-sqlite3";
 import express from "express";
 import dotenv from "dotenv";
 import fs from "fs";
-import { createServer } from "https";
+import { createServer } from "http";
 
 import { 
     createUsersTable,
@@ -37,15 +37,12 @@ console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });
 
-const httpsServer = createServer ({
-    key: fs.readFileSync('/etc/letsencrypt/live/servisplus.publicvm.com/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/servisplus.publicvm.com/fullchain.pem'),
-}, app);
-const { sendMessageToUser } = setupWebsocketServer(httpsServer);
-const PORT = process.env.PORT || 443;
-httpsServer.listen(PORT, () => {
+const httpServer = createServer(app);
+const { sendMessageToUser } = setupWebsocketServer(httpServer);
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
     console.log(`HTTPS server started on port ${PORT}`);
-})
+});
 
 createUsersTable(db);
 createBidsTable(db);

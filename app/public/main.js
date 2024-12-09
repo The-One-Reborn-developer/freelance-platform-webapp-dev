@@ -8,9 +8,9 @@ window.onload = async function () {
             const role = userData.userData.role;
 
             if (role === 'customer') {
-                setupCustomerInterface(telegramID, userData, socket);
+                setupCustomerInterface(telegramID, userData);
             } else {
-                setupPerformerInterface(telegramID, userData, socket);
+                setupPerformerInterface(telegramID, userData);
             };
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -673,7 +673,7 @@ async function fetchCustomers(telegramID) {
 };
 
 
-function setupCustomerInterface (telegramID, userData, socket) {
+function setupCustomerInterface (telegramID, userData) {
     const name = userData.userData.name;
 
     insertCustomerButtons(name);
@@ -698,12 +698,12 @@ function setupCustomerInterface (telegramID, userData, socket) {
     
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showCustomerChats(telegramID, socket);
+        await showCustomerChats(telegramID);
     });
 };
 
 
-function setupPerformerInterface (telegramID, userData, socket) {
+function setupPerformerInterface (telegramID, userData) {
     const name = userData.userData.name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
@@ -725,7 +725,7 @@ function setupPerformerInterface (telegramID, userData, socket) {
 
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showPerformerChats(telegramID, socket);
+        await showPerformerChats(telegramID);
     });
 
     const changeProfileInfoButton = document.getElementById('change-profile-info');

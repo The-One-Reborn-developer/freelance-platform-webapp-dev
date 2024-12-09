@@ -40,9 +40,6 @@ const db = new Database('./app/database.db', { verbose: console.log });
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);
 const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, () => {
-    console.log(`HTTPS server started on port ${PORT}`);
-});
 
 createUsersTable(db);
 createBidsTable(db);
@@ -405,4 +402,9 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ message: 'Unexpected server error.' });
+});
+
+
+httpServer.listen(PORT, () => {
+    console.log(`HTTPS server started on port ${PORT}`);
 });

@@ -516,6 +516,9 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const senderName = role === 'customer' ? user.name : performerName;
+                console.log(`Sender type: ${role}`);
+                console.log(`User name: ${user.name}`);
+                console.log(`Performer name: ${performerName}`);
                 console.log(`Sender name: ${senderName}`);
 
                 const messageData = {
@@ -788,10 +791,27 @@ function initializeWebSocket(validatedTelegramID) {
             try {
                 const messageData = JSON.parse(event.data);
 
-                if (!messageData || !messageData.senderName || !messageData.message) {
+                const normalizedData = {
+                    senderTelegramID: messageData.sender_telegram_id,
+                    senderName: messageData.sender_name,
+                    message: messageData.message
+                }
+
+                if (!normalizedData.senderName || !normalizedData.message) {
+                    console.error('Invalid message data received');
+                    return;
+                } else if (
+                    !messageData ||
+                    typeof messageData.sender_name !== 'string' ||
+                    typeof messageData.message !== 'string' ||
+                    messageData.sender_name.trim() === '' ||
+                    messageData.message.trim() === ''
+                ) {
                     console.error('Invalid message data received');
                     return;
                 };
+
+                console.log(`Valid message received from ${messageData.sender_name.trim()}: ${messageData.message.trim()}`);
 
                 const chatHistory = document.getElementById('chat-history');
                 chatHistory.innerHTML += `<div class="chat-message">

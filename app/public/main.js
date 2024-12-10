@@ -548,7 +548,7 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    bid_id: user.bidID,
+                    bid_id: customer.bidID,
                     customer_telegram_id: customer.telegramID,
                     performer_telegram_id: validatedTelegramID,
                     message,
@@ -666,7 +666,7 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
     try {
         // Fetch the chat history
         const response = await fetch(
-            `/get-chats?bid_id=${user.bidID}&customer_telegram_id=${validatedTelegramID}&performer_telegram_id=${performer.telegramID}`
+            `/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${validatedTelegramID}&performer_telegram_id=${performer.telegramID}`
         );
         const data = await response.json();
 
@@ -699,7 +699,7 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    bid_id: user.bidID,
+                    bid_id: performer.bidID,
                     customer_telegram_id: validatedTelegramID,
                     performer_telegram_id: performer.telegramID,
                     message,

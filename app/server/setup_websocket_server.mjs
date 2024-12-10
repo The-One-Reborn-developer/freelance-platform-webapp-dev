@@ -22,6 +22,7 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
+                users.get(telegramID).send(JSON.stringify({ message: 'Connected to the server' }));
                 console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
             };
         };

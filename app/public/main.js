@@ -517,9 +517,9 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const senderName = role === 'customer' ? user.name : performerName;
                 console.log(`Role: ${role}`);
-                console.log(`Validated Telegram ID: ${validatedTelegramID}`);
-                console.log(`User Telegram ID: ${user.telegramID}`);
-                console.log(`Recipient Telegram ID: ${role === 'customer' ? user.telegramID : validatedTelegramID}`);
+                console.log(`Customer name: ${user.name}`);
+                console.log(`Performer name: ${performerName}`);
+                console.log(`Sender name assigned: ${senderName}`);
 
                 const messageData = {
                     recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
@@ -697,6 +697,7 @@ async function fetchCustomers(validatedTelegramID) {
 
 function setupCustomerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
+    console.log(`Customer name: ${name}`);
 
     insertCustomerButtons(name);
 
@@ -727,6 +728,7 @@ function setupCustomerInterface (validatedTelegramID, userData, socket) {
 
 function setupPerformerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
+    console.log(`Performer name: ${name}`);
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
 

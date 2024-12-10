@@ -533,7 +533,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                     chatHistory.innerHTML += `<div class="chat-message">
                                                 ${role === 'customer' 
                                                     ? `Заказчик ${user.name}` 
-                                                    : `Мастер ${performerName}`}:
+                                                    : `Мастер ${user.name}`}:
                                                 <br><br>${message}
                                                 <br><br>${currentDate}
                                             </div>`;

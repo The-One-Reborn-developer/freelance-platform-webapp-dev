@@ -34,7 +34,9 @@ export function setupWebsocketServer(server) {
                 const { 
                     recipient_telegram_id: recipientTelegramID,
                     sender_name: senderName,
-                    message } = JSON.parse(rawMessage);
+                    message
+                } = JSON.parse(rawMessage);
+                const recipientTelegramIDString = String(recipientTelegramID);
 
                 if (!recipientTelegramID || !String(senderName).trim() || !String(message).trim()) {
                     console.error(`Invalid message from Telegram ID ${telegramID}: ${rawMessage}`);
@@ -44,8 +46,7 @@ export function setupWebsocketServer(server) {
                     console.log(`Parsed values - recipientTelegramID: ${recipientTelegramID}, senderName: ${senderName}, message: ${message}`);
 
                     sendMessageToUser(
-                        //recipientTelegramID,
-                        telegramID,
+                        recipientTelegramIDString,
                         {
                             sender_telegram_id: telegramID,
                             sender_name: senderName,

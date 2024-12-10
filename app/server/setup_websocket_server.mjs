@@ -21,6 +21,7 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
+                users.get(telegramID).send(JSON.stringify({ status: 'connected' }));
                 console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
             };
         };
@@ -41,7 +42,8 @@ export function setupWebsocketServer(server) {
                     return;
                 } else {
                     sendMessageToUser(
-                        recipientTelegramID,
+                        //recipientTelegramID,
+                        telegramID,
                         {
                             sender_telegram_id: telegramID,
                             sender_name: senderName,
@@ -72,7 +74,6 @@ export function setupWebsocketServer(server) {
         const user = users.get(recipientTelegramID);
         console.log(`Current users keys: ${Array.from(users.keys())}`);
         // Check type of mapped keys
-        console.log(`Type of mapped keys: ${typeof users.keys()}`);
         console.log(`Type of user: ${typeof user}`);
 
         if (user) {

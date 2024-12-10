@@ -10,7 +10,7 @@ export function setupWebsocketServer(server) {
 
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
-        const telegramID = params.get('telegramID');
+        const telegramID = String(params.get('telegramID'));
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
@@ -69,6 +69,7 @@ export function setupWebsocketServer(server) {
 
     // Send message to a specific user
     const sendMessageToUser = (telegramID, message) => {
+        console.log(`Current users map keys: ${Array.from(users.keys())}`);
         const user = users.get(telegramID);
         if (user) {
             user.send(JSON.stringify(message));

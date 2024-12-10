@@ -41,6 +41,8 @@ export function setupWebsocketServer(server) {
                     ws.send(JSON.stringify({ error: 'Invalid message format' }));
                     return;
                 } else {
+                    console.log(`Parsed values - recipientTelegramID: ${recipientTelegramID}, senderName: ${senderName}, message: ${message}`);
+
                     sendMessageToUser(
                         //recipientTelegramID,
                         telegramID,

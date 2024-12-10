@@ -510,7 +510,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                 return;
             } else {
                 const customerData = await getCustomerDataResponse.json();
-                const customerName = customerData.customerData.name;
+                const customerName = customerData.userData.name;
 
                 // Send the message through the WebSocket to be displayed on the other side
                 if (socket && socket.readyState === WebSocket.OPEN) {

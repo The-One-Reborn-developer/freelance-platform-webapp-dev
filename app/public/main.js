@@ -590,7 +590,7 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
                     const chatHistory = document.getElementById('chat-history');
 
                     chatHistory.innerHTML += `<div class="chat-message">
-                                                Мастер ${senderName}}:
+                                                Мастер ${senderName}:
                                                 <br><br>${message}
                                                 <br><br>${currentDate}
                                               </div>`;

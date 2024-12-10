@@ -520,7 +520,6 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                 console.log(`Validated Telegram ID: ${validatedTelegramID}`);
                 console.log(`User Telegram ID: ${user.telegramID}`);
                 console.log(`Recipient Telegram ID: ${role === 'customer' ? user.telegramID : validatedTelegramID}`);
-                console.log(`Message Data: ${JSON.stringify(messageData)}`);
 
                 const messageData = {
                     recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,

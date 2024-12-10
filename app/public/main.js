@@ -741,7 +741,7 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
                     const chatHistory = document.getElementById('chat-history');
 
                     chatHistory.innerHTML += `<div class="chat-message">
-                                                Заказчик ${customerName}
+                                                Заказчик ${senderName}
                                                 <br><br>${message}
                                                 <br><br>${currentDate}
                                             </div>`;

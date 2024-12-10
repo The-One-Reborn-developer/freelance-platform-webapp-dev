@@ -516,13 +516,14 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const senderName = role === 'customer' ? user.name : performerName;
-                console.log(`Sender type: ${role}`);
-                console.log(`User name: ${user.name}`);
-                console.log(`Performer name: ${performerName}`);
-                console.log(`Sender name: ${senderName}`);
+                console.log(`Role: ${role}`);
+                console.log(`Validated Telegram ID: ${validatedTelegramID}`);
+                console.log(`User Telegram ID: ${user.telegramID}`);
+                console.log(`Recipient Telegram ID: ${role === 'customer' ? user.telegramID : validatedTelegramID}`);
+                console.log(`Message Data: ${JSON.stringify(messageData)}`);
 
                 const messageData = {
-                    recipient_telegram_id: role === 'customer' ? validatedTelegramID : user.telegramID,
+                    recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
                     sender_name: senderName,
                     message
                 };

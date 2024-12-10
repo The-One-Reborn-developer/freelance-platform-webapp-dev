@@ -497,7 +497,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             });
 
             // Fetch missing performer name
-            const getUserDataResponse = await fetch('/get-user-data', {
+            const getCustomerDataResponse = await fetch('/get-user-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -505,16 +505,16 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                 body: JSON.stringify({ telegram_id: validatedTelegramID })
             });
 
-            if (!getUserDataResponse.ok) {
+            if (!getCustomerDataResponse.ok) {
                 showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
                 return;
             } else {
-                const userData = await getUserDataResponse.json();
-                const userName = userData.userData.name;
+                const customerData = await getCustomerDataResponse.json();
+                const customerName = customerData.customerData.name;
 
                 // Send the message through the WebSocket to be displayed on the other side
                 if (socket && socket.readyState === WebSocket.OPEN) {
-                    const senderName = userName
+                    const senderName = role === 'customer' ? customerName : user.name;
 
                     const messageData = {
                         recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
@@ -533,8 +533,8 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
 
                     chatHistory.innerHTML += `<div class="chat-message">
                                                 ${role === 'customer' 
-                                                    ? `Заказчик ${userName}` 
-                                                    : `Мастер ${userName}`}:
+                                                    ? `Заказчик ${customerName}` 
+                                                    : `Мастер ${user.name}`}:
                                                 <br><br>${message}
                                                 <br><br>${currentDate}
                                             </div>`;

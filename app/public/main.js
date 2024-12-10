@@ -565,7 +565,7 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
                 body: JSON.stringify({ telegram_id: validatedTelegramID })
             });
 
-            if (!getCustomerDataResponse.ok) {
+            if (!getPerformerDataResponse.ok) {
                 showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
                 return;
             } else {

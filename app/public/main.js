@@ -510,10 +510,11 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                 return;
             } else {
                 const userData = await getUserDataResponse.json();
+                const userName = userData.userData.name;
 
                 // Send the message through the WebSocket to be displayed on the other side
                 if (socket && socket.readyState === WebSocket.OPEN) {
-                    const senderName = userData.userData.name
+                    const senderName = userName
 
                     const messageData = {
                         recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
@@ -532,8 +533,8 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
 
                     chatHistory.innerHTML += `<div class="chat-message">
                                                 ${role === 'customer' 
-                                                    ? `Заказчик ${user.name}` 
-                                                    : `Мастер ${user.name}`}:
+                                                    ? `Заказчик ${userName}` 
+                                                    : `Мастер ${userName}`}:
                                                 <br><br>${message}
                                                 <br><br>${currentDate}
                                             </div>`;

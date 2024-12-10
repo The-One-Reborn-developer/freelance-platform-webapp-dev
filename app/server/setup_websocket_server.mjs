@@ -15,10 +15,15 @@ export function setupWebsocketServer(server) {
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
             return;
+        } else {
+            if (users.has(telegramID)) {
+                console.warn(`Duplicate connection for Telegram ID: ${telegramID}. Closing the old connection.`);
+                users.get(telegramID).close(); // Close the previous connection
+            } else {
+                users.set(telegramID, ws);
+                console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
+            };
         };
-
-        users.set(telegramID, ws);
-        console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
@@ -30,7 +35,7 @@ export function setupWebsocketServer(server) {
                     sender_name: senderName,
                     message } = JSON.parse(rawMessage);
 
-                if (!recipientTelegramID || !senderName || !message) {
+                if (!recipientTelegramID || !String(senderName).trim() || !String(message).trim()) {
                     console.error(`Invalid message from Telegram ID ${telegramID}: ${rawMessage}`);
                     ws.send(JSON.stringify({ error: 'Invalid message format' }));
                     return;
@@ -67,7 +72,9 @@ export function setupWebsocketServer(server) {
         const user = users.get(telegramID);
         if (user) {
             user.send(JSON.stringify(message));
-        };
+        } else {
+            console.error(`User with Telegram ID ${telegramID} is not connected.`);
+        }
     };
 
     return { sendMessageToUser };

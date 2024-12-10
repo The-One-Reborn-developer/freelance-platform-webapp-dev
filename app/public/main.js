@@ -552,7 +552,7 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
                     customer_telegram_id: customer.telegramID,
                     performer_telegram_id: validatedTelegramID,
                     message,
-                    sender_type: role
+                    sender_type: 'performer'
                  })
             });
 
@@ -703,7 +703,7 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
                     customer_telegram_id: validatedTelegramID,
                     performer_telegram_id: performer.telegramID,
                     message,
-                    sender_type: role
+                    sender_type: 'customer'
                  })
             });
 

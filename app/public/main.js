@@ -497,7 +497,7 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
             });
 
             // Fetch missing performer name
-            const performerNameResponse = await fetch('/get-user-data', {
+            const getUserDataResponse = await fetch('/get-user-data', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -505,49 +505,49 @@ async function loadChatHistory(validatedTelegramID, user, role, socket) {
                 body: JSON.stringify({ telegram_id: validatedTelegramID })
             });
 
-            if (!performerNameResponse.ok) {
+            if (!getUserDataResponse.ok) {
                 showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
                 return;
-            };
+            } else {
+                const userData = await getUserDataResponse.json();
 
-            const userData = await performerNameResponse.json();
-            const performerName = userData.userData.name;
+                // Send the message through the WebSocket to be displayed on the other side
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    const senderName = role === 'customer' ? user.name : userData.userData.name;
+                    const recipientName = role === 'customer' ? userData.userData.name : user.name;
 
-            // Send the message through the WebSocket to be displayed on the other side
-            if (socket && socket.readyState === WebSocket.OPEN) {
-                const senderName = role === 'customer' ? user.name : performerName;
-                console.log(`Role: ${role}`);
-                console.log(`Customer name: ${user.name}`);
-                console.log(`Performer name: ${performerName}`);
-                console.log(`Sender name assigned: ${senderName}`);
+                    console.log(`Role: ${role}`);
+                    console.log(`Sender name: ${senderName}`);
+                    console.log(`Recipient name: ${recipientName}`);
 
-                const messageData = {
-                    recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
-                    sender_name: senderName,
-                    message
+                    const messageData = {
+                        recipient_telegram_id: role === 'customer' ? user.telegramID : validatedTelegramID,
+                        sender_name: senderName,
+                        message
+                    };
+                    console.log(`Message data: ${JSON.stringify(messageData)}`);
+
+                    socket.send(JSON.stringify(messageData));
                 };
-                console.log(`Message data: ${JSON.stringify(messageData)}`);
 
-                socket.send(JSON.stringify(messageData));
-            };
+                if (response.ok) {
+                    const currentDate = new Date().toLocaleString();
 
-            if (response.ok) {
-                const currentDate = new Date().toLocaleString();
+                    const chatHistory = document.getElementById('chat-history');
 
-                const chatHistory = document.getElementById('chat-history');
+                    chatHistory.innerHTML += `<div class="chat-message">
+                                                ${role === 'customer' 
+                                                    ? `Заказчик ${user.name}` 
+                                                    : `Мастер ${performerName}`}:
+                                                <br><br>${message}
+                                                <br><br>${currentDate}
+                                            </div>`;
 
-                chatHistory.innerHTML += `<div class="chat-message">
-                                              ${role === 'customer' 
-                                                  ? `Заказчик ${user.name}` 
-                                                  : `Мастер ${performerName}`}:
-                                              <br><br>${message}
-                                              <br><br>${currentDate}
-                                          </div>`;
-
-                messageInput.value = '';
-                const display = document.getElementById('display');
-                scrollToBottom(display);
-            };
+                    messageInput.value = '';
+                    const display = document.getElementById('display');
+                    scrollToBottom(display);
+                };
+            };            
         };
     };
 };

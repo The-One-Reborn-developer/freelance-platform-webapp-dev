@@ -815,9 +815,9 @@ function initializeWebSocket(validatedTelegramID) {
 
                 const chatHistory = document.getElementById('chat-history');
                 chatHistory.innerHTML += `<div class="chat-message">
-                                            ${messageData.senderName}
-                                            <br><br>${messageData.message}
-                                            <br><br>${new Date().toLocaleString()}
+                                            ${normalizedData.senderName}
+                                            <br><br>${normalizedData.message}
+                                            <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
                                           </div>`;
 
                 const display = document.getElementById('display');

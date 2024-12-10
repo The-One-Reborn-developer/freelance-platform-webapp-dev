@@ -21,7 +21,6 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
-                users.get(telegramID).send(JSON.stringify({ status: 'connected' }));
                 console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
             };
         };
@@ -43,8 +42,6 @@ export function setupWebsocketServer(server) {
                     ws.send(JSON.stringify({ error: 'Invalid message format' }));
                     return;
                 } else {
-                    console.log(`Parsed values - recipientTelegramID: ${recipientTelegramID}, senderName: ${senderName}, message: ${message}`);
-
                     sendMessageToUser(
                         recipientTelegramIDString,
                         {
@@ -73,16 +70,13 @@ export function setupWebsocketServer(server) {
     });
 
     // Send message to a specific user
-    function sendMessageToUser (recipientTelegramID, message) {
-        const user = users.get(recipientTelegramID);
-        console.log(`Current users keys: ${Array.from(users.keys())}`);
-        // Check type of mapped keys
-        console.log(`Type of user: ${typeof user}`);
-
+    function sendMessageToUser (recipientTelegramIDString, message) {
+        const user = users.get(recipientTelegramIDString);
         if (user) {
             user.send(JSON.stringify(message));
+            console.log(`Message sent to Telegram ID ${recipientTelegramIDString}: ${JSON.stringify(message)}`);
         } else {
-            console.error(`User with Telegram ID ${recipientTelegramID} is not connected.`);
+            console.error(`User with Telegram ID ${recipientTelegramIDString} is not connected.`);
         };
     };
 

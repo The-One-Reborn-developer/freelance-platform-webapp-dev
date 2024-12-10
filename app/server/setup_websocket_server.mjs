@@ -11,6 +11,7 @@ export function setupWebsocketServer(server) {
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegramID'));
+        console.log(typeof telegramID);
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
@@ -56,9 +57,9 @@ export function setupWebsocketServer(server) {
         });
 
         // Handle disconnections
-        ws.on('close', () => {
+        ws.on('close', (code, reason) => {
             users.delete(telegramID);
-            console.log(`WebSocket connection closed for Telegram ID: ${telegramID}`);
+            console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
         });
 
         // Handle errors

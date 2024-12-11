@@ -448,17 +448,31 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
             .then(data => {
                 if (data.success && Array.isArray(data.bids)) {
                     display.innerHTML = '';
-                    console.log(data);
-                    /*
+                    console.log(data)
+                    
                     data.bids.forEach(bid => {
                         const bidContainer = document.createElement('div');
                         bidContainer.classList.add('bid-container');
 
-                        
-                    };
-                    */
+                        const bidCard = `
+                            <p>Номер заказа: ${bid.id}</p>
+                            <p>Город: ${bid.city}</p>
+                            <p>Описание: ${bid.description}</p>
+                            <p>Срок от: ${bid.deadline_from}</p>
+                            <p>Срок до: ${bid.deadline_to}</p>
+                            <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
+                            <br><br>
+                            <p>Откликнулся: ${bid.performer_name}</p>
+                            <p>Ставка: ${bid.rate} (₽/час)</p>
+                            <p>Опыт: ${bid.experience}</p>
+                        `;
+
+                        bidContainer.innerHTML = bidCard;
+
+                        display.appendChild(bidContainer);
+                    });
                 } else {
-                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
+                    showModal('У данного заказчика ещё нет переписок');
                 };
             })
             .catch(error => {

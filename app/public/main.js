@@ -495,6 +495,7 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                             });
 
                             bidCard.innerHTML += responseDetails;
+                            bidCard.appendChild(lookChatButton);
                         });
 
                         bidsContainer.appendChild(bidCard);

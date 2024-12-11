@@ -477,6 +477,14 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                             bidCard.innerHTML += responseDetails;
                         });
 
+                        const lookChatsButton = document.createElement('button');
+                        lookChatsButton.classList.add('bid-card-button');
+                        lookChatsButton.textContent = 'Посмотреть переписки 👀';
+                        lookChatsButton.addEventListener('click', () => {
+                            // TODO
+                        });
+                        bidCard.appendChild(lookChatsButton);
+
                         bidsContainer.appendChild(bidCard);
                     });
 

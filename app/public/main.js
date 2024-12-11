@@ -545,6 +545,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };
 
+            display.innerHTML = '';
             display.appendChild(chatHistory);
         } catch (error) {
             console.error(`Error in show-selected-customer-chat: ${error}`);

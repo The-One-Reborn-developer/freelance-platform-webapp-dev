@@ -779,7 +779,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 chatButton.innerHTML = 'Написать мастеру 📩';
                 chatButton.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, name, performer, socket));
 
-                const lookPerformerChatsButton = document.getElementById('look-performer-chats');
+                const lookPerformerChatsButton = document.createElement('look-performer-chats');
                 lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
                 lookPerformerChatsButton.addEventListener('click', () => showSelectedPerformerChats(performer.telegramID));
 

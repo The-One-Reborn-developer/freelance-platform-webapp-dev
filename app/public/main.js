@@ -843,7 +843,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 const currentDate = new Date().toLocaleString();
 
                 const chatHistory = document.getElementById('chat-history');
-
+                console.log(`Name: ${name}`);
                 chatHistory.innerHTML += `<div class="chat-message">
                                             Заказчик ${name}
                                             <br><br>${message}

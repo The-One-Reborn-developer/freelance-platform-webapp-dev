@@ -725,6 +725,37 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 };
 
 
+function setupCustomerInterface (validatedTelegramID, userData, socket) {
+    const name = userData.userData.name;
+    console.log(`Customer name: ${name}`);
+
+    insertCustomerButtons(name);
+
+    const createBidButton = document.getElementById('create-bid');
+    createBidButton.addEventListener('click', async function () {
+        await showCreateBidForm();
+
+        // Attach submit form event listener
+        const createBidForm = document.getElementById('create-bid-form');
+        if (createBidForm) {
+            createBidForm.addEventListener('submit', function (event) {
+                handleBidFormSubmit(event, validatedTelegramID, name);
+            });
+        };
+    });
+
+    const myBidsButton = document.getElementById('my-bids');
+    myBidsButton.addEventListener('click', async function () {
+        await showMyBids(validatedTelegramID);
+    });
+    
+    const lookChatsButton = document.getElementById('look-chats');
+    lookChatsButton.addEventListener('click', async function () {
+        await showCustomerChats(validatedTelegramID, name, socket);
+    });
+};
+
+
 async function showCustomerChats(validatedTelegramID, name, socket) {
     // Fetch the list of performers who responded to the customer's bids
     try {
@@ -926,37 +957,6 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
             showModal('Произошла ошибка при изменении информации о профиле.');
         };
     };
-};
-
-
-function setupCustomerInterface (validatedTelegramID, userData, socket) {
-    const name = userData.userData.name;
-    console.log(`Customer name: ${name}`);
-
-    insertCustomerButtons(name);
-
-    const createBidButton = document.getElementById('create-bid');
-    createBidButton.addEventListener('click', async function () {
-        await showCreateBidForm();
-
-        // Attach submit form event listener
-        const createBidForm = document.getElementById('create-bid-form');
-        if (createBidForm) {
-            createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, validatedTelegramID, name);
-            });
-        };
-    });
-
-    const myBidsButton = document.getElementById('my-bids');
-    myBidsButton.addEventListener('click', async function () {
-        await showMyBids(validatedTelegramID);
-    });
-    
-    const lookChatsButton = document.getElementById('look-chats');
-    lookChatsButton.addEventListener('click', async function () {
-        await showCustomerChats(validatedTelegramID, socket);
-    });
 };
 
 

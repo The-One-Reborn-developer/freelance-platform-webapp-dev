@@ -414,6 +414,8 @@ app.post('/show-chats-list', (req, res) => {
         });
 
         if (responsesWithChatStarted.length > 0) {
+            console.log(`Customer bids: ${customerBids}`);
+            console.log('Responses with chat started:', responsesWithChatStarted);
             return res.status(200).json({ success: true, responsesWithChatStarted });
         } else {
             return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });

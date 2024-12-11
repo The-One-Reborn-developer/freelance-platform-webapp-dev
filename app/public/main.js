@@ -408,7 +408,7 @@ async function showBids(city, validatedTelegramID) {
                         const customerTelegramID = bid.customer_telegram_id
                         
                         if (customerTelegramID) {
-                            showCustomerChatsWithPerformers(customerTelegramID);
+                            await showCustomerChatsWithPerformers(customerTelegramID);
                         } else {
                             showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                             console.error('Customer Telegram ID not found');
@@ -428,7 +428,7 @@ async function showBids(city, validatedTelegramID) {
 };
 
 
-function showCustomerChatsWithPerformers(customerTelegramID) {
+async function showCustomerChatsWithPerformers(customerTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -487,7 +487,7 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                                 const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
                                 const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
                                 if (bidID && customerTelegramID && performerTelegramID) {
-                                    showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
+                                    await showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
                                 } else {
                                     showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
                                     console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
@@ -516,45 +516,36 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
 };
 
 
-function showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID) {
+async function showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID) {
     const display = document.getElementById('display');
+    display.innerHTML = '';
+    display.innerHTML = 'Загрузка...';
+
+    const chatHistory = document.createElement('div');
+    chatHistory.classList.add('chat-history');
+
     if (!display) {
         console.error('Display element not found');
         return;
     } else {
         try {
-            display.innerHTML = '';
-            display.innerHTML = 'Загрузка...';
-            fetch ('/show-selected-customer-chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    bid_id: bidID,
-                    customer_telegram_id:
-                    customerTelegramID,
-                    performer_telegram_id: performerTelegramID
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && Array.isArray(data.messages)) {
-                    display.innerHTML = '';
+            const response = await fetch(
+                `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
+            );
+            const data = await response.json();
+            
+            if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
+                chatHistory.innerHTML = data.chatMessages
+                // Filter out empty messages
+                .filter((msg) => msg.trim() !== '')
+                // Replace '\n' with <br>
+                .map((msg) => `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`)
+                .join('');
+            } else {
+                showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+            };
 
-                    const chatContainer = document.createElement('div');
-                    chatContainer.classList.add('chat-container');
-
-                    console.log(data.messages);
-
-                    display.appendChild(chatContainer);
-                } else {
-                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
-                };
-            })
-            .catch(error => {
-                console.error(`Error in show-selected-customer-chat: ${error}`);
-            });
+            display.appendChild(chatHistory);
         } catch (error) {
             console.error(`Error in show-selected-customer-chat: ${error}`);
         };

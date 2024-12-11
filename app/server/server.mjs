@@ -399,25 +399,31 @@ app.post('/show-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
 
+        // Step 1: Retrieve all bids created by the customer
         const customerBids = getAllBidsByCustomerTelegramID(db, customerTelegramID);
         if (!customerBids || customerBids.length === 0) {
             return res.status(200).json({ success: false });
         };
-        
-        const responsesWithChatStarted = []
 
-        customerBids.forEach((bid) => {
+        // Step 2: Filter all bids to include only those with matching responses
+        const bidsWithResponses = customerBids.map((bid) => {
             const responses = getResponsesByBidIDWithChatStarted(db, bid.id);
             if (responses && responses.length > 0) {
-                responsesWithChatStarted.push(...responses);
-            };
-        });
+                return {
+                    ...bid,
+                    responses: responses
+                };
+            } else {
+                return null; // Skip bids without responses
+            }
+        }).filter(Boolean); // Filter out null entries
 
+        // Step 3: Return only bids with responses
         if (responsesWithChatStarted.length > 0) {
-            return res.status(200).json({ success: true, responsesWithChatStarted, customerBids });
+            return res.status(200).json({ success: true, bids: bidsWithResponses });
         } else {
             return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });
-        }ж
+        };
     } catch (error) {
         console.error('Error in /show-chats-list:', error);
         res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });

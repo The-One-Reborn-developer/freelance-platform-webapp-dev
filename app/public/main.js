@@ -446,8 +446,17 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    console.log(data)
+                if (data.success && Array.isArray(data.bids)) {
+                    display.innerHTML = '';
+                    console.log(data);
+                    /*
+                    data.bids.forEach(bid => {
+                        const bidContainer = document.createElement('div');
+                        bidContainer.classList.add('bid-container');
+
+                        
+                    };
+                    */
                 } else {
                     showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                 };

@@ -448,7 +448,6 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
             .then(data => {
                 if (data.success) {
                     console.log(data)
-                    console.log(data.responsesWithChatStarted);
                 } else {
                     showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                 };

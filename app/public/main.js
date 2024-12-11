@@ -408,7 +408,7 @@ async function showBids(city, validatedTelegramID) {
                         const customerTelegramID = bid.customer_telegram_id
                         
                         if (customerTelegramID) {
-                            showChats(customerTelegramID);
+                            showCustomerChatsWithPerformers(customerTelegramID);
                         } else {
                             showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                             console.error('Customer Telegram ID not found');
@@ -428,7 +428,7 @@ async function showBids(city, validatedTelegramID) {
 };
 
 
-function showChats(customerTelegramID) {
+function showCustomerChatsWithPerformers(customerTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');

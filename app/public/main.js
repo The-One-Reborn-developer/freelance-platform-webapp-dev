@@ -448,13 +448,15 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
             .then(data => {
                 if (data.success && Array.isArray(data.bids)) {
                     display.innerHTML = '';
-                    console.log(data)
+
+                    const bidsContainer = document.createElement('div');
+                    bidsContainer.classList.add('bids-container');
                     
                     data.bids.forEach(bid => {
-                        const bidContainer = document.createElement('div');
-                        bidContainer.classList.add('bid-container');
+                        const bidCard = document.createElement('div');
+                        bidCard.classList.add('bid-card');
 
-                        const bidCard = `
+                        bidCard.innerHTML = `
                             <p>Номер заказа: ${bid.id}</p>
                             <p>Город: ${bid.city}</p>
                             <p>Описание: ${bid.description}</p>
@@ -464,8 +466,6 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                             <br><br>
                         `;
 
-                        bidContainer.innerHTML = bidCard;
-
                         bid.responses.forEach((response) => {
                             const responseDetails = `
                                 <div class="response-container">
@@ -474,11 +474,13 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                                     <p>Стаж: ${response.performer_experience} (в годах)</p>
                                 </div>
                             `;
-                            bidContainer.innerHTML += responseDetails;
+                            bidCard.innerHTML += responseDetails;
                         });
 
-                        display.appendChild(bidContainer);
+                        bidsContainer.appendChild(bidCard);
                     });
+
+                    display.appendChild(bidsContainer);
                 } else {
                     showModal('У данного заказчика ещё нет переписок');
                 };

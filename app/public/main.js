@@ -329,7 +329,7 @@ async function handleCityFormSubmit(event, validatedTelegramID) {
 };
 
 
-async function showBids(city, telegramID) {
+async function showBids(city, validatedTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -370,10 +370,11 @@ async function showBids(city, telegramID) {
                         <p>Срок до: ${bid.deadline_to}</p>
                         <br>
                         <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
-                        <button class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
+                        <button id="respond-to-bid" class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
+                        <button id="look-chats" class="bid-card-button">Посмотреть переписки заказчика 📤</button>
                     `;
 
-                    bidCard.querySelector('.bid-card-button').addEventListener('click', async (event) => {
+                    bidCard.querySelector('#respond-to-bid').addEventListener('click', async (event) => {
                         const bidID = event.target.getAttribute('data-bid-id');
                         
                         if (bidID) {
@@ -383,13 +384,13 @@ async function showBids(city, telegramID) {
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({ bid_id: bidID, performer_telegram_id: telegramID })
+                                    body: JSON.stringify({ bid_id: bidID, performer_telegram_id: validatedTelegramID })
                                 })
                                 .then(response => response.json())
                                 .then(data => {
                                     if (data.success) {
                                         showModal(data.message);
-                                        showBids(city, telegramID);
+                                        showBids(city, validatedTelegramID);
                                     };
                                 })
                                 .catch(error => {
@@ -402,6 +403,18 @@ async function showBids(city, telegramID) {
                             };
                         };
                     });
+
+                    bidCard.querySelector('#look-chats').addEventListener('click', async (event) => {
+                        const customerTelegramID = bid.customer_telegram_id
+                        
+                        if (customerTelegramID) {
+                            showChats(customerTelegramID);
+                        } else {
+                            showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
+                            console.error('Customer Telegram ID not found');
+                        };
+                    });
+
                     bidsContainer.appendChild(bidCard);
                 });
                 display.appendChild(bidsContainer);
@@ -410,6 +423,40 @@ async function showBids(city, telegramID) {
             };
         } catch (error) {
             console.error(`Error in showBids: ${error}`);
+        };
+    };
+};
+
+
+function showChats(customerTelegramID) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            display.innerHTML = 'Загрузка...';
+            fetch ('/show-chats-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ customer_telegram_id: customerTelegramID })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    display.innerHTML = data.responsesWithChatStarted;
+                } else {
+                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
+                };
+            })
+            .catch(error => {
+                console.error(`Error in show-chats: ${error}`);
+            });
+        } catch (error) {
+            console.error(`Error in show-chats: ${error}`);
         };
     };
 };

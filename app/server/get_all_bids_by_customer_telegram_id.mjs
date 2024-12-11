@@ -1,7 +1,7 @@
-export function getBidsByCustomerTelegramID(db, customer_telegram_id) {
+export function getAllBidsByCustomerTelegramID(db, customer_telegram_id) {
     try {
         const getBid = db.prepare(
-            'SELECT * FROM bids WHERE customer_telegram_id = ? AND closed = FALSE'
+            'SELECT * FROM bids WHERE customer_telegram_id = ?'
         );
         const getBidResult = getBid.all(customer_telegram_id);
         return getBidResult;

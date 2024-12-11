@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import fs from "fs";
 import { createServer } from "http";
+import path from "path";
 
 import { 
     createUsersTable,
@@ -13,7 +14,7 @@ import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
 import { postBid } from "./post_bid.mjs";
-import { getBidsByCustomerTelegramID } from "./get_bids_by_customer_telegram_id.mjs";
+import { getOpenBidsByCustomerTelegramID } from "./get_open_bids_by_customer_telegram_id.mjs";
 import { updateCloseBid } from "./update_close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
 import { postResponse } from "./post_response.mjs";
@@ -24,8 +25,10 @@ import { getChatMessages } from "./get_chat_messages.mjs";
 import { getResponses } from "./get_responses.mjs";
 import { updateProfileInfo } from "./update_profile_info.mjs"
 import { updateResponse } from "./update_response.mjs";
-import { getResponsesWithChatStarted } from "./get_responses_with_chat_started.mjs";
+import { getResponsesByPerformerTelegramIDWithChatStarted } from "./get_responses_by_performer_telegram_id_with_chat_started.mjs";
 import { setupWebsocketServer } from "./setup_websocket_server.mjs"
+import { getAllBidsByCustomerTelegramID } from "./get_all_bids_by_customer_telegram_id.mjs";
+import { getResponsesByBidIDWithChatStarted } from "./get_responses_by_bid_id_with_chat_started.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -147,7 +150,7 @@ app.post('/my-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
 
-        const bids = getBidsByCustomerTelegramID(db, customerTelegramID);
+        const bids = getOpenBidsByCustomerTelegramID(db, customerTelegramID);
 
         res.status(200).json({ success: true, bids });
     } catch (error) {
@@ -318,7 +321,7 @@ app.get('/responded-performers', (req, res) => {
             res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
             return;
         } else {
-            const customerBids = getBidsByCustomerTelegramID(db, customerTelegramID);
+            const customerBids = getOpenBidsByCustomerTelegramID(db, customerTelegramID);
 
             if (customerBids.length === 0) {
                 res.status(200).json({ success: true, performers: [] });
@@ -369,7 +372,7 @@ app.get('/responded-customers', (req, res) => {
             res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
             return;
         } else {
-            const responses = getResponsesWithChatStarted(db, performerTelegramID);
+            const responses = getResponsesByPerformerTelegramIDWithChatStarted(db, performerTelegramID);
             
             if (responses.length > 0) {
                 const bidIDs = responses.map((res) => res.bid_id);
@@ -388,6 +391,36 @@ app.get('/responded-customers', (req, res) => {
     } catch (error) {
         console.error('Error in /responded-customers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
+    };
+});
+
+
+app.post('/show-chats-list', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id;
+
+        const customerBids = getAllBidsByCustomerTelegramID(db, customerTelegramID);
+        if (!customerBids || customerBids.length === 0) {
+            return res.status(200).json({ success: false });
+        };
+        
+        const responsesWithChatStarted = []
+
+        customerBids.forEach((bid) => {
+            const responses = getResponsesByBidIDWithChatStarted(db, bid.id);
+            if (responses && responses.length > 0) {
+                responsesWithChatStarted.push(...responses);
+            };
+        });
+
+        if (responsesWithChatStarted.length > 0) {
+            return res.status(200).json({ success: true, responsesWithChatStarted });
+        } else {
+            return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });
+        }ж
+    } catch (error) {
+        console.error('Error in /show-chats-list:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
     };
 });
 

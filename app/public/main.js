@@ -6,7 +6,6 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             const validatedTelegramID = userData.userData.telegram_id;
-            const role = userData.userData.role;
             const socket = initializeWebSocket(validatedTelegramID);
 
             if (role === 'customer') {
@@ -417,7 +416,6 @@ async function showBids(city, telegramID) {
 
 function setupPerformerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
-    console.log(`Performer name: ${name}`);
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
 
@@ -438,7 +436,7 @@ function setupPerformerInterface (validatedTelegramID, userData, socket) {
 
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
-        await showPerformerChats(validatedTelegramID, socket);
+        await showPerformerChats(validatedTelegramID, name, socket);
     });
 
     const changeProfileInfoButton = document.getElementById('change-profile-info');
@@ -456,7 +454,7 @@ function setupPerformerInterface (validatedTelegramID, userData, socket) {
 };
 
 
-async function showPerformerChats(validatedTelegramID, socket) {
+async function showPerformerChats(validatedTelegramID, name, socket) {
     // Fetch the list of customers who wrote to the performer
     try {
         const customers = await fetchCustomers(validatedTelegramID);
@@ -474,7 +472,7 @@ async function showPerformerChats(validatedTelegramID, socket) {
             customers.forEach((customer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
-                button.addEventListener('click', () => loadPerformerChatHistory(validatedTelegramID, customer, socket));
+                button.addEventListener('click', () => loadPerformerChatHistory(validatedTelegramID, name, customer, socket));
                 customerList.appendChild(button);
             });
         };
@@ -505,7 +503,7 @@ async function fetchCustomers(validatedTelegramID) {
 };
 
 
-async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
+async function loadPerformerChatHistory(validatedTelegramID, name, customer, socket) {
     const chatHistory = document.getElementById('chat-history');
 
     // Clear the chat history
@@ -541,7 +539,7 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
         const message = messageInput.value.trim();
 
         if (message) {
-            // Send the message
+            // Send the message to the server to save and to route to Telegram
             const response = await fetch('/send-message', {
                 method: 'POST',
                 headers: {
@@ -555,57 +553,39 @@ async function loadPerformerChatHistory(validatedTelegramID, customer, socket) {
                     sender_type: 'performer'
                  })
             });
-
-            // Fetch missing performer name
-            const getPerformerDataResponse = await fetch('/get-user-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ telegram_id: validatedTelegramID })
-            });
-
-            if (!getPerformerDataResponse.ok) {
-                showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
-                return;
-            } else {
-                const performerData = await getPerformerDataResponse.json();
-                const senderName = performerData.userData.name;
-
-                // Send the message through the WebSocket to be displayed on the other side
-                if (socket && socket.readyState === WebSocket.OPEN) {
-                    const messageData = {
-                        recipient_telegram_id: customer.telegramID,
-                        sender_name: senderName,
-                        message
-                    };
-                    console.log(`Message data: ${JSON.stringify(messageData)}`);
-
-                    socket.send(JSON.stringify(messageData));
+            // Send the message through the WebSocket to be displayed on the other side
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const messageData = {
+                    recipient_telegram_id: customer.telegramID,
+                    sender_name: name,
+                    message
                 };
+                console.log(`Message data: ${JSON.stringify(messageData)}`);
 
-                if (response.ok) {
-                    const currentDate = new Date().toLocaleString();
+                socket.send(JSON.stringify(messageData));
+            };
 
-                    const chatHistory = document.getElementById('chat-history');
+            if (response.ok) {
+                const currentDate = new Date().toLocaleString();
 
-                    chatHistory.innerHTML += `<div class="chat-message">
-                                                Мастер ${senderName}:
-                                                <br><br>${message}
-                                                <br><br>${currentDate}
-                                              </div>`;
+                const chatHistory = document.getElementById('chat-history');
 
-                    messageInput.value = '';
-                    const display = document.getElementById('display');
-                    scrollToBottom(display);
-                };
-            };            
-        };
+                chatHistory.innerHTML += `<div class="chat-message">
+                                            Мастер ${name}:
+                                            <br><br>${message}
+                                            <br><br>${currentDate}
+                                            </div>`;
+
+                messageInput.value = '';
+                const display = document.getElementById('display');
+                scrollToBottom(display);
+            };
+        };            
     };
 };
 
 
-async function showCustomerChats(validatedTelegramID, socket) {
+async function showCustomerChats(validatedTelegramID, name, socket) {
     // Fetch the list of performers who responded to the customer's bids
     try {
         const performers = await fetchPerformers(validatedTelegramID);
@@ -623,7 +603,7 @@ async function showCustomerChats(validatedTelegramID, socket) {
             performers.forEach((performer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
-                button.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, performer, socket));
+                button.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, name, performer, socket));
                 performerList.appendChild(button);
             });
         };
@@ -656,7 +636,7 @@ async function fetchPerformers(validatedTelegramID) {
 };
 
 
-async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
+async function loadCustomerChatHistory(validatedTelegramID, name, performer, socket) {
     const chatHistory = document.getElementById('chat-history');
 
     // Clear the chat history
@@ -692,7 +672,7 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
         const message = messageInput.value.trim();
 
         if (message) {
-            // Send the message
+            // Send the message to the server to save and to route to Telegram
             const response = await fetch('/send-message', {
                 method: 'POST',
                 headers: {
@@ -707,51 +687,34 @@ async function loadCustomerChatHistory(validatedTelegramID, performer, socket) {
                  })
             });
 
-            // Fetch missing performer name
-            const getCustomerDataResponse = await fetch('/get-user-data', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ telegram_id: validatedTelegramID })
-            });
-
-            if (!getCustomerDataResponse.ok) {
-                showModal('Произошла ошибка при отправке сообщения, попробуйте перезайти в приложение');
-                return;
-            } else {
-                const customerData = await getCustomerDataResponse.json();
-                const senderName = customerData.userData.name;
-
-                // Send the message through the WebSocket to be displayed on the other side
-                if (socket && socket.readyState === WebSocket.OPEN) {
-                    const messageData = {
-                        recipient_telegram_id: performer.telegramID,
-                        sender_name: senderName,
-                        message
-                    };
-                    console.log(`Message data: ${JSON.stringify(messageData)}`);
-
-                    socket.send(JSON.stringify(messageData));
+            // Send the message through the WebSocket to be displayed on the other side
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const messageData = {
+                    recipient_telegram_id: performer.telegramID,
+                    sender_name: name,
+                    message
                 };
+                console.log(`Message data: ${JSON.stringify(messageData)}`);
 
-                if (response.ok) {
-                    const currentDate = new Date().toLocaleString();
+                socket.send(JSON.stringify(messageData));
+            };
 
-                    const chatHistory = document.getElementById('chat-history');
+            if (response.ok) {
+                const currentDate = new Date().toLocaleString();
 
-                    chatHistory.innerHTML += `<div class="chat-message">
-                                                Заказчик ${senderName}
-                                                <br><br>${message}
-                                                <br><br>${currentDate}
-                                            </div>`;
+                const chatHistory = document.getElementById('chat-history');
 
-                    messageInput.value = '';
-                    const display = document.getElementById('display');
-                    scrollToBottom(display);
-                };
-            };            
-        };
+                chatHistory.innerHTML += `<div class="chat-message">
+                                            Заказчик ${name}
+                                            <br><br>${message}
+                                            <br><br>${currentDate}
+                                        </div>`;
+
+                messageInput.value = '';
+                const display = document.getElementById('display');
+                scrollToBottom(display);
+            };
+        };            
     };
 };
 

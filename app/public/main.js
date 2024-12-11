@@ -462,12 +462,20 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                             <p>Срок до: ${bid.deadline_to}</p>
                             <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
                             <br><br>
-                            <p>Откликнулся: ${bid.performer_name}</p>
-                            <p>Ставка: ${bid.rate} (₽/час)</p>
-                            <p>Опыт: ${bid.experience}</p>
                         `;
 
                         bidContainer.innerHTML = bidCard;
+
+                        bid.responses.forEach((response) => {
+                            const responseDetails = `
+                                <div class="response-container">
+                                    <p>Откликнулся: ${response.performer_name}</p>
+                                    <p>Ставка: ${response.performer_rate} (₽/час)</p>
+                                    <p>Стаж: ${response.performer_experience} (в годах)</p>
+                                </div>
+                            `;
+                            bidContainer.innerHTML += responseDetails;
+                        });
 
                         display.appendChild(bidContainer);
                     });

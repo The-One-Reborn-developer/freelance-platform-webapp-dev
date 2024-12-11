@@ -419,7 +419,7 @@ app.post('/show-chats-list', (req, res) => {
         }).filter(Boolean); // Filter out null entries
 
         // Step 3: Return only bids with responses
-        if (responsesWithChatStarted.length > 0) {
+        if (bidsWithResponses.length > 0) {
             return res.status(200).json({ success: true, bids: bidsWithResponses });
         } else {
             return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });

@@ -431,6 +431,27 @@ app.post('/show-chats-list', (req, res) => {
 });
 
 
+app.post('/show-selected-customer-chat', (req, res) => {
+    try {
+        const bidID = req.body.bid_id;
+        const customerTelegramID = req.body.customer_telegram_id;
+        const performerTelegramID = req.body.performer_telegram_id;
+
+        // Step 1: Retrieve chat messages
+        const messages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
+        if (messages.length === 0) {
+            return res.status(404).json({ success: false, message: 'Чат не найден.' });
+        };
+
+        // Step 2: Return chat messages
+        return res.status(200).json({ success: true, messages });
+    } catch (error) {
+        console.error('Error in /show-selected-customer-chat:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching chat messages.' });
+    };
+});
+
+
 // 404 Route
 app.use((req, res) => {
     res.status(404).json({ message: 'Route not found.' });

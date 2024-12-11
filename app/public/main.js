@@ -474,16 +474,28 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                                     <p>Стаж: ${response.performer_experience} (в годах)</p>
                                 </div>
                             `;
+                            
+                            const lookChatButton = document.createElement('button');
+                            lookChatButton.classList.add('bid-card-button');
+                            lookChatButton.innerHTML = 'Посмотреть переписку 👀';
+                            lookChatButton.setAttribute('data-bid-id', bid.id);
+                            lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
+                            lookChatButton.setAttribute('data-performer-telegram-id', response.performer_telegram_id);
+                            
+                            lookChatButton.addEventListener('click', async (event) => {
+                                const bidID = event.target.getAttribute('data-bid-id');
+                                const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                                const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                                if (bidID && customerTelegramID && performerTelegramID) {
+                                    showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
+                                } else {
+                                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+                                    console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
+                                };
+                            });
+
                             bidCard.innerHTML += responseDetails;
                         });
-
-                        const lookChatsButton = document.createElement('button');
-                        lookChatsButton.classList.add('bid-card-button');
-                        lookChatsButton.textContent = 'Посмотреть переписки 👀';
-                        lookChatsButton.addEventListener('click', () => {
-                            // TODO
-                        });
-                        bidCard.appendChild(lookChatsButton);
 
                         bidsContainer.appendChild(bidCard);
                     });
@@ -502,6 +514,51 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
     };
 };
 
+
+function showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            display.innerHTML = 'Загрузка...';
+            fetch ('/show-selected-customer-chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    bid_id: bidID,
+                    customer_telegram_id:
+                    customerTelegramID,
+                    performer_telegram_id: performerTelegramID
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && Array.isArray(data.messages)) {
+                    display.innerHTML = '';
+
+                    const chatContainer = document.createElement('div');
+                    chatContainer.classList.add('chat-container');
+
+                    console.log(data.messages);
+
+                    display.appendChild(chatContainer);
+                } else {
+                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+                };
+            })
+            .catch(error => {
+                console.error(`Error in show-selected-customer-chat: ${error}`);
+            });
+        } catch (error) {
+            console.error(`Error in show-selected-customer-chat: ${error}`);
+        };
+    };
+};
 
 function setupPerformerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;

@@ -437,7 +437,7 @@ async function showCustomerChatsWithPerformers(customerTelegramID) {
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            fetch ('/show-chats-list', {
+            fetch ('/show-customer-chats-list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -781,7 +781,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
                 const lookPerformerChatsButton = document.createElement('button');
                 lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
-                lookPerformerChatsButton.addEventListener('click', () => showSelectedPerformerChats(performer.telegramID));
+                lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
 
                 performerList.appendChild(performerParagraph);
                 performerList.appendChild(chatButton);
@@ -794,8 +794,52 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 };
 
 
-function showSelectedPerformerChats(performerTelegramID) {
-    // TODO: implement
+function showPerformerChatsWithCustomers(performerTelegramID) {
+    const display = document.getElementById('display');
+    display.innerHTML = '';
+
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            display.innerHTML = 'Загрузка...';
+            fetch ('/show-performer-chats-list', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ performer_telegram_id: performerTelegramID })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.success && Array.isArray(data.responsesWithBids)) {
+                    // TODO: Display the list of chats with customers
+                    display.innerHTML = '';
+
+                    const responsesContainer = document.createElement('div');
+                    responsesContainer.classList.add('bid-container');
+                    /*
+                    data.responsesWithBids.forEach(response => {
+                        const responseCard = document.createElement('div');
+                        responseCard.classList.add('bid-card');
+                    */
+                    
+                } else {
+                    showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                };
+            })
+            .catch(error => {
+                console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
+                showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+            });
+        } catch (error) {
+            showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+            console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
+        };
+    };
 };
 
 

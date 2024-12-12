@@ -395,7 +395,7 @@ app.get('/responded-customers', (req, res) => {
 });
 
 
-app.post('/show-chats-list', (req, res) => {
+app.post('/show-customer-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
 
@@ -423,6 +423,35 @@ app.post('/show-chats-list', (req, res) => {
             return res.status(200).json({ success: true, bids: bidsWithResponses });
         } else {
             return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });
+        };
+    } catch (error) {
+        console.error('Error in /show-chats-list:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
+    };
+});
+
+
+app.post('/show-performer-chats-list', (req, res) => {
+    try {
+        const performerTelegramID = req.body.performer_telegram_id;
+
+        // Step 1: Retrieve all responses made by the performer with chats started
+        const performerResponses = getResponsesByPerformerTelegramIDWithChatStarted(db, performerTelegramID);
+
+        if (performerResponses && performerResponses.length > 0) {
+            // Step 2: Retrieve bids associated with the responses
+            const responsesWithBids = performerResponses.map((response) => {
+                const bid = getBidByBidID(db, response.bid_id);
+                return {
+                    response,
+                    bid
+                }
+            });
+
+            // Step 3: Return the responses with associated bids
+            return res.status(200).json({ success: true, responsesWithBids });
+        } else {
+            return res.status(404).json({ success: false, message: 'У данного мастера не было переписок.' });
         };
     } catch (error) {
         console.error('Error in /show-chats-list:', error);

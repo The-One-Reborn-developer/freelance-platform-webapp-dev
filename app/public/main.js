@@ -675,8 +675,8 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
-        const messageInput = document.getElementById('message-input');
-        const message = messageInput.value.trim();
+        const messageTextArea = document.getElementById('message-input');
+        const message = messageTextArea.value.trim();
 
         if (message) {
             // Send the message to the server to save and to route to Telegram
@@ -854,8 +854,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
-        const messageInput = document.getElementById('message-input');
-        const message = messageInput.value.trim();
+        const messageTextArea = document.getElementById('message-input');
+        const message = messageTextArea.value.trim();
 
         if (message) {
             // Send the message to the server to save and to route to Telegram

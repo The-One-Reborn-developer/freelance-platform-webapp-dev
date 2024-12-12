@@ -261,6 +261,7 @@ body {
 	width: 100%;
 	border-radius: 10px;
 	border: solid 2px grey;
+	padding: 5px;
 }
 
 .chat-input {

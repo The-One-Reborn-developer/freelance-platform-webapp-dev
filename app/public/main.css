@@ -135,6 +135,10 @@ body {
 	cursor: pointer;
 }
 
+.send-button {
+	margin-top: 7%;
+}
+
 .submit-form-button:hover,
 .bid-card-button:hover,
 .modal-button:hover,
@@ -253,17 +257,15 @@ body {
 }
 
 .message-input {
-    flex-grow: 1;
-    padding: 10px;
-    margin-right: 10px;
-    width: 100%;
-	height: 30px;
+	height: 20vh;
+	width: 100%;
 	border-radius: 10px;
 	border: solid 2px grey;
 }
 
 .chat-input {
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	padding: 10px;
 	border-top: 1px solid #ccc;

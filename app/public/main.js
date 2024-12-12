@@ -821,7 +821,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                     const responsesContainer = document.createElement('div');
                     responsesContainer.classList.add('bid-container');
                     
-                    data.responsesWithBids.forEach(response => {
+                    data.bids.forEach(bid => {
                         const responseCard = document.createElement('div');
                         responseCard.classList.add('bid-card');
 

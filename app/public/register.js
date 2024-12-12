@@ -3,6 +3,8 @@ window.Telegram.WebApp.disableVerticalSwipes()
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');
+const nameInput = document.getElementById('name-input');
+const nameLabel = document.getElementById('name-label');
 const rateInput = document.getElementById('rate-input');
 const rateLabel = document.getElementById('rate-label');
 const experienceInput = document.getElementById('experience-input');
@@ -14,10 +16,22 @@ performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
 
 
+function initializePage() {
+    nameInput.style.display = 'none';
+    nameLabel.style.display = 'none';
+    rateInput.style.display = 'none';
+    rateLabel.style.display = 'none';
+    experienceInput.style.display = 'none';
+    experienceLabel.style.display = 'none';
+    registerButton.style.display = 'none';
+}
+
+
 window.onload = function () {
-    const telegramData = window.Telegram.WebApp.initData;
+    initializePage();
 
     // Check if the user is already registered
+    const telegramData = window.Telegram.WebApp.initData;
     checkIfUserIsRegistered(telegramData);
 }
 
@@ -44,91 +58,77 @@ function checkIfUserIsRegistered(telegramData) {
 
 
 function chooseCustomer() {
-    if (performerButton.disabled) {
-        performerButton.disabled = false;
-        performerButton.style.backgroundColor = '';
+    // Show only the name input and label
+    nameInput.style.display = '';
+    nameLabel.style.display = '';
+    rateInput.style.display = 'none';
+    rateLabel.style.display = 'none';
+    experienceInput.style.display = 'none';
+    experienceLabel.style.display = 'none';
+    registerButton.style.display = '';
 
-        rateInput.disabled = true;
-        rateLabel.style.color = 'darkgrey';
-        experienceInput.disabled = true;
-        experienceLabel.style.color = 'darkgrey';
-    } else {
-        performerButton.disabled = false;
-        performerButton.style.backgroundColor = '';
-        customerButton.style.backgroundColor = 'darkgrey';
-
-        rateInput.disabled = true;
-        rateLabel.style.color = 'darkgrey';
-        experienceInput.disabled = true;
-        experienceLabel.style.color = 'darkgrey';
-    }
-    customerButton.disabled = !performerButton.disabled;
-    customerButton.style.backgroundColor = customerButton.disabled ? 'darkgrey' : '';
+    // Highlight the selected button
+    customerButton.style.backgroundColor = 'darkgrey';
+    performerButton.style.backgroundColor = '';
 };
 
 
 function choosePerformer() {
-    if (customerButton.disabled) {
-        customerButton.disabled = false;
-        customerButton.style.backgroundColor = '';
+    // Show name, rate, and experience inputs and labels
+    nameInput.style.display = '';
+    nameLabel.style.display = '';
+    rateInput.style.display = '';
+    rateLabel.style.display = '';
+    experienceInput.style.display = '';
+    experienceLabel.style.display = '';
+    registerButton.style.display = '';
 
-        rateInput.disabled = false;
-        rateLabel.style.color = '';
-        experienceInput.disabled = false;
-        experienceLabel.style.color = '';
-    } else {
-        customerButton.disabled = false;
-        customerButton.style.backgroundColor = '';
-        performerButton.style.backgroundColor = 'darkgrey';
-    }
-    performerButton.disabled = !customerButton.disabled;
-    performerButton.style.backgroundColor = performerButton.disabled ? 'darkgrey' : '';
+    // Highlight the selected button
+    performerButton.style.backgroundColor = 'darkgrey';
+    customerButton.style.backgroundColor = '';
 };
 
 
 function register() {
-    const role = customerButton.disabled ? 'customer' : (performerButton.disabled ? 'performer' : null);
-    const name = document.getElementById('name-input').value;
-    const rate = document.getElementById('rate-input').value;
-    const experience = document.getElementById('experience-input').value;
+    const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'performer';
+    const name = nameInput.value.trim();
+    const rate = rateInput.value.trim();
+    const experience = experienceInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    if (!role || !name) {
-        showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
+    if (!name || (role === 'performer' && (!rate || !experience))) {
+        showModal('Пожалуйста, заполните все необходимые поля.');
         return;
-    } else if (role === 'performer' && (!rate || !experience)) {
-        showModal('Пожалуйста, заполните все необходимые поля и выберите роль.');
-        return;
-    }
-
-    const data = {
-        role,
-        name,
-        rate,
-        experience,
-        telegram_data: telegramData
-    };
-    
-    fetch('/registration-attempt', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Registration is successful
-            showModal(data.message, true, data.telegram_id);
-        } else {
-            // Registration failed
-            showModal(data.message, false, null);
+    } else {
+        const data = {
+            role,
+            name,
+            rate,
+            experience,
+            telegram_data: telegramData
         };
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        
+        fetch('/registration-attempt', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Registration is successful
+                showModal(data.message, true, data.telegram_id);
+            } else {
+                // Registration failed
+                showModal(data.message, false, null);
+            };
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    };
 };
 
 
@@ -149,3 +149,9 @@ function showModal(message, isSuccess, telegramID) {
         };
     };
 };
+
+
+// Event listeners for the buttons
+customerButton.addEventListener('click', chooseCustomer);
+performerButton.addEventListener('click', choosePerformer);
+registerButton.addEventListener('click', register);

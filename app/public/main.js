@@ -826,13 +826,13 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                         responseCard.classList.add('bid-card');
 
                         responseCard.innerHTML = `
-                        <p>Номер заказа: ${data.bid.id}</p>
-                        <p>Город: ${data.bid.city}</p>
-                        <p>Заказчик: ${data.bid.customer_name}</p>
-                        <p>Описание: ${data.bid.description}</p>
-                        <p>Срок от: ${data.bid.deadline_from}</p>
-                        <p>Срок до: ${data.bid.deadline_to}</p>
-                        <p>Предоставляется инструмент: ${(data.bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
+                        <p>Номер заказа: ${bid.id}</p>
+                        <p>Город: ${bid.city}</p>
+                        <p>Заказчик: ${bid.customer_name}</p>
+                        <p>Описание: ${bid.description}</p>
+                        <p>Срок от: ${bid.deadline_from}</p>
+                        <p>Срок до: ${bid.deadline_to}</p>
+                        <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
                         `;
 
                         responsesContainer.appendChild(responseCard);

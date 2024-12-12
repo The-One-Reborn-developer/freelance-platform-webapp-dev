@@ -815,18 +815,30 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                if (data.success && Array.isArray(data.responsesWithBids)) {
-                    // TODO: Display the list of chats with customers
+                if (data.success && Array.isArray(data.bids)) {
                     display.innerHTML = '';
 
                     const responsesContainer = document.createElement('div');
                     responsesContainer.classList.add('bid-container');
-                    /*
+                    
                     data.responsesWithBids.forEach(response => {
                         const responseCard = document.createElement('div');
                         responseCard.classList.add('bid-card');
-                    */
-                    
+
+                        responseCard.innerHTML = `
+                        <p>Номер заказа: ${data.bid.id}</p>
+                        <p>Город: ${data.bid.city}</p>
+                        <p>Заказчик: ${data.bid.customer_name}</p>
+                        <p>Описание: ${data.bid.description}</p>
+                        <p>Срок от: ${data.bid.deadline_from}</p>
+                        <p>Срок до: ${data.bid.deadline_to}</p>
+                        <p>Предоставляется инструмент: ${(data.bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
+                        `;
+
+                        responsesContainer.appendChild(responseCard);
+                    });
+
+                    display.appendChild(responsesContainer);
                 } else {
                     showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
                 };

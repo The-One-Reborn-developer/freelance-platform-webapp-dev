@@ -437,19 +437,17 @@ app.post('/show-performer-chats-list', (req, res) => {
 
         // Step 1: Retrieve all responses made by the performer with chats started
         const performerResponses = getResponsesByPerformerTelegramIDWithChatStarted(db, performerTelegramID);
-        console.log(`Found ${performerResponses.length} responses ${performerResponses} for Telegram ID: ${performerTelegramID}`);
         if (performerResponses && performerResponses.length > 0) {
             // Step 2: Retrieve bids associated with the responses
-            const responsesWithBids = performerResponses.map((response) => {
+            const bids = performerResponses.map((response) => {
                 const bid = getBidByBidID(db, response.bid_id);
                 return {
-                    response,
                     bid
                 };
             });
-            console.log(`Found ${responsesWithBids.length} responses with bids ${responsesWithBids} for Telegram ID: ${performerTelegramID}`);
-            // Step 3: Return the responses with associated bids
-            return res.status(200).json({ success: true, responsesWithBids });
+
+            // Step 3: Return the bids
+            return res.status(200).json({ success: true, bids });
         } else {
             return res.status(404).json({ success: false, message: 'У данного мастера не было переписок.' });
         };

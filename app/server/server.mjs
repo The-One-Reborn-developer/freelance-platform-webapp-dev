@@ -259,6 +259,8 @@ app.get('/get-chats', (req, res) => {
     const bidID = req.query.bid_id;
     const customerTelegramID = req.query.customer_telegram_id;
     const performerTelegramID = req.query.performer_telegram_id;
+
+    console.log(`Fetching chat messages for bid ID: ${bidID}, customer Telegram ID: ${customerTelegramID}, performer Telegram ID: ${performerTelegramID}`);
     
     const chatMessages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
 

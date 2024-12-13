@@ -855,7 +855,8 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                                 console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');
                             }
                         });
-
+                        
+                        responseCard.appendChild(responseButton);
                         responsesContainer.appendChild(responseCard);
                     });
 

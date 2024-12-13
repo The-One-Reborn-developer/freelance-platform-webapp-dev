@@ -844,8 +844,6 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                     
                     data.bids.forEach(item => {
                         const bid = item.bid;
-
-                        console.log(bid);
                         
                         const responseCard = document.createElement('div');
                         responseCard.classList.add('bid-card');
@@ -869,12 +867,10 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
                         responseButton.addEventListener('click', async (event) => {
                             const bidID = event.target.getAttribute('data-bid-id');
-                            const bidCustomerTelegramID = event.target.getAttribute('data-customer-telegram-id');
-                            const bidPerformerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                            const CustomerTelegramID = event.target.getAttribute('data-customer-telegram-id');
 
-                            if (bidID && bidCustomerTelegramID && bidPerformerTelegramID) {
-                                console.log(`performerTelegramID: ${bidPerformerTelegramID}`);
-                                await showSelectedPerformerChat(bidID, bidCustomerTelegramID, bidPerformerTelegramID);
+                            if (bidID && CustomerTelegramID && performerTelegramID) {
+                                await showSelectedPerformerChat(bidID, CustomerTelegramID, performerTelegramID);
                             } else {
                                 showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
                                 console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');

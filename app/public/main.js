@@ -863,14 +863,15 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                         responseButton.innerHTML = 'Посмотреть переписку 👀';
                         responseButton.setAttribute('data-bid-id', bid.id);
                         responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);
-                        responseButton.setAttribute('data-performer-telegram-id', bid.performer_telegram_id);
+                        responseButton.setAttribute('data-performer-telegram-id', performerTelegramID);
 
                         responseButton.addEventListener('click', async (event) => {
                             const bidID = event.target.getAttribute('data-bid-id');
-                            const CustomerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                            const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                            const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
 
-                            if (bidID && CustomerTelegramID && performerTelegramID) {
-                                await showSelectedPerformerChat(bidID, CustomerTelegramID, performerTelegramID);
+                            if (bidID && customerTelegramID && performerTelegramID) {
+                                await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
                             } else {
                                 showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
                                 console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');

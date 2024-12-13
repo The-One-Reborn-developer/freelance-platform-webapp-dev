@@ -903,6 +903,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
 
 async function showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID) {
+    console.log(`performerTelegramID in showSelectedPerformerChat: ${performerTelegramID}`);
     const display = document.getElementById('display');
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';

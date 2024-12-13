@@ -162,3 +162,14 @@ function showModal(message, isSuccess, telegramID) {
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
+
+
+// Ensure the input field is scrolled into view
+const inputs = document.querySelectorAll('input, textarea');
+inputs.forEach((input) => {
+    input.addEventListener('focus', () => {
+        setTimeout(() => {
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+    });
+});

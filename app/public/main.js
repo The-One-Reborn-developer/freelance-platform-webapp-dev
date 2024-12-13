@@ -143,7 +143,16 @@ async function showCreateBidForm() {
                 const formHTML = await response.text();
 
                 display.innerHTML = formHTML;
-            };            
+
+                const inputs = document.querySelectorAll('input, textarea');
+                inputs.forEach((input) => {
+                    input.addEventListener('focus', () => {
+                        setTimeout(() => {
+                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                    });
+                });
+            };
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
         };
@@ -627,6 +636,16 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
                 });
                 customerList.appendChild(button);
             });
+
+            // Ensure the input field is scrolled into view
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach((input) => {
+                input.addEventListener('focus', () => {
+                    setTimeout(() => {
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                });
+            });
         };
     } catch (error) {
         console.error(`Error in showPerformerChats: ${error}`);
@@ -802,6 +821,16 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerList.appendChild(performerParagraph);
                 performerList.appendChild(chatButton);
                 performerList.appendChild(lookPerformerChatsButton);
+            });
+
+            // Ensure the input field is scrolled into view
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach((input) => {
+                input.addEventListener('focus', () => {
+                    setTimeout(() => {
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                });
             });
         };
     } catch (error) {

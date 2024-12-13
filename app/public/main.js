@@ -727,7 +727,6 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
 function setupCustomerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
-    console.log(`Customer name: ${name}`);
 
     insertCustomerButtons(name);
 
@@ -900,7 +899,6 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
 
 async function showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID) {
-    console.log(`performerTelegramID in showSelectedPerformerChat: ${performerTelegramID}`);
     const display = document.getElementById('display');
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';
@@ -915,13 +913,11 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            console.log(performerTelegramID);
+            
             const response = await fetch (
                 `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );
             const data = await response.json();
-
-            console.log(data)
 
             if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
                 chatHistory.innerHTML = data.chatMessages
@@ -1011,7 +1007,6 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 const currentDate = new Date().toLocaleString();
 
                 const chatHistory = document.getElementById('chat-history');
-                console.log(`Name: ${name}`);
                 chatHistory.innerHTML += `<div class="chat-message">
                                             Заказчик ${name}
                                             <br><br>${message}

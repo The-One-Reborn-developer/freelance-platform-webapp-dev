@@ -781,7 +781,6 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
                 const lookPerformerChatsButton = document.createElement('button');
                 lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
-                console.log(`performer.telegramID in showCustomerChats: ${performer.telegramID}`);
                 lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
 
                 performerList.appendChild(performerParagraph);
@@ -821,7 +820,6 @@ async function fetchPerformers(validatedTelegramID) {
 function showPerformerChatsWithCustomers(performerTelegramID) {
     const display = document.getElementById('display');
     display.innerHTML = '';
-    console.log(`performerTelegramID in showPerformerChatsWithCustomers: ${performerTelegramID}`);
     if (!display) {
         console.error('Display element not found');
         return;
@@ -846,6 +844,8 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                     
                     data.bids.forEach(item => {
                         const bid = item.bid;
+
+                        console.log(bid);
                         
                         const responseCard = document.createElement('div');
                         responseCard.classList.add('bid-card');
@@ -869,12 +869,12 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
                         responseButton.addEventListener('click', async (event) => {
                             const bidID = event.target.getAttribute('data-bid-id');
-                            const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
-                            const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                            const bidCustomerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                            const bidPerformerTelegramID = event.target.getAttribute('data-performer-telegram-id');
 
-                            if (bidID && customerTelegramID && performerTelegramID) {
-                                console.log(`performerTelegramID: ${performerTelegramID}`);
-                                await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
+                            if (bidID && bidCustomerTelegramID && bidPerformerTelegramID) {
+                                console.log(`performerTelegramID: ${bidPerformerTelegramID}`);
+                                await showSelectedPerformerChat(bidID, bidCustomerTelegramID, bidPerformerTelegramID);
                             } else {
                                 showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
                                 console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');

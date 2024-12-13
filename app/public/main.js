@@ -428,7 +428,7 @@ async function showBids(city, validatedTelegramID) {
 };
 
 
-async function showCustomerChatsWithPerformers(customerTelegramID) {
+function showCustomerChatsWithPerformers(customerTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -837,6 +837,25 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                         <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
                         `;
 
+                        const responseButton = document.createElement('button');
+                        responseButton.innerHTML = 'Посмотреть переписку 👀';
+                        responseButton.setAttribute('data-bid-id', bid.id);
+                        responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);
+                        responseButton.setAttribute('data-performer-telegram-id', bid.performer_telegram_id);
+
+                        responseButton.addEventListener('click', async (event) => {
+                            const bidID = event.target.getAttribute('data-bid-id');
+                            const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                            const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+
+                            if (bidID && customerTelegramID && performerTelegramID) {
+                                await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
+                            } else {
+                                showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
+                                console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');
+                            }
+                        });
+
                         responsesContainer.appendChild(responseCard);
                     });
 
@@ -852,6 +871,48 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
         } catch (error) {
             showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
             console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
+        };
+    };
+};
+
+
+async function showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID) {
+    const display = document.getElementById('display');
+    display.innerHTML = '';
+    display.innerHTML = 'Загрузка...';
+
+    const chatHistory = document.createElement('div');
+    chatHistory.classList.add('chat-history');
+
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            display.innerHTML = '';
+            display.innerHTML = 'Загрузка...';
+            
+            const response = await fetch (
+                `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
+            );
+            const data = await response.json();
+
+            if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
+                chatHistory.innerHTML = data.chatMessages
+                // Filter out empty messages
+                .filter((msg) => msg.trim() !== '')
+                // Replace '\n' with <br>
+                .map((msg) => `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`)
+                .join('');
+            } else {
+                showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+            };
+
+            display.innerHTML = '';
+            display.appendChild(chatHistory);
+        } catch (error) {
+            showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+            console.error(`Error in showSelectedPerformerChat: ${error}`);
         };
     };
 };

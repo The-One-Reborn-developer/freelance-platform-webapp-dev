@@ -838,6 +838,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                         `;
 
                         const responseButton = document.createElement('button');
+                        responseButton.classList.add('bid-card-button');
                         responseButton.innerHTML = 'Посмотреть переписку 👀';
                         responseButton.setAttribute('data-bid-id', bid.id);
                         responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);

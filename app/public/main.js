@@ -18,6 +18,13 @@ window.onload = async function () {
             console.error(`Error in window.onload: ${error}`);
         };
     };
+
+    // Ensure that the keyboard is closed when the user touches the screen outside of input elements
+    document.addEventListener('touchstart', (event) => {
+        if (!event.target.closest('input, textarea, select')) {
+            document.activeElement.blur();
+        };
+    });    
 };
 
 

@@ -721,7 +721,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                                             <br><br>${currentDate}
                                             </div>`;
 
-                messageInput.value = '';
+                messageTextArea.value = '';
                 const display = document.getElementById('display');
                 scrollToBottom(display);
             };
@@ -1023,7 +1023,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                                             <br><br>${currentDate}
                                         </div>`;
 
-                messageInput.value = '';
+                messageTextArea.value = '';
                 const display = document.getElementById('display');
                 scrollToBottom(display);
             };

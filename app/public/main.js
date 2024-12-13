@@ -725,75 +725,6 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 };
 
 
-function setupCustomerInterface (validatedTelegramID, userData, socket) {
-    const name = userData.userData.name;
-    console.log(`Customer name: ${name}`);
-
-    insertCustomerButtons(name);
-
-    const createBidButton = document.getElementById('create-bid');
-    createBidButton.addEventListener('click', async function () {
-        await showCreateBidForm();
-
-        // Attach submit form event listener
-        const createBidForm = document.getElementById('create-bid-form');
-        if (createBidForm) {
-            createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, validatedTelegramID, name);
-            });
-        };
-    });
-
-    const myBidsButton = document.getElementById('my-bids');
-    myBidsButton.addEventListener('click', async function () {
-        await showMyBids(validatedTelegramID);
-    });
-    
-    const lookChatsButton = document.getElementById('look-chats');
-    lookChatsButton.addEventListener('click', async function () {
-        await showCustomerChats(validatedTelegramID, name, socket);
-    });
-};
-
-
-async function showCustomerChats(validatedTelegramID, name, socket) {
-    // Fetch the list of performers who responded to the customer's bids
-    try {
-        const performers = await fetchPerformers(validatedTelegramID);
-
-        if (performers.length === 0) {
-            showModal('На Ваши заявки ещё никто не откликался.');
-            return;
-        } else {
-            // Create the chat interface
-            const response = await fetch('chat_window.html');
-            display.innerHTML = await response.text(); // Properly inject the fetched HTML content
-
-            // Populate the performer buttons
-            const performerList = document.getElementById('user-list');
-            performers.forEach((performer) => {
-                const performerParagraph = document.createElement('p');
-                performerParagraph.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
-
-                const chatButton = document.createElement('button');
-                chatButton.innerHTML = 'Написать мастеру 📩';
-                chatButton.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, name, performer, socket));
-
-                const lookPerformerChatsButton = document.createElement('button');
-                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
-                lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
-
-                performerList.appendChild(performerParagraph);
-                performerList.appendChild(chatButton);
-                performerList.appendChild(lookPerformerChatsButton);
-            });
-        };
-    } catch (error) {
-        console.error(`Error in showCustomerChats: ${error}`);
-    };
-};
-
-
 function showPerformerChatsWithCustomers(performerTelegramID) {
     const display = document.getElementById('display');
     display.innerHTML = '';
@@ -814,7 +745,6 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 if (data.success && Array.isArray(data.bids)) {
                     display.innerHTML = '';
 
@@ -899,6 +829,8 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
             );
             const data = await response.json();
 
+            console.log(data)
+
             if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
                 chatHistory.innerHTML = data.chatMessages
                 // Filter out empty messages
@@ -916,6 +848,75 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
             showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             console.error(`Error in showSelectedPerformerChat: ${error}`);
         };
+    };
+};
+
+
+function setupCustomerInterface (validatedTelegramID, userData, socket) {
+    const name = userData.userData.name;
+    console.log(`Customer name: ${name}`);
+
+    insertCustomerButtons(name);
+
+    const createBidButton = document.getElementById('create-bid');
+    createBidButton.addEventListener('click', async function () {
+        await showCreateBidForm();
+
+        // Attach submit form event listener
+        const createBidForm = document.getElementById('create-bid-form');
+        if (createBidForm) {
+            createBidForm.addEventListener('submit', function (event) {
+                handleBidFormSubmit(event, validatedTelegramID, name);
+            });
+        };
+    });
+
+    const myBidsButton = document.getElementById('my-bids');
+    myBidsButton.addEventListener('click', async function () {
+        await showMyBids(validatedTelegramID);
+    });
+    
+    const lookChatsButton = document.getElementById('look-chats');
+    lookChatsButton.addEventListener('click', async function () {
+        await showCustomerChats(validatedTelegramID, name, socket);
+    });
+};
+
+
+async function showCustomerChats(validatedTelegramID, name, socket) {
+    // Fetch the list of performers who responded to the customer's bids
+    try {
+        const performers = await fetchPerformers(validatedTelegramID);
+
+        if (performers.length === 0) {
+            showModal('На Ваши заявки ещё никто не откликался.');
+            return;
+        } else {
+            // Create the chat interface
+            const response = await fetch('chat_window.html');
+            display.innerHTML = await response.text(); // Properly inject the fetched HTML content
+
+            // Populate the performer buttons
+            const performerList = document.getElementById('user-list');
+            performers.forEach((performer) => {
+                const performerParagraph = document.createElement('p');
+                performerParagraph.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
+
+                const chatButton = document.createElement('button');
+                chatButton.innerHTML = 'Написать мастеру 📩';
+                chatButton.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, name, performer, socket));
+
+                const lookPerformerChatsButton = document.createElement('button');
+                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
+                lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
+
+                performerList.appendChild(performerParagraph);
+                performerList.appendChild(chatButton);
+                performerList.appendChild(lookPerformerChatsButton);
+            });
+        };
+    } catch (error) {
+        console.error(`Error in showCustomerChats: ${error}`);
     };
 };
 

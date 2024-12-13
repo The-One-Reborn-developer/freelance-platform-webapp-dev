@@ -780,6 +780,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                             const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
 
                             if (bidID && customerTelegramID && performerTelegramID) {
+                                console.log(`performerTelegramID: ${performerTelegramID}`);
                                 await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
                             } else {
                                 showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
@@ -823,7 +824,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            
+            console.log(performerTelegramID);
             const response = await fetch (
                 `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );

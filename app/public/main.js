@@ -609,10 +609,15 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
 
             // Populate the customer buttons
             const customerList = document.getElementById('user-list');
+            const chatInput = document.getElementById('chat-input');
+
             customers.forEach((customer) => {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
-                button.addEventListener('click', () => loadPerformerChatHistory(validatedTelegramID, name, customer, socket));
+                button.addEventListener('click', () => {
+                    loadPerformerChatHistory(validatedTelegramID, name, customer, socket)
+                    chatInput.classList.remove('hidden');
+                });
                 customerList.appendChild(button);
             });
         };
@@ -770,13 +775,18 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
             // Populate the performer buttons
             const performerList = document.getElementById('user-list');
+            const chatInput = document.getElementById('chat-input');
+
             performers.forEach((performer) => {
                 const performerParagraph = document.createElement('p');
                 performerParagraph.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
                 chatButton.innerHTML = 'Написать мастеру 📩';
-                chatButton.addEventListener('click', () => loadCustomerChatHistory(validatedTelegramID, name, performer, socket));
+                chatButton.addEventListener('click', () => {
+                    loadCustomerChatHistory(validatedTelegramID, name, performer, socket)
+                    chatInput.classList.remove('hidden');
+                });
 
                 const lookPerformerChatsButton = document.createElement('button');
                 lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';

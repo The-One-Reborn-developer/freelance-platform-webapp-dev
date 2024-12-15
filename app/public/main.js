@@ -53,7 +53,7 @@ async function getUserData(telegramID) {
 };
 
 
-function insertCustomerButtons(name) {
+function insertCustomerButtons(name, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
 
@@ -62,7 +62,7 @@ function insertCustomerButtons(name) {
         return;
     } else {
         try {
-            headerInfo.innerHTML = `Заказчик ${name}`;
+            headerInfo.innerHTML = `Заказчик ${name}. Зарегистрирован ${registrationDate}.`;
 
             const createBidButton = document.createElement('button');
             createBidButton.className = 'header-button';
@@ -759,8 +759,9 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
 function setupCustomerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
+    const registrationDate = userData.userData.registration_date;
 
-    insertCustomerButtons(name);
+    insertCustomerButtons(name, registrationDate);
 
     const createBidButton = document.getElementById('create-bid');
     createBidButton.addEventListener('click', async function () {

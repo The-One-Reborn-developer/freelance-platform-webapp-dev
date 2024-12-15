@@ -1,3 +1,5 @@
+window.Telegram.WebApp.disableVerticalSwipes()
+
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');
@@ -166,8 +168,6 @@ const inputs = document.querySelectorAll('input, textarea');
 inputs.forEach((input) => {
     input.addEventListener('focus', () => {
         setTimeout(() => {
-            document.body.style.height = '120%';
-            document.body.style.height = '';
             input.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
     });

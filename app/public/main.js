@@ -807,7 +807,9 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
             performers.forEach((performer) => {
                 const performerParagraph = document.createElement('p');
-                performerParagraph.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
+                performerParagraph.innerHTML = 
+                `${performer.name}. Зарегистрирован ${performer.registration_date}.
+                Ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
                 chatButton.innerHTML = 'Написать исполнителю 📩';

@@ -4,7 +4,8 @@ export function postResponse(
     performerTelegramID,
     performerName,
     performerRate,
-    performerExperience) {
+    performerExperience,
+    performerRegistrationDate) {
     try {
         const existingResponse = db.prepare(
             'SELECT * FROM responses WHERE bid_id = ? AND performer_telegram_id = ?'
@@ -20,7 +21,8 @@ export function postResponse(
                                     performer_telegram_id,
                                     performer_name,
                                     performer_rate,
-                                    performer_experience) VALUES (?, ?, ?, ?, ?)`
+                                    performer_experience,
+                                    performer_registration_date) VALUES (?, ?, ?, ?, ?, ?)`
                                 );
         
         postResponse.run(
@@ -28,7 +30,8 @@ export function postResponse(
             performerTelegramID,
             performerName,
             performerRate,
-            performerExperience
+            performerExperience,
+            performerRegistrationDate
         );
 
         return true;

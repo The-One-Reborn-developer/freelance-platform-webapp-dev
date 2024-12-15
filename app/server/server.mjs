@@ -209,7 +209,8 @@ app.post('/respond-to-bid', (req, res) => {
             performerTelegramID,
             performerName,
             performerRate,
-            performerExperience
+            performerExperience,
+            performerRegistrationDate
         );
 
         if (postResponseResult === true) {

@@ -15,7 +15,8 @@ export function getResponses(db, customerBids) {
                         performerTelegramID: response.performer_telegram_id,
                         performerName: response.performer_name,
                         performerRate: response.performer_rate,
-                        performerExperience: response.performer_experience
+                        performerExperience: response.performer_experience,
+                        performerRegistrationDate: response.performer_registration_date 
                     }))
                 );
             };

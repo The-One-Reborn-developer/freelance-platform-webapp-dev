@@ -854,7 +854,8 @@ async function fetchPerformers(validatedTelegramID) {
                 rate: res.performerRate,
                 experience: res.performerExperience,
                 bidID: res.bidID,
-                telegramID: res.performerTelegramID
+                telegramID: res.performerTelegramID,
+                registration_date: res.performerRegistrationDate
             }));
         } else {
             return [];

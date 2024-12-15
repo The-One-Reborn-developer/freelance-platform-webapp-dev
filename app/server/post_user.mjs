@@ -24,7 +24,7 @@ export function postUser(db, res, telegramID, role, name, rate, experience) {
         const insertUser = db.prepare(
             'INSERT INTO users (telegram_id, role, name, rate, experience, registration_date) VALUES (?, ?, ?, ?, ?, ?)'
         );
-        const registrationDate = new Date().toLocaleString();
+        const registrationDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
         const insertUserResult = insertUser.run(telegramID, role, name, rate, experience, registrationDate);
         res.status(201).json({
             success: true,

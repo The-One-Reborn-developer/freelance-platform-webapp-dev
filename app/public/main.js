@@ -1196,16 +1196,9 @@ function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
-            const container = document.getElementById('container');
-            container.style.height = '200vh';
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);
-        });
-
-        input.addEventListener('blur', () => {
-            const container = document.getElementById('container');
-            container.style.height = '100vh';
         });
     });
 };

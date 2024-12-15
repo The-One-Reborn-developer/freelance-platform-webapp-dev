@@ -1,3 +1,14 @@
+function setViewportHeight() {
+    const vh = window.innerHeight * 0.01; // Calculate 1% of the current viewport height
+    document.documentElement.style.setProperty('--vh', `${vh}px`); // Set the custom CSS property
+}
+
+// Ensure the height is set correctly when the page loads and when the window is resized or orientation changes
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+setViewportHeight();
+
+
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     

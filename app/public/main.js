@@ -934,7 +934,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
                     display.appendChild(responsesContainer);
                 } else {
-                    showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                    showModal('У данного исполнителя ещё нет переписок');
                 };
             })
             .catch(error => {

@@ -455,7 +455,7 @@ app.post('/show-performer-chats-list', (req, res) => {
             // Step 3: Return the bids
             return res.status(200).json({ success: true, bids });
         } else {
-            return res.status(404).json({ success: false, message: 'У данного исполнителя не было переписок.' });
+            return res.status(404).json({ success: false });
         };
     } catch (error) {
         console.error('Error in /show-chats-list:', error);

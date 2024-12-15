@@ -1,8 +1,3 @@
-window.Telegram.WebApp.disableVerticalSwipes()
-window.addEventListener('resize', setViewportHeight);
-window.addEventListener('orientationchange', setViewportHeight);
-setViewportHeight();
-
 const customerButton = document.getElementById('customer-button');
 const performerButton = document.getElementById('performer-button');
 const registerButton = document.getElementById('register-button');
@@ -171,14 +166,9 @@ const inputs = document.querySelectorAll('input, textarea');
 inputs.forEach((input) => {
     input.addEventListener('focus', () => {
         setTimeout(() => {
-            const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
-            input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
+            document.body.style.height = '120%';
+            document.body.style.height = '';
+            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
     });
 });
-
-
-function setViewportHeight() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}

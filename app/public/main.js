@@ -1,9 +1,3 @@
-window.Telegram.WebApp.disableVerticalSwipes()
-window.addEventListener('resize', setViewportHeight);
-window.addEventListener('orientationchange', setViewportHeight);
-setViewportHeight();
-
-
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
@@ -32,12 +26,6 @@ window.onload = async function () {
         };
     });    
 };
-
-
-function setViewportHeight() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
 
 
 function getQueryParameter(name) {
@@ -160,8 +148,9 @@ async function showCreateBidForm() {
                 inputs.forEach((input) => {
                     input.addEventListener('focus', () => {
                         setTimeout(() => {
-                            const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
-                            input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
+                            document.body.style.height = '120%';
+                            document.body.style.height = '';
+                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         }, 300);
                     });
                 });
@@ -656,8 +645,9 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
             inputs.forEach((input) => {
                 input.addEventListener('focus', () => {
                     setTimeout(() => {
-                        const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
-                        input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
+                        document.body.style.height = '120%';
+                        document.body.style.height = '';
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 300);
                 });
             });
@@ -846,8 +836,9 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             inputs.forEach((input) => {
                 input.addEventListener('focus', () => {
                     setTimeout(() => {
-                        const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
-                        input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
+                        document.body.style.height = '120%';
+                        document.body.style.height = '';
+                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }, 300);
                 });
             });

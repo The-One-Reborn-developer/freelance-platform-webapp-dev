@@ -98,7 +98,7 @@ function insertPerformerButtons(name, rate, experience) {
         return;
     } else {
         try {
-            headerInfo.innerHTML = `Мастер ${name}. Ставка ${rate} (₽/час), ${experience} (лет опыта)`;
+            headerInfo.innerHTML = `Исполнитель ${name}. Ставка ${rate} (₽/час), ${experience} (лет опыта)`;
 
             const searchBidsButton = document.createElement('button');
             searchBidsButton.className = 'header-button';
@@ -742,7 +742,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 const chatHistory = document.getElementById('chat-history');
 
                 chatHistory.innerHTML += `<div class="chat-message">
-                                            Мастер ${name}:
+                                            Исполнитель ${name}:
                                             <br><br>${message}
                                             <br><br>${currentDate}
                                             </div>`;
@@ -808,14 +808,14 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerParagraph.innerHTML = `${performer.name}, ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
-                chatButton.innerHTML = 'Написать мастеру 📩';
+                chatButton.innerHTML = 'Написать исполнителю 📩';
                 chatButton.addEventListener('click', () => {
                     loadCustomerChatHistory(validatedTelegramID, name, performer, socket)
                     chatInput.classList.remove('hidden');
                 });
 
                 const lookPerformerChatsButton = document.createElement('button');
-                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки мастера 📤';
+                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки исполнителю 📤';
                 lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
 
                 performerList.appendChild(performerParagraph);

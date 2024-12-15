@@ -225,7 +225,7 @@ app.post('/respond-to-bid', (req, res) => {
                             'Описание: ' + description + '\n' +
                             'Срок выполнения: от <i>' + deadlineFrom + ' - до ' + deadlineTo + '</i>\n' +
                             'Предоставляется инструмент: ' + ((instrumentProvided === true || instrumentProvided === 1) ? 'да' : 'нет') + '\n\n' +
-                            'Откликнулся мастер ' + performerName + ', ставка: <i>' + performerRate +
+                            'Откликнулся исполнитель ' + performerName + ', ставка: <i>' + performerRate +
                             '/час</i>, опыт: <i>' + performerExperience + ' (в годах)</i>.';
 
 
@@ -301,7 +301,7 @@ app.post('/send-message', (req, res) => {
 
         const formattedMessage = senderType === 'customer' ? 
             `Заказчик ${customerName}:\n${message}` :
-            `Мастер ${performerName}:\n${message}`;
+            `Исполнитель ${performerName}:\n${message}`;
         sendMessage(
             recipientTelegramID,
             formattedMessage
@@ -340,7 +340,7 @@ app.get('/responded-performers', (req, res) => {
         };
     } catch (error) {
         console.error('Error in /responded-performers:', error);
-        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся мастеров.' });
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся исполнителей.' });
     };    
 });
 
@@ -451,7 +451,7 @@ app.post('/show-performer-chats-list', (req, res) => {
             // Step 3: Return the bids
             return res.status(200).json({ success: true, bids });
         } else {
-            return res.status(404).json({ success: false, message: 'У данного мастера не было переписок.' });
+            return res.status(404).json({ success: false, message: 'У данного исполнителя не было переписок.' });
         };
     } catch (error) {
         console.error('Error in /show-chats-list:', error);

@@ -20,7 +20,7 @@ export function saveChatMessage(
         const separator = '\n---\n';
 
         const formattedMessage = `${senderType === 'customer' ? `Заказчик ${customerName}` :
-                                 `Мастер ${performerName}`}:\n\n${message}\n\n${currentDate}${separator}`;
+                                 `Исполнитель ${performerName}`}:\n\n${message}\n\n${currentDate}${separator}`;
 
         fs.appendFileSync(filePath, formattedMessage, 'utf8');
     } catch (error) {

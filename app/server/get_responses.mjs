@@ -22,6 +22,8 @@ export function getResponses(db, customerBids) {
             };
         });
 
+        console.log(`Responses in getResponses: ${JSON.stringify(responses)}`);
+
         return responses;
     } catch (error) {
         console.error('Error in getResponses:', error);

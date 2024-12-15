@@ -337,6 +337,7 @@ app.get('/responded-performers', (req, res) => {
                 if (responses.length === 0) {
                     res.status(200).json({ success: true, responses: [] });
                 } else {
+                    console.log(`Responses in server: ${responses}`);
                     res.status(200).json({ success: true, responses });
                 };
             };

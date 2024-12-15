@@ -144,7 +144,7 @@ async function showCreateBidForm() {
 
                 display.innerHTML = formHTML;
 
-                scrollInputsIntoView();
+                handleKeyboardAndScroll();
             };
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
@@ -631,7 +631,7 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
                 customerList.appendChild(button);
             });
 
-            scrollInputsIntoView();
+            handleKeyboardAndScroll();
         };
     } catch (error) {
         console.error(`Error in showPerformerChats: ${error}`);
@@ -812,7 +812,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerList.appendChild(lookPerformerChatsButton);
             });
 
-            scrollInputsIntoView();
+            handleKeyboardAndScroll();
         };
     } catch (error) {
         console.error(`Error in showCustomerChats: ${error}`);
@@ -1192,13 +1192,29 @@ function scrollToBottom(element) {
 };
 
 
-function scrollInputsIntoView() {
-    const inputs = document.querySelectorAll('input, textarea');
-    inputs.forEach((input) => {
-        input.addEventListener('focus', () => {
-            setTimeout(() => {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-        });
-    });
+function handleKeyboardAndScroll() {
+    document.body.addEventListener(
+        'focus',
+        (event) => {
+            const target = event.target;
+            if (['INPUT', 'TEXTAREA'].includes(target.tagName)) {
+                document.classList.add('keyboard-open');
+                setTimeout(() => {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            };
+        },
+        true
+    );
+
+    document.body.addEventListener(
+        'blur',
+        (event) => {
+            const target = event.target;
+            if (['INPUT', 'TEXTAREA'].includes(target.tagName)) {
+                document.classList.remove('keyboard-open');
+            };
+        },
+        true
+    );
 };

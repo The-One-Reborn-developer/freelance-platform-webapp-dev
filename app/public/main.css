@@ -55,7 +55,10 @@ table {
 body {
 	font-family: "Montserrat";
 	font-size: 18px;
-	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);	
+}
+
+body.keyboard-open {
+	height: calc(100% + 500px);
 }
 
 .container {
@@ -263,6 +266,7 @@ body {
 	border-radius: 10px;
 	border: solid 2px grey;
 	padding: 5px;
+	font-size: 16px !important;
 }
 
 .chat-input {

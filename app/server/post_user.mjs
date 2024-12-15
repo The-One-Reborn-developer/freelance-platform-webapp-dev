@@ -22,7 +22,7 @@ export function postUser(db, res, telegramID, role, name, rate, experience) {
 
         // Insert the new user
         const insertUser = db.prepare(
-            'INSERT INTO users (telegram_id, role, name, rate, experience, registration_date) VALUES (?, ?, ?, ?, ?)'
+            'INSERT INTO users (telegram_id, role, name, rate, experience, registration_date) VALUES (?, ?, ?, ?, ?, ?)'
         );
         const registrationDate = new Date().toISOString();
         const insertUserResult = insertUser.run(telegramID, role, name, rate, experience, registrationDate);

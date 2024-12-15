@@ -201,6 +201,7 @@ app.post('/respond-to-bid', (req, res) => {
         const performerName = performerData.name;
         const performerRate = performerData.rate;
         const performerExperience = performerData.experience;
+        const performerRegistrationDate = performerData.registration_date;
         
         const postResponseResult = postResponse(
             db,
@@ -220,14 +221,16 @@ app.post('/respond-to-bid', (req, res) => {
             const deadlineFrom = bidData.deadline_from;
             const deadlineTo = bidData.deadline_to;
             const instrumentProvided = bidData.instrument_provided;
-            const message = 'На Ваш заказ №' + bidID + ': \n\n' +
-                            'Город: ' + city + '\n' +
-                            'Описание: ' + description + '\n' +
-                            'Срок выполнения: от <i>' + deadlineFrom + ' - до ' + deadlineTo + '</i>\n' +
-                            'Предоставляется инструмент: ' + ((instrumentProvided === true || instrumentProvided === 1) ? 'да' : 'нет') + '\n\n' +
-                            'Откликнулся исполнитель ' + performerName + ', ставка: <i>' + performerRate +
-                            '/час</i>, опыт: <i>' + performerExperience + ' (в годах)</i>.';
-
+            const message = `
+                На Ваш заказ №${bidID}: \n\n
+                Город: ${city}\n
+                Описание: ${description}\n
+                Срок выполнения: от <i>${deadlineFrom} - до ${deadlineTo}</i>\n
+                Предоставляется инструмент: ${instrumentProvided ? 'да' : 'нет'}\n\n
+                Откликнулся исполнитель ${performerName}.
+                Зарегистрирован: <i>${performerRegistrationDate}</i>,
+                ставка: <i>${performerRate}/час</i>,
+                опыт: <i>${performerExperience} (в годах)</i>.`
 
             sendMessage(
                 customerTelegramID,

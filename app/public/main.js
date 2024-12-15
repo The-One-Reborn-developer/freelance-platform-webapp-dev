@@ -483,40 +483,55 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                         `;
 
                         bid.responses.forEach((response) => {
-                            const responseDetails = `
-                                <div class="response-container">
-                                    <p>Откликнулся: ${response.performer_name}</p>
-                                    <p>Ставка: ${response.performer_rate} (₽/час)</p>
-                                    <p>Стаж: ${response.performer_experience} (в годах)</p>
-                                </div>
-                            `;
-                            
-                            const lookChatButton = document.createElement('button');
-                            lookChatButton.classList.add('bid-card-button');
-                            lookChatButton.innerHTML = 'Посмотреть переписку 👀';
-                            lookChatButton.setAttribute('data-bid-id', bid.id);
-                            lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
-                            lookChatButton.setAttribute('data-performer-telegram-id', response.performer_telegram_id);
-                            
-                            lookChatButton.addEventListener('click', async (event) => {
-                                const bidID = event.target.getAttribute('data-bid-id');
-                                const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
-                                const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
-                                if (bidID && customerTelegramID && performerTelegramID) {
-                                    await showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
+                            fetch('/get-user-data', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ telegram_id: response.performer_telegram_id })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const performer = data.user;
+                                    const performerRegistrationDate = performer.registration_date;
+
+                                    const responseDetails = `
+                                        <div class="response-container">
+                                            <p>Откликнулся: ${response.performer_name}</p>
+                                            <p>Зарегистрирован: ${performerRegistrationDate}</p>
+                                            <p>Ставка: ${response.performer_rate} (₽/час)</p>
+                                            <p>Стаж: ${response.performer_experience} (в годах)</p>
+                                        </div>
+                                    `;
+                                    
+                                    const lookChatButton = document.createElement('button');
+                                    lookChatButton.classList.add('bid-card-button');
+                                    lookChatButton.innerHTML = 'Посмотреть переписку 👀';
+                                    lookChatButton.setAttribute('data-bid-id', bid.id);
+                                    lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
+                                    lookChatButton.setAttribute('data-performer-telegram-id', response.performer_telegram_id);
+                                    
+                                    lookChatButton.addEventListener('click', async (event) => {
+                                        const bidID = event.target.getAttribute('data-bid-id');
+                                        const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                                        const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                                        if (bidID && customerTelegramID && performerTelegramID) {
+                                            await showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
+                                        } else {
+                                            showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+                                            console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
+                                        };
+                                    });
+                                    bidCard.innerHTML += responseDetails;
+                                    bidCard.appendChild(lookChatButton);  
                                 } else {
-                                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
-                                    console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
+                                    console.error(`Error in get-user-data: ${data.message}`);
                                 };
                             });
-
-                            bidCard.innerHTML += responseDetails;
-                            bidCard.appendChild(lookChatButton);
                         });
-
                         bidsContainer.appendChild(bidCard);
                     });
-
                     display.appendChild(bidsContainer);
                 } else {
                     showModal('У данного заказчика ещё нет переписок');

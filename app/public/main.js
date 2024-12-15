@@ -144,21 +144,7 @@ async function showCreateBidForm() {
 
                 display.innerHTML = formHTML;
 
-                const inputs = document.querySelectorAll('input, textarea');
-                inputs.forEach((input) => {
-                    input.addEventListener('focus', () => {
-                        const container = document.getElementById('container');
-                        container.style.height = '120vh';
-                        setTimeout(() => {
-                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 300);
-                    });
-
-                    input.addEventListener('blur', () => {
-                        const container = document.getElementById('container');
-                        container.style.height = '100vh';
-                    });
-                });
+                scrollInputsIntoView();
             };
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
@@ -645,22 +631,7 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
                 customerList.appendChild(button);
             });
 
-            // Ensure the input field is scrolled into view
-            const inputs = document.querySelectorAll('input, textarea');
-            inputs.forEach((input) => {
-                input.addEventListener('focus', () => {
-                    const container = document.getElementById('container');
-                    container.style.height = '120vh';
-                    setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 300);
-                });
-
-                input.addEventListener('blur', () => {
-                    const container = document.getElementById('container');
-                    container.style.height = '100vh';
-                });
-            });
+            scrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showPerformerChats: ${error}`);
@@ -841,21 +812,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerList.appendChild(lookPerformerChatsButton);
             });
 
-            // Ensure the input field is scrolled into view
-            const inputs = document.querySelectorAll('input, textarea');
-            inputs.forEach((input) => {
-                input.addEventListener('focus', () => {
-                    const container = document.getElementById('container');
-                    setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }, 300);
-                });
-
-                input.addEventListener('blur', () => {
-                    const container = document.getElementById('container');
-                    container.style.height = '100vh';
-                });
-            });
+            scrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showCustomerChats: ${error}`);
@@ -1232,4 +1189,23 @@ function initializeWebSocket(validatedTelegramID) {
 
 function scrollToBottom(element) {
     element.scrollTop = element.scrollHeight;
+};
+
+
+function scrollInputsIntoView() {
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach((input) => {
+        input.addEventListener('focus', () => {
+            const container = document.getElementById('container');
+            container.style.height = '120vh';
+            setTimeout(() => {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        });
+
+        input.addEventListener('blur', () => {
+            const container = document.getElementById('container');
+            container.style.height = '100vh';
+        });
+    });
 };

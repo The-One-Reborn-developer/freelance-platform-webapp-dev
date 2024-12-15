@@ -144,7 +144,7 @@ async function showCreateBidForm() {
 
                 display.innerHTML = formHTML;
 
-                handleKeyboardAndScroll();
+                adjustAndScrollInputsIntoView();
             };
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
@@ -631,7 +631,7 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
                 customerList.appendChild(button);
             });
 
-            handleKeyboardAndScroll();
+            adjustAndScrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showPerformerChats: ${error}`);
@@ -812,7 +812,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerList.appendChild(lookPerformerChatsButton);
             });
 
-            handleKeyboardAndScroll();
+            adjustAndScrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showCustomerChats: ${error}`);
@@ -1192,29 +1192,39 @@ function scrollToBottom(element) {
 };
 
 
-function handleKeyboardAndScroll() {
-    document.body.addEventListener(
-        'focus',
-        (event) => {
-            const target = event.target;
-            if (['INPUT', 'TEXTAREA'].includes(target.tagName)) {
-                document.classList.add('keyboard-open');
-                setTimeout(() => {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            };
-        },
-        true
-    );
+function adjustAndScrollInputsIntoView() {
+    const inputs = document.querySelectorAll('input, textarea');
+    const originalViewportHeight = window.innerHeight;
 
-    document.body.addEventListener(
-        'blur',
-        (event) => {
-            const target = event.target;
-            if (['INPUT', 'TEXTAREA'].includes(target.tagName)) {
-                document.classList.remove('keyboard-open');
+    inputs.forEach((input) => {
+        input.addEventListener('focus', () => {
+            const visualViewport = window.visualViewport;
+
+            if (visualViewport) {
+                // Listen for viewport resize events
+                visualViewport.addEventListener('resize', () => {
+                    const keyboardHeight = originalViewportHeight - visualViewport.height;
+
+                    if (keyboardHeight > 0) {
+                        // Adjust the input position to account for the keyboard height
+                        const inputRect = input.getBoundingClientRect();
+                        const overlap = inputRect.bottom - (visualViewport.height - keyboardHeight);
+
+                        if (overlap > 0) {
+                            // Adjust scroll position
+                            window.scrollBy(0, overlap + 10); // Scroll to bring the input into view
+                        };
+                    };
+                });
             };
-        },
-        true
-    );
-};
+
+            setTimeout(() => {
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        });
+
+        input.addEventListener('blur', () => {
+            document.body.style.paddingBottom = '';
+        });
+    });
+};   

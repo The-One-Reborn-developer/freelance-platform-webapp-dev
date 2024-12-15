@@ -832,7 +832,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 });
 
                 const lookPerformerChatsButton = document.createElement('button');
-                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки исполнителю 📤';
+                lookPerformerChatsButton.innerHTML = 'Посмотреть переписки исполнителя 📤';
                 lookPerformerChatsButton.addEventListener('click', () => showPerformerChatsWithCustomers(performer.telegramID));
 
                 performerList.appendChild(performerParagraph);

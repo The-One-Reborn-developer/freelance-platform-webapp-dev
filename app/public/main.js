@@ -148,7 +148,8 @@ async function showCreateBidForm() {
                 inputs.forEach((input) => {
                     input.addEventListener('focus', () => {
                         setTimeout(() => {
-                            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
+                            input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
                         }, 300);
                     });
                 });
@@ -643,7 +644,8 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
             inputs.forEach((input) => {
                 input.addEventListener('focus', () => {
                     setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
+                        input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
                     }, 300);
                 });
             });
@@ -832,7 +834,8 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             inputs.forEach((input) => {
                 input.addEventListener('focus', () => {
                     setTimeout(() => {
-                        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
+                        input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
                     }, 300);
                 });
             });

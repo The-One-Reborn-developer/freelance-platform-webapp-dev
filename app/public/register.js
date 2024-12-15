@@ -10,7 +10,6 @@ const rateLabel = document.getElementById('rate-label');
 const experienceInput = document.getElementById('experience-input');
 const experienceLabel = document.getElementById('experience-label');
 
-
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
@@ -169,7 +168,8 @@ const inputs = document.querySelectorAll('input, textarea');
 inputs.forEach((input) => {
     input.addEventListener('focus', () => {
         setTimeout(() => {
-            input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            const scrollOffset = input.getBoundingClientRect().top + window.scrollY - 100;
+            input.scrollIntoView({ top: scrollOffset, behavior: 'smooth', block: 'center' });
         }, 300);
     });
 });

@@ -7,7 +7,9 @@ export function createUsersTable(db) {
                 role TEXT NOT NULL,
                 name TEXT NOT NULL,
                 rate INTEGER NOT NULL,
-                experience INTEGER NOT NULL
+                experience INTEGER NOT NULL,
+                registration_date STRING(20) NOT NULL,
+                UNIQUE(telegram_id)
             );
         `);
         console.log('Users table check or creation executed successfully');

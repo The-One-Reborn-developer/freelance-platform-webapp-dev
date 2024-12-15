@@ -89,7 +89,7 @@ function insertCustomerButtons(name) {
 };
 
 
-function insertPerformerButtons(name, rate, experience) {
+function insertPerformerButtons(name, rate, experience, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
 
@@ -98,7 +98,7 @@ function insertPerformerButtons(name, rate, experience) {
         return;
     } else {
         try {
-            headerInfo.innerHTML = `Исполнитель ${name}. Ставка ${rate} (₽/час), ${experience} (лет опыта)`;
+            headerInfo.innerHTML = `Исполнитель ${name}. Ставка ${rate} (₽/час), ${experience} (лет опыта). Зарегистрирован ${registrationDate}`;
 
             const searchBidsButton = document.createElement('button');
             searchBidsButton.className = 'header-button';
@@ -574,8 +574,9 @@ function setupPerformerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
+    const registrationDate = userData.userData.registration_date;
 
-    insertPerformerButtons(name, rate, experience);
+    insertPerformerButtons(name, rate, experience, registrationDate);
 
     const searchBidsButton = document.getElementById('search-bids');
     searchBidsButton.addEventListener('click', async function () {

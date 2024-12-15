@@ -1197,7 +1197,7 @@ function scrollInputsIntoView() {
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
             const container = document.getElementById('container');
-            container.style.height = '120vh';
+            container.style.height = '200vh';
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);

@@ -685,8 +685,8 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик: ${customer.name}`
-                            : `Исполнитель: ${name}`;
+                            ? `Заказчик ${customer.name}:`
+                            : `Исполнитель ${name}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
@@ -758,6 +758,67 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
             };
         };            
     };
+
+    const attachmentInput = document.getElementById('attachment-input');
+    const attachmentButton = document.getElementById('attachment-button');
+    attachmentButton.onclick = () => {
+        attachmentInput.click();
+    };
+
+    attachmentInput.addEventListener('change', async () => {
+        const file = attachmentInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('attachment', file);
+            formData.append('bid_id', performer.bidID);
+            formData.append('customer_telegram_id', customer.telegramID);
+            formData.append('performer_telegram_id', validatedTelegramID);
+            formData.append('sender_type', 'performer');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+
+            try {
+                const response = await fetch('/send-message', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Send the file through the WebSocket to be displayed on the other side
+                const base64File = await fileToBase64(file);
+
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    const messageData = {
+                        recipient_telegram_id: customer.telegramID,
+                        sender_name: name,
+                        message: '[File sent]',
+                        attachment: base64File
+                    };
+                    console.log(`Attachment data: ${JSON.stringify(messageData)}`);
+
+                    socket.send(JSON.stringify(messageData));
+                };
+
+                if (response.ok) {
+                    const currentDate = new Date().toLocaleString();
+                    const chatHistory = document.getElementById('chat-history');
+
+                    chatHistory.innerHTML += `<div class="chat-message">
+                                                Исполнитель ${name}:
+                                                <br><br><img src="${URL.createObjectURL(file)}" alt="Attachment" class="attachment-image">
+                                                <br><br>${currentDate}
+                                              </div>`;
+
+                    const display = document.getElementById('display');
+                    scrollToBottom(display);
+                };
+            } catch (error) {
+                console.error(`Error in sendAttachment: ${error}`);
+                showModal('Произошла ошибка при отправке файла');
+            };
+        };
+    });
 };
 
 
@@ -1013,8 +1074,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик: ${name}`
-                            : `Исполнитель: ${performer.name}`;
+                            ? `Заказчик ${name}:`
+                            : `Исполнитель ${performer.name}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
@@ -1076,10 +1137,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
 
                 const chatHistory = document.getElementById('chat-history');
                 chatHistory.innerHTML += `<div class="chat-message">
-                                            Заказчик ${name}
+                                            Заказчик ${name}:
                                             <br><br>${message}
                                             <br><br>${currentDate}
-                                        </div>`;
+                                          </div>`;
 
                 messageTextArea.value = '';
                 const display = document.getElementById('display');
@@ -1134,10 +1195,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                     const chatHistory = document.getElementById('chat-history');
 
                     chatHistory.innerHTML += `<div class="chat-message">
-                                                Заказчик ${name}
-                                                <br><br><img src="${URL.createObjectURL(file)}" alt="Attachment">
+                                                Заказчик ${name}:
+                                                <br><br><img src="${URL.createObjectURL(file)}" alt="Attachment" class="attachment-image">
                                                 <br><br>${currentDate}
-                                            </div>`;
+                                              </div>`;
 
                     const display = document.getElementById('display');
                     scrollToBottom(display);

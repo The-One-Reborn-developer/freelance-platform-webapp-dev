@@ -288,3 +288,7 @@ body.keyboard-open {
 .hidden {
 	display: none;
 }
+
+.keyboard-active {
+    padding-bottom: 300px;
+}

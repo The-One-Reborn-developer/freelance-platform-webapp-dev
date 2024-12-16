@@ -1055,7 +1055,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
         attachmentInput.click();
     };
 
-    imageInput.addEventListener('change', async () => {
+    attachmentInput.addEventListener('change', async () => {
         const file = imageInput.files[0];
 
         if (file) {

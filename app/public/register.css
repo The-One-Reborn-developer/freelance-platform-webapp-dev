@@ -59,12 +59,14 @@ body {
 
 .container {
 	width: 100vw;
-	height: 100vh;
+	height: 120vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: slategrey;
 	padding-bottom: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .registration-form {

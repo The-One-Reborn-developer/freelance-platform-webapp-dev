@@ -1070,7 +1070,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             }
 
             try {
-                const response = await fetch('/send-attachment', {
+                const response = await fetch('/send-message', {
                     method: 'POST',
                     body: formData
                 });

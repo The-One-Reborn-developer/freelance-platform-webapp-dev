@@ -1024,7 +1024,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 const messageData = {
                     recipient_telegram_id: performer.telegramID,
                     sender_name: name,
-                    message
+                    message,
+                    attachment: null
                 };
                 console.log(`Message data: ${JSON.stringify(messageData)}`);
 
@@ -1047,6 +1048,62 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             };
         };            
     };
+
+    const attachmentInput = document.getElementById('attachment-input');
+    const attachmentButton = document.getElementById('attachment-button');
+    attachmentButton.onclick = () => {
+        attachmentInput.click();
+    };
+
+    imageInput.addEventListener('change', async () => {
+        const file = imageInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('attachment', file);
+            formData.append('bid_id', performer.bidID);
+            formData.append('customer_telegram_id', validatedTelegramID);
+            formData.append('performer_telegram_id', performer.telegramID);
+            formData.append('sender_type', 'customer');
+
+            try {
+                const response = await fetch('/send-attachment', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Send the file through the WebSocket to be displayed on the other side
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    const messageData = {
+                        recipient_telegram_id: performer.telegramID,
+                        sender_name: name,
+                        message: '[File sent]',
+                        attachment: file
+                    };
+                    console.log(`Attachment data: ${JSON.stringify(attachmentData)}`);
+
+                    socket.send(JSON.stringify(messageData));
+                };
+
+                if (response.ok) {
+                    const currentDate = new Date().toLocaleString();
+                    const chatHistory = document.getElementById('chat-history');
+
+                    chatHistory.innerHTML += `<div class="chat-message">
+                                                Заказчик ${name}
+                                                <br><br><img src="${URL.createObjectURL(file)}" alt="Attachment">
+                                                <br><br>${currentDate}
+                                            </div>`;
+
+                    const display = document.getElementById('display');
+                    scrollToBottom(display);
+                };
+            } catch (error) {
+                console.error(`Error in sendAttachment: ${error}`);
+                showModal('Произошла ошибка при отправке файла');
+            };
+        };
+    });
 };
 
 
@@ -1149,7 +1206,8 @@ function initializeWebSocket(validatedTelegramID) {
                 const normalizedData = {
                     senderTelegramID: messageData.sender_telegram_id,
                     senderName: messageData.sender_name,
-                    message: messageData.message
+                    message: messageData.message,
+                    attachment: messageData.attachment
                 }
 
                 if (!normalizedData.senderName || !normalizedData.message) {
@@ -1169,11 +1227,19 @@ function initializeWebSocket(validatedTelegramID) {
                 console.log(`Valid message received from ${messageData.sender_name.trim()}: ${messageData.message.trim()}`);
 
                 const chatHistory = document.getElementById('chat-history');
-                chatHistory.innerHTML += `<div class="chat-message">
-                                            ${normalizedData.senderName}
-                                            <br><br>${normalizedData.message}
-                                            <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
-                                          </div>`;
+                if (normalizedData.attachment) {
+                    chatHistory.innerHTML += `<div class="chat-message">
+                                                ${normalizedData.senderName}
+                                                <br><br><img src="${normalizedData.attachment}" alt="Attachment">
+                                                <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
+                                              </div>`;
+                } else {
+                    chatHistory.innerHTML += `<div class="chat-message">
+                                                ${normalizedData.senderName}
+                                                <br><br>${normalizedData.message}
+                                                <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
+                                              </div>`;
+                };
 
                 const display = document.getElementById('display');
                 scrollToBottom(display);
@@ -1182,7 +1248,7 @@ function initializeWebSocket(validatedTelegramID) {
             };
         });
 
-        return socket
+        return socket;
     };
 };
 

@@ -33,7 +33,8 @@ export function setupWebsocketServer(server) {
                 const { 
                     recipient_telegram_id: recipientTelegramID,
                     sender_name: senderName,
-                    message
+                    message,
+                    attachment
                 } = JSON.parse(rawMessage);
                 const recipientTelegramIDString = String(recipientTelegramID);
 
@@ -47,7 +48,8 @@ export function setupWebsocketServer(server) {
                         {
                             sender_telegram_id: telegramID,
                             sender_name: senderName,
-                            message 
+                            message,
+                            attachment
                         }
                     );
                 };

@@ -279,6 +279,7 @@ app.post('/send-message', (req, res) => {
         const customerName = getUser(db, customerTelegramID).name;
         const performerName = getUser(db, performerTelegramID).name;
         const message = req.body.message;
+        const attachment = req.body.attachment;
         const senderType = req.body.sender_type;
 
         saveChatMessage(
@@ -288,6 +289,7 @@ app.post('/send-message', (req, res) => {
             customerName,
             performerName,
             message,
+            attachment,
             senderType
         );
 
@@ -302,6 +304,7 @@ app.post('/send-message', (req, res) => {
 
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
 
+        // TODO: ATTACHMENT SENDING
         const formattedMessage = senderType === 'customer' ? 
             `Заказчик ${customerName}:\n${message}` :
             `Исполнитель ${performerName}:\n${message}`;

@@ -746,25 +746,15 @@ function renderMessage(msg) {
 
     // Check if the content looks like a file path
     if (content.startsWith('app/chats/attachments/')) {
-        const filePath = content.replace('app/chats/attachments/', '/attachments/');
-        const fileExtension = filePath.split('.').pop().toLowerCase();
-
-        // Determine file type and render accordingly
-        if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'].includes(fileExtension)) {
-            // Image file
-            return `<div class="chat-message">
-                        ${sender}<br>
-                        <img src="${filePath}" alt="Attachment" style="max-width: 100%; height: auto;">
-                        <br>${timestamp}
-                    </div>`;
-        } else {
-            // Non-image file
-            return `<div class="chat-message">
-                        ${sender}<br>
-                        <a href="${filePath}" target="_blank" download>Скачать файл 💾</a>
-                        <br>${timestamp}
-                    </div>`;
-        };
+        // File attachment
+        const filePath = content;
+        
+        return `<div class="chat-message">
+                    ${sender}<br>
+                    <img src="${filePath}" alt="Attachment">
+                    <br>${timestamp}
+                </div>`
+        
     } else {
         // Text message
         return `<div class="chat-message">

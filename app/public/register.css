@@ -64,6 +64,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	background-color: slategrey;
+	padding-bottom: 200px;
 }
 
 .registration-form {

@@ -1265,29 +1265,13 @@ function scrollToBottom(element) {
 
 function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
-
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 500);
-
-            setTimeout(() => {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 1000);
+            }, 300);
         });
     });
-
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', () => {
-            const active = document.activeElement;
-            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
-                setTimeout(() => {
-                    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            };
-        });
-    };
 };
 
 

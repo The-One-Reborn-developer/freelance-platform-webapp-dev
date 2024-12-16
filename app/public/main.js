@@ -693,7 +693,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
-                                    ${sender}<br><br>
+                                    ${senderName}<br><br>
                                     <img src="${relativePath}" alt="Attachment" class="attachment-image">
                                     <br><br>
                                     ${timestamp}
@@ -1023,7 +1023,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
-                                    ${sender}<br><br>
+                                    ${senderName}<br><br>
                                     <img src="${relativePath}" alt="Attachment" class="attachment-image">
                                     <br><br>
                                     ${timestamp}

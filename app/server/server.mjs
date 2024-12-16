@@ -5,6 +5,7 @@ import fs from "fs";
 import { createServer } from "http";
 import path from "path";
 import multer from "multer";
+import { fileURLToPath } from "url";
 
 import { 
     createUsersTable,
@@ -34,6 +35,8 @@ import { sendAttachment } from "./send_attachment.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());

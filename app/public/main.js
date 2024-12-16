@@ -1,7 +1,5 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
-
-    fixIOSKeyboardIssue();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -27,29 +25,6 @@ window.onload = async function () {
             document.activeElement.blur();
         };
     });    
-};
-
-
-function fixIOSKeyboardIssue() {
-    // Слушатель события, чтобы при открытии клавиатуры страница прокручивалась к активному полю
-    if (window.visualViewport) {
-        const display = document.querySelector('#display');
-        
-        if (!display) {
-            return;
-        } else {
-            let initialHeight = window.visualViewport.height;
-
-            window.visualViewport.addEventListener('resize', () => {
-                const currentHeight = window.visualViewport.height;
-                if (currentHeight < initialHeight - 100) {
-                    display.classList.add('ios-keyboard-padding');
-                } else {
-                    display.classList.remove('ios-keyboard-padding');
-                };
-            });
-        };
-    };
 };
 
 
@@ -1290,22 +1265,15 @@ function scrollToBottom(element) {
 
 function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
-    const display = document.getElementById('display');
-  
+
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
             setTimeout(() => {
-                display.scrollTo({ 
-                    top: input.offsetTop - 100,
-                    behavior: 'smooth'
-                });
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 500);
 
             setTimeout(() => {
-                display.scrollTo({ 
-                    top: input.offsetTop - 100,
-                    behavior: 'smooth'
-                });
+                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 1000);
         });
     });
@@ -1315,10 +1283,7 @@ function scrollInputsIntoView() {
             const active = document.activeElement;
             if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
                 setTimeout(() => {
-                    display.scrollTo({
-                        top: active.offsetTop - 100,
-                        behavior: 'smooth'
-                    })
+                    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }, 300);
             };
         });

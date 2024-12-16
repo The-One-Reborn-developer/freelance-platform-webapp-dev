@@ -119,7 +119,7 @@ body.keyboard-open {
 	position: relative;
 	overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal overflow */
-	max-height: 80vh;
+	padding-bottom: 300px;
 }
 
 .form-title {

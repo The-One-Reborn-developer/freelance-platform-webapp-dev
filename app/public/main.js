@@ -1304,20 +1304,34 @@ function fileToBase64(file) {
 
 
 function fixIOSKeyboardIssue() {
+    const display = document.querySelector('.display');
+
+    document.addEventListener('focusin', (event) => {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            display.classList.add('keyboard-active');
+            setTimeout(() => {
+                event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+    });
+
+    document.addEventListener('focusout', (event) => {
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            display.classList.remove('keyboard-active');
+        }
+    });
+
     if (window.visualViewport) {
-        const display = document.querySelector('.display'); 
-
         window.visualViewport.addEventListener('resize', () => {
-
             const viewportHeight = window.visualViewport.height;
             const windowHeight = window.innerHeight;
 
             if (windowHeight - viewportHeight > 150) {
-                // Клавиатура открыта
-                display.style.paddingBottom = '300px';
+                // Клавиатура, вероятно, открыта
+                display.classList.add('keyboard-active');
             } else {
                 // Клавиатура закрыта
-                display.style.paddingBottom = '0px';
+                display.classList.remove('keyboard-active');
             }
 
             const activeElement = document.activeElement;

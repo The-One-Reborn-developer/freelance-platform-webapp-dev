@@ -681,11 +681,22 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
+                        // Extract file path
                         const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
                         const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
 
+                        // Extract sender and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик: ${customer.name}`
+                            : `Исполнитель: ${name}`;
+                        
+                        // Render the message with attachment
                         return `<div class="chat-message">
+                                    ${sender}<br><br>
                                     <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
                                 </div>`
                     } else {
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
@@ -1000,11 +1011,22 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
+                        // Extract file path
                         const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
                         const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
 
+                        // Extract sender and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик: ${customer.name}`
+                            : `Исполнитель: ${name}`;
+                        
+                        // Render the message with attachment
                         return `<div class="chat-message">
+                                    ${sender}<br><br>
                                     <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
                                 </div>`
                     } else {
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`

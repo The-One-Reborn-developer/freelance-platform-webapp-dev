@@ -1065,6 +1065,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             formData.append('customer_telegram_id', validatedTelegramID);
             formData.append('performer_telegram_id', performer.telegramID);
             formData.append('sender_type', 'customer');
+            console.log(`Attachment data: ${JSON.stringify(formData)}`);
 
             try {
                 const response = await fetch('/send-attachment', {

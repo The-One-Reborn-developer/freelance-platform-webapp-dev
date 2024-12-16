@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import fs from "fs";
 import { createServer } from "http";
 import path from "path";
+import multer from "multer";
 
 import { 
     createUsersTable,
@@ -39,6 +40,7 @@ app.use(express.static('app/public'));
 console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });
+const upload = multer({ dest: 'app/chats/attachments' });
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);
@@ -271,7 +273,7 @@ app.get('/get-chats', (req, res) => {
 });
 
 
-app.post('/send-message', (req, res) => {
+app.post('/send-message', upload.single('attachment'), (req, res) => {
     try {
         const bidID = req.body.bid_id;
         const customerTelegramID = req.body.customer_telegram_id;
@@ -279,8 +281,13 @@ app.post('/send-message', (req, res) => {
         const customerName = getUser(db, customerTelegramID).name;
         const performerName = getUser(db, performerTelegramID).name;
         const message = req.body.message;
-        const attachment = req.body.attachment;
         const senderType = req.body.sender_type;
+
+        let attachmentPath = null;
+        if (req.file) {
+            attachmentPath = req.file.path;
+            console.log(`Attachment saved to: ${attachmentPath}`);
+        };
 
         saveChatMessage(
             bidID,
@@ -289,7 +296,7 @@ app.post('/send-message', (req, res) => {
             customerName,
             performerName,
             message,
-            attachment,
+            attachmentPath,
             senderType
         );
 
@@ -304,14 +311,21 @@ app.post('/send-message', (req, res) => {
 
         const recipientTelegramID = senderType === 'customer' ? performerTelegramID : customerTelegramID;
 
-        // TODO: ATTACHMENT SENDING
         const formattedMessage = senderType === 'customer' ? 
             `Заказчик ${customerName}:\n${message}` :
             `Исполнитель ${performerName}:\n${message}`;
-        sendMessage(
-            recipientTelegramID,
-            formattedMessage
-        );
+
+        if (attachmentPath) {
+            sendAttachment(
+                recipientTelegramID,
+                attachmentPath
+            );
+        } else {
+            sendMessage(
+                recipientTelegramID,
+                formattedMessage
+            );
+        };
 
         res.status(200).json({ success: true, message: 'Сообщение успешно отправлено.' });
     } catch (error) {

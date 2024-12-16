@@ -1085,7 +1085,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         message: '[File sent]',
                         attachment: base64File
                     };
-                    console.log(`Attachment data: ${JSON.stringify(attachmentData)}`);
+                    console.log(`Attachment data: ${JSON.stringify(messageData)}`);
 
                     socket.send(JSON.stringify(messageData));
                 };

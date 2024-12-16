@@ -1018,11 +1018,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
 
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
-                // Filter out empty messages
-                .filter((msg) => msg.trim() !== '')
-                // Replace '\n' with <br>
-                .map((msg) => `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`)
-                .join('');
+            .map((msg) => renderMessage(msg))
+            .join('');
         } else {
             chatHistory.innerHTML = 'Нет сообщений.';
         };

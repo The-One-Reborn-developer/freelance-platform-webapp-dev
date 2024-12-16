@@ -1262,7 +1262,7 @@ function scrollInputsIntoView() {
     const input_elements = document.querySelectorAll('input, textarea');
 
     input_elements.forEach((input_element) => {
-        input_element.addEventListener('click', () => {
+        input_element.addEventListener('focus', () => {
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);

@@ -1000,6 +1000,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };
                 })
+                .join('');
         } else {
             chatHistory.innerHTML = 'Нет сообщений.';
         };

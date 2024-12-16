@@ -290,6 +290,7 @@ body.keyboard-open {
 	display: none;
 }
 
-.keyboard-active {
-    padding-bottom: 300px;
+.attachment-image {
+	max-width: 100%;
+	max-height: auto;
 }

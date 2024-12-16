@@ -681,7 +681,12 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
-                        // TODO: fetch attachment from the server and render it
+                        const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
+                        const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
+
+                        return `<div class="chat-message">
+                                    <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                </div>`
                     } else {
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };
@@ -995,7 +1000,12 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
-                        // TODO: fetch attachment from the server and render it
+                        const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
+                        const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
+
+                        return `<div class="chat-message">
+                                    <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                </div>`
                     } else {
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };

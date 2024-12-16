@@ -1305,15 +1305,15 @@ function scrollInputsIntoView() {
                 });
             }, 1000);
         });
-    });
 
-    input.addEventListener('blur', () => {
-        setTimeout(() => {
-            const active = document.activeElement;
-            if (!active || active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA') {
-                display.classList.remove('keyboard-active');
-            }
-        }, 100);
+        input.addEventListener('blur', () => {
+            setTimeout(() => {
+                const active = document.activeElement;
+                if (!active || active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA') {
+                    display.classList.remove('keyboard-active');
+                }
+            }, 100);
+        });
     });
 
     if (window.visualViewport) {

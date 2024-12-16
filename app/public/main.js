@@ -1,5 +1,7 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
+
+    fixIOSKeyboardIssue();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -1299,3 +1301,34 @@ function fileToBase64(file) {
         reader.readAsDataURL(file);
     });
 };
+
+
+function fixIOSKeyboardIssue() {
+    if (window.visualViewport) {
+        const display = document.querySelector('.display'); 
+
+        window.visualViewport.addEventListener('resize', () => {
+
+            const viewportHeight = window.visualViewport.height;
+            const windowHeight = window.innerHeight;
+
+            if (windowHeight - viewportHeight > 150) {
+                // Клавиатура открыта
+                display.style.paddingBottom = '300px';
+            } else {
+                // Клавиатура закрыта
+                display.style.paddingBottom = '0px';
+            }
+
+            const activeElement = document.activeElement;
+            if (
+                activeElement &&
+                (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')
+            ) {
+                setTimeout(() => {
+                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+    }
+}

@@ -1285,12 +1285,23 @@ function scrollToBottom(element) {
 
 function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
+    const display = document.getElementById('display');
   
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
             setTimeout(() => {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
+                display.scrollTo({ 
+                    top: input.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }, 500);
+
+            setTimeout(() => {
+                display.scrollTo({ 
+                    top: input.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }, 1000);
         });
     });
 
@@ -1299,7 +1310,10 @@ function scrollInputsIntoView() {
             const active = document.activeElement;
             if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
                 setTimeout(() => {
-                    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    display.scrollTo({
+                        top: active.offsetTop - 100,
+                        behavior: 'smooth'
+                    })
                 }, 300);
             };
         });

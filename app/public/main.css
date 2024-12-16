@@ -62,7 +62,7 @@ body.keyboard-open {
 }
 
 .container {
-	width: 100wv;
+	width: 100vw;
 	height: 100vh;
 	display: flex;
     flex-direction: column;
@@ -112,14 +112,14 @@ body.keyboard-open {
 .display {
 	display: flex;
 	flex-direction: column;
-	flex-shrink: 1;
+	flex-grow: 1;
 	padding: 10px;
+	padding-bottom: 300px;
     align-items: center;
     justify-content: flex-start;
 	position: relative;
 	overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal overflow */
-	max-height: 80vh;
 }
 
 .form-title {

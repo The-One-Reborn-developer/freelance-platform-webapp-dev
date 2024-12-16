@@ -1014,6 +1014,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         // Extract file path
                         const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
                         const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
+                        console.log(relativePath);
 
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');

@@ -42,6 +42,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static('app/public'));
 app.use('/attachments', express.static(path.join(__dirname, 'app/chats/attachments')));
+console.log('Serving static files from:', path.join(__dirname, 'app/chats/attachments'));
 console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });

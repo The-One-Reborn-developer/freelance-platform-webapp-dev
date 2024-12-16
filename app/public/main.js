@@ -144,7 +144,7 @@ async function showCreateBidForm() {
 
                 display.innerHTML = formHTML;
 
-                adjustAndScrollInputsIntoView();
+                scrollInputsIntoView();
             };
         } catch (error) {
             console.error(`Error in showCreateBidForm: ${error}`);
@@ -631,7 +631,7 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
                 customerList.appendChild(button);
             });
 
-            adjustAndScrollInputsIntoView();
+            scrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showPerformerChats: ${error}`);
@@ -812,7 +812,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 performerList.appendChild(lookPerformerChatsButton);
             });
 
-            adjustAndScrollInputsIntoView();
+            scrollInputsIntoView();
         };
     } catch (error) {
         console.error(`Error in showCustomerChats: ${error}`);
@@ -1258,39 +1258,14 @@ function scrollToBottom(element) {
 };
 
 
-function adjustAndScrollInputsIntoView() {
+function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
-    const originalViewportHeight = window.innerHeight;
 
     inputs.forEach((input) => {
-        input.addEventListener('focus', () => {
-            const visualViewport = window.visualViewport;
-
-            if (visualViewport) {
-                // Listen for viewport resize events
-                visualViewport.addEventListener('resize', () => {
-                    const keyboardHeight = originalViewportHeight - visualViewport.height;
-
-                    if (keyboardHeight > 0) {
-                        // Adjust the input position to account for the keyboard height
-                        const inputRect = input.getBoundingClientRect();
-                        const overlap = inputRect.bottom - (visualViewport.height - keyboardHeight);
-
-                        if (overlap > 0) {
-                            // Adjust scroll position
-                            window.scrollBy(0, overlap + 10); // Scroll to bring the input into view
-                        };
-                    };
-                });
-            };
-
+        input.addEventListener('click', () => {
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);
         });
-
-        input.addEventListener('blur', () => {
-            document.body.style.paddingBottom = '';
-        });
     });
-};   
+};

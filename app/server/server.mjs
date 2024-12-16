@@ -30,6 +30,7 @@ import { getResponsesByPerformerTelegramIDWithChatStarted } from "./get_response
 import { setupWebsocketServer } from "./setup_websocket_server.mjs"
 import { getAllBidsByCustomerTelegramID } from "./get_all_bids_by_customer_telegram_id.mjs";
 import { getResponsesByBidIDWithChatStarted } from "./get_responses_by_bid_id_with_chat_started.mjs";
+import { sendAttachment } from "./send_attachment.mjs";
 
 
 dotenv.config({ path: '/app/.env' });

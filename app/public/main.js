@@ -734,7 +734,8 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 const messageData = {
                     recipient_telegram_id: customer.telegramID,
                     sender_name: name,
-                    message
+                    message,
+                    attachment: null
                 };
                 console.log(`Message data: ${JSON.stringify(messageData)}`);
 
@@ -1378,7 +1379,11 @@ function scrollInputsIntoView() {
 function fileToBase64(file) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
+        reader.onload = () => {
+            // Add the MIME type to the data URL
+            const base64String = `data:${file.type};base64,${reader.result.split(',')[1]}`;
+            resolve(base64String);
+        }
         reader.onerror = (error) => reject(error);
         reader.readAsDataURL(file);
     });

@@ -1018,8 +1018,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик: ${performer.name}`
-                            : `Исполнитель: ${name}`;
+                            ? `Заказчик: ${name}`
+                            : `Исполнитель: ${performer.name}`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">

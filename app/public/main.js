@@ -1,5 +1,7 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
+
+    fixIOSKeyboardIssue();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -26,6 +28,24 @@ window.onload = async function () {
         };
     });    
 };
+
+
+function fixIOSKeyboardIssue() {
+    // Слушатель события, чтобы при открытии клавиатуры страница прокручивалась к активному полю
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            const activeElement = document.activeElement;
+            if (
+                activeElement &&
+                (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')
+            ) {
+                setTimeout(() => {
+                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+    }
+}
 
 
 function getQueryParameter(name) {
@@ -1265,7 +1285,7 @@ function scrollToBottom(element) {
 
 function scrollInputsIntoView() {
     const inputs = document.querySelectorAll('input, textarea');
-
+  
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
             setTimeout(() => {
@@ -1273,6 +1293,17 @@ function scrollInputsIntoView() {
             }, 300);
         });
     });
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            const active = document.activeElement;
+            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
+                setTimeout(() => {
+                    active.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            };
+        });
+    };
 };
 
 

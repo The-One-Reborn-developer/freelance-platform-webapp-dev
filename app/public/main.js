@@ -1259,10 +1259,10 @@ function scrollToBottom(element) {
 
 
 function scrollInputsIntoView() {
-    const inputs = document.querySelectorAll('input, textarea');
+    const input_elements = document.querySelectorAll('input, textarea');
 
-    inputs.forEach((input) => {
-        input.addEventListener('click', () => {
+    input_elements.forEach((input_element) => {
+        input_element.addEventListener('click', () => {
             setTimeout(() => {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);

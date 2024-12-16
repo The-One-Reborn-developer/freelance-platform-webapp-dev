@@ -1,7 +1,7 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
 
-    scrollInputsIntoView();
+    fixIOSKeyboardIssue();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -33,19 +33,24 @@ window.onload = async function () {
 function fixIOSKeyboardIssue() {
     // Слушатель события, чтобы при открытии клавиатуры страница прокручивалась к активному полю
     if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', () => {
-            const activeElement = document.activeElement;
-            if (
-                activeElement &&
-                (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')
-            ) {
-                setTimeout(() => {
-                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            }
-        });
-    }
-}
+        const display = document.querySelector('#display');
+        
+        if (!display) {
+            return;
+        } else {
+            let initialHeight = window.visualViewport.height;
+
+            window.visualViewport.addEventListener('resize', () => {
+                const currentHeight = window.visualViewport.height;
+                if (currentHeight < initialHeight - 100) {
+                    display.classList.add('ios-keyboard-padding');
+                } else {
+                    display.classList.remove('ios-keyboard-padding');
+                };
+            });
+        };
+    };
+};
 
 
 function getQueryParameter(name) {
@@ -1289,8 +1294,6 @@ function scrollInputsIntoView() {
   
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
-            display.classList.add('keyboard-active');
-
             setTimeout(() => {
                 display.scrollTo({ 
                     top: input.offsetTop - 100,
@@ -1304,15 +1307,6 @@ function scrollInputsIntoView() {
                     behavior: 'smooth'
                 });
             }, 1000);
-        });
-
-        input.addEventListener('blur', () => {
-            setTimeout(() => {
-                const active = document.activeElement;
-                if (!active || active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA') {
-                    display.classList.remove('keyboard-active');
-                }
-            }, 100);
         });
     });
 

@@ -48,7 +48,12 @@ console.log(`Serving attachments from ${attachmentPath}`);
 console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });
-const upload = multer({ dest: 'app/chats/attachments' });
+const upload = multer({ 
+    dest: 'app/chats/attachments',
+    limits: {
+        fileSize: 1024 * 1024 * 50 // 50MB
+    }
+});
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);

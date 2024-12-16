@@ -1,7 +1,5 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
-
-    fixIOSKeyboardIssue();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -1301,48 +1299,3 @@ function fileToBase64(file) {
         reader.readAsDataURL(file);
     });
 };
-
-
-function fixIOSKeyboardIssue() {
-    const display = document.querySelector('.display');
-
-    document.addEventListener('focusin', (event) => {
-        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-            display.classList.add('keyboard-active');
-            setTimeout(() => {
-                event.target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-        }
-    });
-
-    document.addEventListener('focusout', (event) => {
-        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-            display.classList.remove('keyboard-active');
-        }
-    });
-
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', () => {
-            const viewportHeight = window.visualViewport.height;
-            const windowHeight = window.innerHeight;
-
-            if (windowHeight - viewportHeight > 150) {
-                // Клавиатура, вероятно, открыта
-                display.classList.add('keyboard-active');
-            } else {
-                // Клавиатура закрыта
-                display.classList.remove('keyboard-active');
-            }
-
-            const activeElement = document.activeElement;
-            if (
-                activeElement &&
-                (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')
-            ) {
-                setTimeout(() => {
-                    activeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 300);
-            }
-        });
-    }
-}

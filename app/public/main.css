@@ -130,7 +130,7 @@ body.keyboard-open {
 .bid-card-button,
 .modal-button,
 .user-list button,
-.send-button
+.send-button,
 .attachment-button {
 	padding: 10px;
 	width: 100%;
@@ -140,7 +140,7 @@ body.keyboard-open {
 	cursor: pointer;
 }
 
-.send-button
+.send-button,
 .attachment-button {
 	margin-top: 7%;
 }
@@ -149,7 +149,7 @@ body.keyboard-open {
 .bid-card-button:hover,
 .modal-button:hover,
 .user-list button:hover,
-.send-button:hover
+.send-button:hover,
 .attachment-button:hover {
 	background-color: lightgrey;
 }
@@ -158,7 +158,7 @@ body.keyboard-open {
 .bid-card-button:active,
 .modal-button:active,
 .user-list button:active,
-.send-button:active
+.send-button:active,
 .attachment-button:active {
 	background-color: darkgrey;
 }

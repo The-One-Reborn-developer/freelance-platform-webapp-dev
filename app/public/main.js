@@ -1,7 +1,7 @@
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
 
-    fixIOSKeyboardIssue();
+    scrollInputsIntoView();
     
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
@@ -1289,6 +1289,8 @@ function scrollInputsIntoView() {
   
     inputs.forEach((input) => {
         input.addEventListener('focus', () => {
+            display.classList.add('keyboard-active');
+
             setTimeout(() => {
                 display.scrollTo({ 
                     top: input.offsetTop - 100,
@@ -1303,6 +1305,15 @@ function scrollInputsIntoView() {
                 });
             }, 1000);
         });
+    });
+
+    input.addEventListener('blur', () => {
+        setTimeout(() => {
+            const active = document.activeElement;
+            if (!active || active.tagName !== 'INPUT' && active.tagName !== 'TEXTAREA') {
+                display.classList.remove('keyboard-active');
+            }
+        }, 100);
     });
 
     if (window.visualViewport) {

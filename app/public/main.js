@@ -681,12 +681,9 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
-                        // Extract file path
-                        const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
-                        const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
-
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик: ${customer.name}`
                             : `Исполнитель: ${name}`;
@@ -694,7 +691,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
-                                    <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
                                     <br><br>
                                     ${timestamp}
                                 </div>`
@@ -1013,6 +1010,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик: ${name}`
                             : `Исполнитель: ${performer.name}`;
@@ -1020,7 +1018,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
-                                    <img src="${attachmentString}" alt="Attachment" class="attachment-image">
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
                                     <br><br>
                                     ${timestamp}
                                 </div>`

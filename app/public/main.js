@@ -1065,7 +1065,9 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             formData.append('customer_telegram_id', validatedTelegramID);
             formData.append('performer_telegram_id', performer.telegramID);
             formData.append('sender_type', 'customer');
-            console.log(`Attachment data: ${JSON.stringify(formData)}`);
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
 
             try {
                 const response = await fetch('/send-attachment', {
@@ -1074,12 +1076,14 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 });
 
                 // Send the file through the WebSocket to be displayed on the other side
+                const base64File = await fileToBase64(file);
+
                 if (socket && socket.readyState === WebSocket.OPEN) {
                     const messageData = {
                         recipient_telegram_id: performer.telegramID,
                         sender_name: name,
                         message: '[File sent]',
-                        attachment: file
+                        attachment: base64File
                     };
                     console.log(`Attachment data: ${JSON.stringify(attachmentData)}`);
 
@@ -1268,5 +1272,15 @@ function scrollInputsIntoView() {
                 input.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }, 300);
         });
+    });
+};
+
+
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
     });
 };

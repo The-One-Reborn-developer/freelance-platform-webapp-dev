@@ -676,7 +676,16 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
-                .map((msg) => renderMessage(msg))
+                // Filter out empty messages
+                .filter((msg) => msg.trim() !== '')
+                // Replace '\n' with <br>
+                .map((msg) => {
+                    if (msg.includes('app/chats/attachments/')) {
+                        // TODO: fetch attachment from the server and render it
+                    } else {
+                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                    };
+                })
                 .join('');
         } else {
             chatHistory.innerHTML = 'Нет сообщений.';
@@ -739,33 +748,6 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 };
 
 
-function renderMessage(msg) {
-    // Extract the timestamp and sender details if present (modify based on your format)
-    const [sender, ...rest] = msg.split('\n\n');
-    const [content, timestamp] = rest.join('\n\n').split('\n');
-
-    // Check if the content looks like a file path
-    if (content.startsWith('app/chats/attachments/')) {
-        // File attachment
-        const filePath = content;
-        
-        return `<div class="chat-message">
-                    ${sender}<br>
-                    <img src="${filePath}" alt="Attachment">
-                    <br>${timestamp}
-                </div>`
-        
-    } else {
-        // Text message
-        return `<div class="chat-message">
-                    ${sender}<br>
-                    ${content.replace(/\n/g, '<br>')}
-                    <br>${timestamp}
-                </div>`
-    };
-};
-
-
 function setupCustomerInterface (validatedTelegramID, userData, socket) {
     const name = userData.userData.name;
     const registrationDate = userData.userData.registration_date;
@@ -803,7 +785,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
         const performers = await fetchPerformers(validatedTelegramID);
 
         if (performers.length === 0) {
-            showModal('На Ваши заявки ещё никто, не откликался.');
+            showModal('На Ваши заявки ещё никто не откликался.');
             return;
         } else {
             // Create the chat interface
@@ -1008,8 +990,16 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
 
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
-            .map((msg) => renderMessage(msg))
-            .join('');
+                // Filter out empty messages
+                .filter((msg) => msg.trim() !== '')
+                // Replace '\n' with <br>
+                .map((msg) => {
+                    if (msg.includes('app/chats/attachments/')) {
+                        // TODO: fetch attachment from the server and render it
+                    } else {
+                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                    };
+                })
         } else {
             chatHistory.innerHTML = 'Нет сообщений.';
         };

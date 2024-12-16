@@ -38,6 +38,7 @@ dotenv.config({ path: '/app/.env' });
 const app = express();
 app.use(express.json());
 app.use(express.static('app/public'));
+app.use(express.static('app/chats/attachments'));
 console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });

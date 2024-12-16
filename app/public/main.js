@@ -1013,11 +1013,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract file path
                         const filePath = msg.match(/app\/chats\/attachments\/[^\s]+/)[0];
-                        const relativePath = filePath.replace('app/chats/attachments/', '/attachments/');
-                        console.log(relativePath);
 
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        console.log(attachmentString);
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик: ${name}`
                             : `Исполнитель: ${performer.name}`;
@@ -1025,7 +1024,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
-                                    <img src="${relativePath}" alt="Attachment" class="attachment-image">
+                                    <img src="${attachmentString}" alt="Attachment" class="attachment-image">
                                     <br><br>
                                     ${timestamp}
                                 </div>`

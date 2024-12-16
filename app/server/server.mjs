@@ -35,14 +35,13 @@ import { sendAttachment } from "./send_attachment.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
 app.use(express.static('app/public'));
-app.use('/attachments', express.static(path.join(__dirname, 'app/chats/attachments')));
-console.log('Serving static files from:', path.join(__dirname, 'app/chats/attachments'));
+const attachmentPath = path.join(__dirname, '../chats/attachments');
+app.use('/attachments', express.static(attachmentPath));
+console.log(`Serving attachments from ${attachmentPath}`);
 console.log('Express app created');
 
 const db = new Database('./app/database.db', { verbose: console.log });

@@ -1,6 +1,7 @@
 {
   "name": "freelance-platform-webapp",
   "version": "1.0.0",
+  "type": "module",
   "description": "A [TG WebApp]() bot for customers to post bids and performers to respond.",
   "main": "index.js",
   "scripts": {

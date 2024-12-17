@@ -23,7 +23,7 @@ function initializePage() {
     experienceInput.style.display = 'none';
     experienceLabel.style.display = 'none';
     registerButton.style.display = 'none';
-}
+};
 
 
 window.onload = function () {

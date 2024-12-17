@@ -134,7 +134,7 @@ async function showCreateBidForm() {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('create_bid_form.html');
+            const response = await fetch('../templates/create_bid_form.html');
 
             if (!response.ok) {
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
@@ -309,7 +309,7 @@ async function showSelectCityForm() {
         try {
             display.innerHTML = '';
             
-            const response = await fetch('select_city.html');
+            const response = await fetch('../templates/select_city.html');
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
@@ -664,7 +664,7 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
             return;
         } else {
             // Create the chat interface
-            const response = await fetch('chat_window.html');
+            const response = await fetch('../templates/chat_window.html');
             display.innerHTML = await response.text(); // Properly inject the fetched HTML content
 
             // Populate the customer buttons
@@ -914,7 +914,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             return;
         } else {
             // Create the chat interface
-            const response = await fetch('chat_window.html');
+            const response = await fetch('../templates/chat_window.html');
             display.innerHTML = await response.text(); // Properly inject the fetched HTML content
 
             // Populate the performer buttons
@@ -1319,7 +1319,7 @@ async function showChangeProfileInfoForm() {
         try {
             display.innerHTML = '';
             
-            const response = await fetch('change_profile_info.html');
+            const response = await fetch('../templates/change_profile_info.html');
             
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке формы профиля, попробейте перезайти в приложение');

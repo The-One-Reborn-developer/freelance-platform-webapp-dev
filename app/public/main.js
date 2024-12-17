@@ -589,6 +589,9 @@ function setupPerformerInterface (validatedTelegramID, userData, socket) {
 
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
+        const display = document.getElementById('display');
+        display.classList.remove('view-mode');
+        
         await showPerformerChats(validatedTelegramID, name, socket);
     });
 

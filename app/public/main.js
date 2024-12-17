@@ -547,40 +547,44 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
             const data = await response.json();
             
             if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
-                chatHistory.innerHTML = data.chatMessages
-                // Filter out empty messages
-                .filter((msg) => msg.trim() !== '')
-                // Replace '\n' with <br>
-                .map((msg) => async () => {
-                    if (msg.includes('app/chats/attachments/')) {
-                        // Extract sender, attachment path, and timestamp
-                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
-                        console.log(attachmentUrl);
-                        
-                        const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
-                        .then(response => response.json())
-                        .then(data => data.userData.name);
-                        const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
-                        .then(response => response.json())
-                        .then(data => data.userData.name);
+                // Use Promise.all to resolve all async operations in the .map()
+                const messagesHtml = await Promise.all(
+                    data.chatMessages
+                        // Filter out empty messages
+                        .filter((msg) => msg.trim() !== '')
+                        // Replace '\n' with <br>
+                        .map(async (msg) => {
+                            if (msg.includes('app/chats/attachments/')) {
+                                // Extract sender, attachment path, and timestamp
+                                const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                                const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                                console.log(attachmentUrl);
+                                
+                                const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                                .then(response => response.json())
+                                .then(data => data.userData.name);
+                                const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                                .then(response => response.json())
+                                .then(data => data.userData.name);
 
-                        const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customerName}:`
-                            : `Исполнитель ${performerName}:`;
-                        
-                        // Render the message with attachment
-                        return `<div class="chat-message">
-                                    ${senderName}<br><br>
-                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
-                                    <br><br>
-                                    ${timestamp}
-                                </div>`
-                    } else {
-                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
-                    };
-                })
-                .join('');
+                                const senderName = senderLine.includes('Заказчик')
+                                    ? `Заказчик ${customerName}:`
+                                    : `Исполнитель ${performerName}:`;
+                                
+                                // Render the message with attachment
+                                return `<div class="chat-message">
+                                            ${senderName}<br><br>
+                                            <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                            <br><br>
+                                            ${timestamp}
+                                        </div>`
+                            } else {
+                                return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                            };
+                        })
+                );
+                
+                chatHistory.innerHTML = messagesHtml.join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };
@@ -1066,40 +1070,44 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
             const data = await response.json();
 
             if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
-                chatHistory.innerHTML = data.chatMessages
-                // Filter out empty messages
-                .filter((msg) => msg.trim() !== '')
-                // Replace '\n' with <br>
-                .map((msg) => async () => {
-                    if (msg.includes('app/chats/attachments/')) {
-                        // Extract sender, attachment path, and timestamp
-                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
-                        console.log(attachmentUrl);
+                // Use Promise.all to resolve all async operations in the .map()
+                const messagesHtml = await Promise.all(
+                    data.chatMessages
+                        // Filter out empty messages
+                        .filter((msg) => msg.trim() !== '')
+                        // Replace '\n' with <br>
+                        .map(async (msg) => {
+                            if (msg.includes('app/chats/attachments/')) {
+                                // Extract sender, attachment path, and timestamp
+                                const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                                const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                                console.log(attachmentUrl);
 
-                        const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
-                        .then(response => response.json())
-                        .then(data => data.userData.name);
-                        const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
-                        .then(response => response.json())
-                        .then(data => data.userData.name);
+                                const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                                .then(response => response.json())
+                                .then(data => data.userData.name);
+                                const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                                .then(response => response.json())
+                                .then(data => data.userData.name);
 
-                        const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customerName}:`
-                            : `Исполнитель ${performerName}:`;
-                        
-                        // Render the message with attachment
-                        return `<div class="chat-message">
-                                    ${senderName}<br><br>
-                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
-                                    <br><br>
-                                    ${timestamp}
-                                </div>`
-                    } else {
-                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
-                    };
-                })
-                .join('');
+                                const senderName = senderLine.includes('Заказчик')
+                                    ? `Заказчик ${customerName}:`
+                                    : `Исполнитель ${performerName}:`;
+                                
+                                // Render the message with attachment
+                                return `<div class="chat-message">
+                                            ${senderName}<br><br>
+                                            <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                            <br><br>
+                                            ${timestamp}
+                                        </div>`
+                            } else {
+                                return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                            };
+                        })
+                );
+                
+                chatHistory.innerHTML = messagesHtml.join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };

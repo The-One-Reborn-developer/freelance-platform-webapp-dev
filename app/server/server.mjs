@@ -121,7 +121,7 @@ app.post('/registration-attempt', (req, res) => {
 
 app.post('/get-user-data', (req, res) => {
     try {
-        const telegramID = req.body.telegram_id;
+        const telegramID = req.body.telegram_id || req.query.telegram_id;
         // Get user data
         const userData = getUser(db, telegramID);
         res.status(200).json({ success: true, userData });

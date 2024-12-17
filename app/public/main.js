@@ -557,9 +557,17 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         console.log(attachmentUrl);
+                        
+                        const customerName = fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                        .then(response => response.json())
+                        .then(data => data.userData.name);
+                        const performerName = fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                        .then(response => response.json())
+                        .then(data => data.userData.name);
+
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customerTelegramID}:`
-                            : `Исполнитель ${performerTelegramID}:`;
+                            ? `Заказчик ${customerName}:`
+                            : `Исполнитель ${performerName}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
@@ -1068,9 +1076,17 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         console.log(attachmentUrl);
+
+                        const customerName = fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                        .then(response => response.json())
+                        .then(data => data.userData.name);
+                        const performerName = fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                        .then(response => response.json())
+                        .then(data => data.userData.name);
+
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customerTelegramID}:`
-                            : `Исполнитель ${performerTelegramID}:`;
+                            ? `Заказчик ${customerName}:`
+                            : `Исполнитель ${performerName}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">

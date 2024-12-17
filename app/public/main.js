@@ -527,12 +527,13 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
 
 async function showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID) {
     const display = document.getElementById('display');
+    display.classList.add('view-mode');
+
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';
 
     const chatHistory = document.createElement('div');
     chatHistory.classList.add('chat-history');
-    chatHistory.classList.add('view-mode');
 
     if (!display) {
         console.error('Display element not found');
@@ -1010,12 +1011,13 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
 
 async function showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID) {
     const display = document.getElementById('display');
+    display.classList.add('view-mode');
+
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';
 
     const chatHistory = document.createElement('div');
     chatHistory.classList.add('chat-history');
-    chatHistory.classList.add('view-mode');
 
     if (!display) {
         console.error('Display element not found');

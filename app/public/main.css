@@ -130,7 +130,6 @@ body.keyboard-open {
 .submit-form-button,
 .bid-card-button,
 .modal-button,
-.user-list button,
 .send-button,
 .attachment-button {
 	padding: 10px;
@@ -139,6 +138,15 @@ body.keyboard-open {
 	border-radius: 10px;
 	border: solid 2px grey;
 	cursor: pointer;
+}
+
+.user-list button {
+	padding: 10px;
+	width: 100%;
+	border-radius: 10px;
+	border: solid 2px grey;
+	cursor: pointer;
+	font-size: 10px;
 }
 
 .submit-form-button,

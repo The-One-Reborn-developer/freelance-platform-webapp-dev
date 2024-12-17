@@ -551,8 +551,26 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`)
-                .join('');
+                .map((msg) => {
+                    if (msg.includes('app/chats/attachments/')) {
+                        // Extract sender and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик ${customer.name}:`
+                            : `Исполнитель ${name}:`;
+                        
+                        // Render the message with attachment
+                        return `<div class="chat-message">
+                                    ${senderName}<br><br>
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
+                                </div>`
+                    } else {
+                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                    };
+                })
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };
@@ -591,7 +609,7 @@ function setupPerformerInterface (validatedTelegramID, userData, socket) {
     lookChatsButton.addEventListener('click', async function () {
         const display = document.getElementById('display');
         display.classList.remove('view-mode');
-        
+
         await showPerformerChats(validatedTelegramID, name, socket);
     });
 
@@ -1042,8 +1060,26 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`)
-                .join('');
+                .map((msg) => {
+                    if (msg.includes('app/chats/attachments/')) {
+                        // Extract sender and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик ${customer.name}:`
+                            : `Исполнитель ${name}:`;
+                        
+                        // Render the message with attachment
+                        return `<div class="chat-message">
+                                    ${senderName}<br><br>
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
+                                </div>`
+                    } else {
+                        return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
+                    };
+                })
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };

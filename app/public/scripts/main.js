@@ -899,6 +899,9 @@ function setupCustomerInterface (validatedTelegramID, userData, socket) {
     
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
+        const display = document.getElementById('display');
+        display.classList.remove('view-mode');
+        
         await showCustomerChats(validatedTelegramID, name, socket);
     });
 };

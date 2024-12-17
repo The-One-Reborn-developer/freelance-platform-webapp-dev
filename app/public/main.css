@@ -141,9 +141,13 @@ body.keyboard-open {
 	cursor: pointer;
 }
 
+.submit-form-button,
+.bid-card-button,
+.modal-button,
+.user-list button,
 .send-button,
 .attachment-button {
-	margin-top: 7%;
+	margin-top: 4%;
 }
 
 .submit-form-button:hover,

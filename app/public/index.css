@@ -59,14 +59,11 @@ body {
 
 .container {
 	width: 100vw;
-	height: 120vh;
+	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: slategrey;
-	padding-bottom: 200px;
-	overflow-y: auto;
-	overflow-x: hidden;
 }
 
 .services-container {

@@ -553,12 +553,13 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
-                        // Extract sender and timestamp
+                        // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customer.name}:`
-                            : `Исполнитель ${name}:`;
+                            ? `Заказчик ${customerTelegramID}:`
+                            : `Исполнитель ${performerTelegramID}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
@@ -571,6 +572,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };
                 })
+                .join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };
@@ -1062,12 +1064,13 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                 // Replace '\n' with <br>
                 .map((msg) => {
                     if (msg.includes('app/chats/attachments/')) {
-                        // Extract sender and timestamp
+                        // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
-                            ? `Заказчик ${customer.name}:`
-                            : `Исполнитель ${name}:`;
+                            ? `Заказчик ${customerTelegramID}:`
+                            : `Исполнитель ${performerTelegramID}:`;
                         
                         // Render the message with attachment
                         return `<div class="chat-message">
@@ -1080,6 +1083,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };
                 })
+                .join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
             };

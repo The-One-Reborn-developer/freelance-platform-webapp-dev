@@ -551,7 +551,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => async () => {
+                .map(async (msg) => {
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
@@ -1070,7 +1070,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => async () => {
+                .map(async (msg) => {
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');

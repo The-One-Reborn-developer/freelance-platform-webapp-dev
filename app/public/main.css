@@ -257,6 +257,10 @@ body.keyboard-open {
     border-radius: 4px;
     background-color: #e8f4ff;
     border: 1px solid #cce1ff;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	overflow: hidden;
+	max-width: 100%;
 }
 
 .main-input {

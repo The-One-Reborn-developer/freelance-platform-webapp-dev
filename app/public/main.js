@@ -551,17 +551,17 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => {
+                .map((msg) => async () => {
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         console.log(attachmentUrl);
                         
-                        const customerName = fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                        const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
                         .then(response => response.json())
                         .then(data => data.userData.name);
-                        const performerName = fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                        const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
                         .then(response => response.json())
                         .then(data => data.userData.name);
 
@@ -1070,17 +1070,17 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                 // Filter out empty messages
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
-                .map((msg) => {
+                .map((msg) => async () => {
                     if (msg.includes('app/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                         console.log(attachmentUrl);
 
-                        const customerName = fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                        const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
                         .then(response => response.json())
                         .then(data => data.userData.name);
-                        const performerName = fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                        const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
                         .then(response => response.json())
                         .then(data => data.userData.name);
 

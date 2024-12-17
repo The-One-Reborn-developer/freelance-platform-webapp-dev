@@ -65,7 +65,7 @@ createResponsesTable(db);
 
 
 app.get('/', (req, res) => {
-    res.sendFile('app/public/index.html', { root: './' });    
+    res.sendFile('app/public/views/index.html', { root: './' });    
 });
 
 

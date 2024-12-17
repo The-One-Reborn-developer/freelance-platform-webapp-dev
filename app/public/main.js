@@ -560,10 +560,22 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                                 console.log(attachmentUrl);
                                 
-                                const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                                const customerName = await fetch('/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: customerTelegramID })
+                                })
                                 .then(response => response.json())
                                 .then(data => data.userData.name);
-                                const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                                const performerName = await fetch('/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: performerTelegramID })
+                                })
                                 .then(response => response.json())
                                 .then(data => data.userData.name);
 
@@ -1083,10 +1095,22 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                                 console.log(attachmentUrl);
 
-                                const customerName = await fetch(`/get-user-data?telegram_id=${customerTelegramID}`)
+                                const customerName = await fetch('/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: customerTelegramID })
+                                })
                                 .then(response => response.json())
                                 .then(data => data.userData.name);
-                                const performerName = await fetch(`/get-user-data?telegram_id=${performerTelegramID}`)
+                                const performerName = await fetch('/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: performerTelegramID })
+                                })
                                 .then(response => response.json())
                                 .then(data => data.userData.name);
 

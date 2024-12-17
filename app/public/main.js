@@ -531,7 +531,8 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
     display.innerHTML = 'Загрузка...';
 
     const chatHistory = document.createElement('div');
-    chatHistory.classList.add('chat-history view-mode');
+    chatHistory.classList.add('chat-history');
+    chatHistory.classList.add('view-mode');
 
     if (!display) {
         console.error('Display element not found');
@@ -1013,7 +1014,8 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
     display.innerHTML = 'Загрузка...';
 
     const chatHistory = document.createElement('div');
-    chatHistory.classList.add('chat-history view-mode');
+    chatHistory.classList.add('chat-history');
+    chatHistory.classList.add('view-mode');
 
     if (!display) {
         console.error('Display element not found');

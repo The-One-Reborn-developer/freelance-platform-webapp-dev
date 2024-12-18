@@ -15,9 +15,6 @@ import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
-import { postServiceBid } from "./post_service_bid.mjs";
-import { getOpenBidsByCustomerTelegramID } from "./get_open_bids_by_customer_telegram_id.mjs";
-import { updateCloseBid } from "./update_close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
 import { postResponse } from "./post_response.mjs";
 import { sendMessage } from "./send_message.mjs";
@@ -32,6 +29,11 @@ import { setupWebsocketServer } from "./setup_websocket_server.mjs"
 import { getAllBidsByCustomerTelegramID } from "./get_all_bids_by_customer_telegram_id.mjs";
 import { getResponsesByBidIDWithChatStarted } from "./get_responses_by_bid_id_with_chat_started.mjs";
 import { sendAttachment } from "./send_attachment.mjs";
+
+// Services functions
+import { postBid } from "./index.mjs";
+import { getOpenBidsByCustomerTelegramID } from "./index.mjs";
+import { updateCloseBid } from "./index.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -168,7 +170,7 @@ app.post('/post-service-bid', (req, res) => {
         const instrumentProvided = req.body.instrument_provided;
 
         // Post the new bid
-        postServiceBid(
+        postBid(
             db,
             res,
             customerTelegramID,
@@ -186,7 +188,7 @@ app.post('/post-service-bid', (req, res) => {
 });
 
 
-app.post('/my-bids', (req, res) => {
+app.post('/my-services-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
 
@@ -200,7 +202,7 @@ app.post('/my-bids', (req, res) => {
 });
 
 
-app.post('/close-bid', (req, res) => {
+app.post('/close-service-bid', (req, res) => {
     try {
         const bidID = req.body.bid_id;
         
@@ -212,7 +214,7 @@ app.post('/close-bid', (req, res) => {
             res.status(200).json({ success: true, message: `Заказ №${bidID} успешно закрыт.` });
         };
     } catch (error) {
-        console.error('Error in /close-bid:', error);
+        console.error('Error in /close-service-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
     };
 });

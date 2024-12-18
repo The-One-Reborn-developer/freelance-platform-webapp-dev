@@ -225,7 +225,7 @@ async function showMyBids(validatedTelegramID) {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('/my-bids', {
+            const response = await fetch('/my-services-bids', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -270,7 +270,7 @@ async function showMyBids(validatedTelegramID) {
                             const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
                             if (confirmation) {
                                 try {
-                                    const response = await fetch('/close-bid', {
+                                    const response = await fetch('/close-service-bid', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json'
@@ -280,7 +280,7 @@ async function showMyBids(validatedTelegramID) {
 
                                     if (!response.ok) {
                                         showModal('Произошла ошибка при закрытии заказа, попробуйте перезайти в приложение');
-                                        throw new Error('Failed to close bid');
+                                        console.error('Failed to close bid');
                                     } else {
                                         const { success, message } = await response.json();
                                         if (success) {
@@ -289,7 +289,7 @@ async function showMyBids(validatedTelegramID) {
                                         };
                                     };
                                 } catch (error) {
-                                    console.error(`Error in close-bid: ${error}`);
+                                    console.error(`Error in close-service-bid: ${error}`);
                                 };
                             };
                         };
@@ -320,7 +320,7 @@ async function showSelectCityForm() {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load select_city.html');
+                console.error('Failed to load select_city.html');
             };
 
             const formHTML = await response.text();

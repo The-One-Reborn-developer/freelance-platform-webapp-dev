@@ -872,6 +872,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             const chatInput = document.getElementById('chat-input');
 
             performers.forEach((performer) => {
+                console.log(performer);
                 const performerParagraph = document.createElement('p');
                 performerParagraph.innerHTML =
                     `${performer.name}. Зарегистрирован ${performer.registration_date}.
@@ -1231,7 +1232,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
 
 
 async function showChangeProfileInfoForm() {
-    display = document.getElementById('display');
+    const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
         return;

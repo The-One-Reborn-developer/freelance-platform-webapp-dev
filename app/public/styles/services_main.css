@@ -246,7 +246,7 @@ body.keyboard-open {
 }
 
 .user-list {
-    width: 30%;
+    width: 30vw;
     background-color: lightgrey;
     overflow-y: auto;
 	overflow-x: hidden;
@@ -261,7 +261,7 @@ body.keyboard-open {
     overflow-x: hidden;
 	overflow-y: auto;
 	position: relative;
-	width: 70%;
+	width: 70vw;
 }
 
 .chat-history {

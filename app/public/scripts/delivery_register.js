@@ -175,7 +175,6 @@ function register() {
         telegram_data: telegramData,
         service: 'delivery'
     };
-    console.log(JSON.stringify(data));
 
     fetch('/registration-attempt', {
         method: 'POST',

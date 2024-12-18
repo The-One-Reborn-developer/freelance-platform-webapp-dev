@@ -120,12 +120,6 @@ app.post('/registration-attempt', (req, res) => {
                 service
             } = req.body;
 
-            console.log(`Registration attempt for ${telegramID} with role ${role}
-                name ${name}, rate ${rate}, experience ${experience},
-                date of birth ${dateOfBirth}, has car ${hasCar}, car model ${carModel},
-                car dimensions width ${carDimensionsWidth}, car dimensions length ${carDimensionsLength},
-                car dimensions height ${carDimensionsHeight}, service ${service}`);
-
             postUser(
                 db,
                 res,

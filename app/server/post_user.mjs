@@ -25,20 +25,25 @@ export function postUser(
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
 
-        console.log(`Registration attempt for ${telegramID} with role ${role}
-            name ${name}, rate ${sanitizedRate}, experience ${sanitizedExperience},
-            date of birth ${sanitizedDateOfBirth}, has car ${sanitizedHasCar}, car model ${sanitizedCarModel},
-            car dimensions width ${sanitizedCarDimensionsWidth}, car dimensions length ${sanitizedCarDimensionsLength},
-            car dimensions height ${sanitizedCarDimensionsHeight}, service ${service}`);
-
         // Check if the user is already registered
-        const checkUserTelegram = db.prepare(
-            'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
-        );
-        const checkUserTelegramResult = checkUserTelegram.get(telegramID);
-        if (checkUserTelegramResult.count > 0) {
-            res.status(409).json({ message: 'Вы уже зарегистрированы.' });
-            return;
+        if (service === 'services') {
+            const checkUserTelegram = db.prepare(
+                'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_services = 1'
+            );
+            const checkUserTelegramResult = checkUserTelegram.get(telegramID);
+            if (checkUserTelegramResult.count > 0) {
+                res.status(409).json({ message: 'Вы уже зарегистрированы.' });
+                return;
+            };   
+        } else if (service === 'delivery') {
+            const checkUserTelegram = db.prepare(
+                'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_deliveries = 1'
+            );
+            const checkUserTelegramResult = checkUserTelegram.get(telegramID);
+            if (checkUserTelegramResult.count > 0) {
+                res.status(409).json({ message: 'Вы уже зарегистрированы.' });
+                return;
+            };
         };
 
         // Check if the name is already taken

@@ -283,7 +283,8 @@ app.post('/respond-to-bid', (req, res) => {
                 performerTelegramID,
                 customerName,
                 performerName,
-                'Отклик на заказ.',
+                message,
+                null,
                 'performer'
             );
             

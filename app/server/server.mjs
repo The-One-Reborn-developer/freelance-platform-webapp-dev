@@ -82,7 +82,6 @@ app.post('/check-registration', (req, res) => {
             const service = req.body.service;
 
             const checkUserTelegramResult = checkUserTelegram(db, verifiedTelegramID, service);
-            console.log(`checkUserTelegramResult: ${checkUserTelegramResult}`);
 
             if (checkUserTelegramResult.count > 0) {
                 return res.status(200).json({ registered: true, telegram_id: verifiedTelegramID });
@@ -304,8 +303,6 @@ app.get('/get-chats', (req, res) => {
     const customerTelegramID = req.query.customer_telegram_id;
     const performerTelegramID = req.query.performer_telegram_id;
 
-    console.log(`Fetching chat messages for bid ID: ${bidID}, customer Telegram ID: ${customerTelegramID}, performer Telegram ID: ${performerTelegramID}`);
-    
     const chatMessages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
 
     res.status(200).json({ success: true, chatMessages });
@@ -325,7 +322,6 @@ app.post('/send-message', upload.single('attachment'), (req, res) => {
         let attachmentPath = null;
         if (req.file) {
             attachmentPath = req.file.path;
-            console.log(`Attachment saved to: ${attachmentPath}`);
         };
 
         saveChatMessage(
@@ -393,7 +389,6 @@ app.get('/responded-performers', (req, res) => {
                 if (responses.length === 0) {
                     res.status(200).json({ success: true, responses: [] });
                 } else {
-                    console.log(`Responses in server: ${responses}`);
                     res.status(200).json({ success: true, responses });
                 };
             };
@@ -427,7 +422,6 @@ app.post('/change-profile-info', (req, res) => {
 
 app.get('/responded-customers', (req, res) => {
     const performerTelegramID = req.query.performer_telegram_id;
-    console.log(`Fetching responded customers for Telegram ID: ${performerTelegramID}`);
 
     try {
         if (!performerTelegramID) {

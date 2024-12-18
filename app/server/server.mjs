@@ -315,8 +315,8 @@ app.post('/send-message', upload.single('attachment'), (req, res) => {
         const bidID = req.body.bid_id;
         const customerTelegramID = req.body.customer_telegram_id;
         const performerTelegramID = req.body.performer_telegram_id;
-        const customerName = getUser(db, customerTelegramID).name;
-        const performerName = getUser(db, performerTelegramID).name;
+        const customerName = getUser(db, customerTelegramID).services_name;
+        const performerName = getUser(db, performerTelegramID).services_name;
         const message = req.body.message;
         const senderType = req.body.sender_type;
 

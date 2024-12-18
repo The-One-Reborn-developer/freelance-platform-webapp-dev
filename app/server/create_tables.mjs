@@ -15,8 +15,8 @@ export function createUsersTable(db) {
                 car_dimensions_width INTEGER,
                 car_dimensions_length INTEGER,
                 car_dimensions_height INTEGER,
-                registered_in_services BOOLEAN,
-                registered_in_deliveries BOOLEAN,
+                registered_in_services BOOLEAN DEFAULT FALSE,
+                registered_in_deliveries BOOLEAN DEFAULT FALSE,
                 registration_date STRING(20) NOT NULL,
                 UNIQUE(telegram_id)
             );

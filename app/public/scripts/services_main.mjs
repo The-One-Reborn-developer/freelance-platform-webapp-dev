@@ -1,16 +1,17 @@
-import { fileToBase64 } from "./utils";
+import { fileToBase64 } from "./utils/index.mjs";
 import {
     scrollToBottom,
-    scrollInputsIntoView } from "./utils";
-import { initializeWebSocket } from "./utils";
-import { fetchPerformers } from "./utils";
-import { getQueryParameter } from "./utils";
-import { getUserData } from "./utils";
-import { showModal } from "./utils";
+    scrollInputsIntoView
+} from "./utils/index.mjs";
+import { initializeWebSocket } from "./utils/index.mjs";
+import { fetchPerformers } from "./utils/index.mjs";
+import { getQueryParameter } from "./utils/index.mjs";
+import { getUserData } from "./utils/index.mjs";
+import { showModal } from "./utils/index.mjs";
 
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
-    
+
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
         try {
@@ -34,7 +35,7 @@ window.onload = async function () {
         if (!event.target.closest('input, textarea, select')) {
             document.activeElement.blur();
         };
-    });    
+    });
 };
 
 
@@ -123,7 +124,7 @@ async function showCreateBidForm() {
 
             if (!response.ok) {
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
-                throw new Error('Failed to load create_bid_form.html');                
+                throw new Error('Failed to load create_bid_form.html');
             } else {
                 const formHTML = await response.text();
 
@@ -168,14 +169,14 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(data => {
-            showModal(data.message)
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
-        });
+            .then(response => response.json())
+            .then(data => {
+                showModal(data.message)
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+            });
     };
 };
 
@@ -195,7 +196,7 @@ async function showMyBids(validatedTelegramID) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ customer_telegram_id: validatedTelegramID })  // Send the Telegram ID as JSON
-            });            
+            });
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
@@ -229,7 +230,7 @@ async function showMyBids(validatedTelegramID) {
                     const closeBidButton = bidCard.querySelector('.bid-card-button');
                     closeBidButton.addEventListener('click', async (event) => {
                         const bidID = event.target.getAttribute('data-bid-id');
-                        
+
                         if (bidID) {
                             const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
                             if (confirmation) {
@@ -279,7 +280,7 @@ async function showSelectCityForm() {
     } else {
         try {
             display.innerHTML = '';
-            
+
             const response = await fetch('../templates/select_city.html');
 
             if (!response.ok) {
@@ -302,7 +303,7 @@ async function handleCityFormSubmit(event, validatedTelegramID) {
 
     const formData = new FormData(event.target);
     const city = formData.get('city');
-    
+
     if (city) {
         await showBids(city, validatedTelegramID);
     };
@@ -317,7 +318,7 @@ async function showBids(city, validatedTelegramID) {
     } else {
         try {
             display.innerHTML = '';
-            
+
             const response = await fetch('/get-bids', {
                 method: 'POST',
                 headers: {
@@ -356,27 +357,27 @@ async function showBids(city, validatedTelegramID) {
 
                     bidCard.querySelector('#respond-to-bid').addEventListener('click', async (event) => {
                         const bidID = event.target.getAttribute('data-bid-id');
-                        
+
                         if (bidID) {
                             try {
-                                fetch ('/respond-to-bid', {
+                                fetch('/respond-to-bid', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
                                     body: JSON.stringify({ bid_id: bidID, performer_telegram_id: validatedTelegramID })
                                 })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        showModal(data.message);
-                                        showBids(city, validatedTelegramID);
-                                    };
-                                })
-                                .catch(error => {
-                                    console.error(`Error in respond-to-bid: ${error}`);
-                                    showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
-                                });
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            showModal(data.message);
+                                            showBids(city, validatedTelegramID);
+                                        };
+                                    })
+                                    .catch(error => {
+                                        console.error(`Error in respond-to-bid: ${error}`);
+                                        showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
+                                    });
                             } catch (error) {
                                 console.error(`Error in respond-to-bid: ${error}`);
                                 showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
@@ -386,7 +387,7 @@ async function showBids(city, validatedTelegramID) {
 
                     bidCard.querySelector('#look-chats').addEventListener('click', async (event) => {
                         const customerTelegramID = bid.customer_telegram_id
-                        
+
                         if (customerTelegramID) {
                             await showCustomerChatsWithPerformers(customerTelegramID);
                         } else {
@@ -417,26 +418,26 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            fetch ('/show-customer-chats-list', {
+            fetch('/show-customer-chats-list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ customer_telegram_id: customerTelegramID })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && Array.isArray(data.bids)) {
-                    display.innerHTML = '';
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.bids)) {
+                        display.innerHTML = '';
 
-                    const bidsContainer = document.createElement('div');
-                    bidsContainer.classList.add('bids-container');
-                    
-                    data.bids.forEach(bid => {
-                        const bidCard = document.createElement('div');
-                        bidCard.classList.add('bid-card');
+                        const bidsContainer = document.createElement('div');
+                        bidsContainer.classList.add('bids-container');
 
-                        bidCard.innerHTML = `
+                        data.bids.forEach(bid => {
+                            const bidCard = document.createElement('div');
+                            bidCard.classList.add('bid-card');
+
+                            bidCard.innerHTML = `
                             <p>Номер заказа: ${bid.id}</p>
                             <p>Город: ${bid.city}</p>
                             <p>Описание: ${bid.description}</p>
@@ -446,49 +447,49 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                             <br><br>
                         `;
 
-                        bid.responses.forEach((response) => {
-                            const responseDetails = `
+                            bid.responses.forEach((response) => {
+                                const responseDetails = `
                                 <div class="response-container">
                                     <p>Откликнулся: ${response.performer_name}</p>
                                     <p>Ставка: ${response.performer_rate} (₽/час)</p>
                                     <p>Стаж: ${response.performer_experience} (в годах)</p>
                                 </div>
                             `;
-                            
-                            const lookChatButton = document.createElement('button');
-                            lookChatButton.classList.add('bid-card-button');
-                            lookChatButton.innerHTML = 'Посмотреть переписку 👀';
-                            lookChatButton.setAttribute('data-bid-id', bid.id);
-                            lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
-                            lookChatButton.setAttribute('data-performer-telegram-id', response.performer_telegram_id);
-                            
-                            lookChatButton.addEventListener('click', async (event) => {
-                                const bidID = event.target.getAttribute('data-bid-id');
-                                const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
-                                const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
-                                if (bidID && customerTelegramID && performerTelegramID) {
-                                    await showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
-                                } else {
-                                    showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
-                                    console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
-                                };
+
+                                const lookChatButton = document.createElement('button');
+                                lookChatButton.classList.add('bid-card-button');
+                                lookChatButton.innerHTML = 'Посмотреть переписку 👀';
+                                lookChatButton.setAttribute('data-bid-id', bid.id);
+                                lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
+                                lookChatButton.setAttribute('data-performer-telegram-id', response.performer_telegram_id);
+
+                                lookChatButton.addEventListener('click', async (event) => {
+                                    const bidID = event.target.getAttribute('data-bid-id');
+                                    const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                                    const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                                    if (bidID && customerTelegramID && performerTelegramID) {
+                                        await showSelectedCustomerChat(bidID, customerTelegramID, performerTelegramID);
+                                    } else {
+                                        showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
+                                        console.error('Bid ID, Customer Telegram ID, or Performer Telegram ID not found');
+                                    };
+                                });
+
+                                bidCard.innerHTML += responseDetails;
+                                bidCard.appendChild(lookChatButton);
                             });
 
-                            bidCard.innerHTML += responseDetails;
-                            bidCard.appendChild(lookChatButton);
+                            bidsContainer.appendChild(bidCard);
                         });
 
-                        bidsContainer.appendChild(bidCard);
-                    });
-
-                    display.appendChild(bidsContainer);
-                } else {
-                    showModal('У данного заказчика ещё нет переписок');
-                };
-            })
-            .catch(error => {
-                console.error(`Error in show-chats: ${error}`);
-            });
+                        display.appendChild(bidsContainer);
+                    } else {
+                        showModal('У данного заказчика ещё нет переписок');
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error in show-chats: ${error}`);
+                });
         } catch (error) {
             console.error(`Error in show-chats: ${error}`);
         };
@@ -516,7 +517,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                 `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );
             const data = await response.json();
-            
+
             if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
                 // Use Promise.all to resolve all async operations in the .map()
                 const messagesHtml = await Promise.all(
@@ -530,7 +531,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                                 console.log(attachmentUrl);
-                                
+
                                 const customerName = await fetch('/get-user-data', {
                                     method: 'POST',
                                     headers: {
@@ -538,8 +539,8 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                     },
                                     body: JSON.stringify({ telegram_id: customerTelegramID })
                                 })
-                                .then(response => response.json())
-                                .then(data => data.userData.name);
+                                    .then(response => response.json())
+                                    .then(data => data.userData.name);
                                 const performerName = await fetch('/get-user-data', {
                                     method: 'POST',
                                     headers: {
@@ -547,13 +548,13 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                     },
                                     body: JSON.stringify({ telegram_id: performerTelegramID })
                                 })
-                                .then(response => response.json())
-                                .then(data => data.userData.name);
+                                    .then(response => response.json())
+                                    .then(data => data.userData.name);
 
                                 const senderName = senderLine.includes('Заказчик')
                                     ? `Заказчик ${customerName}:`
                                     : `Исполнитель ${performerName}:`;
-                                
+
                                 // Render the message with attachment
                                 return `<div class="chat-message">
                                             ${senderName}<br><br>
@@ -566,7 +567,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                             };
                         })
                 );
-                
+
                 chatHistory.innerHTML = messagesHtml.join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
@@ -581,7 +582,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
 };
 
 
-function setupPerformerInterface (validatedTelegramID, userData, socket) {
+function setupPerformerInterface(validatedTelegramID, userData, socket) {
     const name = userData.userData.services_name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
@@ -687,7 +688,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Исполнитель ${name}:`;
-                        
+
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
@@ -721,13 +722,13 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     bid_id: customer.bidID,
                     customer_telegram_id: customer.telegramID,
                     performer_telegram_id: validatedTelegramID,
                     message,
                     sender_type: 'performer'
-                 })
+                })
             });
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
@@ -757,7 +758,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 const display = document.getElementById('display');
                 scrollToBottom(display);
             };
-        };            
+        };
     };
 
     const attachmentInput = document.getElementById('attachment-input');
@@ -823,7 +824,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 };
 
 
-function setupCustomerInterface (validatedTelegramID, userData, socket) {
+function setupCustomerInterface(validatedTelegramID, userData, socket) {
     const name = userData.userData.services_name;
     const registrationDate = userData.userData.services_registration_date;
 
@@ -846,12 +847,12 @@ function setupCustomerInterface (validatedTelegramID, userData, socket) {
     myBidsButton.addEventListener('click', async function () {
         await showMyBids(validatedTelegramID);
     });
-    
+
     const lookChatsButton = document.getElementById('look-chats');
     lookChatsButton.addEventListener('click', async function () {
         const display = document.getElementById('display');
         display.classList.remove('view-mode');
-        
+
         await showCustomerChats(validatedTelegramID, name, socket);
     });
 };
@@ -876,8 +877,8 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
             performers.forEach((performer) => {
                 const performerParagraph = document.createElement('p');
-                performerParagraph.innerHTML = 
-                `${performer.name}. Зарегистрирован ${performer.registration_date}.
+                performerParagraph.innerHTML =
+                    `${performer.name}. Зарегистрирован ${performer.registration_date}.
                 Ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
@@ -914,28 +915,28 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            fetch ('/show-performer-chats-list', {
+            fetch('/show-performer-chats-list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ performer_telegram_id: performerTelegramID })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && Array.isArray(data.bids)) {
-                    display.innerHTML = '';
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.bids)) {
+                        display.innerHTML = '';
 
-                    const responsesContainer = document.createElement('div');
-                    responsesContainer.classList.add('bid-container');
-                    
-                    data.bids.forEach(item => {
-                        const bid = item.bid;
-                        
-                        const responseCard = document.createElement('div');
-                        responseCard.classList.add('bid-card');
+                        const responsesContainer = document.createElement('div');
+                        responsesContainer.classList.add('bid-container');
 
-                        responseCard.innerHTML = `
+                        data.bids.forEach(item => {
+                            const bid = item.bid;
+
+                            const responseCard = document.createElement('div');
+                            responseCard.classList.add('bid-card');
+
+                            responseCard.innerHTML = `
                         <p>Номер заказа: ${bid.id}</p>
                         <p>Город: ${bid.city}</p>
                         <p>Заказчик: ${bid.customer_name}</p>
@@ -945,39 +946,39 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
                         <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
                         `;
 
-                        const responseButton = document.createElement('button');
-                        responseButton.classList.add('bid-card-button');
-                        responseButton.innerHTML = 'Посмотреть переписку 👀';
-                        responseButton.setAttribute('data-bid-id', bid.id);
-                        responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);
-                        responseButton.setAttribute('data-performer-telegram-id', performerTelegramID);
+                            const responseButton = document.createElement('button');
+                            responseButton.classList.add('bid-card-button');
+                            responseButton.innerHTML = 'Посмотреть переписку 👀';
+                            responseButton.setAttribute('data-bid-id', bid.id);
+                            responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);
+                            responseButton.setAttribute('data-performer-telegram-id', performerTelegramID);
 
-                        responseButton.addEventListener('click', async (event) => {
-                            const bidID = event.target.getAttribute('data-bid-id');
-                            const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
-                            const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
+                            responseButton.addEventListener('click', async (event) => {
+                                const bidID = event.target.getAttribute('data-bid-id');
+                                const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
+                                const performerTelegramID = event.target.getAttribute('data-performer-telegram-id');
 
-                            if (bidID && customerTelegramID && performerTelegramID) {
-                                await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
-                            } else {
-                                showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
-                                console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');
-                            }
+                                if (bidID && customerTelegramID && performerTelegramID) {
+                                    await showSelectedPerformerChat(bidID, customerTelegramID, performerTelegramID);
+                                } else {
+                                    showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
+                                    console.error('Invalid bid ID, customer Telegram ID, or performer Telegram ID');
+                                }
+                            });
+
+                            responseCard.appendChild(responseButton);
+                            responsesContainer.appendChild(responseCard);
                         });
-                        
-                        responseCard.appendChild(responseButton);
-                        responsesContainer.appendChild(responseCard);
-                    });
 
-                    display.appendChild(responsesContainer);
-                } else {
-                    showModal('У данного исполнителя ещё нет переписок');
-                };
-            })
-            .catch(error => {
-                console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
-                showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-            });
+                        display.appendChild(responsesContainer);
+                    } else {
+                        showModal('У данного исполнителя ещё нет переписок');
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
+                    showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
+                });
         } catch (error) {
             showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
             console.error(`Error in showPerformerChatsWithCustomers: ${error}`);
@@ -1004,8 +1005,8 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            
-            const response = await fetch (
+
+            const response = await fetch(
                 `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );
             const data = await response.json();
@@ -1031,8 +1032,8 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                     },
                                     body: JSON.stringify({ telegram_id: customerTelegramID })
                                 })
-                                .then(response => response.json())
-                                .then(data => data.userData.name);
+                                    .then(response => response.json())
+                                    .then(data => data.userData.name);
                                 const performerName = await fetch('/get-user-data', {
                                     method: 'POST',
                                     headers: {
@@ -1040,13 +1041,13 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                     },
                                     body: JSON.stringify({ telegram_id: performerTelegramID })
                                 })
-                                .then(response => response.json())
-                                .then(data => data.userData.name);
+                                    .then(response => response.json())
+                                    .then(data => data.userData.name);
 
                                 const senderName = senderLine.includes('Заказчик')
                                     ? `Заказчик ${customerName}:`
                                     : `Исполнитель ${performerName}:`;
-                                
+
                                 // Render the message with attachment
                                 return `<div class="chat-message">
                                             ${senderName}<br><br>
@@ -1059,7 +1060,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                             };
                         })
                 );
-                
+
                 chatHistory.innerHTML = messagesHtml.join('');
             } else {
                 showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
@@ -1103,7 +1104,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Исполнитель ${performer.name}:`;
-                        
+
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
@@ -1137,13 +1138,13 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     bid_id: performer.bidID,
                     customer_telegram_id: validatedTelegramID,
                     performer_telegram_id: performer.telegramID,
                     message,
                     sender_type: 'customer'
-                 })
+                })
             });
 
             // Send the message through the WebSocket to be displayed on the other side
@@ -1173,7 +1174,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 const display = document.getElementById('display');
                 scrollToBottom(display);
             };
-        };            
+        };
     };
 
     const attachmentInput = document.getElementById('attachment-input');
@@ -1247,9 +1248,9 @@ async function showChangeProfileInfoForm() {
     } else {
         try {
             display.innerHTML = '';
-            
+
             const response = await fetch('../templates/change_profile_info.html');
-            
+
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке формы профиля, попробейте перезайти в приложение');
                 throw new Error('Failed to load change_profile_info.html');

@@ -21,6 +21,8 @@ const carDimensionsLabel = document.getElementById('car-dimensions-label');
 
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
+hasCarInputTrue.addEventListener('click', hasCar);
+hasCarInputFalse.addEventListener('click', noCar);
 registerButton.addEventListener('click', register);
 
 
@@ -116,12 +118,27 @@ function chooseCourier() {
 };
 
 
+function noCar() {
+    carModelInput.style.display = 'none';
+    carModelLabel.style.display = 'none';
+    carDimensionsContainer.style.display = 'none';
+    carDimensionsLabel.style.display = 'none';
+};
+
+
+function hasCar() {
+    carModelInput.style.display = '';
+    carModelLabel.style.display = '';
+    carDimensionsContainer.style.display = '';
+    carDimensionsLabel.style.display = '';
+};
+
+
 function register() {
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'performer';
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();
-    const hasCar = hasCarInputTrue.checked;
-    const carModel = carModelInput.value.trim();
+    const hasCar = document.querySelector('input[name="has-car"]:checked');
     const carDimensionsWidth = carDimensionsWidthInput.value.trim();
     const carDimensionsLength = carDimensionsLengthInput.value.trim();
     const carDimensionsHeight = carDimensionsHeightInput.value.trim();

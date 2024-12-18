@@ -106,10 +106,6 @@ function chooseCourier() {
     dateOfBirthLabel.style.display = '';
     hasCarContainer.style.display = '';
     hasCarLabel.style.display = '';
-    carModelInput.style.display = '';
-    carModelLabel.style.display = '';
-    carDimensionsContainer.style.display = '';
-    carDimensionsLabel.style.display = '';
     registerButton.style.display = '';
 
     // Highlight the selected button
@@ -150,6 +146,7 @@ function register() {
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
     } else if (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
+        console.log(`role: ${role}, name: ${name}, dateOfBirth: ${dateOfBirth}, hasCar: ${hasCar}, carModel: ${carModel}, carDimensionsWidth: ${carDimensionsWidth}, carDimensionsLength: ${carDimensionsLength}, carDimensionsHeight: ${carDimensionsHeight}`);
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
     } else {

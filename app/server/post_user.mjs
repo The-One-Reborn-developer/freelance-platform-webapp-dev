@@ -15,6 +15,8 @@ export function postUser(
     service
 ) {
     try {
+        // Sanitize data
+        const sanitizedTelegramID = sanitizeData(String(telegramID));
         const sanitizedRole = sanitizeData(role);
         const sanitizedName = sanitizeData(name);
         const sanitizedRate = sanitizeData(rate);
@@ -27,7 +29,7 @@ export function postUser(
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
 
         console.log(`
-            Telegram ID: ${telegramID}
+            Telegram ID: ${sanitizedTelegramID}
             Role: ${sanitizedRole}
             Name: ${sanitizedName}
             Rate: ${sanitizedRate}

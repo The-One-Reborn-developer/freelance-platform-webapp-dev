@@ -50,7 +50,7 @@ export function postUser(
             car_dimensions_length,
             car_dimensions_height,
             service,
-            registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         );
         const registrationDate = new Date().toLocaleString(
             'ru-RU',

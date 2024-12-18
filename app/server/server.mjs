@@ -111,12 +111,12 @@ app.post('/registration-attempt', (req, res) => {
                 name,
                 rate,
                 experience,
-                dateOfBirth,
-                hasCar,
-                carModel,
-                carDimensionsWidth,
-                carDimensionsLength,
-                carDimensionsHeight,
+                date_of_birth: dateOfBirth,
+                has_car: hasCar,
+                car_model: carModel,
+                car_dimensions_width: carDimensionsWidth,
+                car_dimensions_length: carDimensionsLength,
+                car_dimensions_height: carDimensionsHeight,
                 service
             } = req.body;
 

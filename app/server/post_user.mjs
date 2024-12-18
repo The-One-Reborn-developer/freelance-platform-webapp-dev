@@ -113,7 +113,7 @@ export function postUser(
                 role,
                 name,
                 sanitizedDateOfBirth,
-                sanitizedHasCar,
+                sanitizedHasCar ? 1 : 0,
                 sanitizedCarModel,
                 sanitizedCarDimensionsWidth,
                 sanitizedCarDimensionsLength,

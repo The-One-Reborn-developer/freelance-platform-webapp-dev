@@ -19,26 +19,11 @@ export function postUser(
         const sanitizedRate = sanitizeData(rate);
         const sanitizedExperience = sanitizeData(experience);
         const sanitizedDateOfBirth = sanitizeData(dateOfBirth);
-        const sanitizedHasCar = sanitizeData(hasCar);
+        const sanitizedHasCar = sanitizeData(hasCar) ? 1 : 0;
         const sanitizedCarModel = sanitizeData(carModel);
         const sanitizedCarDimensionsWidth = sanitizeData(carDimensionsWidth);
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
-
-        console.log(`
-            Telegram ID: ${telegramID}
-            Role: ${role}
-            Name: ${name}
-            Rate: ${sanitizedRate}
-            Experience: ${sanitizedExperience}
-            Date of Birth: ${sanitizedDateOfBirth}
-            Has Car: ${sanitizedHasCar}
-            Car Model: ${sanitizedCarModel}
-            Car Dimensions Width: ${sanitizedCarDimensionsWidth}
-            Car Dimensions Length: ${sanitizedCarDimensionsLength}
-            Car Dimensions Height: ${sanitizedCarDimensionsHeight}
-            Service: ${service}
-        `);
 
         const registrationDate = new Date().toLocaleString(
             'ru-RU',
@@ -66,7 +51,7 @@ export function postUser(
                                         rate,
                                         experience,
                                         registered_in_services,
-                                        services_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
+                                        services_registration_date) VALUES (?, ?, ?, ?, ?, 1, ?)`
                 );
                 insertUser.run(
                     telegramID,
@@ -74,7 +59,6 @@ export function postUser(
                     name,
                     sanitizedRate,
                     sanitizedExperience,
-                    1,
                     registrationDate
                 );
                 res.status(201).json({ 
@@ -94,7 +78,7 @@ export function postUser(
                                         car_dimensions_length,
                                         car_dimensions_height,
                                         registered_in_delivery,
-                                        delivery_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                                        delivery_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`
                 );
                 insertUser.run(
                     telegramID,
@@ -106,7 +90,6 @@ export function postUser(
                     sanitizedCarDimensionsWidth,
                     sanitizedCarDimensionsLength,
                     sanitizedCarDimensionsHeight,
-                    1,
                     registrationDate
                 );
                 res.status(201).json({ 
@@ -133,7 +116,7 @@ export function postUser(
                         name = ?,
                         rate = ?,
                         experience = ?,
-                        registered_in_services = ?,
+                        registered_in_services = 1,
                         services_registration_date = ?
                         WHERE telegram_id = ?`
                 );
@@ -142,7 +125,6 @@ export function postUser(
                     name,
                     sanitizedRate,
                     sanitizedExperience,
-                    1,
                     registrationDate,
                     telegramID
                 );
@@ -171,7 +153,7 @@ export function postUser(
                         car_dimensions_width = ?,
                         car_dimensions_length = ?,
                         car_dimensions_height = ?,
-                        registered_in_delivery = ?,
+                        registered_in_delivery = 1,
                         delivery_registration_date = ?
                         WHERE telegram_id = ?`
                 );
@@ -184,7 +166,6 @@ export function postUser(
                     sanitizedCarDimensionsWidth,
                     sanitizedCarDimensionsLength,
                     sanitizedCarDimensionsHeight,
-                    1,
                     registrationDate,
                     telegramID
                 );

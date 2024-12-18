@@ -31,6 +31,7 @@ window.onload = function () {
 
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
+    console.log(telegramData)
     checkIfUserIsRegistered(telegramData);
 
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements

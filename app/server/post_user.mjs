@@ -15,6 +15,18 @@ export function postUser(
     service
 ) {
     try {
+        console.log(`Registering user with ID: ${telegramID}
+        Role: ${role}
+        Name: ${name}
+        Rate: ${rate}
+        Experience: ${experience}
+        Date of Birth: ${dateOfBirth}
+        Has Car: ${hasCar}
+        Car Model: ${carModel}
+        Car Dimensions Width: ${carDimensionsWidth}
+        Car Dimensions Length: ${carDimensionsLength}
+        Car Dimensions Height: ${carDimensionsHeight}
+        Service: ${service}`);
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
             'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'

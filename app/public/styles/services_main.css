@@ -270,7 +270,6 @@ body.keyboard-open {
     overflow-y: auto;
     background-color: #f9f9f9;
     border-bottom: 1px solid #ccc;
-	margin-bottom: 20px;
 }
 
 .chat-message {

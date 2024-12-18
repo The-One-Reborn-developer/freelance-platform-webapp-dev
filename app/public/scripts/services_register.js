@@ -53,7 +53,6 @@ function checkIfUserIsRegistered(telegramData) {
     .then(response => response.json())
     .then(data => {
         if (data.registered) {
-            console.log(data);
             window.location.href = `services_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         };
     })

@@ -79,8 +79,10 @@ app.post('/check-registration', (req, res) => {
         } else {
             // What service is the user accessing
             const service = req.body.service;
+            console.log(`Service: ${service}`);
 
             const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegramID, service);
+            console.log(`checkUserTelegramResult: ${checkUserTelegramResult}`);
 
             if (checkUserTelegramResult.count > 0) {
                 return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegramID });

@@ -197,7 +197,7 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
             instrument_provided: instrumentProvided.value
         };
 
-        fetch('/post-service-bid', {
+        fetch('/services/post-bid', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -225,7 +225,7 @@ async function showMyBids(validatedTelegramID) {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('/my-services-bids', {
+            const response = await fetch('/services/my-bids', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -235,7 +235,7 @@ async function showMyBids(validatedTelegramID) {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load my-bids');
+                console.error(`Error in /services/my-bids: ${response}`);
             };
 
             const { success, bids } = await response.json();
@@ -258,7 +258,7 @@ async function showMyBids(validatedTelegramID) {
                         <p>Срок от: ${bid.deadline_from}</p>
                         <p>Срок до: ${bid.deadline_to}</p>
                         <br>
-                        <p>Предоставляется инструмент: ${(bid.instrument_provided === true || bid.instrument_provided === 1) ? 'Да' : 'Нет'}</p>
+                        <p>Предоставляется инструмент: ${(bid.instrument_provided === 1) ? 'Да' : 'Нет'}</p>
                         <button class="bid-card-button" data-bid-id="${bid.id}">Закрыть заказ 🔐</button>
                     `;
 
@@ -270,7 +270,7 @@ async function showMyBids(validatedTelegramID) {
                             const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
                             if (confirmation) {
                                 try {
-                                    const response = await fetch('/close-service-bid', {
+                                    const response = await fetch('/services/close-bid', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json'
@@ -289,7 +289,7 @@ async function showMyBids(validatedTelegramID) {
                                         };
                                     };
                                 } catch (error) {
-                                    console.error(`Error in close-service-bid: ${error}`);
+                                    console.error(`Error in /services/close-bid: ${error}`);
                                 };
                             };
                         };
@@ -354,7 +354,7 @@ async function showBids(city, validatedTelegramID) {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('/get-bids', {
+            const response = await fetch('/services/get-bids', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -364,7 +364,7 @@ async function showBids(city, validatedTelegramID) {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load bids');
+                console.error(`Error in /services/get-bids: ${response}`);
             };
 
             const bidsResponse = await response.json();
@@ -385,7 +385,7 @@ async function showBids(city, validatedTelegramID) {
                         <p>Срок от: ${bid.deadline_from}</p>
                         <p>Срок до: ${bid.deadline_to}</p>
                         <br>
-                        <p>Предоставляется инструмент: ${(bid.instrument_provided === 1 || bid.instrument_provided === true) ? 'Да' : 'Нет'}</p>
+                        <p>Предоставляется инструмент: ${(bid.instrument_provided === 1) ? 'Да' : 'Нет'}</p>
                         <button id="respond-to-bid" class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
                         <button id="look-chats" class="bid-card-button">Посмотреть переписки заказчика 📤</button>
                     `;
@@ -395,7 +395,7 @@ async function showBids(city, validatedTelegramID) {
 
                         if (bidID) {
                             try {
-                                fetch('/respond-to-bid', {
+                                fetch('/services/respond-to-bid', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -410,11 +410,11 @@ async function showBids(city, validatedTelegramID) {
                                         };
                                     })
                                     .catch(error => {
-                                        console.error(`Error in respond-to-bid: ${error}`);
+                                        console.error(`Error in /services/respond-to-bid: ${error}`);
                                         showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
                                     });
                             } catch (error) {
-                                console.error(`Error in respond-to-bid: ${error}`);
+                                console.error(`Error in /services/respond-to-bid: ${error}`);
                                 showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
                             };
                         };
@@ -453,7 +453,7 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            fetch('/show-customer-chats-list', {
+            fetch('/services/show-customer-chats-list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -523,10 +523,10 @@ function showCustomerChatsWithPerformers(customerTelegramID) {
                     };
                 })
                 .catch(error => {
-                    console.error(`Error in show-chats: ${error}`);
+                    console.error(`Error in showCustomerChatsWithPerformers: ${error}`);
                 });
         } catch (error) {
-            console.error(`Error in show-chats: ${error}`);
+            console.error(`Error in showCustomerChatsWithPerformers: ${error}`);
         };
     };
 };
@@ -549,7 +549,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
     } else {
         try {
             const response = await fetch(
-                `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
+                `/services/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );
             const data = await response.json();
 
@@ -565,7 +565,6 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
-                                console.log(attachmentUrl);
 
                                 const customerName = await fetch('/get-user-data', {
                                     method: 'POST',
@@ -584,7 +583,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                     body: JSON.stringify({ telegram_id: performerTelegramID })
                                 })
                                     .then(response => response.json())
-                                    .then(data => data.userData.name);
+                                    .then(data => data.userData.services_name);
 
                                 const senderName = senderLine.includes('Заказчик')
                                     ? `Заказчик ${customerName}:`
@@ -611,7 +610,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
             display.innerHTML = '';
             display.appendChild(chatHistory);
         } catch (error) {
-            console.error(`Error in show-selected-customer-chat: ${error}`);
+            console.error(`Error in showSelectedCustomerChat: ${error}`);
         };
     };
 };
@@ -706,7 +705,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
     try {
         // Fetch the chat history
         const response = await fetch(
-            `/get-chats?bid_id=${customer.bidID}&customer_telegram_id=${customer.telegramID}&performer_telegram_id=${validatedTelegramID}`
+            `/services/get-chats?bid_id=${customer.bidID}&customer_telegram_id=${customer.telegramID}&performer_telegram_id=${validatedTelegramID}`
         );
         const data = await response.json();
 
@@ -752,7 +751,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
         if (message) {
             // Send the message to the server to save and to route to Telegram
-            const response = await fetch('/send-message', {
+            const response = await fetch('/services/send-message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -812,12 +811,9 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
             formData.append('customer_telegram_id', customer.telegramID);
             formData.append('performer_telegram_id', validatedTelegramID);
             formData.append('sender_type', 'performer');
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
 
             try {
-                const response = await fetch('/send-message', {
+                const response = await fetch('/services/send-message', {
                     method: 'POST',
                     body: formData
                 });
@@ -832,7 +828,6 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                         message: '[File sent]',
                         attachment: base64File
                     };
-                    console.log(`Attachment data: ${JSON.stringify(messageData)}`);
 
                     socket.send(JSON.stringify(messageData));
                 };
@@ -879,8 +874,8 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             performers.forEach((performer) => {
                 const performerParagraph = document.createElement('p');
                 performerParagraph.innerHTML =
-                    `${performer.name}. Зарегистрирован ${performer.registration_date}.
-                Ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
+                    `${performer.services_name}. Зарегистрирован ${performer.services_registration_date}.
+                    Ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
                 chatButton.innerHTML = 'Написать исполнителю 📩';
@@ -916,7 +911,7 @@ function showPerformerChatsWithCustomers(performerTelegramID) {
         try {
             display.innerHTML = '';
             display.innerHTML = 'Загрузка...';
-            fetch('/show-performer-chats-list', {
+            fetch('/services/show-performer-chats-list', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1008,7 +1003,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
             display.innerHTML = 'Загрузка...';
 
             const response = await fetch(
-                `/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
+                `/services/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&performer_telegram_id=${performerTelegramID}`
             );
             const data = await response.json();
 
@@ -1034,7 +1029,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                     body: JSON.stringify({ telegram_id: customerTelegramID })
                                 })
                                     .then(response => response.json())
-                                    .then(data => data.userData.name);
+                                    .then(data => data.userData.services_name);
                                 const performerName = await fetch('/get-user-data', {
                                     method: 'POST',
                                     headers: {
@@ -1043,7 +1038,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                     body: JSON.stringify({ telegram_id: performerTelegramID })
                                 })
                                     .then(response => response.json())
-                                    .then(data => data.userData.name);
+                                    .then(data => data.userData.services_name);
 
                                 const senderName = senderLine.includes('Заказчик')
                                     ? `Заказчик ${customerName}:`
@@ -1087,7 +1082,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
     try {
         // Fetch the chat history
         const response = await fetch(
-            `/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${validatedTelegramID}&performer_telegram_id=${performer.telegramID}`
+            `/services/get-chats?bid_id=${performer.bidID}&customer_telegram_id=${validatedTelegramID}&performer_telegram_id=${performer.telegramID}`
         );
         const data = await response.json();
 
@@ -1122,7 +1117,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             chatHistory.innerHTML = 'Нет сообщений.';
         };
     } catch (error) {
-        console.error(`Error in loadChatHistory: ${error}`);
+        console.error(`Error in loadCustomerChatHistory: ${error}`);
         chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 
@@ -1134,7 +1129,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
 
         if (message) {
             // Send the message to the server to save and to route to Telegram
-            const response = await fetch('/send-message', {
+            const response = await fetch('/services/send-message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1156,7 +1151,6 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                     message,
                     attachment: null
                 };
-                console.log(`Message data: ${JSON.stringify(messageData)}`);
 
                 socket.send(JSON.stringify(messageData));
             };
@@ -1194,12 +1188,9 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
             formData.append('customer_telegram_id', validatedTelegramID);
             formData.append('performer_telegram_id', performer.telegramID);
             formData.append('sender_type', 'customer');
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
 
             try {
-                const response = await fetch('/send-message', {
+                const response = await fetch('/services/send-message', {
                     method: 'POST',
                     body: formData
                 });
@@ -1214,7 +1205,6 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         message: '[File sent]',
                         attachment: base64File
                     };
-                    console.log(`Attachment data: ${JSON.stringify(messageData)}`);
 
                     socket.send(JSON.stringify(messageData));
                 };

@@ -73,21 +73,20 @@ app.post('/check-registration', (req, res) => {
     try {
         const telegramData = req.body.telegram_data;
         // Check telegram data
-        const checkTelegramDataResult = checkTelegramData(telegramData, res);
-        console.log(`checkTelegramDataResult: ${checkTelegramDataResult}`);
+        const verifiedTelegramID = checkTelegramData(telegramData, res);
 
-        if (!checkTelegramDataResult) {
+        if (!verifiedTelegramID) {
             return;
         } else {
             // What service is the user accessing
             const service = req.body.service;
             console.log(`Service: ${service}`);
 
-            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegramID, service);
+            const checkUserTelegramResult = checkUserTelegram(db, verifiedTelegramID, service);
             console.log(`checkUserTelegramResult: ${checkUserTelegramResult}`);
 
             if (checkUserTelegramResult.count > 0) {
-                return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegramID });
+                return res.status(200).json({ registered: true, telegram_id: verifiedTelegramID });
             } else {
                 return res.status(200).json({ registered: false });
             };

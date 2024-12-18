@@ -3,7 +3,6 @@ import crypto from 'crypto';
 
 export function checkTelegramData(telegramData, res) {
     try {
-        console.log(`Checking Telegram data...`);
         if (typeof telegramData !== 'string' || !telegramData) {
             res.status(400).json({ message: 'Телеграм-данные не в корректном формате.' });
             return;
@@ -13,7 +12,6 @@ export function checkTelegramData(telegramData, res) {
         const userDataString = new URLSearchParams(telegramData).get('user');
         const userData = JSON.parse(decodeURIComponent(userDataString));
         const telegramID = userData.id;
-        console.log(`Telegram ID: ${telegramID}`);
 
         // Check environment variable
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -22,13 +20,11 @@ export function checkTelegramData(telegramData, res) {
             res.status(500).json({ message: 'Server configuration error.' });
             return;
         };
-        console.log(`Bot token: ${botToken}`);
 
         // Compute secret key
         const secretKey = crypto.createHmac('sha256', 'WebAppData')
             .update(botToken)
             .digest();
-        console.log(`Secret key: ${secretKey.toString('hex')}`);
 
         // Create data check string
         const dataCheckString = telegramData.split('&')
@@ -36,13 +32,11 @@ export function checkTelegramData(telegramData, res) {
             .sort()
             .map(pair => pair.split('=')[0] + '=' + decodeURIComponent(pair.split('=')[1]))
             .join('\n'); // Format as key=value\n
-        console.log(`Data check string: ${dataCheckString}`);
 
         // Compute hash
         const computedHash = crypto.createHmac('sha256', secretKey)
             .update(dataCheckString)
             .digest('hex');
-        console.log(`Computed hash: ${computedHash}`);
 
         // Compare hashes
         const receivedHash = new URLSearchParams(telegramData).get('hash');
@@ -50,7 +44,6 @@ export function checkTelegramData(telegramData, res) {
             res.status(400).json({ message: 'Неверные телеграм-данные.' });
             return;
         };
-        console.log(`Hashes match.`);
 
         // Check timestamp
         const authDate = parseInt(new URLSearchParams(telegramData).get('auth_date'), 10);
@@ -59,7 +52,6 @@ export function checkTelegramData(telegramData, res) {
             res.status(400).json({ message: 'Телеграм-данные устарели.' });
             return;
         };
-        console.log(`Timestamp is valid.`);
 
         return telegramID;
     } catch (error) {

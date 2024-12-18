@@ -1,4 +1,4 @@
-import { getResponse } from '../get_response.mjs';
+import { getResponse } from './get_response.mjs';
 
 
 export function getResponses(db, customerBids) {

@@ -16,7 +16,7 @@ export { getUserData };
 import { showModal } from "./modals.mjs";
 export { showModal };
 
-import { fetchPerformers } from "./services/requests.mjs"
+import { fetchPerformers } from "../services/requests.mjs"
 export { fetchPerformers };
-import { fetchCustomers } from './services/requests.mjs';
+import { fetchCustomers } from '../services/requests.mjs';
 export { fetchCustomers };

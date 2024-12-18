@@ -102,7 +102,7 @@ export function postUser(
                 name,
                 sanitizedRate,
                 sanitizedExperience,
-                true,
+                1,
                 registrationDate
             );
 
@@ -139,7 +139,7 @@ export function postUser(
                 sanitizedCarDimensionsWidth,
                 sanitizedCarDimensionsLength,
                 sanitizedCarDimensionsHeight,
-                true,
+                1,
                 registrationDate
             );
 

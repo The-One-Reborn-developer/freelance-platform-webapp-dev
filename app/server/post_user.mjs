@@ -15,6 +15,8 @@ export function postUser(
     service
 ) {
     try {
+        const sanitizedRole = sanitizeData(role);
+        const sanitizedName = sanitizeData(name);
         const sanitizedRate = sanitizeData(rate);
         const sanitizedExperience = sanitizeData(experience);
         const sanitizedDateOfBirth = sanitizeData(dateOfBirth);
@@ -23,6 +25,22 @@ export function postUser(
         const sanitizedCarDimensionsWidth = sanitizeData(carDimensionsWidth);
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
+
+        console.log(`
+            Telegram ID: ${telegramID}
+            Role: ${sanitizedRole}
+            Name: ${sanitizedName}
+            Rate: ${sanitizedRate}
+            Experience: ${sanitizedExperience}
+            Date of Birth: ${sanitizedDateOfBirth}
+            Has Car: ${sanitizedHasCar}
+            Car Model: ${sanitizedCarModel}
+            Car Dimensions Width: ${sanitizedCarDimensionsWidth}
+            Car Dimensions Length: ${sanitizedCarDimensionsLength}
+            Car Dimensions Height: ${sanitizedCarDimensionsHeight}
+            Service: ${service}
+        `);
+
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
             'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
@@ -76,6 +94,14 @@ export function postUser(
                 true,
                 registrationDate
             );
+
+            res.status(201).json({
+                success: true,
+                message: 'Пользователь ' + name +
+                ' с ID ' + insertUserResult.lastInsertRowid +
+                ' успешно зарегистрирован.',
+                telegram_id: telegramID
+            });
         } else if (service === 'delivery') {
             const insertUser = db.prepare(
                 `INSERT INTO users (
@@ -101,18 +127,19 @@ export function postUser(
                 sanitizedCarModel,
                 sanitizedCarDimensionsWidth,
                 sanitizedCarDimensionsLength,
+                sanitizedCarDimensionsHeight,
                 true,
                 registrationDate
             );
+
+            res.status(201).json({
+                success: true,
+                message: 'Пользователь ' + name +
+                ' с ID ' + insertUserResult.lastInsertRowid +
+                ' успешно зарегистрирован.',
+                telegram_id: telegramID
+            });
         };
-        
-        res.status(201).json({
-            success: true,
-            message: 'Пользователь ' + name +
-            ' с ID ' + insertUserResult.lastInsertRowid +
-            ' успешно зарегистрирован.',
-            telegram_id: telegramID
-        });
     } catch (error) {
         console.error('Error in postUser:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });

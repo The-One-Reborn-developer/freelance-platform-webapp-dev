@@ -15,7 +15,6 @@ import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
-import { getResponses } from "./get_responses.mjs";
 import { updateProfileInfo } from "./update_profile_info.mjs"
 import { setupWebsocketServer } from "./setup_websocket_server.mjs"
 
@@ -34,6 +33,7 @@ import { sendMessage } from "./index.mjs";
 import { sendAttachment } from "./index.mjs";
 import { getResponsesByPerformerTelegramIDWithChatStarted } from "./index.mjs";
 import { getBidByBidID } from "./index.mjs";
+import { getResponses } from "./index.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -436,7 +436,7 @@ app.post('/services/send-message', upload.single('attachment'), (req, res) => {
 });
 
 
-app.get('/responded-performers', (req, res) => {
+app.get('/services/responded-performers', (req, res) => {
     const customerTelegramID = req.query.customer_telegram_id;
 
     try {
@@ -486,7 +486,7 @@ app.post('/change-profile-info', (req, res) => {
 });
 
 
-app.get('/responded-customers', (req, res) => {
+app.get('/services/responded-customers', (req, res) => {
     const performerTelegramID = req.query.performer_telegram_id;
 
     try {

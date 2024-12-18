@@ -1,4 +1,4 @@
-import { getResponse } from './get_response.mjs';
+import { getResponse } from '../get_response.mjs';
 
 
 export function getResponses(db, customerBids) {
@@ -28,5 +28,5 @@ export function getResponses(db, customerBids) {
     } catch (error) {
         console.error('Error in getResponses:', error);
         return [];
-    }
-}
+    };
+};

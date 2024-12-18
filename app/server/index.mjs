@@ -39,3 +39,6 @@ export { getResponsesByPerformerTelegramIDWithChatStarted };
 
 import { getBidByBidID } from "./services/get_bid_by_bid_id.mjs";
 export { getBidByBidID };
+
+import { getResponses } from "./services/get_responses.mjs";
+export { getResponses };

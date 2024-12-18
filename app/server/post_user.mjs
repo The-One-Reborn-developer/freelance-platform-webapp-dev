@@ -121,5 +121,5 @@ export function postUser(
 
 
 function sanitizeData(input) {
-    return input === undefined ? null : value;
+    return input === undefined ? null : input;
 };

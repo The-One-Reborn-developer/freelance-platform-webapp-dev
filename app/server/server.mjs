@@ -71,7 +71,7 @@ app.get('/', (req, res) => {
 
 app.post('/check-registration', (req, res) => {
     try {
-        console.log(`Checking if user is registered...`);
+        console.log(`Incoming data: ${req.body}`);
         // Check telegram data
         const checkTelegramDataResult = checkTelegramData(req, res);
         console.log(`checkTelegramDataResult: ${checkTelegramDataResult}`);

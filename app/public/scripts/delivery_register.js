@@ -214,7 +214,7 @@ function showModal(message, isSuccess, telegramID) {
 
         // If registration is successful, redirect
         if (isSuccess) {
-            window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(telegramID)}`;  // Redirect if the user is registered
+            //window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(telegramID)}`;  // Redirect if the user is registered
         };
     };
 };

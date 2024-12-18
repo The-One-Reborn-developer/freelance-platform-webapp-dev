@@ -612,7 +612,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
 
 
 function setupPerformerInterface (validatedTelegramID, userData, socket) {
-    const name = userData.userData.name;
+    const name = userData.userData.services_name;
     const rate = userData.userData.rate;
     const experience = userData.userData.experience;
     const registrationDate = userData.userData.services_registration_date;
@@ -875,7 +875,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
 
 function setupCustomerInterface (validatedTelegramID, userData, socket) {
-    const name = userData.userData.name;
+    const name = userData.userData.services_name;
     const registrationDate = userData.userData.services_registration_date;
 
     insertCustomerButtons(name, registrationDate);

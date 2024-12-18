@@ -874,7 +874,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             performers.forEach((performer) => {
                 const performerParagraph = document.createElement('p');
                 performerParagraph.innerHTML =
-                    `${performer.services_name}. Зарегистрирован ${performer.services_registration_date}.
+                    `${performer.name}. Зарегистрирован ${performer.registration_date}.
                     Ставка: ${performer.rate}/час, опыт: ${performer.experience} (в годах)`;
 
                 const chatButton = document.createElement('button');
@@ -1019,7 +1019,6 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
-                                console.log(attachmentUrl);
 
                                 const customerName = await fetch('/get-user-data', {
                                     method: 'POST',

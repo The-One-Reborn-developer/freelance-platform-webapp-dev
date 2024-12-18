@@ -5,7 +5,7 @@ export function createUsersTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 telegram_id BIGINT NOT NULL,
                 services_role STRING(20),
-                deliveries_role STRING(20),
+                delivery_role STRING(20),
                 name TEXT,
                 rate INTEGER,
                 experience INTEGER,

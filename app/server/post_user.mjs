@@ -25,37 +25,6 @@ export function postUser(
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
 
-        // Check if the user is already registered
-        if (service === 'services') {
-            const checkUserTelegram = db.prepare(
-                'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_services = 1'
-            );
-            const checkUserTelegramResult = checkUserTelegram.get(telegramID);
-            if (checkUserTelegramResult.count > 0) {
-                res.status(409).json({ message: 'Вы уже зарегистрированы.' });
-                return;
-            };   
-        } else if (service === 'delivery') {
-            const checkUserTelegram = db.prepare(
-                'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_deliveries = 1'
-            );
-            const checkUserTelegramResult = checkUserTelegram.get(telegramID);
-            if (checkUserTelegramResult.count > 0) {
-                res.status(409).json({ message: 'Вы уже зарегистрированы.' });
-                return;
-            };
-        };
-
-        // Check if the name is already taken
-        const checkUserName = db.prepare(
-            'SELECT COUNT(*) as count FROM users WHERE name = ?'
-        );
-        const checkUserNameResult = checkUserName.get(name);
-        if (checkUserNameResult.count > 0) {
-            res.status(409).json({ message: 'Имя ' + name + ' уже занято.' });
-            return;
-        };
-
         const registrationDate = new Date().toLocaleString(
             'ru-RU',
             { 
@@ -65,75 +34,133 @@ export function postUser(
                 year: 'numeric',
                 month: 'numeric',
                 day: 'numeric'
-            });
+            }
+        );
 
-        // Insert the new user
+        const userQuery = db.prepare('SELECT * FROM users WHERE telegram_id = ?');
+        const user = userQuery.get(telegramID);
+
+        // Check if the user is already registered
+        if (!user) {
+            // Register a new user
+            if (service === 'services') {
+                const insertUser = db.prepare(
+                    `INSERT INTO users (telegram_id,
+                                        services_role,
+                                        name,
+                                        rate,
+                                        experience,
+                                        registered_in_services,
+                                        registration_date) VALUES (?, ?, ?, ?, ?, 1, ?)`
+                );
+                insertUser.run(telegramID, role, name, sanitizedRate, sanitizedExperience, registrationDate);
+                res.status(201).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Услуги.`,
+                    telegram_id: telegramID,
+                });
+            } else if (service === 'delivery') {
+                const insertUser = db.prepare(
+                    `INSERT INTO users (telegram_id,
+                                        delivery_role,
+                                        name,
+                                        date_of_birth,
+                                        has_car,
+                                        car_model,
+                                        car_dimensions_width,
+                                        car_dimensions_length,
+                                        car_dimensions_height,
+                                        registered_in_delivery,
+                                        delivery_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`
+                );
+                insertUser.run(
+                    telegramID,
+                    role,
+                    name,
+                    sanitizedDateOfBirth,
+                    sanitizedHasCar,
+                    sanitizedCarModel,
+                    sanitizedCarDimensionsWidth,
+                    sanitizedCarDimensionsLength,
+                    sanitizedCarDimensionsHeight,
+                    registrationDate
+                );
+                res.status(201).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Доставка.`,
+                    telegram_id: telegramID,
+                });
+            };
+        };
+
+        // Update an existing user
         if (service === 'services') {
-            const insertUser = db.prepare(
-                `INSERT INTO users (
-                telegram_id,
-                services_role,
-                name,
-                rate,
-                experience,
-                registered_in_services,
-                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
-            );
-            
-            const insertUserResult = insertUser.run(
-                telegramID,
-                role,
-                name,
-                sanitizedRate,
-                sanitizedExperience,
-                1,
-                registrationDate
-            );
-
-            res.status(201).json({
-                success: true,
-                message: 'Пользователь ' + name +
-                ' с ID ' + insertUserResult.lastInsertRowid +
-                ' успешно зарегистрирован.',
-                telegram_id: telegramID
-            });
+            if (user.registered_in_services === 1) {
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} уже зарегистрирован в Сервис+Услуги.`,
+                    telegram_id: telegramID,
+                });
+                return;
+            } else {
+                const updateUser = db.prepare(
+                    `UPDATE users SET 
+                        services_role = ?,
+                        name = ?,
+                        rate = ?,
+                        experience = ?,
+                        registered_in_services = 1,
+                        services_registration_date = ?
+                        WHERE telegram_id = ?`
+                );
+                updateUser.run(role, name, sanitizedRate, sanitizedExperience, registrationDate, telegramID);
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Услуги.`,
+                    telegram_id: telegramID,
+                });
+            };
         } else if (service === 'delivery') {
-            const insertUser = db.prepare(
-                `INSERT INTO users (
-                telegram_id,
-                deliveries_role,
-                name,
-                date_of_birth,
-                has_car,
-                car_model,
-                car_dimensions_width,
-                car_dimensions_length,
-                car_dimensions_height,
-                registered_in_deliveries,
-                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-            );
-            
-            const insertUserResult = insertUser.run(
-                telegramID,
-                role,
-                name,
-                sanitizedDateOfBirth,
-                sanitizedHasCar ? 1 : 0,
-                sanitizedCarModel,
-                sanitizedCarDimensionsWidth,
-                sanitizedCarDimensionsLength,
-                sanitizedCarDimensionsHeight,
-                1,
-                registrationDate
-            );
-
-            res.status(201).json({
-                success: true,
-                message: 'Пользователь ' + name +
-                ' с ID ' + insertUserResult.lastInsertRowid +
-                ' успешно зарегистрирован.',
-                telegram_id: telegramID
-            });
+            if (user.registered_in_delivery === 1) {
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} уже зарегистрирован в Сервис+Доставка.`,
+                    telegram_id: telegramID,
+                });
+                return;
+            } else {
+                const updateUser = db.prepare(
+                    `UPDATE users SET 
+                        delivery_role = ?,
+                        name = ?,
+                        date_of_birth = ?,
+                        has_car = ?,
+                        car_model = ?,
+                        car_dimensions_width = ?,
+                        car_dimensions_length = ?,
+                        car_dimensions_height = ?,
+                        registered_in_delivery = 1,
+                        delivery_registration_date = ?
+                        WHERE telegram_id = ?`
+                );
+                updateUser.run(
+                    role,
+                    name,
+                    sanitizedDateOfBirth,
+                    sanitizedHasCar,
+                    sanitizedCarModel,
+                    sanitizedCarDimensionsWidth,
+                    sanitizedCarDimensionsLength,
+                    sanitizedCarDimensionsHeight,
+                    registrationDate,
+                    telegramID
+                );
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Доставка.`,
+                    telegram_id: telegramID,
+                });
+            };
         };
     } catch (error) {
         console.error('Error in postUser:', error);

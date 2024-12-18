@@ -1274,7 +1274,7 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
         };
 
         try {
-            const response = await fetch('/change-profile-info', {
+            const response = await fetch('/services/change-profile-info', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

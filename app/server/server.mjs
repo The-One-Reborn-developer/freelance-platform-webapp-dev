@@ -466,7 +466,7 @@ app.get('/services/responded-performers', (req, res) => {
 });
 
 
-app.post('/change-profile-info', (req, res) => {
+app.post('/services/change-profile-info', (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
         const rate = req.body.rate;

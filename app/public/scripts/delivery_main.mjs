@@ -53,7 +53,7 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
         const createBidForm = document.getElementById('create-bid-form');
         if (createBidForm) {
             createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, validatedTelegramID, name);
+                handleDeliveryFormSubmit(event, validatedTelegramID, name);
             });
         };
     });
@@ -223,7 +223,7 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit(event, validatedTelegramID, name) {
+function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
     event.preventDefault();
 
     const description = document.getElementById('description-textarea');

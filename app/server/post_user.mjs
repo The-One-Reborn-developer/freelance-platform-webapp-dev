@@ -34,24 +34,7 @@ export function postUser(
             res.status(409).json({ message: 'Имя ' + name + ' уже занято.' });
             return;
         };
-        console.log(`Service: ${service}`);
-        // Insert the new user
-        const insertUser = db.prepare(
-            `INSERT INTO users (
-            telegram_id,
-            role,
-            name,
-            rate,
-            experience,
-            date_of_birth,
-            has_car,
-            car_model,
-            car_dimensions_width,
-            car_dimensions_length,
-            car_dimensions_height,
-            service,
-            registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-        );
+
         const registrationDate = new Date().toLocaleString(
             'ru-RU',
             { 
@@ -62,21 +45,60 @@ export function postUser(
                 month: 'numeric',
                 day: 'numeric'
             });
-        const insertUserResult = insertUser.run(
-            telegramID,
-            role,
-            name,
-            rate,
-            experience,
-            dateOfBirth,
-            hasCar,
-            carModel,
-            carDimensionsWidth,
-            carDimensionsLength,
-            carDimensionsHeight,
-            service,
-            registrationDate
-        );
+
+        // Insert the new user
+        if (service === 'services') {
+            const insertUser = db.prepare(
+                `INSERT INTO users (
+                telegram_id,
+                services_role,
+                name,
+                rate,
+                experience,
+                registered_in_services,
+                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            );
+            
+            const insertUserResult = insertUser.run(
+                telegramID,
+                role,
+                name,
+                rate,
+                experience,
+                true,
+                registrationDate
+            );
+        } else if (service === 'delivery') {
+            const insertUser = db.prepare(
+                `INSERT INTO users (
+                telegram_id,
+                deliveries_role,
+                name,
+                date_of_birth,
+                has_car,
+                car_model,
+                car_dimensions_width,
+                car_dimensions_length,
+                car_dimensions_height,
+                registered_in_deliveries,
+                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+            );
+            
+            const insertUserResult = insertUser.run(
+                telegramID,
+                role,
+                name,
+                dateOfBirth,
+                hasCar,
+                carModel,
+                carDimensionsWidth,
+                carDimensionsLength,
+                carDimensionsHeight,
+                true,
+                registrationDate
+            );
+        };
+        
         res.status(201).json({
             success: true,
             message: 'Пользователь ' + name +

@@ -4,7 +4,8 @@ export function createUsersTable(db) {
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 telegram_id BIGINT NOT NULL,
-                role STRING(20) NOT NULL,
+                services_role STRING(20),
+                deliveries_role STRING(20),
                 name TEXT,
                 rate INTEGER,
                 experience INTEGER,
@@ -14,7 +15,8 @@ export function createUsersTable(db) {
                 car_dimensions_width INTEGER,
                 car_dimensions_length INTEGER,
                 car_dimensions_height INTEGER,
-                service STRING(20) NOT NULL,
+                registered_in_services BOOLEAN,
+                registered_in_deliveries BOOLEAN,
                 registration_date STRING(20) NOT NULL,
                 UNIQUE(telegram_id)
             );

@@ -25,6 +25,12 @@ export function postUser(
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
 
+        console.log(`Registration attempt for ${telegramID} with role ${role}
+            name ${name}, rate ${sanitizedRate}, experience ${sanitizedExperience},
+            date of birth ${sanitizedDateOfBirth}, has car ${sanitizedHasCar}, car model ${sanitizedCarModel},
+            car dimensions width ${sanitizedCarDimensionsWidth}, car dimensions length ${sanitizedCarDimensionsLength},
+            car dimensions height ${sanitizedCarDimensionsHeight}, service ${service}`);
+
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
             'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'

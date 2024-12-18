@@ -143,9 +143,10 @@ function register() {
     const telegramData = window.Telegram.WebApp.initData;
 
     if (!name || (role === 'courier' && (!name || !dateOfBirth || !noCar))) {
+        console.log(``)
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
-    } else if (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
+    } else if (!name || (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight))) {
         console.log(`role: ${role}, name: ${name}, dateOfBirth: ${dateOfBirth}, hasCar: ${hasCar}, carModel: ${carModel}, carDimensionsWidth: ${carDimensionsWidth}, carDimensionsLength: ${carDimensionsLength}, carDimensionsHeight: ${carDimensionsHeight}`);
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;

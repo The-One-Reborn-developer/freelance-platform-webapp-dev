@@ -138,14 +138,15 @@ function register() {
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'courier';
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();
-    const hasCar = document.querySelector('input[name="has-car"]:checked');
+    const hasCar = hasCarInputTrue.checked;
+    const noCar = hasCarInputFalse.checked;
     const carModel = carModelInput.value.trim();
     const carDimensionsWidth = carDimensionsWidthInput.value.trim();
     const carDimensionsLength = carDimensionsLengthInput.value.trim();
     const carDimensionsHeight = carDimensionsHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    if (!name || (role === 'courier' && (!name || !dateOfBirth || !hasCar))) {
+    if (!name || (role === 'courier' && (!name || !dateOfBirth || !noCar))) {
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
     } else if (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {

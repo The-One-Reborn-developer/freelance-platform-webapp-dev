@@ -1,8 +1,6 @@
 <form id="create-bid-form" class="form" novalidate>
     <h2 class="form-title">Создать новый заказ</h2>
-
     <br>
-
     <label for="city">Город:</label>
     <select id="city" name="city" required>
         <option value="Москва">Москва</option>
@@ -11,14 +9,10 @@
         <option value="Екатеринбург">Екатеринбург</option>
         <option value="Казань">Казань</option>
     </select>
-    
     <br><br>
-
     <label for="description-textarea" class="description-label">Описание:</label>
     <textarea id="description-textarea" class="description-textarea" name="description" required></textarea>
-
     <br><br>
-    
     <label for="deadline-container">Сроки выполнения работ:</label>
     <div id="deadline-container" class="deadline-container">
         <label for="deadline-from">От</label>
@@ -27,9 +21,7 @@
         <label for="deadline-to">До</label>
         <input type="date" id="deadline-to" name="deadline" required>
     </div>
-
     <br>
-    
     <label for="instrument-provided-container">Предоставляете ли инструмент:</label>
     <div id="instrument-provided-container" class="instrument-provided-container">
         <label for="instrument-provided-true">Да</label>
@@ -37,8 +29,6 @@
         <label for="instrument-provided-false">Нет</label>
         <input type="radio" id="instrument-provided-false" class="instrument-provided" name="instrument-provided" value="false" required>
     </div>
-
     <br>
-    
     <button type="submit" class="submit-form-button">Создать заказ</button>
 </form>

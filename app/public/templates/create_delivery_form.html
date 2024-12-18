@@ -1,0 +1,34 @@
+<form id="create-delivery-form" class="form" novalidate>
+    <h2 class="form-title">Создать новый заказ</h2>
+    <br>
+    <label for="city">Город:</label>
+    <select id="city" name="city" required>
+        <option value="Москва">Москва</option>
+        <option value="Санкт-Петербург">Санкт-Петербург</option>
+        <option value="Новосибирск">Новосибирск</option>
+        <option value="Екатеринбург">Екатеринбург</option>
+        <option value="Казань">Казань</option>
+    </select>
+    <br><br>
+    <label for="description-textarea" class="description-label">Что нужно доставить, описание:</label>
+    <textarea id="description-textarea" class="description-textarea" name="description" required></textarea>
+    <br><br>
+    <label for="addresses-container">Адреса доставки:</label>
+    <div id="addresses-container" class="deadline-container">
+        <label for="deliver-from">Откуда</label>
+        <input type="text" id="deliver-from" name="address" required>
+        <br>
+        <label for="deadline-to">До</label>
+        <input type="text" id="deliver-to" name="address" required>
+    </div>
+    <br>
+    <label for="car-necessary-container">Нужен ли автомобиль:</label>
+    <div id="car-necessary-container" class="car-necessary-container">
+        <label for="car-necessary-true">Да</label>
+        <input type="radio" id="car-necessary-true" class="car-necessary" name="car-necessary" value="true" required>
+        <label for="car-necessary-false">Нет</label>
+        <input type="radio" id="car-necessary-false" class="car-necessary" name="car-necessary" value="false" required>
+    </div>
+    <br>
+    <button type="submit" class="submit-form-button">Создать заказ</button>
+</form>

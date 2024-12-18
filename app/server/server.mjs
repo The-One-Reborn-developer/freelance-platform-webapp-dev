@@ -241,7 +241,7 @@ app.post('/respond-to-bid', (req, res) => {
         const performerName = performerData.name;
         const performerRate = performerData.rate;
         const performerExperience = performerData.experience;
-        const performerRegistrationDate = performerData.registration_date;
+        const performerRegistrationDate = performerData.services_registration_date;
         
         const postResponseResult = postResponse(
             db,

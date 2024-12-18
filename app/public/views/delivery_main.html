@@ -6,11 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 
+    <link rel="stylesheet" href="../styles/delivery_main.css">
+
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script src="../scripts/delivery_main.js" defer></script>
+    
     <title>Сервис+Доставка</title>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="header-container">
+            <header class="header">
+                <p class="header-user-info" id="header-user-info"></p>
+                <nav id="header-nav" class="header-nav">
+                    <!-- Dynamic content depending on whether
+                        the user is performer or customer -->
+                </nav>
+            </header>
+        </div>
+
+        <div class="display-container">
+            <div id="display" class="display">
+                <!-- Dynamic content depending on which option is selected -->
+            </div>
+        </div>
+        
+        <div id="create-bid-form-modal" class="modal">
+            <div class="modal-content">
+                <p id="modal-message" class="modal-message-text"></p>
+                <button id="modal-button" class="modal-button">OK</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,3 +1,13 @@
+import { fileToBase64 } from "./utils";
+import {
+    scrollToBottom,
+    scrollInputsIntoView } from "./utils";
+import { initializeWebSocket } from "./utils";
+import { fetchPerformers } from "./utils";
+import { getQueryParameter } from "./utils";
+import { getUserData } from "./utils";
+import { showModal } from "./utils";
+
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
@@ -6,7 +16,6 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             const validatedTelegramID = userData.userData.telegram_id;
-            console.log(`User data: ${JSON.stringify(userData)}`);
             const role = userData.userData.services_role;
             const socket = initializeWebSocket(validatedTelegramID);
 
@@ -26,31 +35,6 @@ window.onload = async function () {
             document.activeElement.blur();
         };
     });    
-};
-
-
-function getQueryParameter(name) {
-    const urlParameters = new URLSearchParams(window.location.search);
-    return urlParameters.get(name);
-};
-
-
-async function getUserData(telegramID) {
-    try {
-        const response = await fetch('/get-user-data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ telegram_id: telegramID })  // Send the Telegram ID as JSON
-        })
-        
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(`Error in getUserData: ${error}`);
-        return null
-    };
 };
 
 
@@ -192,20 +176,6 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
             console.error('Error:', error);
             showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
         });
-    };
-};
-
-
-function showModal(message) {
-    const modal = document.getElementById('create-bid-form-modal');
-    const modalOkButton = document.getElementById('modal-button');
-    const modalMessage = document.getElementById('modal-message')
-
-    modal.style.visibility = 'visible';
-    modalMessage.innerHTML = message;
-
-    modalOkButton.onclick = () => {
-        modal.style.visibility = 'hidden';
     };
 };
 
@@ -690,27 +660,6 @@ async function showPerformerChats(validatedTelegramID, name, socket) {
 };
 
 
-async function fetchCustomers(validatedTelegramID) {
-    try {
-        const response = await fetch(`/responded-customers?performer_telegram_id=${validatedTelegramID}`);
-        const data = await response.json();
-
-        if (data.success && Array.isArray(data.bidsInfo)) {
-            return data.bidsInfo.map((res) => ({
-                name: res.customer_name,
-                bidID: res.id,
-                telegramID: res.customer_telegram_id
-            }));
-        } else {
-            return [];
-        };
-    } catch (error) {
-        console.error(`Error in fetchCustomers: ${error}`);
-        return [];
-    };
-};
-
-
 async function loadPerformerChatHistory(validatedTelegramID, name, customer, socket) {
     const chatHistory = document.getElementById('chat-history');
 
@@ -951,30 +900,6 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
         };
     } catch (error) {
         console.error(`Error in showCustomerChats: ${error}`);
-    };
-};
-
-
-async function fetchPerformers(validatedTelegramID) {
-    try {
-        const response = await fetch(`/responded-performers?customer_telegram_id=${validatedTelegramID}`);
-        const data = await response.json();
-        console.log(`data: ${JSON.stringify(data)}`);
-        if (data.success) {
-            return data.responses.map((res) => ({
-                name: res.performerName,
-                rate: res.performerRate,
-                experience: res.performerExperience,
-                bidID: res.bidID,
-                telegramID: res.performerTelegramID,
-                registration_date: res.performerRegistrationDate
-            }));
-        } else {
-            return [];
-        };
-    } catch (error) {
-        console.error(`Error in fetchPerformers: ${error}`);
-        return [];
     };
 };
 
@@ -1381,111 +1306,4 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
             showModal('Произошла ошибка при изменении информации о профиле.');
         };
     };
-};
-
-
-function initializeWebSocket(validatedTelegramID) {
-    if (!validatedTelegramID) {
-        console.error('Telegram ID not found, unable to initialize WebSocket');
-        return;
-    } else {
-        const socket = new WebSocket(`wss://${window.location.host}?telegramID=${validatedTelegramID}`);
-
-        socket.addEventListener('open', () => {
-            console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}`);
-        });
-
-        socket.addEventListener('close', () => {
-            console.log(`WebSocket connection closed for Telegram ID: ${validatedTelegramID}. Reconnecting...`);
-            setTimeout(() => initializeWebSocket(validatedTelegramID), 5000); // Reconnect after 5 seconds
-        });
-
-        socket.addEventListener('error', (error) => {
-            console.error(`WebSocket error for Telegram ID ${validatedTelegramID}: ${error}`);
-        });
-
-        socket.addEventListener('message', (event) => {
-            console.log(`Received message from Telegram ID ${validatedTelegramID}: ${event.data}`);
-
-            try {
-                const messageData = JSON.parse(event.data);
-
-                const normalizedData = {
-                    senderTelegramID: messageData.sender_telegram_id,
-                    senderName: messageData.sender_name,
-                    message: messageData.message,
-                    attachment: messageData.attachment
-                }
-
-                if (!normalizedData.senderName || !normalizedData.message) {
-                    console.error('Invalid message data received');
-                    return;
-                } else if (
-                    !messageData ||
-                    typeof messageData.sender_name !== 'string' ||
-                    typeof messageData.message !== 'string' ||
-                    messageData.sender_name.trim() === '' ||
-                    messageData.message.trim() === ''
-                ) {
-                    console.error('Invalid message data received');
-                    return;
-                };
-
-                console.log(`Valid message received from ${messageData.sender_name.trim()}: ${messageData.message.trim()}`);
-
-                const chatHistory = document.getElementById('chat-history');
-                if (normalizedData.attachment) {
-                    chatHistory.innerHTML += `<div class="chat-message">
-                                                ${normalizedData.senderName}
-                                                <br><br><img src="${normalizedData.attachment}" alt="Attachment">
-                                                <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
-                                              </div>`;
-                } else {
-                    chatHistory.innerHTML += `<div class="chat-message">
-                                                ${normalizedData.senderName}
-                                                <br><br>${normalizedData.message}
-                                                <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
-                                              </div>`;
-                };
-
-                const display = document.getElementById('display');
-                scrollToBottom(display);
-            } catch (error) {
-                console.error(`Error parsing message data: ${error}`);
-            };
-        });
-
-        return socket;
-    };
-};
-
-
-function scrollToBottom(element) {
-    element.scrollTop = element.scrollHeight;
-};
-
-
-function scrollInputsIntoView() {
-    const inputs = document.querySelectorAll('input, textarea');
-    inputs.forEach((input) => {
-        input.addEventListener('focus', () => {
-            setTimeout(() => {
-                input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
-        });
-    });
-};
-
-
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            // Add the MIME type to the data URL
-            const base64String = `data:${file.type};base64,${reader.result.split(',')[1]}`;
-            resolve(base64String);
-        }
-        reader.onerror = (error) => reject(error);
-        reader.readAsDataURL(file);
-    });
 };

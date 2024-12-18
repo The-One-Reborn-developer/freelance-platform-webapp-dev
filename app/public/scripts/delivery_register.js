@@ -158,7 +158,7 @@ function register() {
         };
 
         if (hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
-            showModal('Пожалуйста, укажите модель автомобиля и его размеры.');
+            showModal('Пожалуйста, укажите марку автомобиля и его размеры.');
             return;
         };
     };
@@ -175,7 +175,8 @@ function register() {
         telegram_data: telegramData,
         service: 'delivery'
     };
-    
+    console.log(JSON.stringify(data));
+
     fetch('/registration-attempt', {
         method: 'POST',
         headers: {

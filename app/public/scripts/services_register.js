@@ -43,6 +43,7 @@ window.onload = function () {
 
 
 function checkIfUserIsRegistered(telegramData) {
+    console.log(`Checking if user is registered...`);
     fetch('/check-registration', {
         method: 'POST',
         headers: {
@@ -53,6 +54,8 @@ function checkIfUserIsRegistered(telegramData) {
     .then(response => response.json())
     .then(data => {
         if (data.registered) {
+            console.log(data);
+            console.log(`User is registered. Redirecting...`);
             // Redirect if the user is registered
             window.location.href = `../views/services_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;
         };

@@ -139,6 +139,7 @@ function register() {
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();
     const hasCar = document.querySelector('input[name="has-car"]:checked');
+    const carModel = carModelInput.value.trim();
     const carDimensionsWidth = carDimensionsWidthInput.value.trim();
     const carDimensionsLength = carDimensionsLengthInput.value.trim();
     const carDimensionsHeight = carDimensionsHeightInput.value.trim();

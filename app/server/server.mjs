@@ -238,7 +238,7 @@ app.post('/respond-to-bid', (req, res) => {
         const performerTelegramID = req.body.performer_telegram_id;
         
         const performerData = getUser(db, performerTelegramID);
-        const performerName = performerData.name;
+        const performerName = performerData.services_name;
         const performerRate = performerData.rate;
         const performerExperience = performerData.experience;
         const performerRegistrationDate = performerData.services_registration_date;

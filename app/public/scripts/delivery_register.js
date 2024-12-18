@@ -135,7 +135,7 @@ function hasCar() {
 
 
 function register() {
-    const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'performer';
+    const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'courier';
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();
     const hasCar = document.querySelector('input[name="has-car"]:checked');
@@ -145,7 +145,7 @@ function register() {
     const carDimensionsHeight = carDimensionsHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    if (!name || (role === 'courier' && (!dateOfBirth || !hasCar))) {
+    if (!name || (role === 'courier' && (!name || !dateOfBirth || !hasCar))) {
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
     } else if (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {

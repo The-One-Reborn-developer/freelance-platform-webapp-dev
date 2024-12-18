@@ -17,8 +17,8 @@ export function createUsersTable(db) {
                 car_dimensions_height INTEGER,
                 registered_in_services BOOLEAN DEFAULT FALSE,
                 registered_in_delivery BOOLEAN DEFAULT FALSE,
-                services_registration_date STRING(20) NOT NULL,
-                delivery_registration_date STRING(20) NOT NULL,
+                services_registration_date STRING(20),
+                delivery_registration_date STRING(20),
                 UNIQUE(telegram_id)
             );
         `);

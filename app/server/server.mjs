@@ -99,6 +99,7 @@ app.post('/registration-attempt', (req, res) => {
     try {
         // Check which service the user is trying to register on
         const service = req.body.service;
+        console.log(`service: ${service}`);
 
         // Check telegram data
         const telegramData = req.body.telegram_data;

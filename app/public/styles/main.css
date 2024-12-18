@@ -66,7 +66,9 @@ body.keyboard-open {
 	height: 100vh;
 	display: flex;
     flex-direction: column;
-	background-color: lightsteelblue;
+	background: #F0F2F0;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #000C40, #F0F2F0);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #000C40, #F0F2F0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .header-container {
@@ -121,6 +123,12 @@ body.keyboard-open {
 	overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal overflow */
 	max-height: 80vh;
+}
+
+.form {
+	background-color: white;
+	border: solid 4px black;
+	padding: 20px;
 }
 
 .form-title {

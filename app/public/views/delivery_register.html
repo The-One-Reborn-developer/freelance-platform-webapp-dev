@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+    <link rel="stylesheet" href="../styles/delivery_register.css">
+    
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script src="../scripts/delivery_register.js" defer></script>
+    
+    <title>Сервис+Услуги</title>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <button id="customer-button" class="register-form-button">Я — заказчик 🤵‍♂️</button>
+            <button id="delivery-button" class="register-form-button">Я — доставщик 🚚</button>
+
+            <label for="name-input" id="name-label" class="register-form-label">Введите ФИО 📜</label>
+            <input type="text" id="name-input" class="register-form-input">
+
+            <label for="rate-input" id="rate-label" class="register-form-label">Введите свою ставку в ₽/час</label>
+            <input type="number" id="rate-input" class="register-form-input">
+
+            <label for="experience-input" id="experience-label" class="register-form-label">Введите свой стаж в годах</label>
+            <input type="number" id="experience-input" class="register-form-input">
+
+            <button id="register-button" class="register-form-button">Зарегистрироваться ✅</button>
+        </div>
+
+        <div id="registration-modal" class="modal">
+            <div class="modal-content">
+                <p id="modal-message" class="modal-message-text"></p>
+                <button id="modal-button" class="register-form-button">OK</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

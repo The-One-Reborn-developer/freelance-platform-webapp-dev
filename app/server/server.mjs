@@ -118,13 +118,15 @@ app.post('/registration-attempt', (req, res) => {
                 carDimensionsHeight,
                 service
             } = req.body;
-            
+
             postUser(
                 db,
                 res,
                 telegramID,
                 role,
                 name,
+                rate,
+                experience,
                 dateOfBirth,
                 hasCar,
                 carModel,

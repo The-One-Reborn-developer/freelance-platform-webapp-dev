@@ -47,7 +47,7 @@ export function postUser(
                 const insertUser = db.prepare(
                     `INSERT INTO users (telegram_id,
                                         services_role,
-                                        name,
+                                        services_name,
                                         rate,
                                         experience,
                                         registered_in_services,
@@ -70,7 +70,7 @@ export function postUser(
                 const insertUser = db.prepare(
                     `INSERT INTO users (telegram_id,
                                         delivery_role,
-                                        name,
+                                        delivery_name,
                                         date_of_birth,
                                         has_car,
                                         car_model,
@@ -113,7 +113,7 @@ export function postUser(
                 const updateUser = db.prepare(
                     `UPDATE users SET 
                         services_role = ?,
-                        name = ?,
+                        services_name = ?,
                         rate = ?,
                         experience = ?,
                         registered_in_services = 1,
@@ -146,7 +146,7 @@ export function postUser(
                 const updateUser = db.prepare(
                     `UPDATE users SET 
                         delivery_role = ?,
-                        name = ?,
+                        delivery_name = ?,
                         date_of_birth = ?,
                         has_car = ?,
                         car_model = ?,

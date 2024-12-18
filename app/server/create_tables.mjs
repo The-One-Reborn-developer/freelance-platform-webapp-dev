@@ -14,8 +14,8 @@ export function createUsersTable(db) {
                 car_dimensions_width INTEGER,
                 car_dimensions_length INTEGER,
                 car_dimensions_height INTEGER,
-                registration_date STRING(20) NOT NULL,
                 service STRING(20) NOT NULL,
+                registration_date STRING(20) NOT NULL,
                 UNIQUE(telegram_id)
             );
         `);

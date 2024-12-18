@@ -34,7 +34,7 @@ export function postUser(
             res.status(409).json({ message: 'Имя ' + name + ' уже занято.' });
             return;
         };
-
+        console.log(`Service: ${service}`);
         // Insert the new user
         const insertUser = db.prepare(
             `INSERT INTO users (

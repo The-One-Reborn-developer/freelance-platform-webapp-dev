@@ -1,11 +1,8 @@
 import crypto from 'crypto';
 
 
-export function checkTelegramData(req, res) {
+export function checkTelegramData(telegramData, res) {
     try {
-        const { role, name, rate, experience } = req.body;
-        const telegramData = req.body.telegram_data;
-
         if (typeof telegramData !== 'string' || !telegramData) {
             res.status(400).json({ message: 'Телеграм-данные не в корректном формате.' });
             return;
@@ -56,7 +53,7 @@ export function checkTelegramData(req, res) {
             return;
         };
 
-        return { telegramID, role, name, rate, experience };
+        return telegramID;
     } catch (error) {
         console.error('Error in checkTelegramData:', error);
         res.status(400).json({ message: 'Ошибка обработки телеграм-данных.' });

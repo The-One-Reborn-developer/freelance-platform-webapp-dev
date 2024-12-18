@@ -1,4 +1,19 @@
-export function postUser(db, res, telegramID, role, name, rate, experience) {
+export function postUser(
+    db,
+    res,
+    telegramID,
+    role,
+    name,
+    rate,
+    experience,
+    dateOfBirth,
+    hasCar,
+    carModel,
+    carDimensionsWidth,
+    carDimensionsLength,
+    carDimensionsHeight,
+    service
+) {
     try {
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
@@ -22,7 +37,20 @@ export function postUser(db, res, telegramID, role, name, rate, experience) {
 
         // Insert the new user
         const insertUser = db.prepare(
-            'INSERT INTO users (telegram_id, role, name, rate, experience, registration_date) VALUES (?, ?, ?, ?, ?, ?)'
+            `INSERT INTO users (
+            telegram_id,
+            role,
+            name,
+            rate,
+            experience,
+            date_of_birth,
+            has_car,
+            car_model,
+            car_dimensions_width,
+            car_dimensions_length,
+            car_dimensions_height,
+            service,
+            registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         );
         const registrationDate = new Date().toLocaleString(
             'ru-RU',
@@ -34,7 +62,21 @@ export function postUser(db, res, telegramID, role, name, rate, experience) {
                 month: 'numeric',
                 day: 'numeric'
             });
-        const insertUserResult = insertUser.run(telegramID, role, name, rate, experience, registrationDate);
+        const insertUserResult = insertUser.run(
+            telegramID,
+            role,
+            name,
+            rate,
+            experience,
+            dateOfBirth,
+            hasCar,
+            carModel,
+            carDimensionsWidth,
+            carDimensionsLength,
+            carDimensionsHeight,
+            service,
+            registrationDate
+        );
         res.status(201).json({
             success: true,
             message: 'Пользователь ' + name +

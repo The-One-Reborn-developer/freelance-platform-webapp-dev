@@ -174,7 +174,7 @@ function register() {
 function showModal(message, isSuccess, telegramID) {
     const modal = document.getElementById('registration-modal');
     const modalOkButton = document.getElementById('modal-button');
-    const modalMessage = document.getElementById('modal-message')
+    const modalMessage = document.getElementById('modal-message');
 
     modal.style.visibility = 'visible';
     modalMessage.textContent = message;

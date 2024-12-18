@@ -97,22 +97,47 @@ app.post('/check-registration', (req, res) => {
 
 app.post('/registration-attempt', (req, res) => {
     try {
-        // Check telegram data
-        const checkTelegramDataResult = checkTelegramData(req, res);
+        // Check which service the user is trying to register on
+        const service = req.body.service;
 
-        if (!checkTelegramDataResult) {
-            return;
+        // Check telegram data
+        const telegramData = req.body.telegram_data;
+        const telegramID = checkTelegramData(telegramData, res);
+
+        if (!telegramID) {
+            console.error('Error in /registration-attempt: Telegram ID not found');
+            res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
         } else {
-            // Post the new user
-            postUser(
-                db,
-                res,
-                checkTelegramDataResult.telegramID,
-                checkTelegramDataResult.role,
-                checkTelegramDataResult.name,
-                checkTelegramDataResult.rate,
-                checkTelegramDataResult.experience,
-            );
+            // Post the new user for services
+            if (service === 'services') {
+                const { role, name, rate, experience } = req.body;
+                postUser(
+                    db,
+                    res,
+                    telegramID,
+                    role,
+                    name,
+                    rate,
+                    experience,
+                    service
+                );
+            } else if (service === 'delivery') {
+                const { role, name, dateOfBirth, hasCar, carModel, carDimensionsWidth, carDimensionsLength, carDimensionsHeight } = req.body;
+                postUser(
+                    db,
+                    res,
+                    telegramID,
+                    role,
+                    name,
+                    dateOfBirth,
+                    hasCar,
+                    carModel,
+                    carDimensionsWidth,
+                    carDimensionsLength,
+                    carDimensionsHeight,
+                    service
+                );
+            };
         };
     } catch (error) {
         console.error('Error in /registration-attempt:', error);

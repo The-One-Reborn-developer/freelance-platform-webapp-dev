@@ -84,9 +84,13 @@ body {
 	background-color: white;
 }
 
+.has-car-container {
+	display: flex;
+}
+
 .car-dimensions-container {
 	display: flex;
-	gap: 10px;
+	gap: 5px;
 }
 
 .register-form-button {

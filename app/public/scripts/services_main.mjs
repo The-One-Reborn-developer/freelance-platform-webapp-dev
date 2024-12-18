@@ -40,6 +40,40 @@ window.onload = async function () {
 };
 
 
+function setupCustomerInterface(validatedTelegramID, userData, socket) {
+    const name = userData.userData.services_name;
+    const registrationDate = userData.userData.services_registration_date;
+
+    insertCustomerButtons(name, registrationDate);
+
+    const createBidButton = document.getElementById('create-bid');
+    createBidButton.addEventListener('click', async function () {
+        await showCreateBidForm();
+
+        // Attach submit form event listener
+        const createBidForm = document.getElementById('create-bid-form');
+        if (createBidForm) {
+            createBidForm.addEventListener('submit', function (event) {
+                handleBidFormSubmit(event, validatedTelegramID, name);
+            });
+        };
+    });
+
+    const myBidsButton = document.getElementById('my-bids');
+    myBidsButton.addEventListener('click', async function () {
+        await showMyBids(validatedTelegramID);
+    });
+
+    const lookChatsButton = document.getElementById('look-chats');
+    lookChatsButton.addEventListener('click', async function () {
+        const display = document.getElementById('display');
+        display.classList.remove('view-mode');
+
+        await showCustomerChats(validatedTelegramID, name, socket);
+    });
+};
+
+
 function insertCustomerButtons(name, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
@@ -125,7 +159,7 @@ async function showCreateBidForm() {
 
             if (!response.ok) {
                 display.textContent = 'Произошла ошибка при загрузке формы создания заказа, попробуйте перезайти в приложение';
-                throw new Error('Failed to load create_bid_form.html');
+                console.error('Failed to load create_bid_form.html');
             } else {
                 const formHTML = await response.text();
 
@@ -163,7 +197,7 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
             instrument_provided: instrumentProvided.value
         };
 
-        fetch('/post-bid', {
+        fetch('/post-service-bid', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -821,40 +855,6 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 showModal('Произошла ошибка при отправке файла');
             };
         };
-    });
-};
-
-
-function setupCustomerInterface(validatedTelegramID, userData, socket) {
-    const name = userData.userData.services_name;
-    const registrationDate = userData.userData.services_registration_date;
-
-    insertCustomerButtons(name, registrationDate);
-
-    const createBidButton = document.getElementById('create-bid');
-    createBidButton.addEventListener('click', async function () {
-        await showCreateBidForm();
-
-        // Attach submit form event listener
-        const createBidForm = document.getElementById('create-bid-form');
-        if (createBidForm) {
-            createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, validatedTelegramID, name);
-            });
-        };
-    });
-
-    const myBidsButton = document.getElementById('my-bids');
-    myBidsButton.addEventListener('click', async function () {
-        await showMyBids(validatedTelegramID);
-    });
-
-    const lookChatsButton = document.getElementById('look-chats');
-    lookChatsButton.addEventListener('click', async function () {
-        const display = document.getElementById('display');
-        display.classList.remove('view-mode');
-
-        await showCustomerChats(validatedTelegramID, name, socket);
     });
 };
 

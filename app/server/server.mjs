@@ -15,7 +15,7 @@ import { checkTelegramData } from "./check_telegram_data.mjs";
 import { postUser } from "./post_user.mjs";
 import { checkUserTelegram } from "./check_user_telegram.mjs";
 import { getUser } from "./get_user.mjs";
-import { postBid } from "./post_bid.mjs";
+import { postServiceBid } from "./post_service_bid.mjs";
 import { getOpenBidsByCustomerTelegramID } from "./get_open_bids_by_customer_telegram_id.mjs";
 import { updateCloseBid } from "./update_close_bid.mjs";
 import { getBidsByCity } from "./get_bids_by_city.mjs";
@@ -157,7 +157,7 @@ app.post('/get-user-data', (req, res) => {
 });
 
 
-app.post('/post-bid', (req, res) => {
+app.post('/post-service-bid', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
         const customerName = req.body.customer_name;
@@ -168,7 +168,7 @@ app.post('/post-bid', (req, res) => {
         const instrumentProvided = req.body.instrument_provided;
 
         // Post the new bid
-        postBid(
+        postServiceBid(
             db,
             res,
             customerTelegramID,
@@ -180,7 +180,7 @@ app.post('/post-bid', (req, res) => {
             instrumentProvided
         );
     } catch (error) {
-        console.error('Error in /post-bid:', error);
+        console.error('Error in /post-service-bid:', error);
         res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
 });

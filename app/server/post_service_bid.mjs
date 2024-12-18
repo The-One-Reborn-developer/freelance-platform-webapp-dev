@@ -1,4 +1,4 @@
-export function postBid(
+export function postServiceBid(
     db,
     res,
     customerTelegramID,

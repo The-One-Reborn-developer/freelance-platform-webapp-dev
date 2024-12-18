@@ -774,7 +774,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
         if (file) {
             const formData = new FormData();
             formData.append('attachment', file);
-            formData.append('bid_id', performer.bidID);
+            formData.append('bid_id', customer.bidID);
             formData.append('customer_telegram_id', customer.telegramID);
             formData.append('performer_telegram_id', validatedTelegramID);
             formData.append('sender_type', 'performer');

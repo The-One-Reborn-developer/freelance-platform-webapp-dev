@@ -6,7 +6,7 @@ export function checkUserTelegram(db, telegramID, service) {
             );
             const checkUserTelegramResult = checkUserTelegram.get(telegramID);
             return checkUserTelegramResult;   
-        } else if (service === 'deliveries') {
+        } else if (service === 'delivery') {
             const checkUserTelegram = db.prepare(
                 'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_deliveries = 1'
             );

@@ -15,18 +15,14 @@ export function postUser(
     service
 ) {
     try {
-        console.log(`Registering user with ID: ${telegramID}
-        Role: ${role}
-        Name: ${name}
-        Rate: ${rate}
-        Experience: ${experience}
-        Date of Birth: ${dateOfBirth}
-        Has Car: ${hasCar}
-        Car Model: ${carModel}
-        Car Dimensions Width: ${carDimensionsWidth}
-        Car Dimensions Length: ${carDimensionsLength}
-        Car Dimensions Height: ${carDimensionsHeight}
-        Service: ${service}`);
+        const sanitizedRate = sanitizeData(rate);
+        const sanitizedExperience = sanitizeData(experience);
+        const sanitizedDateOfBirth = sanitizeData(dateOfBirth);
+        const sanitizedHasCar = sanitizeData(hasCar);
+        const sanitizedCarModel = sanitizeData(carModel);
+        const sanitizedCarDimensionsWidth = sanitizeData(carDimensionsWidth);
+        const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
+        const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
             'SELECT COUNT(*) as count FROM users WHERE telegram_id = ?'
@@ -75,8 +71,8 @@ export function postUser(
                 telegramID,
                 role,
                 name,
-                rate,
-                experience,
+                sanitizedRate,
+                sanitizedExperience,
                 true,
                 registrationDate
             );
@@ -100,12 +96,11 @@ export function postUser(
                 telegramID,
                 role,
                 name,
-                dateOfBirth,
-                hasCar,
-                carModel,
-                carDimensionsWidth,
-                carDimensionsLength,
-                carDimensionsHeight,
+                sanitizedDateOfBirth,
+                sanitizedHasCar,
+                sanitizedCarModel,
+                sanitizedCarDimensionsWidth,
+                sanitizedCarDimensionsLength,
                 true,
                 registrationDate
             );
@@ -122,4 +117,9 @@ export function postUser(
         console.error('Error in postUser:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });
     };
+};
+
+
+function sanitizeData(input) {
+    return value === undefined ? null : value;
 };

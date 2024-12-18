@@ -142,49 +142,61 @@ function register() {
     const carDimensionsHeight = carDimensionsHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    if (!name || (role === 'courier' && (!name || !dateOfBirth || !noCar))) {
-        console.log(``)
-        showModal('Пожалуйста, заполните все необходимые поля.');
+    if (!name) {
+        showModal('Пожалуйста, укажите имя.');
         return;
-    } else if (!name || (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight))) {
-        console.log(`role: ${role}, name: ${name}, dateOfBirth: ${dateOfBirth}, hasCar: ${hasCar}, carModel: ${carModel}, carDimensionsWidth: ${carDimensionsWidth}, carDimensionsLength: ${carDimensionsLength}, carDimensionsHeight: ${carDimensionsHeight}`);
-        showModal('Пожалуйста, заполните все необходимые поля.');
-        return;
-    } else {
-        const data = {
-            role,
-            name,
-            date_of_birth: dateOfBirth,
-            has_car: hasCar,
-            car_model: carModel,
-            car_dimensions_width: carDimensionsWidth,
-            car_dimensions_length: carDimensionsLength,
-            car_dimensions_height: carDimensionsHeight,
-            telegram_data: telegramData,
-            service: 'delivery'
+    }
+    if (role === 'courier') {
+        if (!dateOfBirth) {
+            showModal('Пожалуйста, укажите дату рождения.');
+            return;
         };
-        
-        fetch('/registration-attempt', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Registration is successful
-                showModal(data.message, true, data.telegram_id);
-            } else {
-                // Registration failed
-                showModal(data.message, false, null);
-            };
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+
+        if (!hasCar && !noCar) {
+            showModal('Пожалуйста, укажите, есть ли у Вас автомобиль.');
+            return;
+        };
+
+        if (hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
+            showModal('Пожалуйста, укажите модель автомобиля и его размеры.');
+            return;
+        };
     };
+
+    const data = {
+        role,
+        name,
+        date_of_birth: dateOfBirth,
+        has_car: hasCar,
+        car_model: carModel,
+        car_dimensions_width: carDimensionsWidth,
+        car_dimensions_length: carDimensionsLength,
+        car_dimensions_height: carDimensionsHeight,
+        telegram_data: telegramData,
+        service: 'delivery'
+    };
+    
+    fetch('/registration-attempt', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Registration is successful
+            showModal(data.message, true, data.telegram_id);
+        } else {
+            // Registration failed
+            showModal(data.message, false, null);
+        };
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showModal('Произошла ошибка при регистрации, попробуйте перезайти в приложение', false, null);
+    });
 };
 
 

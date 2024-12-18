@@ -21,6 +21,8 @@ export function postBid(
             VALUES (?, ?, ?, ?, ?, ?, ?)`
         );
         
+        const sanitizedInstrumentProvided = instrumentProvided === 'true' ? 1 : 0;
+
         const postBidResult = postBid.run(
             customerTelegramID,
             customerName,
@@ -28,7 +30,7 @@ export function postBid(
             description,
             deadlineFrom,
             deadlineTo,
-            instrumentProvided
+            sanitizedInstrumentProvided
         );
         
         const newBidID = postBidResult.lastInsertRowid;

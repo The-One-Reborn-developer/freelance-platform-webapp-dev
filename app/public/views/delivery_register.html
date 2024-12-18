@@ -19,17 +19,35 @@
     <div class="container">
         <div class="registration-form">
             <button id="customer-button" class="register-form-button">Я — заказчик 🤵‍♂️</button>
-            <button id="delivery-button" class="register-form-button">Я — доставщик 🚚</button>
+            <button id="courier-button" class="register-form-button">Я — курьер 🚚</button>
 
             <label for="name-input" id="name-label" class="register-form-label">Введите ФИО 📜</label>
             <input type="text" id="name-input" class="register-form-input">
 
-            <label for="rate-input" id="rate-label" class="register-form-label">Введите свою ставку в ₽/час</label>
-            <input type="number" id="rate-input" class="register-form-input">
+            <label for="date-of-birth-input" id="date-of-birth-label" class="register-form-label">Выберите дату рождения 📅</label>
+            <input type="date" id="date-of-birth-input" class="register-form-input">
 
-            <label for="experience-input" id="experience-label" class="register-form-label">Введите свой стаж в годах</label>
-            <input type="number" id="experience-input" class="register-form-input">
+            <label for="has-car-container" id="has-car-label" class="register-form-label">Есть ли у Вас автомобиль?</label>
+            <div id="has-car-container" class="has-car-container">
+                <label for="has-car-input-true">Да</label>
+                <input type="radio" id="has-car-input-true" class="register-form-input" value="true">
+                <label for="has-car-input-false">Нет</label>
+                <input type="radio" id="has-car-input-false" class="register-form-input" value="false">
+            </div>
 
+            <label for="car-model-input" id="car-model-label" class="register-form-label">Введите марку автомобиля</label>
+            <input type="text" id="car-model-input" class="register-form-input">
+
+            <label for="car-dimensions-input" id="car-dimensions-label" class="register-form-label">Введите габариты автомобиля (в метрах)</label>
+            <div id="car-dimensions-container" class="car-dimensions-container">
+                <label for="car-dimensions-width-input">Ширина:</label>
+                <input type="number" id="car-dimensions-width-input" class="register-form-input">
+                <label for="car-dimensions-length-input">Длина:</label>
+                <input type="number" id="car-dimensions-length-input" class="register-form-input">
+                <label for="car-dimensions-height-input">Высота:</label>
+                <input type="number" id="car-dimensions-height-input" class="register-form-input">
+            </div>
+            
             <button id="register-button" class="register-form-button">Зарегистрироваться ✅</button>
         </div>
 

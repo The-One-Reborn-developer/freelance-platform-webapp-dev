@@ -1,27 +1,40 @@
 window.Telegram.WebApp.disableVerticalSwipes()
 
 const customerButton = document.getElementById('customer-button');
-const performerButton = document.getElementById('performer-button');
+const courierButton = document.getElementById('courier-button');
 const registerButton = document.getElementById('register-button');
 const nameInput = document.getElementById('name-input');
 const nameLabel = document.getElementById('name-label');
-const rateInput = document.getElementById('rate-input');
-const rateLabel = document.getElementById('rate-label');
-const experienceInput = document.getElementById('experience-input');
-const experienceLabel = document.getElementById('experience-label');
+const dateOfBirthInput = document.getElementById('date-of-birth-input');
+const dateOfBirthLabel = document.getElementById('date-of-birth-label');
+const hasCarContainer = document.getElementById('has-car-container');
+const hasCarInputTrue = document.getElementById('has-car-input-true');
+const hasCarInputFalse = document.getElementById('has-car-input-false');
+const hasCarLabel = document.getElementById('has-car-label');
+const carModelInput = document.getElementById('car-model-input');
+const carModelLabel = document.getElementById('car-model-label');
+const carDimensionsContainer = document.getElementById('car-dimensions-container');
+const carDimensionsWidthInput = document.getElementById('car-dimensions-width-input');
+const carDimensionsLengthInput = document.getElementById('car-dimensions-length-input');
+const carDimensionsHeightInput = document.getElementById('car-dimensions-height-input');
+const carDimensionsLabel = document.getElementById('car-dimensions-label');
 
 customerButton.addEventListener('click', chooseCustomer);
-performerButton.addEventListener('click', choosePerformer);
+courierButton.addEventListener('click', chooseCourier);
 registerButton.addEventListener('click', register);
 
 
 function initializePage() {
     nameInput.style.display = 'none';
     nameLabel.style.display = 'none';
-    rateInput.style.display = 'none';
-    rateLabel.style.display = 'none';
-    experienceInput.style.display = 'none';
-    experienceLabel.style.display = 'none';
+    dateOfBirthInput.style.display = 'none';
+    dateOfBirthLabel.style.display = 'none';
+    hasCarContainer.style.display = 'none';
+    hasCarLabel.style.display = 'none';
+    carModelInput.style.display = 'none';
+    carModelLabel.style.display = 'none';
+    carDimensionsContainer.style.display = 'none';
+    carDimensionsLabel.style.display = 'none';
     registerButton.style.display = 'none';
 };
 
@@ -48,13 +61,13 @@ function checkIfUserIsRegistered(telegramData) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ service: 'services', telegram_data: telegramData })  // Send the Telegram data as JSON
+        body: JSON.stringify({ service: 'delivery', telegram_data: telegramData })  // Send the Telegram data as JSON
     })
     .then(response => response.json())
     .then(data => {
         if (data.registered) {
             console.log(data);
-            window.location.href = `services_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
+            window.location.href = `main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         };
     })
     .catch(error => {
@@ -67,30 +80,38 @@ function chooseCustomer() {
     // Show only the name input and label
     nameInput.style.display = '';
     nameLabel.style.display = '';
-    rateInput.style.display = 'none';
-    rateLabel.style.display = 'none';
-    experienceInput.style.display = 'none';
-    experienceLabel.style.display = 'none';
+    dateOfBirthInput.style.display = 'none';
+    dateOfBirthLabel.style.display = 'none';
+    hasCarContainer.style.display = 'none';
+    hasCarLabel.style.display = 'none';
+    carModelInput.style.display = 'none';
+    carModelLabel.style.display = 'none';
+    carDimensionsContainer.style.display = 'none';
+    carDimensionsLabel.style.display = 'none';
     registerButton.style.display = '';
 
     // Highlight the selected button
     customerButton.style.backgroundColor = 'darkgrey';
-    performerButton.style.backgroundColor = '';
+    courierButton.style.backgroundColor = '';
 };
 
 
-function choosePerformer() {
+function chooseCourier() {
     // Show name, rate, and experience inputs and labels
     nameInput.style.display = '';
     nameLabel.style.display = '';
-    rateInput.style.display = '';
-    rateLabel.style.display = '';
-    experienceInput.style.display = '';
-    experienceLabel.style.display = '';
+    dateOfBirthInput.style.display = '';
+    dateOfBirthLabel.style.display = '';
+    hasCarContainer.style.display = '';
+    hasCarLabel.style.display = '';
+    carModelInput.style.display = '';
+    carModelLabel.style.display = '';
+    carDimensionsContainer.style.display = '';
+    carDimensionsLabel.style.display = '';
     registerButton.style.display = '';
 
     // Highlight the selected button
-    performerButton.style.backgroundColor = 'darkgrey';
+    courierButton.style.backgroundColor = 'darkgrey';
     customerButton.style.backgroundColor = '';
 };
 
@@ -98,21 +119,32 @@ function choosePerformer() {
 function register() {
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'performer';
     const name = nameInput.value.trim();
-    const rate = rateInput.value.trim();
-    const experience = experienceInput.value.trim();
+    const dateOfBirth = dateOfBirthInput.value.trim();
+    const hasCar = hasCarInputTrue.checked;
+    const carModel = carModelInput.value.trim();
+    const carDimensionsWidth = carDimensionsWidthInput.value.trim();
+    const carDimensionsLength = carDimensionsLengthInput.value.trim();
+    const carDimensionsHeight = carDimensionsHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    if (!name || (role === 'performer' && (!rate || !experience))) {
+    if (!name || (role === 'courier' && (!dateOfBirth || !hasCar))) {
+        showModal('Пожалуйста, заполните все необходимые поля.');
+        return;
+    } else if (role === 'courier' && hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
         showModal('Пожалуйста, заполните все необходимые поля.');
         return;
     } else {
         const data = {
             role,
             name,
-            rate,
-            experience,
+            date_of_birth: dateOfBirth,
+            has_car: hasCar,
+            car_model: carModel,
+            car_dimensions_width: carDimensionsWidth,
+            car_dimensions_length: carDimensionsLength,
+            car_dimensions_height: carDimensionsHeight,
             telegram_data: telegramData,
-            service: 'services'
+            service: 'delivery'
         };
         
         fetch('/registration-attempt', {
@@ -152,7 +184,7 @@ function showModal(message, isSuccess, telegramID) {
 
         // If registration is successful, redirect
         if (isSuccess) {
-            window.location.href = `services_main.html?telegram_id=${encodeURIComponent(telegramID)}`;  // Redirect if the user is registered
+            window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(telegramID)}`;  // Redirect if the user is registered
         };
     };
 };

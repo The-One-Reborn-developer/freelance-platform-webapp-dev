@@ -4,9 +4,17 @@ A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bid
 
 ## Features
 
-* Creating and searching bids by city *in progress*
-* Save chat history between customer and performer *in progress*
-* Show chat history between customer and performer to other customers and performers when needed *in progress*
+### Services
+
+* Creating and searching bids by city
+* Save chat history between customer and performer
+* Show chat history between customer and performer to other customers and performers when needed
+
+### Delivery
+
+* Creating and searching bids by city _in progress_
+* Save chat history between customer and courier _in progress_
+* Show chat history between customer and courier to other customers and couriers when needed _in progress_
 
 ## Dependencies
 

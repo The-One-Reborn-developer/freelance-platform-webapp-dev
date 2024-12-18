@@ -77,14 +77,16 @@ app.post('/check-registration', (req, res) => {
         if (!checkTelegramDataResult) {
             return;
         } else {
-            // Check if the user is already registered
-            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegramID);
+            // What service is the user accessing
+            const service = req.body.service;
+
+            const checkUserTelegramResult = checkUserTelegram(db, checkTelegramDataResult.telegramID, service);
 
             if (checkUserTelegramResult.count > 0) {
                 return res.status(200).json({ registered: true, telegram_id: checkTelegramDataResult.telegramID });
             } else {
                 return res.status(200).json({ registered: false });
-            }
+            };
         };
     } catch (error) {
         console.error('Error in /check-registration:', error);

@@ -9,6 +9,7 @@ export function createUsersTable(db) {
                 rate INTEGER NOT NULL,
                 experience INTEGER NOT NULL,
                 registration_date STRING(20) NOT NULL,
+                service STRING(20) NOT NULL,
                 UNIQUE(telegram_id)
             );
         `);

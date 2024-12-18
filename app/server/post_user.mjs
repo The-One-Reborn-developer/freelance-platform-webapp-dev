@@ -56,7 +56,7 @@ export function postUser(
                 rate,
                 experience,
                 registered_in_services,
-                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
             );
             
             const insertUserResult = insertUser.run(
@@ -81,7 +81,7 @@ export function postUser(
                 car_dimensions_length,
                 car_dimensions_height,
                 registered_in_deliveries,
-                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
             );
             
             const insertUserResult = insertUser.run(

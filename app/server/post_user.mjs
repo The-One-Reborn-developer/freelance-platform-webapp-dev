@@ -86,6 +86,15 @@ export function postUser(
                 registered_in_services,
                 registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
             );
+
+            console.log(`
+                ${typeof telegramID}
+                ${typeof role}
+                ${typeof name}
+                ${typeof sanitizedRate}
+                ${typeof sanitizedExperience}
+                ${typeof registrationDate}
+            `);
             
             const insertUserResult = insertUser.run(
                 telegramID,

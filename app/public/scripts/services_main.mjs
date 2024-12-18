@@ -5,6 +5,7 @@ import {
 } from "./utils/index.mjs";
 import { initializeWebSocket } from "./utils/index.mjs";
 import { fetchPerformers } from "./utils/index.mjs";
+import { fetchCustomers } from "./utils/index.mjs";
 import { getQueryParameter } from "./utils/index.mjs";
 import { getUserData } from "./utils/index.mjs";
 import { showModal } from "./utils/index.mjs";

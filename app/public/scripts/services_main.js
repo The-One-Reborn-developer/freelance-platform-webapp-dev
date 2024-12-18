@@ -6,6 +6,7 @@ window.onload = async function () {
         try {
             const userData = await getUserData(telegramID);
             const validatedTelegramID = userData.userData.telegram_id;
+            console.log(`User data: ${JSON.stringify(userData)}`);
             const role = userData.userData.role;
             const socket = initializeWebSocket(validatedTelegramID);
 

@@ -16,9 +16,6 @@ export function postUser(
 ) {
     try {
         // Sanitize data
-        const sanitizedTelegramID = sanitizeData(String(telegramID));
-        const sanitizedRole = sanitizeData(role);
-        const sanitizedName = sanitizeData(name);
         const sanitizedRate = sanitizeData(rate);
         const sanitizedExperience = sanitizeData(experience);
         const sanitizedDateOfBirth = sanitizeData(dateOfBirth);
@@ -27,21 +24,6 @@ export function postUser(
         const sanitizedCarDimensionsWidth = sanitizeData(carDimensionsWidth);
         const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
         const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
-
-        console.log(`
-            Telegram ID: ${sanitizedTelegramID}
-            Role: ${sanitizedRole}
-            Name: ${sanitizedName}
-            Rate: ${sanitizedRate}
-            Experience: ${sanitizedExperience}
-            Date of Birth: ${sanitizedDateOfBirth}
-            Has Car: ${sanitizedHasCar}
-            Car Model: ${sanitizedCarModel}
-            Car Dimensions Width: ${sanitizedCarDimensionsWidth}
-            Car Dimensions Length: ${sanitizedCarDimensionsLength}
-            Car Dimensions Height: ${sanitizedCarDimensionsHeight}
-            Service: ${service}
-        `);
 
         // Check if the user is already registered
         const checkUserTelegram = db.prepare(
@@ -86,15 +68,6 @@ export function postUser(
                 registered_in_services,
                 registration_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
             );
-
-            console.log(`
-                ${typeof telegramID}
-                ${typeof role}
-                ${typeof name}
-                ${typeof sanitizedRate}
-                ${typeof sanitizedExperience}
-                ${typeof registrationDate}
-            `);
             
             const insertUserResult = insertUser.run(
                 telegramID,

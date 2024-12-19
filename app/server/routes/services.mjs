@@ -8,6 +8,7 @@ import {
     getChatMessages,
     getOpenBidsByCustomerTelegramID,
     getResponses,
+    getBidByBidID,
     getResponsesByBidIDWithChatStarted,
     getResponsesByPerformerTelegramIDWithChatStarted,
     postBid,

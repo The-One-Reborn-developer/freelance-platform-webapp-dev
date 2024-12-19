@@ -289,35 +289,35 @@ async function showMyDeliveries(validatedTelegramID) {
                 throw new Error('Failed to load my-bids');
             };
 
-            const { success, bids } = await response.json();
+            const { success, deliveries } = await response.json();
 
-            if (success && bids.length > 0) {
-                const bidsContainer = document.createElement('div');
-                bidsContainer.classList.add('bids-container');
+            if (success && deliveries.length > 0) {
+                const deliveriesContainer = document.createElement('div');
+                deliveriesContainer.classList.add('deliveries-container');
 
-                bids.forEach((bid) => {
-                    const bidCard = document.createElement('div');
-                    bidCard.classList.add('bid-card');
+                deliveries.forEach((delivery) => {
+                    const deliveryCard = document.createElement('div');
+                    deliveryCard.classList.add('delivery-card');
 
-                    bidCard.innerHTML = `
-                        <h3>Заказ #${bid.id}</h3>
+                    deliveryCard.innerHTML = `
+                        <h3>Заказ #${delivery.id}</h3>
                         <br>
-                        <p>Город: ${bid.city}</p>
+                        <p>Город: ${delivery.city}</p>
                         <br>
-                        <p>Что нужно доставить, описание: ${bid.description}</p>
+                        <p>Что нужно доставить, описание: ${delivery.description}</p>
                         <br>
-                        <p>Откуда: ${bid.deliver_from}</p>
-                        <p>Куда: ${bid.deliver_to}</p>
+                        <p>Откуда: ${delivery.deliver_from}</p>
+                        <p>Куда: ${delivery.deliver_to}</p>
                         <br>
-                        <p>Нужна машина: ${(bid.car_necessary === 1) ? 'Да' : 'Нет'}</p>
-                        <button class="bid-card-button" data-bid-id="${bid.id}">Закрыть заказ 🔐</button>
+                        <p>Нужна машина: ${(delivery.car_necessary === 1) ? 'Да' : 'Нет'}</p>
+                        <button class="delivery-card-button" data-delivery-id="${delivery.id}">Закрыть заказ 🔐</button>
                     `;
 
-                    const closeBidButton = bidCard.querySelector('.bid-card-button');
-                    closeBidButton.addEventListener('click', async (event) => {
-                        const bidID = event.target.getAttribute('data-bid-id');
+                    const closeDeliveryButton = deliveryCard.querySelector('.delivery-card-button');
+                    closeDeliveryButton.addEventListener('click', async (event) => {
+                        const deliveryID = event.target.getAttribute('data-delivery-id');
 
-                        if (bidID) {
+                        if (deliveryID) {
                             const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
                             if (confirmation) {
                                 try {
@@ -326,33 +326,33 @@ async function showMyDeliveries(validatedTelegramID) {
                                         headers: {
                                             'Content-Type': 'application/json'
                                         },
-                                        body: JSON.stringify({ bid_id: bidID })  // Send the Telegram ID as JSON
+                                        body: JSON.stringify({ delivery_id: deliveryID })
                                     });
 
                                     if (!response.ok) {
                                         showModal('Произошла ошибка при закрытии заказа, попробуйте перезайти в приложение');
-                                        console.error('Failed to close bid');
+                                        console.error('Failed to close delivery');
                                     } else {
                                         const { success, message } = await response.json();
                                         if (success) {
                                             showModal(message);
-                                            showMyBids(validatedTelegramID);
+                                            showMyDeliveries(validatedTelegramID);
                                         };
                                     };
                                 } catch (error) {
-                                    console.error(`Error in close-delivery-bid: ${error}`);
+                                    console.error(`Error in showMyDeliveries: ${error}`);
                                 };
                             };
                         };
                     });
-                    bidsContainer.appendChild(bidCard);
+                    deliveriesContainer.appendChild(deliveryCard);
                 });
-                display.appendChild(bidsContainer);
+                display.appendChild(deliveriesContainer);
             } else {
                 display.innerHTML = `<p>У вас нет активных заказов</p>`;
             };
         } catch (error) {
-            console.error(`Error in showMyBids: ${error}`);
+            console.error(`Error in showMyDeliveries: ${error}`);
         };
     };
 };

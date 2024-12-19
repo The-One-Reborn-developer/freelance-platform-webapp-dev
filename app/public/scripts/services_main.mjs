@@ -276,7 +276,7 @@ async function showMyBids(validatedTelegramID) {
                                         headers: {
                                             'Content-Type': 'application/json'
                                         },
-                                        body: JSON.stringify({ bid_id: bidID })  // Send the Telegram ID as JSON
+                                        body: JSON.stringify({ bid_id: bidID })
                                     });
 
                                     if (!response.ok) {

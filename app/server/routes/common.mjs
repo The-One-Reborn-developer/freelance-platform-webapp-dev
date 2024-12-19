@@ -8,7 +8,7 @@ import {
 } from "../modules/common_index.mjs";
 
 
-const router = express.Router();
+const commonRouter = express.Router();
 
 
 router.post('/check-registration', (req, res) => {
@@ -99,4 +99,4 @@ router.post('/get-user-data', (req, res) => {
 });
 
 
-export default router;
+export default commonRouter;

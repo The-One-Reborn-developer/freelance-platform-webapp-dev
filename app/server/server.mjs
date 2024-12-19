@@ -5,9 +5,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Import routes
-import { servicesRoutes } from "./routes/services.mjs";
-import { commonRoutes } from "./routes/common.mjs";
-import { deliveryRoutes } from "./routes/delivery.mjs";
+import servicesRouter from "./routes/services.mjs";
+import commonRouter from "./routes/common.mjs";
+import deliveryRouter from "./routes/delivery.mjs";
 
 // Import websocket server
 import { setupWebsocketServer } from "./modules/common_index.mjs";
@@ -34,9 +34,9 @@ app.use('/attachments', express.static(attachmentPath));
 console.log(`Serving attachments from ${attachmentPath}`);
 console.log('Express app created');
 
-app.use('/common', commonRoutes);
-app.use('/services', servicesRoutes);
-app.use('/delivery', deliveryRoutes);
+app.use('/common', commonRouter);
+app.use('/services', servicesRouter);
+app.use('/delivery', deliveryRouter);
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);

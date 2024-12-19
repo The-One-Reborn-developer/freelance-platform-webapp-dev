@@ -29,7 +29,7 @@ const upload = multer({
 });
 
 
-const router = express.Router();
+const servicesRouter = express.Router();
 
 
 router.post('/post-bid', (req, res) => {
@@ -394,4 +394,4 @@ router.get('/responded-customers', (req, res) => {
 });
 
 
-export default router;
+export default servicesRouter;

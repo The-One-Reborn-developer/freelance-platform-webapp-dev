@@ -15,7 +15,7 @@ const upload = multer({
 });
 
 
-const router = express.Router();
+const deliveryRouter = express.Router();
 
 
 router.post('/post-delivery', (req, res) => {
@@ -29,7 +29,7 @@ router.post('/post-delivery', (req, res) => {
         const carNecessary = req.body.car_necessary;
 
         // Post the new bid
-        postBid(
+        postDelivery(
             db,
             res,
             customerTelegramID,
@@ -44,4 +44,7 @@ router.post('/post-delivery', (req, res) => {
         console.error('Error in /post-delivery:', error);
         res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
-})
+});
+
+
+export default deliveryRouter;

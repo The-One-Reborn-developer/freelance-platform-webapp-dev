@@ -37,7 +37,7 @@ deliveryRouter.post('/post-delivery', (req, res) => {
         const deliverTo = req.body.deliver_to;
         const carNecessary = req.body.car_necessary;
 
-        // Post the new bid
+        // Post the new delivery
         postDelivery(
             db,
             res,
@@ -116,7 +116,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         
         const postResponseResult = postResponse(
             db,
-            bidID,
+            deliveryID,
             courierTelegramID,
             courierName,
             courierDateOfBirth,

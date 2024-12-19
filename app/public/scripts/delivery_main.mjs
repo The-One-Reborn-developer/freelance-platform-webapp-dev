@@ -45,22 +45,22 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
 
     insertCustomerButtons(name, registrationDate);
 
-    const createBidButton = document.getElementById('create-bid');
-    createBidButton.addEventListener('click', async function () {
-        await showCreateBidForm();
+    const createDeliveryButton = document.getElementById('create-delivery');
+    createDeliveryButton.addEventListener('click', async function () {
+        await showCreateDeliveryForm();
 
         // Attach submit form event listener
-        const createBidForm = document.getElementById('create-bid-form');
-        if (createBidForm) {
-            createBidForm.addEventListener('submit', function (event) {
+        const createDeliveryForm = document.getElementById('create-delivery-form');
+        if (createDeliveryForm) {
+            createDeliveryForm.addEventListener('submit', function (event) {
                 handleDeliveryFormSubmit(event, validatedTelegramID, name);
             });
         };
     });
 
-    const myBidsButton = document.getElementById('my-bids');
-    myBidsButton.addEventListener('click', async function () {
-        await showMyBids(validatedTelegramID);
+    const myDeliveriesButton = document.getElementById('my-deliveries');
+    myDeliveriesButton.addEventListener('click', async function () {
+        await showMyDeliveries(validatedTelegramID);
     });
 
     const lookChatsButton = document.getElementById('look-chats');
@@ -128,23 +128,23 @@ function insertCustomerButtons(name, registrationDate) {
         try {
             headerInfo.innerHTML = `Заказчик ${name}. Зарегистрирован ${registrationDate}.`;
 
-            const createBidButton = document.createElement('button');
-            createBidButton.className = 'header-button';
-            createBidButton.id = 'create-bid';
-            createBidButton.textContent = 'Опубликовать новый заказ 🏷️';
+            const createDeliveryButton = document.createElement('button');
+            createDeliveryButton.className = 'header-button';
+            createDeliveryButton.id = 'create-delivery';
+            createDeliveryButton.textContent = 'Опубликовать новый заказ 🏷️';
 
-            const myBidsButton = document.createElement('button');
-            myBidsButton.className = 'header-button';
-            myBidsButton.id = 'my-bids';
-            myBidsButton.textContent = 'Просмотреть мои заказы 📂';
+            const myDeliveriesButton = document.createElement('button');
+            myDeliveriesButton.className = 'header-button';
+            myDeliveriesButton.id = 'my-deliveries';
+            myDeliveriesButton.textContent = 'Просмотреть мои заказы 📂';
 
             const lookChatsButton = document.createElement('button');
             lookChatsButton.className = 'header-button';
             lookChatsButton.id = 'look-chats';
             lookChatsButton.textContent = 'Переписки по активным заказам 📩';
 
-            headerNav.appendChild(createBidButton);
-            headerNav.appendChild(myBidsButton);
+            headerNav.appendChild(createDeliveryButton);
+            headerNav.appendChild(myDeliveriesButton);
             headerNav.appendChild(lookChatsButton);
         } catch (error) {
             console.error(`Error in insertCustomerButtons: ${error}`);
@@ -195,7 +195,7 @@ function insertCourierButtons(
 };
 
 
-async function showCreateBidForm() {
+async function showCreateDeliveryForm() {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -217,7 +217,7 @@ async function showCreateBidForm() {
                 scrollInputsIntoView();
             };
         } catch (error) {
-            console.error(`Error in showCreateBidForm: ${error}`);
+            console.error(`Error in showCreateDeliveryForm: ${error}`);
         };
     };
 };

@@ -9,7 +9,7 @@ export function updateResponse(
         const chatStartedInt = chatStarted ? 1 : 0;
 
         const updateResponse = db.prepare(
-            'UPDATE responses SET chat_started = ? WHERE bid_id = ? AND performer_telegram_id = ?'
+            'UPDATE services_responses SET chat_started = ? WHERE bid_id = ? AND performer_telegram_id = ?'
         );
         const updateResponseResult = updateResponse.run(chatStartedInt, bidIDInt, performerTelegramIDInt);
         return updateResponseResult;

@@ -4,20 +4,22 @@ import {
     createUsersTable,
     createBidsTable,
     createDeliveriesTable,
-    createResponsesTable
+    createServicesResponsesTable,
+    createDeliveriesResponsesTable
 } from "../utils/common/create_tables.mjs";
 import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
 import { setupWebsocketServer } from "../utils/common/setup_websocket_server.mjs";
 
-export { checkTelegramData };
-export { checkUserTelegram };
-export { 
+export {
+    checkTelegramData,
+    checkUserTelegram,
     createUsersTable,
     createBidsTable,
     createDeliveriesTable,
-    createResponsesTable
+    createServicesResponsesTable,
+    createDeliveriesResponsesTable,
+    setupWebsocketServer,
+    getUser,
+    postUser
 };
-export { setupWebsocketServer };
-export { getUser };
-export { postUser };

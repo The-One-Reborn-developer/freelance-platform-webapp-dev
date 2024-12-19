@@ -8,7 +8,7 @@ export function postResponse(
     performerRegistrationDate) {
     try {
         const existingResponse = db.prepare(
-            'SELECT * FROM responses WHERE bid_id = ? AND performer_telegram_id = ?'
+            'SELECT * FROM services_responses WHERE bid_id = ? AND performer_telegram_id = ?'
         ).get(bidID, performerTelegramID);
 
         if (existingResponse) {
@@ -17,7 +17,8 @@ export function postResponse(
         };
         
         const postResponse = db.prepare(
-            `INSERT INTO responses (bid_id,
+            `INSERT INTO services_responses (
+                                    bid_id,
                                     performer_telegram_id,
                                     performer_name,
                                     performer_rate,

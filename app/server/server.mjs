@@ -18,7 +18,8 @@ import {
     createUsersTable,
     createBidsTable,
     createDeliveriesTable,
-    createResponsesTable
+    createServicesResponsesTable,
+    createDeliveriesResponsesTable
 } from "./modules/common_index.mjs";
 
 
@@ -48,7 +49,8 @@ const PORT = process.env.PORT || 3000;
 createUsersTable(db);
 createBidsTable(db);
 createDeliveriesTable(db);
-createResponsesTable(db);
+createServicesResponsesTable(db);
+createDeliveriesResponsesTable(db);
 
 
 app.get('/', (req, res) => {

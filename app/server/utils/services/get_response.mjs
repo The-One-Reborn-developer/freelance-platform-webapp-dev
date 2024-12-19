@@ -1,7 +1,7 @@
 export function getResponse(db, bidID) {
     try {
         const getResponse = db.prepare(
-            'SELECT * FROM responses WHERE bid_id = ?'
+            'SELECT * FROM services_responses WHERE bid_id = ?'
         );
         const getResponseResult = getResponse.all(bidID);
         return getResponseResult;

@@ -70,14 +70,14 @@ export function createDeliveriesTable(db) {
         console.log('Deliveries table check or creation executed successfully');
     } catch (error) {
         console.error(`Error creating deliveries table: ${error}`);
-    } ;
+    };
 };
 
 
-export function createResponsesTable(db) {
+export function createServicesResponsesTable(db) {
     try {
         db.exec(`
-            CREATE TABLE IF NOT EXISTS responses (
+            CREATE TABLE IF NOT EXISTS services_responses (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 bid_id INTEGER NOT NULL,
                 performer_telegram_id BIGINT NOT NULL,
@@ -90,8 +90,35 @@ export function createResponsesTable(db) {
                 UNIQUE(bid_id, performer_telegram_id)
             );
         `);
-        console.log('Responses table check or creation executed successfully');
+        console.log('Services responses table check or creation executed successfully');
     } catch (error) {
         console.error('Error creating responses table:', error);
-    }
-}
+    };
+};
+
+
+export function createDeliveriesResponsesTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS deliveries_responses (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                delivery_id INTEGER NOT NULL,
+                courier_telegram_id BIGINT NOT NULL,
+                courier_name STRING(255) NOT NULL,
+                courier_date_of_birth STRING(20) NOT NULL,
+                courier_has_car BOOLEAN NOT NULL,
+                courier_car_model STRING(255) NOT NULL,
+                courier_car_dimensions_width INTEGER NOT NULL,
+                courier_car_dimensions_length INTEGER NOT NULL,
+                courier_car_dimensions_height INTEGER NOT NULL,
+                courier_registration_date STRING(20) NOT NULL,
+                chat_started BOOLEAN DEFAULT FALSE,
+                FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
+                UNIQUE(bid_id, performer_telegram_id)
+            );
+        `);
+        console.log('Deliveries responses table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating responses table:', error);
+    };
+};

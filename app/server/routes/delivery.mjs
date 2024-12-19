@@ -3,10 +3,15 @@ import multer from "multer";
 import Database from 'better-sqlite3';
 
 import {
+    getUser
+} from "../modules/common_index.mjs"
+
+import {
     postDelivery,
     getOpenDeliveriesByCustomerTelegramID,
     updateCloseDelivery,
-    getDeliveriesByCity
+    getDeliveriesByCity,
+    postResponse
 } from "../modules/delivery_index.mjs";
 
 
@@ -93,6 +98,76 @@ deliveryRouter.post('/get-deliveries', (req, res) => {
     } catch (error) {
         console.error('Error in /delivery/get-deliveries:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
+    };
+});
+
+
+deliveryRouter.post('/respond-to-delivery', (req, res) => {
+    try {
+        const deliveryID = req.body.delivery_id;
+        const courierTelegramID = req.body.courier_telegram_id;
+        const courierData = getUser(db, courierTelegramID);
+        const courierName = courierData.deliveries_name;
+        const courierDateOfBirth = courierData.date_of_birth;
+        const courierHasCar = courierData.has_car;
+        const courierCarModel = courierData.car_model;
+        const courierCarDimensions = courierData.car_dimensions;
+        const courierRegistrationDate = courierData.delivery_registration_date;
+        
+        const postResponseResult = postResponse(
+            db,
+            bidID,
+            courierTelegramID,
+            courierName,
+            courierDateOfBirth,
+            courierHasCar,
+            courierCarModel,
+            courierCarDimensions,
+            courierRegistrationDate
+        );
+
+        if (postResponseResult === true) {
+            const deliveryData = getDeliveryByDeliveryID(db, deliveryID);
+            const customerTelegramID = deliveryData.customer_telegram_id;
+            const customerName = deliveryData.customer_name;
+            const city = deliveryData.city;
+            const description = deliveryData.description;
+            const deliverFrom = deliveryData.deliver_from;
+            const deliverTo = deliveryData.deliver_to;
+            const carNecessary = deliveryData.car_necessary;
+            const message = 'На Ваш заказ №' + deliveryID + ': \n\n' +
+                            'Город: ' + city + '\n' +
+                            'Что нужно доставить, описание: ' + description + '\n' +
+                            'Откуда: ' + deliverFrom + '. Куда: ' + deliverTo + '\n' +
+                            'Нужна машина: ' + ((carNecessary === 1) ? 'да' : 'нет') + '\n\n' +
+                            'Откликнулся исполнитель ' + courierName + '. Зарегистрирован с <i>' + courierRegistrationDate + '</i>. '+
+                            'Есть машина: <i>' + ((courierHasCar === 1) ? 'да' : 'нет') + '</i>, модель: <i>' +
+                            courierCarModel + '</i>, габариты: <i>' + courierCarDimensions + '</i>, стаж: <i>';
+
+
+            sendMessage(
+                customerTelegramID,
+                message
+            );
+
+            saveChatMessage(
+                deliveryID,
+                customerTelegramID,
+                courierTelegramID,
+                customerName,
+                courierName,
+                message,
+                null,
+                'courier'
+            );
+            
+            res.status(200).json({ success: true, message: 'Ваш отклик успешно отправлен заказчику 📲' });
+        } else if (postResponseResult === false) {
+            res.status(409).json({ success: true, message: 'Вы уже откликнулись на этот заказ.' });
+        };
+    } catch (error) {
+        console.error('Error in /delivery/respond-to-delivery:', error);
+        res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });
     };
 });
 

@@ -437,7 +437,7 @@ async function showDeliveries(city, validatedTelegramID) {
                         <p>Что нужно доставить, описание: ${delivery.description}</p>
                         <br>
                         <p>Откуда: ${delivery.deliver_from}</p>
-                        <p>Куда: ${bideliveryd.deliver_to}</p>
+                        <p>Куда: ${delivery.deliver_to}</p>
                         <br>
                         <p>Нужна машина: ${(delivery.car_necessary === 1) ? 'Да' : 'Нет'}</p>
                         <button id="respond-to-delivery" class="delivery-card-button" data-delivery-id="${delivery.id}">Откликнуться ☑️</button>

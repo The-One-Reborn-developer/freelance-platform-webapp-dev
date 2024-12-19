@@ -7,16 +7,16 @@ import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
 
+// Common functions
 import { 
     createUsersTable,
     createBidsTable,
-    createResponsesTable  } from "./create_tables.mjs";
-import { checkTelegramData } from "./check_telegram_data.mjs";
-import { postUser } from "./post_user.mjs";
-import { checkUserTelegram } from "./check_user_telegram.mjs";
-import { getUser } from "./get_user.mjs";
-import { updateProfileInfo } from "./update_profile_info.mjs"
-import { setupWebsocketServer } from "./setup_websocket_server.mjs"
+    createResponsesTable  } from "./index.mjs";
+import { checkTelegramData } from "./index.mjs";
+import { postUser } from "./index.mjs";
+import { checkUserTelegram } from "./index.mjs";
+import { getUser } from "./index.mjs";
+import { setupWebsocketServer } from "./index.mjs"
 
 // Services functions
 import { postBid } from "./index.mjs";
@@ -34,6 +34,7 @@ import { sendAttachment } from "./index.mjs";
 import { getResponsesByPerformerTelegramIDWithChatStarted } from "./index.mjs";
 import { getBidByBidID } from "./index.mjs";
 import { getResponses } from "./index.mjs";
+import { updateProfileInfo } from "./index.mjs";
 
 
 dotenv.config({ path: '/app/.env' });
@@ -480,7 +481,7 @@ app.post('/services/change-profile-info', (req, res) => {
             res.status(200).json({ success: true, message: 'Информация о профиле успешно изменена.' });
         };
     } catch (error) {
-        console.error('Error in /change-profile-info:', error);
+        console.error('Error in /services/change-profile-info:', error);
         res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
     };
 });
@@ -511,10 +512,39 @@ app.get('/services/responded-customers', (req, res) => {
             }
         };
     } catch (error) {
-        console.error('Error in /responded-customers:', error);
+        console.error('Error in /services/responded-customers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
     };
 });
+
+
+app.post('/delivery/post-delivery', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id;
+        const customerName = req.body.customer_name;
+        const city = req.body.city;
+        const description = req.body.description;
+        const deliverFrom = req.body.deliver_from;
+        const deliverTo = req.body.deliver_to;
+        const carNecessary = req.body.car_necessary;
+
+        // Post the new bid
+        postBid(
+            db,
+            res,
+            customerTelegramID,
+            customerName,
+            city,
+            description,
+            deliverFrom,
+            deliverTo,
+            carNecessary
+        );
+    } catch (error) {
+        console.error('Error in /delivery/post-delivery:', error);
+        res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
+    };
+})
 
 
 // 404 Route

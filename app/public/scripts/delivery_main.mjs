@@ -231,11 +231,6 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
     const deliverTo = document.getElementById('deliver-to');
     const carNecessary = document.querySelector('input[name="car-necessary"]:checked');
 
-    console.log(`Description: ${description},
-        Deliver from: ${deliverFrom},
-        Deliver to: ${deliverTo},
-        Car necessary: ${carNecessary}`);
-
     // Check if the fields are valid
     if (!description.value || !deliverFrom.value || !deliverTo.value || !carNecessary) {
         showModal('Пожалуйста, заполните всю форму.');
@@ -251,7 +246,7 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
             car_necessary: carNecessary.value
         };
 
-        fetch('/delivery/post-bid', {
+        fetch('/delivery/post-delivery', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

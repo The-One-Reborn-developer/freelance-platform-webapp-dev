@@ -1,6 +1,4 @@
-import {
-    WebSocketServer,
-    WebSocket } from "ws";
+import { WebSocketServer } from "ws";
 
 
 export function setupWebsocketServer(server) {

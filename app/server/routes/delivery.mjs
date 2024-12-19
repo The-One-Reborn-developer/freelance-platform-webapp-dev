@@ -3,7 +3,7 @@ import multer from "multer";
 import Database from "better-sqlite3";
 
 import {
-    postBid
+    postDelivery
 } from "../modules/delivery_index.mjs";
 
 const db = new Database('./app/database.db', { verbose: console.log });

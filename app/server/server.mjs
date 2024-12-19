@@ -12,6 +12,14 @@ import { deliveryRoutes } from "./routes/delivery.mjs";
 // Import websocket server
 import { setupWebsocketServer } from "./modules/common_index.mjs";
 
+// Import database creation functions
+import {
+    createUsersTable,
+    createBidsTable,
+    createDeliveriesTable,
+    createResponsesTable
+} from "./modules/common_index.mjs";
+
 
 dotenv.config({ path: '/app/.env' });
 
@@ -36,6 +44,7 @@ const PORT = process.env.PORT || 3000;
 
 createUsersTable(db);
 createBidsTable(db);
+createDeliveriesTable(db);
 createResponsesTable(db);
 
 

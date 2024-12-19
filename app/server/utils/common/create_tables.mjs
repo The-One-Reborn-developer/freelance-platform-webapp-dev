@@ -52,6 +52,28 @@ export function createBidsTable(db) {
 };
 
 
+export function createDeliveriesTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS deliveries (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                customer_telegram_id BIGINT NOT NULL,
+                customer_name STRING(255) NOT NULL,
+                city STRING(50) NOT NULL,
+                description TEXT NOT NULL,
+                deliver_from STRING(20) NOT NULL,
+                deliver_to STRING(20) NOT NULL,
+                car_necessary BOOLEAN NOT NULL,
+                closed BOOLEAN DEFAULT FALSE
+            );
+        `);
+        console.log('Deliveries table check or creation executed successfully');
+    } catch (error) {
+        console.error(`Error creating deliveries table: ${error}`);
+    } ;
+};
+
+
 export function createResponsesTable(db) {
     try {
         db.exec(`

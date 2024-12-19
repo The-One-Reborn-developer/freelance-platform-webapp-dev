@@ -113,8 +113,8 @@ export function createDeliveriesResponsesTable(db) {
                 courier_car_dimensions_height INTEGER NOT NULL,
                 courier_registration_date STRING(20) NOT NULL,
                 chat_started BOOLEAN DEFAULT FALSE,
-                FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
-                UNIQUE(bid_id, performer_telegram_id)
+                FOREIGN KEY(delivery_id) REFERENCES deliveries(id) ON DELETE CASCADE,
+                UNIQUE(delivery_id, courier_telegram_id)
             );
         `);
         console.log('Deliveries responses table check or creation executed successfully');

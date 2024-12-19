@@ -1,4 +1,5 @@
 import express from "express";
+import Database from "better-sqlite3";
 
 import {
     checkTelegramData,
@@ -7,6 +8,8 @@ import {
     getUser
 } from "../modules/common_index.mjs";
 
+
+const db = new Database('./app/database.db', { verbose: console.log });
 
 const commonRouter = express.Router();
 

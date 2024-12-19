@@ -1,9 +1,13 @@
 import express from 'express';
 import multer from "multer";
+import Database from 'better-sqlite3';
 
 import {
     postDelivery
 } from "../modules/delivery_index.mjs";
+
+
+const db = new Database('./app/database.db', { verbose: console.log });
 
 const upload = multer({ 
     dest: 'app/chats/attachments',
@@ -11,7 +15,6 @@ const upload = multer({
         fileSize: 1024 * 1024 * 50 // 50MB
     }
 });
-
 
 const deliveryRouter = express.Router();
 

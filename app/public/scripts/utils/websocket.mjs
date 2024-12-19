@@ -1,5 +1,6 @@
 import { scrollToBottom } from './scrolls.mjs';
 
+
 export function initializeWebSocket(validatedTelegramID) {
     if (!validatedTelegramID) {
         console.error('Telegram ID not found, unable to initialize WebSocket');

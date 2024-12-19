@@ -1,6 +1,6 @@
 export async function getUserData(telegramID) {
     try {
-        const response = await fetch('/get-user-data', {
+        const response = await fetch('/common/get-user-data', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

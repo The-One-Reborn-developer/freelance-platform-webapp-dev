@@ -1,4 +1,4 @@
-import { scrollToBottom } from './scrolls.mjs';
+import { scrollToBottom } from './common/scrolls.mjs';
 
 
 export function initializeWebSocket(validatedTelegramID) {

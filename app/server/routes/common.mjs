@@ -11,7 +11,7 @@ import {
 const commonRouter = express.Router();
 
 
-router.post('/check-registration', (req, res) => {
+commonRouter.post('/check-registration', (req, res) => {
     try {
         const telegramData = req.body.telegram_data;
         // Check telegram data
@@ -38,7 +38,7 @@ router.post('/check-registration', (req, res) => {
 });
 
 
-router.post('/registration-attempt', (req, res) => {
+commonRouter.post('/registration-attempt', (req, res) => {
     try {
         // Check telegram data
         const telegramData = req.body.telegram_data;
@@ -86,7 +86,7 @@ router.post('/registration-attempt', (req, res) => {
 });
 
 
-router.post('/get-user-data', (req, res) => {
+commonRouter.post('/get-user-data', (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
         // Get user data

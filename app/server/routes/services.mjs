@@ -32,7 +32,7 @@ const upload = multer({
 const servicesRouter = express.Router();
 
 
-router.post('/post-bid', (req, res) => {
+servicesRouter.post('/post-bid', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
         const customerName = req.body.customer_name;
@@ -61,7 +61,7 @@ router.post('/post-bid', (req, res) => {
 });
 
 
-router.post('/my-bids', (req, res) => {
+servicesRouter.post('/my-bids', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id
 
@@ -75,7 +75,7 @@ router.post('/my-bids', (req, res) => {
 });
 
 
-router.post('/close-bid', (req, res) => {
+servicesRouter.post('/close-bid', (req, res) => {
     try {
         const bidID = req.body.bid_id;
         
@@ -93,7 +93,7 @@ router.post('/close-bid', (req, res) => {
 });
 
 
-router.post('/get-bids', (req, res) => {
+servicesRouter.post('/get-bids', (req, res) => {
     try {
         const city = req.body.city;
 
@@ -107,7 +107,7 @@ router.post('/get-bids', (req, res) => {
 });
 
 
-router.post('/respond-to-bid', (req, res) => {
+servicesRouter.post('/respond-to-bid', (req, res) => {
     try {
         const bidID = req.body.bid_id;
         const performerTelegramID = req.body.performer_telegram_id;
@@ -174,7 +174,7 @@ router.post('/respond-to-bid', (req, res) => {
 });
 
 
-router.post('/show-customer-chats-list', (req, res) => {
+servicesRouter.post('/show-customer-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
 
@@ -210,7 +210,7 @@ router.post('/show-customer-chats-list', (req, res) => {
 });
 
 
-router.post('/show-performer-chats-list', (req, res) => {
+servicesRouter.post('/show-performer-chats-list', (req, res) => {
     try {
         const performerTelegramID = req.body.performer_telegram_id;
 
@@ -237,7 +237,7 @@ router.post('/show-performer-chats-list', (req, res) => {
 });
 
 
-router.get('/get-chats', (req, res) => {
+servicesRouter.get('/get-chats', (req, res) => {
     try {
         const bidID = req.query.bid_id;
         const customerTelegramID = req.query.customer_telegram_id;
@@ -252,7 +252,7 @@ router.get('/get-chats', (req, res) => {
 });
 
 
-router.post('/send-message', upload.single('attachment'), (req, res) => {
+servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => {
     try {
         const bidID = req.body.bid_id;
         const customerTelegramID = req.body.customer_telegram_id;
@@ -313,7 +313,7 @@ router.post('/send-message', upload.single('attachment'), (req, res) => {
 });
 
 
-router.get('/responded-performers', (req, res) => {
+servicesRouter.get('/responded-performers', (req, res) => {
     const customerTelegramID = req.query.customer_telegram_id;
 
     try {
@@ -343,7 +343,7 @@ router.get('/responded-performers', (req, res) => {
 });
 
 
-router.post('/change-profile-info', (req, res) => {
+servicesRouter.post('/change-profile-info', (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
         const rate = req.body.rate;
@@ -363,7 +363,7 @@ router.post('/change-profile-info', (req, res) => {
 });
 
 
-router.get('/responded-customers', (req, res) => {
+servicesRouter.get('/responded-customers', (req, res) => {
     const performerTelegramID = req.query.performer_telegram_id;
 
     try {

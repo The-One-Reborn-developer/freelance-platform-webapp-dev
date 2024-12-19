@@ -18,7 +18,7 @@ const upload = multer({
 const deliveryRouter = express.Router();
 
 
-router.post('/post-delivery', (req, res) => {
+deliveryRouter.post('/post-delivery', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
         const customerName = req.body.customer_name;

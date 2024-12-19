@@ -58,7 +58,7 @@ window.onload = function () {
 
 
 function checkIfUserIsRegistered(telegramData) {
-    fetch('/check-registration', {
+    fetch('/common/check-registration', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ function register() {
         service: 'delivery'
     };
 
-    fetch('/registration-attempt', {
+    fetch('/common/registration-attempt', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

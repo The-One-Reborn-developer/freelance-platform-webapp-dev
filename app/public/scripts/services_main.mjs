@@ -566,7 +566,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
 
-                                const customerName = await fetch('/get-user-data', {
+                                const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -575,7 +575,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                                 })
                                     .then(response => response.json())
                                     .then(data => data.userData.name);
-                                const performerName = await fetch('/get-user-data', {
+                                const performerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -1021,7 +1021,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
 
-                                const customerName = await fetch('/get-user-data', {
+                                const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -1030,7 +1030,7 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                                 })
                                     .then(response => response.json())
                                     .then(data => data.userData.services_name);
-                                const performerName = await fetch('/get-user-data', {
+                                const performerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'

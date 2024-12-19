@@ -4,7 +4,7 @@ import {
     scrollInputsIntoView
 } from "./utils/index.mjs";
 import { initializeWebSocket } from "./utils/index.mjs";
-import { fetchPerformers } from "./utils/index.mjs";
+import { fetchCouriers } from "./utils/index.mjs";
 import { getQueryParameter } from "./utils/index.mjs";
 import { getUserData } from "./utils/index.mjs";
 import { showModal } from "./utils/index.mjs";
@@ -274,7 +274,7 @@ async function showMyBids(validatedTelegramID) {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('/delivery/my-bids', {
+            const response = await fetch('/delivery/my-deliveries', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -319,7 +319,7 @@ async function showMyBids(validatedTelegramID) {
                             const confirmation = confirm('Вы уверены, что хотите закрыть заказ?');
                             if (confirmation) {
                                 try {
-                                    const response = await fetch('/close-delivery-bid', {
+                                    const response = await fetch('/delivery/close-delivery', {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json'
@@ -403,7 +403,7 @@ async function showBids(city, validatedTelegramID) {
         try {
             display.innerHTML = '';
 
-            const response = await fetch('/delivery/get-bids', {
+            const response = await fetch('/delivery/get-deliveries', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -444,7 +444,7 @@ async function showBids(city, validatedTelegramID) {
 
                         if (bidID) {
                             try {
-                                fetch('/respond-to-delivery-bid', {
+                                fetch('/delivery/respond-to-delivery', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -616,7 +616,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
 
-                                const customerName = await fetch('/get-user-data', {
+                                const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -625,7 +625,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
                                 })
                                     .then(response => response.json())
                                     .then(data => data.userData.name);
-                                const courierName = await fetch('/get-user-data', {
+                                const courierName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -1028,7 +1028,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
                                 const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
                                 console.log(attachmentUrl);
 
-                                const customerName = await fetch('/get-user-data', {
+                                const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -1037,7 +1037,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
                                 })
                                     .then(response => response.json())
                                     .then(data => data.userData.delivery_name);
-                                const courierName = await fetch('/get-user-data', {
+                                const courierName = await fetch('/common/get-user-data', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'

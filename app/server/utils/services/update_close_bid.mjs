@@ -6,6 +6,6 @@ export function updateCloseBid(db, bidID) {
         const closeBidResult = closeBid.run(bidID);
         return closeBidResult;
     } catch (error) {
-        console.error('Error in closeBid:', error);
+        console.error('Error in updateCloseBid:', error);
     };
-}
+};

@@ -4,7 +4,8 @@ import Database from 'better-sqlite3';
 
 import {
     postDelivery,
-    getOpenDeliveriesByCustomerTelegramID
+    getOpenDeliveriesByCustomerTelegramID,
+    updateCloseDelivery
 } from "../modules/delivery_index.mjs";
 
 
@@ -60,6 +61,24 @@ deliveryRouter.post('/my-deliveries', (req, res) => {
         console.error('Error in /delivery/my-deliveries:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
     }
+});
+
+
+deliveryRouter.post('/close-delivery', (req, res) => {
+    try {
+        const deliveryID = req.body.delivery_id;
+        
+        const closeDeliveryResult = updateCloseDelivery(db, deliveryID);
+
+        if (!closeDeliveryResult) {
+            res.status(500).json({ success: false, message: 'Ошибка при закрытии заказа.' });
+        } else {
+            res.status(200).json({ success: true, message: `Заказ №${deliveryID} успешно закрыт.` });
+        };
+    } catch (error) {
+        console.error('Error in /delivery/close-delivery:', error);
+        res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
+    };
 });
 
 

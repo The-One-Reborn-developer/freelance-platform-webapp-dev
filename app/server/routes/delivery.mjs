@@ -83,7 +83,7 @@ deliveryRouter.post('/close-delivery', (req, res) => {
 });
 
 
-servicesRouter.post('/get-deliveries', (req, res) => {
+deliveryRouter.post('/get-deliveries', (req, res) => {
     try {
         const city = req.body.city;
 

@@ -14,10 +14,10 @@ export function postResponse(
     try {
         const existingResponse = db.prepare(
             'SELECT * FROM deliveries_responses WHERE delivery_id = ? AND courier_telegram_id = ?'
-        ).get(bidID, courierTelegramID);
+        ).get(deliveryID, courierTelegramID);
 
         if (existingResponse) {
-            console.log('User already responded to this bid.');
+            console.log('User already responded to this delivery.');
             return false;
         };
         

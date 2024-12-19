@@ -10,7 +10,7 @@ export function postDelivery(
     carNecessary) {
     try {
         const postDelivery = db.prepare(
-            `INSERT INTO bids (
+            `INSERT INTO deliveries (
                          customer_telegram_id,
                          customer_name,
                          city,

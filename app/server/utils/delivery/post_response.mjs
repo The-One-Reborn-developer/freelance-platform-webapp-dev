@@ -46,10 +46,10 @@ export function postResponse(
             courierName,
             courierDateOfBirth,
             courierHasCar,
-            courierCarModel,
-            courierCarWidth,
-            courierCarLength,
-            courierCarHeight,
+            sanitizedCarModel,
+            sanitizedCarWidth,
+            sanitizedCarLength,
+            sanitizedCarHeight,
             courierRegistrationDate
         );
 

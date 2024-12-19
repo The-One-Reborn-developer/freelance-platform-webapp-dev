@@ -7,6 +7,7 @@ import { initializeWebSocket } from "./modules/common_index.mjs";
 import { getQueryParameter } from "./modules/common_index.mjs";
 import { getUserData } from "./modules/common_index.mjs";
 
+
 import { fetchCouriers } from "./modules/delivery_index.mjs";
 import { showModal } from "./modules/delivery_index.mjs";
 
@@ -266,7 +267,7 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
 };
 
 
-async function showMyBids(validatedTelegramID) {
+async function showMyDeliveries(validatedTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');

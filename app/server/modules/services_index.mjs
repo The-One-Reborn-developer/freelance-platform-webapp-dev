@@ -15,19 +15,21 @@ import { getBidByBidID } from "../utils/services/get_bid_by_bid_id.mjs";
 import { getResponses } from "../utils/services/get_responses.mjs";
 import { updateProfileInfo } from "../utils/services/update_profile_info.mjs";
 
-export { getOpenBidsByCustomerTelegramID };
-export { postBid };
-export { updateCloseBid };
-export { getBidsByCity };
-export { postResponse };
-export { getAllBidsByCustomerTelegramID };
-export { getResponsesByBidIDWithChatStarted };
-export { getChatMessages };
-export { saveChatMessage };
-export { updateResponse };
-export { sendAttachment };
-export { sendMessage };
-export { getResponsesByPerformerTelegramIDWithChatStarted };
-export { getBidByBidID };
-export { getResponses };
-export { updateProfileInfo };
+export {
+    postBid,
+    getOpenBidsByCustomerTelegramID,
+    updateCloseBid,
+    getBidsByCity,
+    postResponse,
+    getAllBidsByCustomerTelegramID,
+    getResponsesByBidIDWithChatStarted,
+    getChatMessages,
+    saveChatMessage,
+    updateResponse,
+    sendAttachment,
+    sendMessage,
+    getResponsesByPerformerTelegramIDWithChatStarted,
+    getBidByBidID,
+    getResponses,
+    updateProfileInfo
+};

@@ -3,7 +3,8 @@ import multer from "multer";
 import Database from 'better-sqlite3';
 
 import {
-    postDelivery
+    postDelivery,
+    getOpenDeliveriesByCustomerTelegramID
 } from "../modules/delivery_index.mjs";
 
 
@@ -42,9 +43,23 @@ deliveryRouter.post('/post-delivery', (req, res) => {
             carNecessary
         );
     } catch (error) {
-        console.error('Error in /post-delivery:', error);
+        console.error('Error in /delivery/post-delivery:', error);
         res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
+});
+
+
+deliveryRouter.post('/my-deliveries', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id
+
+        const deliveries = getOpenDeliveriesByCustomerTelegramID(db, customerTelegramID);
+
+        res.status(200).json({ success: true, deliveries });
+    } catch (error) {
+        console.error('Error in /delivery/my-deliveries:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
+    }
 });
 
 

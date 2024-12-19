@@ -394,12 +394,12 @@ async function handleCityFormSubmit(event, validatedTelegramID) {
     const city = formData.get('city');
 
     if (city) {
-        await showBids(city, validatedTelegramID);
+        await showDeliveries(city, validatedTelegramID);
     };
 };
 
 
-async function showBids(city, validatedTelegramID) {
+async function showDeliveries(city, validatedTelegramID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
@@ -418,43 +418,43 @@ async function showBids(city, validatedTelegramID) {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                console.error('Failed to load bids');
+                console.error('Failed to load deliveries');
             };
 
-            const bidsResponse = await response.json();
+            const deliveriesResponse = await response.json();
 
-            if (bidsResponse && bidsResponse.bids.length > 0) {
-                const bidsContainer = document.createElement('div');
-                bidsContainer.classList.add('bids-container');
+            if (deliveriesResponse && deliveriesResponse.deliveries.length > 0) {
+                const deliveriesContainer = document.createElement('div');
+                deliveriesContainer.classList.add('deliveries-container');
 
-                bidsResponse.bids.forEach(bid => {
-                    const bidCard = document.createElement('div');
-                    bidCard.classList.add('bid-card');
+                deliveriesResponse.deliveries.forEach(delivery => {
+                    const deliveryCard = document.createElement('div');
+                    deliveryCard.classList.add('delivery-card');
 
-                    bidCard.innerHTML = `
-                        <p>Заказчик: ${bid.customer_name}</p>
+                    deliveryCard.innerHTML = `
+                        <p>Заказчик: ${delivery.customer_name}</p>
                         <br>
-                        <p>Что нужно доставить, описание: ${bid.description}</p>
+                        <p>Что нужно доставить, описание: ${delivery.description}</p>
                         <br>
-                        <p>Откуда: ${bid.deliver_from}</p>
-                        <p>Куда: ${bid.deliver_to}</p>
+                        <p>Откуда: ${delivery.deliver_from}</p>
+                        <p>Куда: ${bideliveryd.deliver_to}</p>
                         <br>
-                        <p>Нужна машина: ${(bid.car_necessary === 1) ? 'Да' : 'Нет'}</p>
-                        <button id="respond-to-bid" class="bid-card-button" data-bid-id="${bid.id}">Откликнуться ☑️</button>
-                        <button id="look-chats" class="bid-card-button">Посмотреть переписки заказчика 📤</button>
+                        <p>Нужна машина: ${(delivery.car_necessary === 1) ? 'Да' : 'Нет'}</p>
+                        <button id="respond-to-delivery" class="delivery-card-button" data-delivery-id="${delivery.id}">Откликнуться ☑️</button>
+                        <button id="look-chats" class="delivery-card-button">Посмотреть переписки заказчика 📤</button>
                     `;
 
-                    bidCard.querySelector('#respond-to-bid').addEventListener('click', async (event) => {
-                        const bidID = event.target.getAttribute('data-bid-id');
+                    deliveryCard.querySelector('#respond-to-delivery').addEventListener('click', async (event) => {
+                        const deliveryID = event.target.getAttribute('data-delivery-id');
 
-                        if (bidID) {
+                        if (deliveryID) {
                             try {
                                 fetch('/delivery/respond-to-delivery', {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
                                     },
-                                    body: JSON.stringify({ bid_id: bidID, performer_telegram_id: validatedTelegramID })
+                                    body: JSON.stringify({ delivery_id: deliveryID, courier_telegram_id: validatedTelegramID })
                                 })
                                     .then(response => response.json())
                                     .then(data => {
@@ -464,18 +464,18 @@ async function showBids(city, validatedTelegramID) {
                                         };
                                     })
                                     .catch(error => {
-                                        console.error(`Error in respond-to-delivery-bid: ${error}`);
+                                        console.error(`Error in showDeliveries: ${error}`);
                                         showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
                                     });
                             } catch (error) {
-                                console.error(`Error in respond-to-delivery-bid: ${error}`);
+                                console.error(`Error in showDeliveries: ${error}`);
                                 showModal('Произошла ошибка при отклике на заказ, попробуйте перезайти в приложение');
                             };
                         };
                     });
 
-                    bidCard.querySelector('#look-chats').addEventListener('click', async (event) => {
-                        const customerTelegramID = bid.customer_telegram_id
+                    deliveryCard.querySelector('#look-chats').addEventListener('click', async (event) => {
+                        const customerTelegramID = delivery.customer_telegram_id
 
                         if (customerTelegramID) {
                             await showCustomerChatsWithCouriers(customerTelegramID);
@@ -485,14 +485,14 @@ async function showBids(city, validatedTelegramID) {
                         };
                     });
 
-                    bidsContainer.appendChild(bidCard);
+                    deliveriesContainer.appendChild(deliveryCard);
                 });
-                display.appendChild(bidsContainer);
+                display.appendChild(deliveriesContainer);
             } else {
                 display.innerHTML = `<p>В данном городе нет активных заказов</p>`;
             };
         } catch (error) {
-            console.error(`Error in showBids: ${error}`);
+            console.error(`Error in showDeliveries: ${error}`);
         };
     };
 };

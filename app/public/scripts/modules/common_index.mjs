@@ -4,8 +4,11 @@ import { initializeWebSocket } from '../utils/common/websocket.mjs';
 import { getQueryParameter } from "../utils/common/parsing.mjs"
 import { getUserData } from "../utils/common/requests.mjs"
 
-export { fileToBase64 };
-export { scrollToBottom, scrollInputsIntoView };
-export { initializeWebSocket };
-export { getQueryParameter };
-export { getUserData };
+export {
+    fileToBase64,
+    scrollToBottom,
+    scrollInputsIntoView,
+    initializeWebSocket,
+    getQueryParameter,
+    getUserData
+};

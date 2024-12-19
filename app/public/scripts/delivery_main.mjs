@@ -1,15 +1,18 @@
-import { fileToBase64 } from "./modules/common_index.mjs";
 import {
+    fileToBase64,
     scrollToBottom,
-    scrollInputsIntoView
+    scrollInputsIntoView,
+    initializeWebSocket,
+    getQueryParameter,
+    getUserData
 } from "./modules/common_index.mjs";
-import { initializeWebSocket } from "./modules/common_index.mjs";
-import { getQueryParameter } from "./modules/common_index.mjs";
-import { getUserData } from "./modules/common_index.mjs";
 
+import {
+    fetchCouriers,
+    fetchCustomers,
+    showModal
+} from "./modules/delivery_index.mjs";
 
-import { fetchCouriers } from "./modules/delivery_index.mjs";
-import { showModal } from "./modules/delivery_index.mjs";
 
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()

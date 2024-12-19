@@ -29,10 +29,10 @@ export async function fetchCustomers(validatedTelegramID) {
         const response = await fetch(`/delivery/responded-customers?courier_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
 
-        if (data.success && Array.isArray(data.bidsInfo)) {
-            return data.bidsInfo.map((res) => ({
+        if (data.success && Array.isArray(data.deliveriesInfo)) {
+            return data.deliveriesInfo.map((res) => ({
                 name: res.customer_name,
-                bidID: res.id,
+                deliveryID: res.id,
                 telegramID: res.customer_telegram_id
             }));
         } else {

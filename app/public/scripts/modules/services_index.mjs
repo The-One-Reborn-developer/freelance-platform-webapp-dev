@@ -4,6 +4,8 @@ import {
     fetchCustomers
 } from "../utils/services/requests.mjs";
 
-export { showModal };
-export { fetchPerformers };
-export { fetchCustomers };
+export {
+    showModal,
+    fetchPerformers,
+    fetchCustomers
+};

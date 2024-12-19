@@ -4,8 +4,18 @@ export { checkTelegramData };
 import { checkUserTelegram } from "../utils/common/check_user_telegram.mjs";
 export { checkUserTelegram };
 
-import { createTables } from "../utils/common/create_tables.mjs";
-export { createTables };
+import {
+    createUsersTable,
+    createBidsTable,
+    createDeliveriesTable,
+    createResponsesTable
+} from "../utils/common/create_tables.mjs";
+export { 
+    createUsersTable,
+    createBidsTable,
+    createDeliveriesTable,
+    createResponsesTable
+};
 
 import { getUser } from "../utils/common/get_user.mjs";
 export { getUser };

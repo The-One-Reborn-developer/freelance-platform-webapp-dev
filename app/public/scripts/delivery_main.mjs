@@ -619,7 +619,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
                             if (msg.includes('app/chats/delivery/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', 'chats/delivery/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/chats/delivery/attachments/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -729,7 +729,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                     if (msg.includes('app/chats/delivery/attachments/')) {
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', 'chats/delivery/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/chats/delivery/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Курьер ${name}:`;
@@ -1033,7 +1033,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
                             if (msg.includes('app/chats/delivery/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', 'chats/delvery/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/chats/delvery/attachments/');
                                 console.log(attachmentUrl);
 
                                 const customerName = await fetch('/common/get-user-data', {
@@ -1110,7 +1110,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                     if (msg.includes('app/chats/delivery/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', 'chats/delivery/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/chats/delivery/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Курьер ${courier.name}:`;

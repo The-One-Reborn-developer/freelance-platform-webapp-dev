@@ -10,6 +10,7 @@ import {
 import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
 import { setupWebsocketServer } from "../utils/common/setup_websocket_server.mjs";
+import { sendMessage } from "../utils/common/send_message.mjs";
 
 export {
     checkTelegramData,
@@ -21,5 +22,6 @@ export {
     createDeliveriesResponsesTable,
     setupWebsocketServer,
     getUser,
-    postUser
+    postUser,
+    sendMessage
 };

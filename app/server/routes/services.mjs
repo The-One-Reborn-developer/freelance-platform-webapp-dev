@@ -15,14 +15,14 @@ import {
     postResponse,
     saveChatMessage,
     sendAttachment,
-    sendMessage,
     updateCloseBid,
     updateProfileInfo,
     updateResponse
 } from "../modules/services_index.mjs"
 
 import { 
-    getUser
+    getUser,
+    sendMessage
 } from "../modules/common_index.mjs"
 
 

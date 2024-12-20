@@ -9,7 +9,6 @@ import { getChatMessages } from "../utils/services/get_chat_messages.mjs";
 import { saveChatMessage } from "../utils/services/save_chat_message.mjs";
 import { updateResponse } from "../utils/services/update_response.mjs";
 import { sendAttachment } from "../utils/services/send_attachment.mjs";
-import { sendMessage } from "../utils/services/send_message.mjs";
 import { getResponsesByPerformerTelegramIDWithChatStarted } from "../utils/services/get_responses_by_performer_telegram_id_with_chat_started.mjs";
 import { getBidByBidID } from "../utils/services/get_bid_by_bid_id.mjs";
 import { getResponses } from "../utils/services/get_responses.mjs";
@@ -27,7 +26,6 @@ export {
     saveChatMessage,
     updateResponse,
     sendAttachment,
-    sendMessage,
     getResponsesByPerformerTelegramIDWithChatStarted,
     getBidByBidID,
     getResponses,

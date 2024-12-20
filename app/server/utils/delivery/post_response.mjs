@@ -1,3 +1,6 @@
+import { formatToSQLiteDate } from "../../modules/common_index.mjs";
+
+
 export function postResponse(
     db,
     deliveryID,
@@ -25,6 +28,7 @@ export function postResponse(
         const sanitizedCarWidth = courierCarWidth ? courierCarWidth : null;
         const sanitizedCarLength = courierCarLength ? courierCarLength : null;
         const sanitizedCarHeight = courierCarHeight ? courierCarHeight : null;
+        const formattedCourierRegistrationDate = formatToSQLiteDate(courierRegistrationDate);
         
         const postResponse = db.prepare(
             `INSERT INTO deliveries_responses (
@@ -50,7 +54,7 @@ export function postResponse(
             sanitizedCarWidth,
             sanitizedCarLength,
             sanitizedCarHeight,
-            courierRegistrationDate
+            formattedCourierRegistrationDate
         );
 
         return true;

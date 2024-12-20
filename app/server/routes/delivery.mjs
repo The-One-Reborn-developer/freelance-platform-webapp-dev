@@ -217,23 +217,23 @@ deliveryRouter.get('/responded-couriers', (req, res) => {
 
 deliveryRouter.get('/responded-customers', (req, res) => {
     const courierTelegramID = req.query.courier_telegram_id;
-
+    console.log(`Courier Telegram ID: ${courierTelegramID}`);
     try {
         if (!courierTelegramID) {
             res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
             return;
         } else {
             const responses = getResponsesByCourierTelegramIDWithChatStarted(db, courierTelegramID);
-            
+            console.log(`Responses: ${JSON.stringify(responses)}`);
             if (responses.length > 0) {
                 const deliveryIDs = responses.map((res) => res.delivery_id);
-
+                console.log(`Delivery IDs: ${JSON.stringify(deliveryIDs)}`);
                 // Extract customer info from deliverys
                 const deliveriesInfo = deliveryIDs.map((deliveryID) => {
                     const deliveryInfo = getDeliveryByDeliveryID(db, deliveryID);
                     return deliveryInfo;
                 });
-
+                console.log(`Deliveries Info: ${JSON.stringify(deliveriesInfo)}`);
                 res.status(200).json({ success: true, deliveriesInfo });
             } else {
                 res.status(200).json({ success: true, responses: [] });

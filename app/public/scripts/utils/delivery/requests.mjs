@@ -34,8 +34,8 @@ export async function fetchCustomers(validatedTelegramID) {
         if (data.success && Array.isArray(data.deliveriesInfo)) {
             return data.deliveriesInfo.map((res) => ({
                 name: res.customer_name,
-                deliveryID: res.id,
-                telegramID: res.customer_telegram_id
+                delivery_id: res.id,
+                telegram_id: res.customer_telegram_id
             }));
         } else {
             return [];

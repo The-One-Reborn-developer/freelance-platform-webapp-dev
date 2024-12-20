@@ -3,7 +3,7 @@ import path from 'path';
 
 
 export function getChatMessages(bidID, customerTelegramID, performerTelegramID) {
-    const chatFilePath = path.join(process.cwd(), 'app', 'services', 'chats', String(bidID), `${customerTelegramID}_${performerTelegramID}.txt`);
+    const chatFilePath = path.join(process.cwd(), 'app', 'chats', 'services', String(bidID), `${customerTelegramID}_${performerTelegramID}.txt`);
     
     try {
         if (fs.existsSync(chatFilePath)) {

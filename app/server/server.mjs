@@ -33,8 +33,10 @@ const db = new Database('./app/database.db', { verbose: console.log });
 const app = express();
 app.use(express.json());
 app.use(express.static('app/public'));
-const attachmentPath = path.join(__dirname, '../chats/attachments');
-app.use('/attachments', express.static(attachmentPath));
+const servicesAttachmentPath = path.join(__dirname, '../services/chats/attachments');
+const deliveryAttachmentPath = path.join(__dirname, '../delivery/chats/attachments');
+app.use('/services/attachments', express.static(servicesAttachmentPath));
+app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
 console.log(`Serving attachments from ${attachmentPath}`);
 console.log('Express app created');
 

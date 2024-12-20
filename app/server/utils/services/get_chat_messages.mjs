@@ -3,7 +3,7 @@ import path from 'path';
 
 
 export function getChatMessages(bidID, customerTelegramID, performerTelegramID) {
-    const chatFilePath = path.join(process.cwd(), 'app', 'chats', String(bidID), `${customerTelegramID}_${performerTelegramID}.txt`);
+    const chatFilePath = path.join(process.cwd(), 'app', 'services', 'chats', String(bidID), `${customerTelegramID}_${performerTelegramID}.txt`);
     
     try {
         if (fs.existsSync(chatFilePath)) {
@@ -14,7 +14,7 @@ export function getChatMessages(bidID, customerTelegramID, performerTelegramID) 
             return [];
         }
     } catch (error) {
-        console.error('Error reading chat file:', error);
+        console.error('Error in getChatMessages reading chat file:', error);
         return [];
     };
 };

@@ -13,14 +13,15 @@ import {
     updateCloseDelivery,
     getDeliveriesByCity,
     postResponse,
-    getDeliveryByDeliveryID
+    getDeliveryByDeliveryID,
+    saveChatMessage
 } from "../modules/delivery_index.mjs";
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
 
 const upload = multer({ 
-    dest: 'app/chats/attachments',
+    dest: 'app/delivery/chats/attachments',
     limits: {
         fileSize: 1024 * 1024 * 50 // 50MB
     }
@@ -144,7 +145,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
             const message = 'На Ваш заказ №' + deliveryID + ': \n\n' +
                             'Город: ' + city + '\n' +
                             'Что нужно доставить, описание: ' + description + '\n' +
-                            'Откуда: ' + deliverFrom + '. Куда: ' + deliverTo + '\n' +
+                            'Откуда: ' + deliverFrom + '.\n' + 'Куда: ' + deliverTo + '\n' +
                             'Нужна машина: ' + ((carNecessary === 1) ? 'да' : 'нет') + '\n\n' +
                             'Откликнулся исполнитель ' + courierName + '. Зарегистрирован с <i>' + courierRegistrationDate + '</i>. '+
                             'Есть машина: <i>' + ((courierHasCar === 1) ? 'да' : 'нет') + '</i>, модель: <i>' +

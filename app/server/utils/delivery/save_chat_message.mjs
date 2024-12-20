@@ -2,27 +2,27 @@ import fs from 'fs';
 import path from 'path';
 
 export function saveChatMessage(
-    bidID,
+    deliveryID,
     customerTelegramID,
-    performerTelegramID,
+    courierTelegramID,
     customerName,
-    performerName,
+    courierName,
     message,
     attachment,
     senderType
 ) {
     try {
-        const folderPath = path.join(process.cwd(), 'app', 'services', 'chats', String(bidID));
+        const folderPath = path.join(process.cwd(), 'app', 'delivery', 'chats', String(bidID));
         fs.mkdirSync(folderPath, { recursive: true });
 
-        const fileName = `${customerTelegramID}_${performerTelegramID}.txt`;
+        const fileName = `${customerTelegramID}_${courierTelegramID}.txt`;
         const filePath = path.join(folderPath, fileName);
 
         const currentDate = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
         const separator = '\n---\n';
 
         const formattedMessage = `${senderType === 'customer' ? `Заказчик ${customerName}` :
-                                 `Исполнитель ${performerName}`}:\n\n` +
+                                 `Курьер ${courierName}`}:\n\n` +
                                  `${attachment ? attachment : message}\n\n` +
                                  `${currentDate}${separator}`;
 

@@ -565,10 +565,10 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, performerTele
                         .filter((msg) => msg.trim() !== '')
                         // Replace '\n' with <br>
                         .map(async (msg) => {
-                            if (msg.includes('app/chats/attachments/')) {
+                            if (msg.includes('app/services/chats/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/services/chats/attachments/', '/services/attachments/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -719,10 +719,10 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
                 .map((msg) => {
-                    if (msg.includes('app/chats/attachments/')) {
+                    if (msg.includes('app/services/chats/attachments/')) {
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/services/chats/attachments/', '/services/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Исполнитель ${name}:`;
@@ -1020,10 +1020,10 @@ async function showSelectedPerformerChat(bidID, customerTelegramID, performerTel
                         .filter((msg) => msg.trim() !== '')
                         // Replace '\n' with <br>
                         .map(async (msg) => {
-                            if (msg.includes('app/chats/attachments/')) {
+                            if (msg.includes('app/services/chats/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/services/chats/attachments/', '/services/attachments/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -1096,10 +1096,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
                 .map((msg) => {
-                    if (msg.includes('app/chats/attachments/')) {
+                    if (msg.includes('app/services/chats/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/chats/attachments/', '/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/services/chats/attachments/', '/services/attachments/');
                         console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`

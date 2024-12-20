@@ -9,6 +9,7 @@ import { getResponses } from "../utils/delivery/get_responses.mjs";
 import { getResponse } from "../utils/delivery/get_response.mjs";
 import { getChatMessages } from "../utils/delivery/get_chat_messages.mjs";
 import { updateResponse } from "../utils/delivery/update_response.mjs";
+import { getResponsesByCourierTelegramIDWithChatStarted } from "../utils/delivery/get_responses_by_courier_telegram_id_with_chat_started.mjs";
 
 export { 
     postDelivery,
@@ -21,5 +22,6 @@ export {
     getResponses,
     getResponse,
     getChatMessages,
-    updateResponse
+    updateResponse,
+    getResponsesByCourierTelegramIDWithChatStarted
 };

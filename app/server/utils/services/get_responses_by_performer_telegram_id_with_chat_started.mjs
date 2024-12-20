@@ -6,7 +6,7 @@ export function getResponsesByPerformerTelegramIDWithChatStarted(db, performerTe
         const getResponsesByPerformerTelegramIDWithChatStartedResult = getResponsesByPerformerTelegramIDWithChatStarted.all(performerTelegramID);
         return getResponsesByPerformerTelegramIDWithChatStartedResult;
     } catch (error) {
-        console.error('Error in getRespondedCustomers:', error);
+        console.error(`Error in getResponsesByPerformerTelegramIDWithChatStarted (services): ${error}`);
         return [];
     };
 };

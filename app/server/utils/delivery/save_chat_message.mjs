@@ -12,7 +12,7 @@ export function saveChatMessage(
     senderType
 ) {
     try {
-        const folderPath = path.join(process.cwd(), 'app', 'delivery', 'chats', String(bidID));
+        const folderPath = path.join(process.cwd(), 'app', 'delivery', 'chats', String(deliveryID));
         fs.mkdirSync(folderPath, { recursive: true });
 
         const fileName = `${customerTelegramID}_${courierTelegramID}.txt`;

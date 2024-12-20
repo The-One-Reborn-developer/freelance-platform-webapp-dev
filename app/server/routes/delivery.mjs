@@ -113,6 +113,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierCarModel = courierData.car_model;
         const courierCarDimensions = courierData.car_dimensions;
         const courierRegistrationDate = courierData.delivery_registration_date;
+        console.log(`Courier registration date in /delivery/respond-to-delivery: ${courierRegistrationDate}`);
         
         const postResponseResult = postResponse(
             db,

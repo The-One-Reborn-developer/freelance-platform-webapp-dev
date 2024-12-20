@@ -460,7 +460,7 @@ async function showDeliveries(city, validatedTelegramID) {
                                     .then(data => {
                                         if (data.success) {
                                             showModal(data.message);
-                                            showBids(city, validatedTelegramID);
+                                            showDeliveries(city, validatedTelegramID);
                                         };
                                     })
                                     .catch(error => {

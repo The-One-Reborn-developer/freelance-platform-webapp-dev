@@ -210,6 +210,21 @@ servicesRouter.get('/responded-performers', (req, res) => {
 });
 
 
+servicesRouter.get('/get-chats', (req, res) => {
+    try {
+        const bidID = req.query.bid_id;
+        const customerTelegramID = req.query.customer_telegram_id;
+        const performerTelegramID = req.query.performer_telegram_id;
+
+        const chatMessages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
+
+        res.status(200).json({ success: true, chatMessages });
+    } catch (error) {
+        console.error(`Error in /get-chats: ${error}`);
+    }
+});
+
+
 servicesRouter.post('/show-customer-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
@@ -270,21 +285,6 @@ servicesRouter.post('/show-performer-chats-list', (req, res) => {
         console.error('Error in /show-performer-chats-list:', error);
         res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
     };
-});
-
-
-servicesRouter.get('/get-chats', (req, res) => {
-    try {
-        const bidID = req.query.bid_id;
-        const customerTelegramID = req.query.customer_telegram_id;
-        const performerTelegramID = req.query.performer_telegram_id;
-
-        const chatMessages = getChatMessages(bidID, customerTelegramID, performerTelegramID);
-
-        res.status(200).json({ success: true, chatMessages });
-    } catch (error) {
-        console.error(`Error in /get-chats: ${error}`);
-    }
 });
 
 

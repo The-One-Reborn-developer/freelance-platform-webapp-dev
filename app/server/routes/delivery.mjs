@@ -15,7 +15,8 @@ import {
     postResponse,
     getDeliveryByDeliveryID,
     saveChatMessage,
-    getResponses
+    getResponses,
+    getChatMessages
 } from "../modules/delivery_index.mjs";
 
 
@@ -208,6 +209,21 @@ deliveryRouter.get('/responded-couriers', (req, res) => {
         console.error('Error in /delivery/responded-couriers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся курьеров.' });
     };    
+});
+
+
+deliveryRouter.get('/get-chats', (req, res) => {
+    try {
+        const deliveryID = req.query.delivery_id;
+        const customerTelegramID = req.query.customer_telegram_id;
+        const courierTelegramID = req.query.courier_telegram_id;
+
+        const chatMessages = getChatMessages(deliveryID, customerTelegramID, courierTelegramID);
+
+        res.status(200).json({ success: true, chatMessages });
+    } catch (error) {
+        console.error(`Error in /delivery/get-chats: ${error}`);
+    };
 });
 
 

@@ -719,7 +719,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
             `/delivery/get-chats?delivery_id=${customer.delivery_id}&customer_telegram_id=${customer.telegram_id}&courier_telegram_id=${validatedTelegramID}`
         );
         const data = await response.json();
-
+        console.log(`data: ${data}`);
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
                 // Filter out empty messages

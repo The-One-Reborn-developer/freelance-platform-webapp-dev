@@ -232,7 +232,7 @@ servicesRouter.get('/responded-customers', (req, res) => {
                 res.status(200).json({ success: true, bidsInfo });
             } else {
                 res.status(200).json({ success: true, responses: [] });
-            }
+            };
         };
     } catch (error) {
         console.error('Error in /responded-customers:', error);

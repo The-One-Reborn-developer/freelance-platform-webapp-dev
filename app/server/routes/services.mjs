@@ -288,6 +288,57 @@ servicesRouter.post('/show-performer-chats-list', (req, res) => {
 });
 
 
+servicesRouter.post('/change-profile-info', (req, res) => {
+    try {
+        const telegramID = req.body.telegram_id;
+        const rate = req.body.rate;
+        const experience = req.body.experience;
+
+        const updateProfileInfoResult = updateProfileInfo(db, telegramID, rate, experience);
+
+        if (!updateProfileInfoResult) {
+            res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
+        } else {
+            res.status(200).json({ success: true, message: 'Информация о профиле успешно изменена.' });
+        };
+    } catch (error) {
+        console.error('Error in /change-profile-info:', error);
+        res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
+    };
+});
+
+
+servicesRouter.get('/responded-customers', (req, res) => {
+    const performerTelegramID = req.query.performer_telegram_id;
+
+    try {
+        if (!performerTelegramID) {
+            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
+            return;
+        } else {
+            const responses = getResponsesByPerformerTelegramIDWithChatStarted(db, performerTelegramID);
+            
+            if (responses.length > 0) {
+                const bidIDs = responses.map((res) => res.bid_id);
+
+                // Extract customer info from bids
+                const bidsInfo = bidIDs.map((bidID) => {
+                    const bidInfo = getBidByBidID(db, bidID);
+                    return bidInfo;
+                });
+
+                res.status(200).json({ success: true, bidsInfo });
+            } else {
+                res.status(200).json({ success: true, responses: [] });
+            }
+        };
+    } catch (error) {
+        console.error('Error in /responded-customers:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
+    };
+});
+
+
 servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => {
     try {
         const bidID = req.body.bid_id;
@@ -345,57 +396,6 @@ servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => 
     } catch (error) {
         console.error('Error in /send-message:', error);
         res.status(500).json({ message: 'Произошла ошибка при отправке сообщения.' });
-    };
-});
-
-
-servicesRouter.post('/change-profile-info', (req, res) => {
-    try {
-        const telegramID = req.body.telegram_id;
-        const rate = req.body.rate;
-        const experience = req.body.experience;
-
-        const updateProfileInfoResult = updateProfileInfo(db, telegramID, rate, experience);
-
-        if (!updateProfileInfoResult) {
-            res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
-        } else {
-            res.status(200).json({ success: true, message: 'Информация о профиле успешно изменена.' });
-        };
-    } catch (error) {
-        console.error('Error in /change-profile-info:', error);
-        res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
-    };
-});
-
-
-servicesRouter.get('/responded-customers', (req, res) => {
-    const performerTelegramID = req.query.performer_telegram_id;
-
-    try {
-        if (!performerTelegramID) {
-            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
-            return;
-        } else {
-            const responses = getResponsesByPerformerTelegramIDWithChatStarted(db, performerTelegramID);
-            
-            if (responses.length > 0) {
-                const bidIDs = responses.map((res) => res.bid_id);
-
-                // Extract customer info from bids
-                const bidsInfo = bidIDs.map((bidID) => {
-                    const bidInfo = getBidByBidID(db, bidID);
-                    return bidInfo;
-                });
-
-                res.status(200).json({ success: true, bidsInfo });
-            } else {
-                res.status(200).json({ success: true, responses: [] });
-            }
-        };
-    } catch (error) {
-        console.error('Error in /responded-customers:', error);
-        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
     };
 });
 

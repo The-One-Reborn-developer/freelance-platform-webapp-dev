@@ -8,6 +8,7 @@ import { saveChatMessage } from "../utils/delivery/save_chat_message.mjs";
 import { getResponses } from "../utils/delivery/get_responses.mjs";
 import { getResponse } from "../utils/delivery/get_response.mjs";
 import { getChatMessages } from "../utils/delivery/get_chat_messages.mjs";
+import { updateResponse } from "../utils/delivery/update_response.mjs";
 
 export { 
     postDelivery,
@@ -19,5 +20,6 @@ export {
     saveChatMessage,
     getResponses,
     getResponse,
-    getChatMessages
+    getChatMessages,
+    updateResponse
 };

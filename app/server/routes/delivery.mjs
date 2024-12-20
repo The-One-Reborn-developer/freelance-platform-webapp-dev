@@ -16,7 +16,9 @@ import {
     getDeliveryByDeliveryID,
     saveChatMessage,
     getResponses,
-    getChatMessages
+    getChatMessages,
+    updateResponse,
+    sendAttachment
 } from "../modules/delivery_index.mjs";
 
 
@@ -223,6 +225,67 @@ deliveryRouter.get('/get-chats', (req, res) => {
         res.status(200).json({ success: true, chatMessages });
     } catch (error) {
         console.error(`Error in /delivery/get-chats: ${error}`);
+    };
+});
+
+
+deliveryRouter.post('/send-message', upload.single('attachment'), (req, res) => {
+    try {
+        const deliveryID = req.body.delivery_id;
+        const customerTelegramID = req.body.customer_telegram_id;
+        const courierTelegramID = req.body.courier_telegram_id;
+        const customerName = getUser(db, customerTelegramID).delivery_name;
+        const courierName = getUser(db, courierTelegramID).delivery_name;
+        const message = req.body.message;
+        const senderType = req.body.sender_type;
+
+        let attachmentPath = null;
+        if (req.file) {
+            attachmentPath = req.file.path;
+        };
+
+        saveChatMessage(
+            deliveryID,
+            customerTelegramID,
+            courierTelegramID,
+            customerName,
+            courierName,
+            message,
+            attachmentPath,
+            senderType
+        );
+
+        if (senderType === 'customer') {
+            updateResponse(
+                db,
+                deliveryID,
+                courierTelegramID,
+                true
+            );
+        };
+
+        const recipientTelegramID = senderType === 'customer' ? courierTelegramID : customerTelegramID;
+
+        const formattedMessage = senderType === 'customer' ? 
+            `Заказчик ${customerName}:\n${message}` :
+            `Курьер ${courierName}:\n${message}`;
+
+        if (attachmentPath) {
+            sendAttachment(
+                recipientTelegramID,
+                attachmentPath
+            );
+        } else {
+            sendMessage(
+                recipientTelegramID,
+                formattedMessage
+            );
+        };
+
+        res.status(200).json({ success: true, message: 'Сообщение успешно отправлено.' });
+    } catch (error) {
+        console.error('Error in /delivery/send-message:', error);
+        res.status(500).json({ message: 'Произошла ошибка при отправке сообщения.' });
     };
 });
 

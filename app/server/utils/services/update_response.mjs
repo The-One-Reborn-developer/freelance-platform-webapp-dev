@@ -2,7 +2,8 @@ export function updateResponse(
     db,
     bidID,
     performerTelegramID,
-    chatStarted) {
+    chatStarted
+) {
     try {
         const bidIDInt = parseInt(bidID, 10);
         const performerTelegramIDInt = BigInt(performerTelegramID);
@@ -14,6 +15,6 @@ export function updateResponse(
         const updateResponseResult = updateResponse.run(chatStartedInt, bidIDInt, performerTelegramIDInt);
         return updateResponseResult;
     } catch (error) {
-        console.error(`Error in updateResponse: ${error}`);
+        console.error(`Error in updateResponse (services): ${error}`);
     };
 };

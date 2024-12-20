@@ -10,7 +10,6 @@ import {
 import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
 import { setupWebsocketServer } from "../utils/common/setup_websocket_server.mjs";
-import { formatToSQLiteDate } from "../utils/common/format_to_sqlite_date.mjs"
 
 export {
     checkTelegramData,
@@ -22,6 +21,5 @@ export {
     createDeliveriesResponsesTable,
     setupWebsocketServer,
     getUser,
-    postUser,
-    formatToSQLiteDate
+    postUser
 };

@@ -111,7 +111,9 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierDateOfBirth = courierData.date_of_birth;
         const courierHasCar = courierData.has_car;
         const courierCarModel = courierData.car_model;
-        const courierCarDimensions = courierData.car_dimensions;
+        const courierCarWidth = courierData.car_width;
+        const courierCarLength = courierData.car_length;
+        const courierCarHeight = courierData.car_height;
         const courierRegistrationDate = courierData.delivery_registration_date;
         console.log(`Courier registration date in /delivery/respond-to-delivery: ${courierRegistrationDate}`);
         
@@ -123,7 +125,9 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
             courierDateOfBirth,
             courierHasCar,
             courierCarModel,
-            courierCarDimensions,
+            courierCarWidth,
+            courierCarLength,
+            courierCarHeight,
             courierRegistrationDate
         );
 

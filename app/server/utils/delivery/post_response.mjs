@@ -1,6 +1,3 @@
-import { formatToSQLiteDate } from "../../modules/common_index.mjs";
-
-
 export function postResponse(
     db,
     deliveryID,
@@ -23,13 +20,10 @@ export function postResponse(
             console.log('User already responded to this delivery.');
             return false;
         };
-        console.log(`courierRegistrationDate in postResponse: ${courierRegistrationDate}`);
         const sanitizedCarModel = courierCarModel ? courierCarModel : null;
         const sanitizedCarWidth = courierCarWidth ? courierCarWidth : null;
         const sanitizedCarLength = courierCarLength ? courierCarLength : null;
         const sanitizedCarHeight = courierCarHeight ? courierCarHeight : null;
-        const formattedCourierRegistrationDate = formatToSQLiteDate(courierRegistrationDate);
-        console.log(`formattedCourierRegistrationDate in postResponse: ${formattedCourierRegistrationDate}`);
         const postResponse = db.prepare(
             `INSERT INTO deliveries_responses (
                                     delivery_id,
@@ -54,7 +48,7 @@ export function postResponse(
             sanitizedCarWidth,
             sanitizedCarLength,
             sanitizedCarHeight,
-            formattedCourierRegistrationDate
+            courierRegistrationDate
         );
 
         return true;

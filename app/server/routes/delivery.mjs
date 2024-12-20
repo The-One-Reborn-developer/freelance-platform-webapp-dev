@@ -147,7 +147,8 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
                             'Нужна машина: ' + ((carNecessary === 1) ? 'да' : 'нет') + '\n\n' +
                             'Откликнулся исполнитель ' + courierName + '. Зарегистрирован с <i>' + courierRegistrationDate + '</i>. '+
                             'Есть машина: <i>' + ((courierHasCar === 1) ? 'да' : 'нет') + '</i>, модель: <i>' +
-                            courierCarModel + '</i>, габариты: <i>' + courierCarDimensions + '</i>, стаж: <i>';
+                            courierCarModel + '</i>, габариты: <i>' + courierCarWidth + 'x' + courierCarLength + 'x' + 
+                            courierCarHeight + '</i>';
 
 
             sendMessage(

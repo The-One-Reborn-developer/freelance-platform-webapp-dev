@@ -768,7 +768,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    bid_id: customer.delivery_id,
+                    delivery_id: customer.delivery_id,
                     customer_telegram_id: customer.telegram_id,
                     courier_telegram_id: validatedTelegramID,
                     message,

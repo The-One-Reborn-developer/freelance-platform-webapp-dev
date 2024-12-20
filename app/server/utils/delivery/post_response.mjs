@@ -32,9 +32,9 @@ export function postResponse(
                                     courier_date_of_birth,
                                     courier_has_car,
                                     courier_car_model,
-                                    courier_width,
-                                    courier_length,
-                                    courier_height,
+                                    courier_car_width,
+                                    courier_car_length,
+                                    courier_car_height,
                                     courier_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
                                 );
         

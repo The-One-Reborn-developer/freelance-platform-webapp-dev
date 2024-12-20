@@ -28,7 +28,7 @@ export async function fetchCouriers(validatedTelegramID) {
 
 export async function fetchCustomers(validatedTelegramID) {
     try {
-        const response = await fetch(`/delivery/responded-customers?telegram_id=${validatedTelegramID}`);
+        const response = await fetch(`/delivery/responded-customers?courier_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
 
         if (data.success && Array.isArray(data.deliveriesInfo)) {

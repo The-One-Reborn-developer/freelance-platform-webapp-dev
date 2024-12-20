@@ -616,10 +616,10 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
                         .filter((msg) => msg.trim() !== '')
                         // Replace '\n' with <br>
                         .map(async (msg) => {
-                            if (msg.includes('app/delivery/chats/attachments/')) {
+                            if (msg.includes('app/chats/delivery/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/delivery/chats/attachments/', '/delivery/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -726,10 +726,10 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
                 .map((msg) => {
-                    if (msg.includes('app/delivery/chats/attachments/')) {
+                    if (msg.includes('app/chats/delivery/attachments/')) {
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/delivery/chats/attachments/', '/delivery/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Курьер ${name}:`;
@@ -1027,10 +1027,10 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
                         .filter((msg) => msg.trim() !== '')
                         // Replace '\n' with <br>
                         .map(async (msg) => {
-                            if (msg.includes('app/delivery/chats/attachments/')) {
+                            if (msg.includes('app/chats/delivery/attachments/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('app/delivery/chats/attachments/', '/delvery/attachments/');
+                                const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delvery/attachments/');
                                 console.log(attachmentUrl);
 
                                 const customerName = await fetch('/common/get-user-data', {
@@ -1104,10 +1104,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                 .filter((msg) => msg.trim() !== '')
                 // Replace '\n' with <br>
                 .map((msg) => {
-                    if (msg.includes('app/delivery/chats/attachments/')) {
+                    if (msg.includes('app/chats/delivery/attachments/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('app/delivery/chats/attachments/', '/delivery/attachments/');
+                        const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
                         console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`

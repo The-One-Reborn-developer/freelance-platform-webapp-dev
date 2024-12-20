@@ -2,6 +2,7 @@ export async function fetchCouriers(validatedTelegramID) {
     try {
         const response = await fetch(`/delivery/responded-couriers?customer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
+        console.log(`data: ${JSON.stringify(data)}`)
         if (data.success) {
             return data.responses.map((res) => ({
                 name: res.courier_name,
@@ -11,7 +12,7 @@ export async function fetchCouriers(validatedTelegramID) {
                 carWidth: res.courier_car_width,
                 carLength: res.courier_car_length,
                 carHeight: res.courier_car_height,
-                bidID: res.id,
+                deliveryID: res.id,
                 telegramID: res.courier_telegram_id,
                 registration_date: res.courier_registration_date
             }));

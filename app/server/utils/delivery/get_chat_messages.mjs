@@ -4,7 +4,7 @@ import path from 'path';
 
 export function getChatMessages(deliveryID, customerTelegramID, courierTelegramID) {
     const chatFilePath = path.join(process.cwd(), 'app', 'chats', 'delivery', String(deliveryID), `${customerTelegramID}_${courierTelegramID}.txt`);
-    
+    console.log(`Chat file path: ${chatFilePath}`);
     try {
         if (fs.existsSync(chatFilePath)) {
             const chatContent = fs.readFileSync(chatFilePath, 'utf8');

@@ -869,7 +869,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
     // Fetch the list of couriers who responded to the customer's bids
     try {
         const couriers = await fetchCouriers(validatedTelegramID);
-        console.log(`couriers: ${JSON.stringify(couriers)}`);
+
         if (couriers.length === 0) {
             showModal('На Ваши заявки ещё никто не откликался.');
             return;
@@ -1100,7 +1100,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
             `/delivery/get-chats?bid_id=${courier.bidID}&customer_telegram_id=${validatedTelegramID}&courier_telegram_id=${courier.telegramID}`
         );
         const data = await response.json();
-
+        console.log(data);
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
                 // Filter out empty messages

@@ -150,9 +150,9 @@ export function postUser(
                         date_of_birth = ?,
                         has_car = ?,
                         car_model = ?,
-                        car__width = ?,
-                        car__length = ?,
-                        car__height = ?,
+                        car_width = ?,
+                        car_length = ?,
+                        car_height = ?,
                         registered_in_delivery = 1,
                         delivery_registration_date = ?
                         WHERE telegram_id = ?`

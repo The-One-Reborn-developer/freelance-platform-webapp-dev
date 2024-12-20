@@ -6,7 +6,7 @@ export function getBidByBidID(db, bidID) {
         const getBidResult = getBid.get(bidID);
         return getBidResult;
     } catch (error) {
-        console.error('Error in getUser:', error);
+        console.error('Error in getBidByBidID:', error);
         return null;
     };
 };

@@ -11,7 +11,8 @@ import {
     getOpenDeliveriesByCustomerTelegramID,
     updateCloseDelivery,
     getDeliveriesByCity,
-    postResponse
+    postResponse,
+    getDeliveryByDeliveryID
 } from "../modules/delivery_index.mjs";
 
 
@@ -115,7 +116,6 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierCarLength = courierData.car_length;
         const courierCarHeight = courierData.car_height;
         const courierRegistrationDate = courierData.delivery_registration_date;
-        console.log(`Courier registration date in /delivery/respond-to-delivery: ${courierRegistrationDate}`);
         
         const postResponseResult = postResponse(
             db,

@@ -26,7 +26,7 @@ export function saveChatMessage(
                                  `${attachment ? attachment : message}\n\n` +
                                  `${currentDate}${separator}`;
 
-            fs.appendFileSync(filePath, formattedMessage, 'utf8');
+        fs.appendFileSync(filePath, formattedMessage, 'utf8');
     } catch (error) {
         console.error('Error in saveChatMessage saving chat message:', error);
     };

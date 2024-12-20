@@ -733,7 +733,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Курьер ${name}:`;
-
+                        console.log(`AttachmentURL: ${attachmentUrl}`);
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>

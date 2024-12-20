@@ -11,6 +11,5 @@ export {
     updateCloseDelivery,
     getDeliveriesByCity,
     postResponse,
-    getDeliveryByDeliveryID,
-    sendMessage
+    getDeliveryByDeliveryID
 };

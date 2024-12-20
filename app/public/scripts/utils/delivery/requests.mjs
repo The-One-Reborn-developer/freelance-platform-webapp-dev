@@ -6,14 +6,14 @@ export async function fetchCouriers(validatedTelegramID) {
         if (data.success) {
             return data.responses.map((res) => ({
                 name: res.courier_name,
-                dateOfBirth: res.courier_date_of_birth,
-                hasCar: res.courier_has_car,
-                carModel: res.courier_car_model,
-                carWidth: res.courier_car_width,
-                carLength: res.courier_car_length,
-                carHeight: res.courier_car_height,
-                deliveryID: res.id,
-                telegramID: res.courier_telegram_id,
+                date_of_birth: res.courier_date_of_birth,
+                has_car: res.courier_has_car,
+                car_model: res.courier_car_model,
+                car_width: res.courier_car_width,
+                car_length: res.courier_car_length,
+                car_height: res.courier_car_height,
+                delivery_id: res.id,
+                telegram_id: res.courier_telegram_id,
                 registration_date: res.courier_registration_date
             }));
         } else {

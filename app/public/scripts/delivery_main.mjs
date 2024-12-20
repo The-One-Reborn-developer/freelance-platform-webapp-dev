@@ -884,10 +884,13 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
             couriers.forEach((courier) => {
                 const courierParagraph = document.createElement('p');
+
                 courierParagraph.innerHTML =
                     `${courier.name}. Зарегистрирован ${courier.registration_date}. 
-                    Дата рождения: ${courier.date_of_birth}. Есть машина ${courier.has_car ? 'да' : 'нет'}. 
-                    Габариты машины: ${courier.car_}.`;
+                    Дата рождения: ${courier.date_of_birth}. Есть машина: ${courier.has_car ? 'да' : 'нет'}.` +
+                    (courier.has_car ? 
+                        ` Модель: ${courier.car_model}. Габариты машины: ${courier.car_width}x${courier.car_length}x${courier.car_height}.`
+                        : '');
 
                 const chatButton = document.createElement('button');
                 chatButton.innerHTML = 'Написать курьеру 📩';

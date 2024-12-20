@@ -11,16 +11,16 @@ export function getResponses(db, customerDeliveries) {
                 responses = responses.concat(
                     responsesForDelivery.map((response) => ({
                         id: response.id,
-                        deliveryID: response.delivery_id,
-                        courierTelegramID: response.courier_telegram_id,
-                        courierName: response.courier_name,
-                        courierDateOfBirth: response.courier_date_of_birth,
-                        courierHasCar: response.courier_has_car,
-                        courierCarModel: response.courier_car_model,
-                        courierCarWidth: response.courier_car_width,
-                        courierCarLength: response.courier_car_length,
-                        courierCarHeight: response.courier_car_height,
-                        courierRegistrationDate: response.courier_registration_date 
+                        delivery_id: response.delivery_id,
+                        telegram_id: response.courier_telegram_id,
+                        name: response.courier_name,
+                        date_of_birth: response.courier_date_of_birth,
+                        has_car: response.courier_has_car,
+                        car_model: response.courier_car_model,
+                        car_width: response.courier_car_width,
+                        car_length: response.courier_car_length,
+                        car_height: response.courier_car_height,
+                        registration_date: response.courier_registration_date 
                     }))
                 );
             };

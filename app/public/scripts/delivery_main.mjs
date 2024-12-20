@@ -1097,7 +1097,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
     try {
         // Fetch the chat history
         const response = await fetch(
-            `/delivery/get-chats?bid_id=${courier.deliveryID}&customer_telegram_id=${validatedTelegramID}&courier_telegram_id=${courier.telegramID}`
+            `/delivery/get-chats?delivery_id=${courier.deliveryID}&customer_telegram_id=${validatedTelegramID}&courier_telegram_id=${courier.telegramID}`
         );
         const data = await response.json();
         console.log(data);

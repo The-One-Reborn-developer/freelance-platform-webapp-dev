@@ -219,7 +219,7 @@ deliveryRouter.get('/get-chats', (req, res) => {
         const courierTelegramID = req.query.courier_telegram_id;
 
         const chatMessages = getChatMessages(deliveryID, customerTelegramID, courierTelegramID);
-        console.log(chatMessages);
+        
         res.status(200).json({ success: true, chatMessages });
     } catch (error) {
         console.error(`Error in /delivery/get-chats: ${error}`);

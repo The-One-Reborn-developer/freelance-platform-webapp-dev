@@ -1089,7 +1089,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
 
 async function loadCustomerChatHistory(validatedTelegramID, name, courier, socket) {
     const chatHistory = document.getElementById('chat-history');
-    console.log(courier);
+    
     // Clear the chat history
     chatHistory.innerHTML = '';
     chatHistory.innerHTML = 'Загрузка...';
@@ -1100,7 +1100,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
             `/delivery/get-chats?delivery_id=${courier.delivery_id}&customer_telegram_id=${validatedTelegramID}&courier_telegram_id=${courier.telegram_id}`
         );
         const data = await response.json();
-        console.log(data);
+        
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
                 // Filter out empty messages
@@ -1150,9 +1150,9 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    bid_id: performer.bidID,
+                    delivery_id: courier.delivery_id,
                     customer_telegram_id: validatedTelegramID,
-                    courier_telegram_id: courier.telegramID,
+                    courier_telegram_id: courier.telegram_id,
                     message,
                     sender_type: 'customer'
                 })
@@ -1161,7 +1161,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const messageData = {
-                    recipient_telegram_id: courier.telegramID,
+                    recipient_telegram_id: courier.telegram_id,
                     sender_name: name,
                     message,
                     attachment: null
@@ -1199,9 +1199,9 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
         if (file) {
             const formData = new FormData();
             formData.append('attachment', file);
-            formData.append('bid_id', courier.bidID);
+            formData.append('delivery_id', courier.delivery_id);
             formData.append('customer_telegram_id', validatedTelegramID);
-            formData.append('courier_telegram_id', courier.telegramID);
+            formData.append('courier_telegram_id', courier.telegram_id);
             formData.append('sender_type', 'customer');
 
             try {
@@ -1215,7 +1215,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
 
                 if (socket && socket.readyState === WebSocket.OPEN) {
                     const messageData = {
-                        recipient_telegram_id: courier.telegramID,
+                        recipient_telegram_id: courier.telegram_id,
                         sender_name: name,
                         message: '[File sent]',
                         attachment: base64File

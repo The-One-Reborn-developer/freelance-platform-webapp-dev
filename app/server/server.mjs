@@ -37,7 +37,7 @@ const servicesAttachmentPath = path.join(__dirname, '../services/chats/attachmen
 const deliveryAttachmentPath = path.join(__dirname, '../delivery/chats/attachments');
 app.use('/services/attachments', express.static(servicesAttachmentPath));
 app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
-console.log(`Serving attachments from ${attachmentPath}`);
+console.log(`Serving attachments from ${servicesAttachmentPath} and ${deliveryAttachmentPath}`);
 console.log('Express app created');
 
 app.use('/common', commonRouter);

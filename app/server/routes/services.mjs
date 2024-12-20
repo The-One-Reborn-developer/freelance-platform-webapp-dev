@@ -180,6 +180,36 @@ servicesRouter.post('/respond-to-bid', (req, res) => {
 });
 
 
+servicesRouter.get('/responded-performers', (req, res) => {
+    const customerTelegramID = req.query.customer_telegram_id;
+
+    try {
+        if (!customerTelegramID) {
+            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
+            return;
+        } else {
+            const customerBids = getOpenBidsByCustomerTelegramID(db, customerTelegramID);
+
+            if (customerBids.length === 0) {
+                res.status(200).json({ success: true, performers: [] });
+                return;
+            } else {
+                const responses = getResponses(db, customerBids);
+
+                if (responses.length === 0) {
+                    res.status(200).json({ success: true, responses: [] });
+                } else {
+                    res.status(200).json({ success: true, responses });
+                };
+            };
+        };
+    } catch (error) {
+        console.error('Error in /responded-performers:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся исполнителей.' });
+    };    
+});
+
+
 servicesRouter.post('/show-customer-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
@@ -316,36 +346,6 @@ servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => 
         console.error('Error in /send-message:', error);
         res.status(500).json({ message: 'Произошла ошибка при отправке сообщения.' });
     };
-});
-
-
-servicesRouter.get('/responded-performers', (req, res) => {
-    const customerTelegramID = req.query.customer_telegram_id;
-
-    try {
-        if (!customerTelegramID) {
-            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
-            return;
-        } else {
-            const customerBids = getOpenBidsByCustomerTelegramID(db, customerTelegramID);
-
-            if (customerBids.length === 0) {
-                res.status(200).json({ success: true, performers: [] });
-                return;
-            } else {
-                const responses = getResponses(db, customerBids);
-
-                if (responses.length === 0) {
-                    res.status(200).json({ success: true, responses: [] });
-                } else {
-                    res.status(200).json({ success: true, responses });
-                };
-            };
-        };
-    } catch (error) {
-        console.error('Error in /responded-performers:', error);
-        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся исполнителей.' });
-    };    
 });
 
 

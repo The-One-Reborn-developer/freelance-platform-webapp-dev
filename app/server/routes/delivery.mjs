@@ -14,7 +14,8 @@ import {
     getDeliveriesByCity,
     postResponse,
     getDeliveryByDeliveryID,
-    saveChatMessage
+    saveChatMessage,
+    getResponses
 } from "../modules/delivery_index.mjs";
 
 
@@ -177,6 +178,36 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         console.error('Error in /delivery/respond-to-delivery:', error);
         res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });
     };
+});
+
+
+deliveryRouter.get('/responded-couriers', (req, res) => {
+    const customerTelegramID = req.query.customer_telegram_id;
+
+    try {
+        if (!customerTelegramID) {
+            res.status(400).json({ message: 'Telegram ID пользователя не указан.' });
+            return;
+        } else {
+            const customerDeliveries = getOpenDeliveriesByCustomerTelegramID(db, customerTelegramID);
+
+            if (customerDeliveries.length === 0) {
+                res.status(200).json({ success: true, couriers: [] });
+                return;
+            } else {
+                const responses = getResponses(db, customerDeliveries);
+
+                if (responses.length === 0) {
+                    res.status(200).json({ success: true, responses: [] });
+                } else {
+                    res.status(200).json({ success: true, responses });
+                };
+            };
+        };
+    } catch (error) {
+        console.error('Error in /delivery/responded-couriers:', error);
+        res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся курьеров.' });
+    };    
 });
 
 

@@ -28,7 +28,7 @@ import {
 
 const db = new Database('./app/database.db', { verbose: console.log });
 const upload = multer({ 
-    dest: 'app/services/chats/attachments',
+    dest: 'app/chats/services/attachments',
     limits: {
         fileSize: 1024 * 1024 * 50 // 50MB
     }

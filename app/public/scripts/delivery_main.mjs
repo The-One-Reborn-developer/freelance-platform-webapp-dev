@@ -733,7 +733,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Курьер ${name}:`;
-                        console.log(`AttachmentURL: ${attachmentUrl}`);
+
                         // Render the message with attachment
                         return `<div class="chat-message">
                                     ${senderName}<br><br>
@@ -1111,7 +1111,6 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
-                        console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Курьер ${courier.name}:`;

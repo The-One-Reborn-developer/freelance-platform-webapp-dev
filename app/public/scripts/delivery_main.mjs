@@ -675,7 +675,7 @@ async function showCourierChats(validatedTelegramID, name, socket) {
     // Fetch the list of customers who wrote to the courier
     try {
         const customers = await fetchCustomers(validatedTelegramID);
-        console.log(`customers: ${JSON.stringify(customers)}`);
+        
         if (customers.length === 0) {
             showModal('На Ваши отклики ещё никто не написал.');
             return;
@@ -719,7 +719,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
             `/delivery/get-chats?delivery_id=${customer.delivery_id}&customer_telegram_id=${customer.telegram_id}&courier_telegram_id=${validatedTelegramID}`
         );
         const data = await response.json();
-        console.log(`data: ${JSON.stringify(data)}`);
+        
         if (data.success && Array.isArray(data.chatMessages) && data.chatMessages.length > 0) {
             chatHistory.innerHTML = data.chatMessages
                 // Filter out empty messages
@@ -768,8 +768,8 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    bid_id: customer.bidID,
-                    customer_telegram_id: customer.telegramID,
+                    bid_id: customer.delivery_id,
+                    customer_telegram_id: customer.telegram_id,
                     courier_telegram_id: validatedTelegramID,
                     message,
                     sender_type: 'courier'
@@ -778,7 +778,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
             // Send the message through the WebSocket to be displayed on the other side
             if (socket && socket.readyState === WebSocket.OPEN) {
                 const messageData = {
-                    recipient_telegram_id: customer.telegramID,
+                    recipient_telegram_id: customer.telegram_id,
                     sender_name: name,
                     message,
                     attachment: null
@@ -818,8 +818,8 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
         if (file) {
             const formData = new FormData();
             formData.append('attachment', file);
-            formData.append('bid_id', courier.bidID);
-            formData.append('customer_telegram_id', customer.telegramID);
+            formData.append('delivery_id', courier.delivery_id);
+            formData.append('customer_telegram_id', customer.telegram_id);
             formData.append('courier_telegram_id', validatedTelegramID);
             formData.append('sender_type', 'courier');
 
@@ -834,7 +834,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
 
                 if (socket && socket.readyState === WebSocket.OPEN) {
                     const messageData = {
-                        recipient_telegram_id: customer.telegramID,
+                        recipient_telegram_id: customer.telegram_id,
                         sender_name: name,
                         message: '[File sent]',
                         attachment: base64File

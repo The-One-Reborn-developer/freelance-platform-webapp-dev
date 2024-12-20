@@ -194,7 +194,7 @@ function insertCourierButtons(
             headerNav.appendChild(searchBidsButton);
             headerNav.appendChild(lookChatsButton);
         } catch (error) {
-            console.error(`Error in insertPerformerButtons: ${error}`);
+            console.error(`Error in insertcourierButtons: ${error}`);
         };
     };
 };
@@ -672,7 +672,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
 
 
 async function showCourierChats(validatedTelegramID, name, socket) {
-    // Fetch the list of customers who wrote to the performer
+    // Fetch the list of customers who wrote to the courier
     try {
         const customers = await fetchCustomers(validatedTelegramID);
 
@@ -692,7 +692,7 @@ async function showCourierChats(validatedTelegramID, name, socket) {
                 const button = document.createElement('button');
                 button.innerHTML = `${customer.name}`;
                 button.addEventListener('click', () => {
-                    loadPerformerChatHistory(validatedTelegramID, name, customer, socket)
+                    loadCourierChatHistory(validatedTelegramID, name, customer, socket)
                     chatInput.classList.remove('hidden');
                 });
                 customerList.appendChild(button);
@@ -770,7 +770,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                 body: JSON.stringify({
                     bid_id: customer.bidID,
                     customer_telegram_id: customer.telegramID,
-                    performer_telegram_id: validatedTelegramID,
+                    courier_telegram_id: validatedTelegramID,
                     message,
                     sender_type: 'courier'
                 })
@@ -821,7 +821,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
             formData.append('bid_id', courier.bidID);
             formData.append('customer_telegram_id', customer.telegramID);
             formData.append('courier_telegram_id', validatedTelegramID);
-            formData.append('sender_type', 'performer');
+            formData.append('sender_type', 'courier');
 
             try {
                 const response = await fetch('/delivery/send-message', {

@@ -13,11 +13,11 @@ const hasCarInputFalse = document.getElementById('has-car-input-false');
 const hasCarLabel = document.getElementById('has-car-label');
 const carModelInput = document.getElementById('car-model-input');
 const carModelLabel = document.getElementById('car-model-label');
-const carDimensionsContainer = document.getElementById('car-dimensions-container');
-const carDimensionsWidthInput = document.getElementById('car-dimensions-width-input');
-const carDimensionsLengthInput = document.getElementById('car-dimensions-length-input');
-const carDimensionsHeightInput = document.getElementById('car-dimensions-height-input');
-const carDimensionsLabel = document.getElementById('car-dimensions-label');
+const carContainer = document.getElementById('car--container');
+const carWidthInput = document.getElementById('car--width-input');
+const carLengthInput = document.getElementById('car--length-input');
+const carHeightInput = document.getElementById('car--height-input');
+const carLabel = document.getElementById('car--label');
 
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
@@ -35,8 +35,8 @@ function initializePage() {
     hasCarLabel.style.display = 'none';
     carModelInput.style.display = 'none';
     carModelLabel.style.display = 'none';
-    carDimensionsContainer.style.display = 'none';
-    carDimensionsLabel.style.display = 'none';
+    carContainer.style.display = 'none';
+    carLabel.style.display = 'none';
     registerButton.style.display = 'none';
 };
 
@@ -88,8 +88,8 @@ function chooseCustomer() {
     hasCarLabel.style.display = 'none';
     carModelInput.style.display = 'none';
     carModelLabel.style.display = 'none';
-    carDimensionsContainer.style.display = 'none';
-    carDimensionsLabel.style.display = 'none';
+    carContainer.style.display = 'none';
+    carLabel.style.display = 'none';
     registerButton.style.display = '';
 
     // Highlight the selected button
@@ -117,16 +117,16 @@ function chooseCourier() {
 function noCar() {
     carModelInput.style.display = 'none';
     carModelLabel.style.display = 'none';
-    carDimensionsContainer.style.display = 'none';
-    carDimensionsLabel.style.display = 'none';
+    carContainer.style.display = 'none';
+    carLabel.style.display = 'none';
 };
 
 
 function hasCar() {
     carModelInput.style.display = '';
     carModelLabel.style.display = '';
-    carDimensionsContainer.style.display = '';
-    carDimensionsLabel.style.display = '';
+    carContainer.style.display = '';
+    carLabel.style.display = '';
 };
 
 
@@ -137,9 +137,9 @@ function register() {
     const hasCar = hasCarInputTrue.checked;
     const noCar = hasCarInputFalse.checked;
     const carModel = carModelInput.value.trim();
-    const carDimensionsWidth = carDimensionsWidthInput.value.trim();
-    const carDimensionsLength = carDimensionsLengthInput.value.trim();
-    const carDimensionsHeight = carDimensionsHeightInput.value.trim();
+    const carWidth = carWidthInput.value.trim();
+    const carLength = carLengthInput.value.trim();
+    const carHeight = carHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
     if (!name) {
@@ -157,7 +157,7 @@ function register() {
             return;
         };
 
-        if (hasCar && (!carModel || !carDimensionsWidth || !carDimensionsLength || !carDimensionsHeight)) {
+        if (hasCar && (!carModel || !carWidth || !carLength || !carHeight)) {
             showModal('Пожалуйста, укажите марку автомобиля и его размеры.');
             return;
         };
@@ -169,9 +169,9 @@ function register() {
         date_of_birth: dateOfBirth,
         has_car: hasCar,
         car_model: carModel,
-        car_dimensions_width: carDimensionsWidth,
-        car_dimensions_length: carDimensionsLength,
-        car_dimensions_height: carDimensionsHeight,
+        car_width: carWidth,
+        car_length: carLength,
+        car_height: carHeight,
         telegram_data: telegramData,
         service: 'delivery'
     };

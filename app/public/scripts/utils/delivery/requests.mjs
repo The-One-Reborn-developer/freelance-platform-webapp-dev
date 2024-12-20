@@ -9,7 +9,9 @@ export async function fetchCouriers(validatedTelegramID) {
                 dateOfBirth: res.courier_date_of_birth,
                 hasCar: res.courier_has_car,
                 carModel: res.courier_car_model,
-                carDimensions: res.courier_car_dimensions,
+                carWidth: res.courier_car_width,
+                carLength: res.courier_car_length,
+                carHeight: res.courier_car_height,
                 bidID: res.id,
                 telegramID: res.courier_telegram_id,
                 registration_date: res.courier_registration_date

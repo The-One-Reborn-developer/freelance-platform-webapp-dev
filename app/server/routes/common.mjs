@@ -59,9 +59,9 @@ commonRouter.post('/registration-attempt', (req, res) => {
                 date_of_birth: dateOfBirth,
                 has_car: hasCar,
                 car_model: carModel,
-                car_dimensions_width: carDimensionsWidth,
-                car_dimensions_length: carDimensionsLength,
-                car_dimensions_height: carDimensionsHeight,
+                car_width: carWidth,
+                car_length: carLength,
+                car_height: carHeight,
                 service
             } = req.body;
 
@@ -76,9 +76,9 @@ commonRouter.post('/registration-attempt', (req, res) => {
                 dateOfBirth,
                 hasCar,
                 carModel,
-                carDimensionsWidth,
-                carDimensionsLength,
-                carDimensionsHeight,
+                carWidth,
+                carLength,
+                carHeight,
                 service
             );
         };

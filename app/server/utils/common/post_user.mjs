@@ -9,9 +9,9 @@ export function postUser(
     dateOfBirth,
     hasCar,
     carModel,
-    carDimensionsWidth,
-    carDimensionsLength,
-    carDimensionsHeight,
+    carWidth,
+    carLength,
+    carHeight,
     service
 ) {
     try {
@@ -21,9 +21,9 @@ export function postUser(
         const sanitizedDateOfBirth = sanitizeData(dateOfBirth);
         const sanitizedHasCar = sanitizeData(hasCar) ? 1 : 0;
         const sanitizedCarModel = sanitizeData(carModel);
-        const sanitizedCarDimensionsWidth = sanitizeData(carDimensionsWidth);
-        const sanitizedCarDimensionsLength = sanitizeData(carDimensionsLength);
-        const sanitizedCarDimensionsHeight = sanitizeData(carDimensionsHeight);
+        const sanitizedCarWidth = sanitizeData(carWidth);
+        const sanitizedCarLength = sanitizeData(carLength);
+        const sanitizedCarHeight = sanitizeData(carHeight);
 
         const registrationDate = new Date().toLocaleString(
             'ru-RU',
@@ -74,9 +74,9 @@ export function postUser(
                                         date_of_birth,
                                         has_car,
                                         car_model,
-                                        car_dimensions_width,
-                                        car_dimensions_length,
-                                        car_dimensions_height,
+                                        car_width,
+                                        car_length,
+                                        car_height,
                                         registered_in_delivery,
                                         delivery_registration_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)`
                 );
@@ -87,9 +87,9 @@ export function postUser(
                     sanitizedDateOfBirth,
                     sanitizedHasCar,
                     sanitizedCarModel,
-                    sanitizedCarDimensionsWidth,
-                    sanitizedCarDimensionsLength,
-                    sanitizedCarDimensionsHeight,
+                    sanitizedCarWidth,
+                    sanitizedCarLength,
+                    sanitizedCarHeight,
                     registrationDate
                 );
                 res.status(201).json({ 
@@ -150,9 +150,9 @@ export function postUser(
                         date_of_birth = ?,
                         has_car = ?,
                         car_model = ?,
-                        car_dimensions_width = ?,
-                        car_dimensions_length = ?,
-                        car_dimensions_height = ?,
+                        car__width = ?,
+                        car__length = ?,
+                        car__height = ?,
                         registered_in_delivery = 1,
                         delivery_registration_date = ?
                         WHERE telegram_id = ?`
@@ -163,9 +163,9 @@ export function postUser(
                     sanitizedDateOfBirth,
                     sanitizedHasCar,
                     sanitizedCarModel,
-                    sanitizedCarDimensionsWidth,
-                    sanitizedCarDimensionsLength,
-                    sanitizedCarDimensionsHeight,
+                    sanitizedCarWidth,
+                    sanitizedCarLength,
+                    sanitizedCarHeight,
                     registrationDate,
                     telegramID
                 );

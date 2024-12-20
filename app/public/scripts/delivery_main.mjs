@@ -83,9 +83,9 @@ function setupCourierInterface(validatedTelegramID, userData, socket) {
     const dateOfBirth = userData.userData.date_of_birth;
     const hasCar = userData.userData.has_car;
     const carModel = userData.userData.car_model;
-    const carDimensionsWidth = userData.userData.car_dimensions_width;
-    const carDimensionsLength = userData.userData.car_dimensions_length;
-    const carDimensionsHeight = userData.userData.car_dimensions_height;
+    const carWidth = userData.userData.car_width;
+    const carLength = userData.userData.car_length;
+    const carHeight = userData.userData.car_height;
     const registrationDate = userData.userData.delivery_registration_date;
 
     insertCourierButtons(
@@ -93,9 +93,9 @@ function setupCourierInterface(validatedTelegramID, userData, socket) {
         dateOfBirth,
         hasCar,
         carModel,
-        carDimensionsWidth,
-        carDimensionsLength,
-        carDimensionsHeight, 
+        carWidth,
+        carLength,
+        carHeight, 
         registrationDate
     );
 
@@ -163,9 +163,9 @@ function insertCourierButtons(
     dateOfBirth,
     hasCar,
     carModel,
-    carDimensionsWidth,
-    carDimensionsLength,
-    carDimensionsHeight,
+    carWidth,
+    carLength,
+    carHeight,
     registrationDate
 ) {
     const headerNav = document.getElementById('header-nav');
@@ -178,7 +178,7 @@ function insertCourierButtons(
         try {
             headerInfo.innerHTML = `Курьер ${name}. Дата рождения: ${dateOfBirth}.
             Есть автомобиль: ${hasCar ? 'да' : 'нет'} ${carModel}.
-            Габариты автомобиля: ${carDimensionsWidth}x${carDimensionsLength}x${carDimensionsHeight}.
+            Габариты автомобиля: ${carWidth}x${carLength}x${carHeight}.
             Зарегистрирован ${registrationDate}`;
 
             const searchBidsButton = document.createElement('button');
@@ -542,7 +542,7 @@ function showCustomerChatsWithCouriers(customerTelegramID) {
                                     <p>Откликнулся: ${response.courier_name}</p>
                                     <p>Дата рождения: ${response.courier_date_of_birth}</p>
                                     <p>Есть ли машина: ${response.courier_has_car}</p>
-                                    <p>Габариты машины: ${response.courier_car_dimensions}</p>
+                                    <p>Габариты машины: ${response.courier_car_}</p>
                                 </div>
                             `;
 
@@ -887,7 +887,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
                 courierParagraph.innerHTML =
                     `${courier.name}. Зарегистрирован ${courier.delivery_registration_date}. 
                     Дата рождения: ${courier.date_of_birth}. Есть машина ${courier.has_car ? 'да' : 'нет'}. 
-                    Габариты машины: ${courier.car_dimensions}.`;
+                    Габариты машины: ${courier.car_}.`;
 
                 const chatButton = document.createElement('button');
                 chatButton.innerHTML = 'Написать курьеру 📩';

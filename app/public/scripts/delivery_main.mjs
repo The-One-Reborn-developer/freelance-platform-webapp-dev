@@ -716,7 +716,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
     try {
         // Fetch the chat history
         const response = await fetch(
-            `/delivery/get-chats?bid_id=${customer.bidID}&customer_telegram_id=${customer.telegramID}&courier_telegram_id=${validatedTelegramID}`
+            `/delivery/get-chats?delivery_id=${customer.delivery_id}&customer_telegram_id=${customer.telegram_id}&courier_telegram_id=${validatedTelegramID}`
         );
         const data = await response.json();
 
@@ -750,7 +750,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
             chatHistory.innerHTML = 'Нет сообщений.';
         };
     } catch (error) {
-        console.error(`Error in loadChatHistory: ${error}`);
+        console.error(`Error in loadCourierChatHistory: ${error}`);
         chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 

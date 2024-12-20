@@ -743,7 +743,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
             chatHistory.innerHTML = 'Нет сообщений.';
         };
     } catch (error) {
-        console.error(`Error in loadChatHistory: ${error}`);
+        console.error(`Error in loadPerformerChatHistory: ${error}`);
         chatHistory.innerHTML = 'Произошла ошибка при загрузке сообщений.';
     };
 

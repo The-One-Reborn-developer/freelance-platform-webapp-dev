@@ -675,7 +675,7 @@ async function showCourierChats(validatedTelegramID, name, socket) {
     // Fetch the list of customers who wrote to the courier
     try {
         const customers = await fetchCustomers(validatedTelegramID);
-
+        console.log(`customers: ${JSON.stringify(customers)}`);
         if (customers.length === 0) {
             showModal('На Ваши отклики ещё никто не написал.');
             return;

@@ -23,13 +23,13 @@ export function postResponse(
             console.log('User already responded to this delivery.');
             return false;
         };
-
+        console.log(courierRegistrationDate);
         const sanitizedCarModel = courierCarModel ? courierCarModel : null;
         const sanitizedCarWidth = courierCarWidth ? courierCarWidth : null;
         const sanitizedCarLength = courierCarLength ? courierCarLength : null;
         const sanitizedCarHeight = courierCarHeight ? courierCarHeight : null;
         const formattedCourierRegistrationDate = formatToSQLiteDate(courierRegistrationDate);
-        
+        console.log(formattedCourierRegistrationDate);
         const postResponse = db.prepare(
             `INSERT INTO deliveries_responses (
                                     delivery_id,

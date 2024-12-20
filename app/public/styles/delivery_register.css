@@ -89,7 +89,7 @@ body {
 	display: flex;
 }
 
-.car-dimensions-container {
+.car-container {
 	display: flex;
 	gap: 5px;
 }

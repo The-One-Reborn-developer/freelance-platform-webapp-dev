@@ -13,11 +13,11 @@ const hasCarInputFalse = document.getElementById('has-car-input-false');
 const hasCarLabel = document.getElementById('has-car-label');
 const carModelInput = document.getElementById('car-model-input');
 const carModelLabel = document.getElementById('car-model-label');
-const carContainer = document.getElementById('car--container');
-const carWidthInput = document.getElementById('car--width-input');
-const carLengthInput = document.getElementById('car--length-input');
-const carHeightInput = document.getElementById('car--height-input');
-const carLabel = document.getElementById('car--label');
+const carContainer = document.getElementById('car-container');
+const carWidthInput = document.getElementById('car-width-input');
+const carLengthInput = document.getElementById('car-length-input');
+const carHeightInput = document.getElementById('car-height-input');
+const carLabel = document.getElementById('car-label');
 
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);

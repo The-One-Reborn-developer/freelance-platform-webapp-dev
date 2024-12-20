@@ -869,7 +869,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
     // Fetch the list of couriers who responded to the customer's bids
     try {
         const couriers = await fetchCouriers(validatedTelegramID);
-
+        console.log(`couriers: ${JSON.stringify(couriers)}`);
         if (couriers.length === 0) {
             showModal('На Ваши заявки ещё никто не откликался.');
             return;
@@ -885,7 +885,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             couriers.forEach((courier) => {
                 const courierParagraph = document.createElement('p');
                 courierParagraph.innerHTML =
-                    `${courier.name}. Зарегистрирован ${courier.delivery_registration_date}. 
+                    `${courier.name}. Зарегистрирован ${courier.registration_date}. 
                     Дата рождения: ${courier.date_of_birth}. Есть машина ${courier.has_car ? 'да' : 'нет'}. 
                     Габариты машины: ${courier.car_}.`;
 

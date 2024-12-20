@@ -2,7 +2,6 @@ export async function fetchCouriers(validatedTelegramID) {
     try {
         const response = await fetch(`/delivery/responded-couriers?customer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
-        console.log(`data: ${JSON.stringify(data)}`);
         if (data.success) {
             return data.responses.map((res) => ({
                 name: res.courier_name,

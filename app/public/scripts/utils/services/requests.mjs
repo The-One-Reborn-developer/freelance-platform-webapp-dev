@@ -2,7 +2,6 @@ export async function fetchPerformers(validatedTelegramID) {
     try {
         const response = await fetch(`/services/responded-performers?customer_telegram_id=${validatedTelegramID}`);
         const data = await response.json();
-        console.log(`data: ${JSON.stringify(data)}`);
         if (data.success) {
             return data.responses.map((res) => ({
                 name: res.performerName,

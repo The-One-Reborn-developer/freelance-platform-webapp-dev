@@ -1089,7 +1089,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
 
 async function loadCustomerChatHistory(validatedTelegramID, name, courier, socket) {
     const chatHistory = document.getElementById('chat-history');
-
+    console.log(courier);
     // Clear the chat history
     chatHistory.innerHTML = '';
     chatHistory.innerHTML = 'Загрузка...';

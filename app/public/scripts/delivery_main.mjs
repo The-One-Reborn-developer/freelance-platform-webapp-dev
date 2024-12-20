@@ -818,7 +818,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
         if (file) {
             const formData = new FormData();
             formData.append('attachment', file);
-            formData.append('delivery_id', courier.delivery_id);
+            formData.append('delivery_id', customer.delivery_id);
             formData.append('customer_telegram_id', customer.telegram_id);
             formData.append('courier_telegram_id', validatedTelegramID);
             formData.append('sender_type', 'courier');

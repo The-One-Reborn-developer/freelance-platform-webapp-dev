@@ -246,6 +246,33 @@ deliveryRouter.get('/responded-customers', (req, res) => {
 });
 
 
+deliveryRouter.post('/show-courier-chats-list', (req, res) => {
+    try {
+        const courierTelegramID = req.body.courier_telegram_id;
+
+        // Step 1: Retrieve all responses made by the courier with chats started
+        const courierResponses = getResponsesByCourierTelegramIDWithChatStarted(db, courierTelegramID);
+        if (courierResponses && courierResponses.length > 0) {
+            // Step 2: Retrieve deliveries associated with the responses
+            const deliveries = courierResponses.map((response) => {
+                const delivery = getDeliveryByDeliveryID(db, response.delivery_id);
+                return {
+                    delivery
+                };
+            });
+
+            // Step 3: Return the deliveries
+            return res.status(200).json({ success: true, deliveries });
+        } else {
+            return res.status(404).json({ success: false });
+        };
+    } catch (error) {
+        console.error('Error in /delivery/show-courier-chats-list:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
+    };
+});
+
+
 deliveryRouter.get('/get-chats', (req, res) => {
     try {
         const deliveryID = req.query.delivery_id;

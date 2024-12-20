@@ -99,8 +99,8 @@ function setupCourierInterface(validatedTelegramID, userData, socket) {
         registrationDate
     );
 
-    const searchBidsButton = document.getElementById('search-bids');
-    searchBidsButton.addEventListener('click', async function () {
+    const searchdeliveriesButton = document.getElementById('search-deliveries');
+    searchdeliveriesButton.addEventListener('click', async function () {
         await showSelectCityForm();
 
         // Attach submit form event listener
@@ -181,17 +181,17 @@ function insertCourierButtons(
             Габариты автомобиля: ${carWidth}x${carLength}x${carHeight}.
             Зарегистрирован ${registrationDate}`;
 
-            const searchBidsButton = document.createElement('button');
-            searchBidsButton.className = 'header-button';
-            searchBidsButton.id = 'search-bids';
-            searchBidsButton.textContent = 'Искать заказы 🔎';
+            const searchdeliveriesButton = document.createElement('button');
+            searchdeliveriesButton.className = 'header-button';
+            searchdeliveriesButton.id = 'search-deliveries';
+            searchdeliveriesButton.textContent = 'Искать заказы 🔎';
 
             const lookChatsButton = document.createElement('button');
             lookChatsButton.className = 'header-button';
             lookChatsButton.id = 'look-chats';
             lookChatsButton.textContent = 'Переписки по активным заказам 📨';
 
-            headerNav.appendChild(searchBidsButton);
+            headerNav.appendChild(searchdeliveriesButton);
             headerNav.appendChild(lookChatsButton);
         } catch (error) {
             console.error(`Error in insertcourierButtons: ${error}`);
@@ -289,7 +289,7 @@ async function showMyDeliveries(validatedTelegramID) {
 
             if (!response.ok) {
                 showModal('Произошла ошибка при загрузке списка заказов, попробуйте перезайти в приложение');
-                throw new Error('Failed to load my-bids');
+                throw new Error('Failed to load my-deliveries');
             };
 
             const { success, deliveries } = await response.json();
@@ -516,27 +516,27 @@ function showCustomerChatsWithCouriers(customerTelegramID) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success && Array.isArray(data.bids)) {
+                    if (data.success && Array.isArray(data.deliveries)) {
                         display.innerHTML = '';
 
-                        const bidsContainer = document.createElement('div');
-                        bidsContainer.classList.add('bids-container');
+                        const deliveriesContainer = document.createElement('div');
+                        deliveriesContainer.classList.add('deliveries-container');
 
-                        data.bids.forEach(bid => {
-                            const bidCard = document.createElement('div');
-                            bidCard.classList.add('bid-card');
+                        data.deliveries.forEach(delivery => {
+                            const deliveryCard = document.createElement('div');
+                            deliveryCard.classList.add('delivery-card');
 
-                            bidCard.innerHTML = `
-                            <p>Номер заказа: ${bid.id}</p>
-                            <p>Город: ${bid.city}</p>
-                            <p>Что нужно доставить, описание: ${bid.description}</p>
-                            <p>Откуда: ${bid.deliver_from}</p>
-                            <p>Куда: ${bid.deliver_to}</p>
-                            <p>Нужна машина: ${(bid.car_necessary === 1) ? 'Да' : 'Нет'}</p>
+                            deliveryCard.innerHTML = `
+                            <p>Номер заказа: ${delivery.id}</p>
+                            <p>Город: ${delivery.city}</p>
+                            <p>Что нужно доставить, описание: ${delivery.description}</p>
+                            <p>Откуда: ${delivery.deliver_from}</p>
+                            <p>Куда: ${delivery.deliver_to}</p>
+                            <p>Нужна машина: ${(delivery.car_necessary === 1) ? 'Да' : 'Нет'}</p>
                             <br><br>
                         `;
 
-                            bid.responses.forEach((response) => {
+                            delivery.responses.forEach((response) => {
                                 const responseDetails = `
                                 <div class="response-container">
                                     <p>Откликнулся: ${response.courier_name}</p>
@@ -547,32 +547,32 @@ function showCustomerChatsWithCouriers(customerTelegramID) {
                             `;
 
                                 const lookChatButton = document.createElement('button');
-                                lookChatButton.classList.add('bid-card-button');
+                                lookChatButton.classList.add('delivery-card-button');
                                 lookChatButton.innerHTML = 'Посмотреть переписку 👀';
-                                lookChatButton.setAttribute('data-bid-id', bid.id);
+                                lookChatButton.setAttribute('data-delivery-id', delivery.id);
                                 lookChatButton.setAttribute('data-customer-telegram-id', customerTelegramID);
                                 lookChatButton.setAttribute('data-courier-telegram-id', response.courier_telegram_id);
 
                                 lookChatButton.addEventListener('click', async (event) => {
-                                    const bidID = event.target.getAttribute('data-bid-id');
+                                    const deliveryID = event.target.getAttribute('data-delivery-id');
                                     const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
                                     const courierTelegramID = event.target.getAttribute('data-courier-telegram-id');
-                                    if (bidID && customerTelegramID && courierTelegramID) {
-                                        await showSelectedCustomerChat(bidID, customerTelegramID, courierTelegramID);
+                                    if (deliveryID && customerTelegramID && courierTelegramID) {
+                                        await showSelectedCustomerChat(deliveryID, customerTelegramID, courierTelegramID);
                                     } else {
                                         showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение.');
-                                        console.error('Bid ID, Customer Telegram ID, or Courier Telegram ID not found');
+                                        console.error('delivery ID, Customer Telegram ID, or Courier Telegram ID not found');
                                     };
                                 });
 
-                                bidCard.innerHTML += responseDetails;
-                                bidCard.appendChild(lookChatButton);
+                                deliveryCard.innerHTML += responseDetails;
+                                deliveryCard.appendChild(lookChatButton);
                             });
 
-                            bidsContainer.appendChild(bidCard);
+                            deliveriesContainer.appendChild(deliveryCard);
                         });
 
-                        display.appendChild(bidsContainer);
+                        display.appendChild(deliveriesContainer);
                     } else {
                         showModal('У данного заказчика ещё нет переписок');
                     };
@@ -587,7 +587,7 @@ function showCustomerChatsWithCouriers(customerTelegramID) {
 };
 
 
-async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegramID) {
+async function showSelectedCustomerChat(deliveryID, customerTelegramID, courierTelegramID) {
     const display = document.getElementById('display');
     display.classList.add('view-mode');
 
@@ -604,7 +604,7 @@ async function showSelectedCustomerChat(bidID, customerTelegramID, courierTelegr
     } else {
         try {
             const response = await fetch(
-                `/delivery/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&courier_telegram_id=${courierTelegramID}`
+                `/delivery/get-chats?delivery_id=${deliveryID}&customer_telegram_id=${customerTelegramID}&courier_telegram_id=${courierTelegramID}`
             );
             const data = await response.json();
 
@@ -866,7 +866,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
 
 
 async function showCustomerChats(validatedTelegramID, name, socket) {
-    // Fetch the list of couriers who responded to the customer's bids
+    // Fetch the list of couriers who responded to the customer's deliveries
     try {
         const couriers = await fetchCouriers(validatedTelegramID);
 
@@ -935,45 +935,45 @@ function showCourierChatsWithCustomers(courierTelegramID) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success && Array.isArray(data.bids)) {
+                    if (data.success && Array.isArray(data.deliveries)) {
                         display.innerHTML = '';
 
                         const responsesContainer = document.createElement('div');
-                        responsesContainer.classList.add('bid-container');
+                        responsesContainer.classList.add('delivery-container');
 
-                        data.bids.forEach(item => {
-                            const bid = item.bid;
+                        data.deliveries.forEach(item => {
+                            const delivery = item.delivery;
 
                             const responseCard = document.createElement('div');
-                            responseCard.classList.add('bid-card');
+                            responseCard.classList.add('delivery-card');
 
                             responseCard.innerHTML = `
-                        <p>Номер заказа: ${bid.id}</p>
-                        <p>Город: ${bid.city}</p>
-                        <p>Заказчик: ${bid.customer_name}</p>
-                        <p>Что нужно доставить, описание: ${bid.description}</p>
-                        <p>Откуда: ${bid.deliver_from}</p>
-                        <p>Куда: ${bid.deliver_to}</p>
-                        <p>Нужна машина: ${(bid.car_necessary === 1) ? 'Да' : 'Нет'}</p>
+                        <p>Номер заказа: ${delivery.id}</p>
+                        <p>Город: ${delivery.city}</p>
+                        <p>Заказчик: ${delivery.customer_name}</p>
+                        <p>Что нужно доставить, описание: ${delivery.description}</p>
+                        <p>Откуда: ${delivery.deliver_from}</p>
+                        <p>Куда: ${delivery.deliver_to}</p>
+                        <p>Нужна машина: ${(delivery.car_necessary === 1) ? 'Да' : 'Нет'}</p>
                         `;
 
                             const responseButton = document.createElement('button');
-                            responseButton.classList.add('bid-card-button');
+                            responseButton.classList.add('delivery-card-button');
                             responseButton.innerHTML = 'Посмотреть переписку 👀';
-                            responseButton.setAttribute('data-bid-id', bid.id);
-                            responseButton.setAttribute('data-customer-telegram-id', bid.customer_telegram_id);
+                            responseButton.setAttribute('data-delivery-id', delivery.id);
+                            responseButton.setAttribute('data-customer-telegram-id', delivery.customer_telegram_id);
                             responseButton.setAttribute('data-courier-telegram-id', courierTelegramID);
 
                             responseButton.addEventListener('click', async (event) => {
-                                const bidID = event.target.getAttribute('data-bid-id');
+                                const deliveryID = event.target.getAttribute('data-delivery-id');
                                 const customerTelegramID = event.target.getAttribute('data-customer-telegram-id');
                                 const courierTelegramID = event.target.getAttribute('data-courier-telegram-id');
 
-                                if (bidID && customerTelegramID && courierTelegramID) {
-                                    await showSelectedCourierChat(bidID, customerTelegramID, courierTelegramID);
+                                if (deliveryID && customerTelegramID && courierTelegramID) {
+                                    await showSelectedCourierChat(deliveryID, customerTelegramID, courierTelegramID);
                                 } else {
                                     showModal('Произошла ошибка при загрузке переписки, попробойте перезайти в приложение.');
-                                    console.error('Invalid bid ID, customer Telegram ID, or courier Telegram ID');
+                                    console.error('Invalid delivery ID, customer Telegram ID, or courier Telegram ID');
                                 }
                             });
 
@@ -998,7 +998,7 @@ function showCourierChatsWithCustomers(courierTelegramID) {
 };
 
 
-async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegramID) {
+async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTelegramID) {
     const display = document.getElementById('display');
     display.classList.add('view-mode');
 
@@ -1018,7 +1018,7 @@ async function showSelectedCourierChat(bidID, customerTelegramID, courierTelegra
             display.innerHTML = 'Загрузка...';
 
             const response = await fetch(
-                `/delivery/get-chats?bid_id=${bidID}&customer_telegram_id=${customerTelegramID}&courier_telegram_id=${courierTelegramID}`
+                `/delivery/get-chats?delivery_id=${deliveryID}&customer_telegram_id=${customerTelegramID}&courier_telegram_id=${courierTelegramID}`
             );
             const data = await response.json();
 

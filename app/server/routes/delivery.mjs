@@ -4,7 +4,8 @@ import Database from 'better-sqlite3';
 
 import {
     getUser,
-    sendMessage
+    sendMessage,
+    sendAttachment
 } from "../modules/common_index.mjs"
 
 import {
@@ -17,8 +18,7 @@ import {
     saveChatMessage,
     getResponses,
     getChatMessages,
-    updateResponse,
-    sendAttachment
+    updateResponse
 } from "../modules/delivery_index.mjs";
 
 

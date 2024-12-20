@@ -2,6 +2,12 @@ import express from "express";
 import multer from "multer";
 import Database from "better-sqlite3";
 
+import { 
+    getUser,
+    sendMessage,
+    sendAttachment
+} from "../modules/common_index.mjs"
+
 import {
     getAllBidsByCustomerTelegramID,
     getBidsByCity,
@@ -14,16 +20,10 @@ import {
     postBid,
     postResponse,
     saveChatMessage,
-    sendAttachment,
     updateCloseBid,
     updateProfileInfo,
     updateResponse
 } from "../modules/services_index.mjs"
-
-import { 
-    getUser,
-    sendMessage
-} from "../modules/common_index.mjs"
 
 
 const db = new Database('./app/database.db', { verbose: console.log });

@@ -10,6 +10,8 @@ import { getResponse } from "../utils/delivery/get_response.mjs";
 import { getChatMessages } from "../utils/delivery/get_chat_messages.mjs";
 import { updateResponse } from "../utils/delivery/update_response.mjs";
 import { getResponsesByCourierTelegramIDWithChatStarted } from "../utils/delivery/get_responses_by_courier_telegram_id_with_chat_started.mjs";
+import { getAllDeliveriesByCustomerTelegramID } from "../utils/delivery/get_all_deliveries_by_customer_telegram_id.mjs";
+import { getResponsesByDeliveryIDWithChatStarted } from "../utils/delivery/get_responses_by_delivery_id_with_chat_started.mjs";
 
 export { 
     postDelivery,
@@ -23,5 +25,7 @@ export {
     getResponse,
     getChatMessages,
     updateResponse,
-    getResponsesByCourierTelegramIDWithChatStarted
+    getResponsesByCourierTelegramIDWithChatStarted,
+    getAllDeliveriesByCustomerTelegramID,
+    getResponsesByDeliveryIDWithChatStarted
 };

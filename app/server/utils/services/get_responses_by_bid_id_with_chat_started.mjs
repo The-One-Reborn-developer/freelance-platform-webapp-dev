@@ -6,7 +6,7 @@ export function getResponsesByBidIDWithChatStarted(db, bidID) {
         const getResponsesByBidIDWithChatStartedResult = getResponsesByBidIDWithChatStarted.all(bidID);
         return getResponsesByBidIDWithChatStartedResult;
     } catch (error) {
-        console.error('Error in getRespondedCustomers:', error);
+        console.error('Error in getResponsesByBidIDWithChatStarted:', error);
         return [];
     };
 };

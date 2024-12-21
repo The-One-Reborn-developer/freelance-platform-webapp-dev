@@ -19,7 +19,9 @@ import {
     getResponses,
     getChatMessages,
     updateResponse,
-    getResponsesByCourierTelegramIDWithChatStarted
+    getResponsesByCourierTelegramIDWithChatStarted,
+    getResponsesByDeliveryIDWithChatStarted,
+    getAllDeliveriesByCustomerTelegramID
 } from "../modules/delivery_index.mjs";
 
 
@@ -242,6 +244,42 @@ deliveryRouter.get('/responded-customers', (req, res) => {
     } catch (error) {
         console.error('Error in /delivery/responded-customers:', error);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
+    };
+});
+
+
+deliveryRouter.post('/show-customer-chats-list', (req, res) => {
+    try {
+        const customerTelegramID = req.body.customer_telegram_id;
+
+        // Step 1: Retrieve all deliveries created by the customer
+        const customerDeliveries = getAllDeliveriesByCustomerTelegramID(db, customerTelegramID);
+        if (!customerDeliveries || customerDeliveries.length === 0) {
+            return res.status(200).json({ success: false });
+        };
+
+        // Step 2: Filter all deliveries to include only those with matching responses
+        const deliveriesWithResponses = customerDeliveries.map((delivery) => {
+            const responses = getResponsesByDeliveryIDWithChatStarted(db, delivery.id);
+            if (responses && responses.length > 0) {
+                return {
+                    ...delivery,
+                    responses: responses
+                };
+            } else {
+                return null; // Skip deliveries without responses
+            }
+        }).filter(Boolean); // Filter out null entries
+
+        // Step 3: Return only deliveries with responses
+        if (deliveriesWithResponses.length > 0) {
+            return res.status(200).json({ success: true, deliveries: deliveriesWithResponses });
+        } else {
+            return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });
+        };
+    } catch (error) {
+        console.error('Error in /delivery/show-customer-chats-list:', error);
+        res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
     };
 });
 

@@ -191,7 +191,7 @@ function register() {
             const formData = new FormData();
             formData.append('photo', file);
             formData.append('courier_telegram_data', telegramData);
-
+            console.log(`formData: ${formData}`);
             try {
                 fetch('/delivery/upload-courier-photo', {
                     method: 'POST',

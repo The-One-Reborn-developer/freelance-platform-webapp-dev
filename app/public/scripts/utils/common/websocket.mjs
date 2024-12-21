@@ -54,7 +54,7 @@ export function initializeWebSocket(validatedTelegramID) {
                 if (normalizedData.attachment) {
                     chatHistory.innerHTML += `<div class="chat-message">
                                                 ${normalizedData.senderName}
-                                                <br><br><img src="${normalizedData.attachment}" alt="Attachment">
+                                                <br><br><img src="${normalizedData.attachment}" alt="Attachment" class="attachment-image">
                                                 <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
                                               </div>`;
                 } else {

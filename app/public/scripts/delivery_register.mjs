@@ -125,7 +125,8 @@ function chooseCourier() {
 
     photoInput.onchange = () => {
         const file = photoInput.files[0];
-
+        const telegramData = window.Telegram.WebApp.initData;
+        
         if (file) {
             const formData = new FormData();
             formData.append('photo', file);

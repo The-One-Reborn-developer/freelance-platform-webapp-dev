@@ -72,6 +72,8 @@ function checkIfUserIsRegistered(telegramData) {
         if (data.registered) {
             console.log(data);
             window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
+        } else {
+            console.log(data);
         };
     })
     .catch(error => {
@@ -125,8 +127,7 @@ function chooseCourier() {
 
     photoInput.onchange = () => {
         const file = photoInput.files[0];
-        const telegramData = window.Telegram.WebApp.initData;
-        
+
         if (file) {
             const formData = new FormData();
             formData.append('photo', file);

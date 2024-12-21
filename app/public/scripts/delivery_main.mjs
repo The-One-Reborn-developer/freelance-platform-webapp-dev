@@ -542,7 +542,7 @@ function showCustomerChatsWithCouriers(customerTelegramID) {
                                     <p>Откликнулся: ${response.courier_name}</p>
                                     <p>Дата рождения: ${response.courier_date_of_birth}</p>
                                     <p>Есть ли машина: ${response.courier_has_car}</p>
-                                    <p>Габариты машины: ${response.courier_car_}</p>
+                                    <p>Габариты машины: ${response.courier_car_width}x${response.courier_car_length}x${response.courier_car_height}</p>
                                 </div>
                             `;
 

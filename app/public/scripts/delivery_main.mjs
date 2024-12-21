@@ -901,7 +901,7 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
 
                 const lookCourierChatsButton = document.createElement('button');
                 lookCourierChatsButton.innerHTML = 'Посмотреть переписки курьера 📤';
-                lookCourierChatsButton.addEventListener('click', () => showCourierChatsWithCustomers(courier.telegramID));
+                lookCourierChatsButton.addEventListener('click', () => showCourierChatsWithCustomers(courier.telegram_id));
 
                 courierList.appendChild(courierParagraph);
                 courierList.appendChild(chatButton);

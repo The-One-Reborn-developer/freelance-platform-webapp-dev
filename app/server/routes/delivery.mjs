@@ -374,7 +374,7 @@ deliveryRouter.post('/send-message', upload.single('attachment'), (req, res) => 
         if (attachmentPath) {
             sendMessage(
                 recipientTelegramID,
-                
+                attachmentMessage
             );
         } else {
             sendMessage(

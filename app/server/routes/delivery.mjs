@@ -1,11 +1,11 @@
 import express from 'express';
 import multer from "multer";
 import Database from 'better-sqlite3';
-import fs from "fs";
 
 import {
     getUser,
-    sendMessage
+    sendMessage,
+    checkTelegramData
 } from "../modules/common_index.mjs"
 
 import {
@@ -35,6 +35,19 @@ const upload = multer({
 });
 
 const deliveryRouter = express.Router();
+
+
+deliveryRouter.post('/upload-courier-photo', (req, res) => {
+    try {
+        const courierTelegramData = req.body.courier_telegram_data;
+        const courierTelegramID = checkTelegramData(courierTelegramData);
+
+        console.log(`Courier Telegram ID: ${courierTelegramID}`);
+    } catch (error) {
+        console.error(`Error in /delivery/upload-courier-photo: ${error}`);
+        res.status(500).json({ message: 'Произошла ошибка при загрузке фото курьера.' });
+    }
+});
 
 
 deliveryRouter.post('/post-delivery', (req, res) => {

@@ -9,7 +9,7 @@ export function sendAttachment(telegramID, filePath) {
     const formData = new FormData();
     formData.append('chat_id', telegramID);
     formData.append('photo', fs.createReadStream(filePath)); // Attach the file
-
+    console.log(`file path: ${filePath}, file exists: ${fs.existsSync(filePath)}`);
     fetch(URL, {
         method: 'POST',
         body: formData

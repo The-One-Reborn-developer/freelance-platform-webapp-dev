@@ -1,4 +1,4 @@
-export function sendMessage(TelegramID, message) {
+export function sendMessage(telegramID, message) {
     const URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 
     fetch(URL, {
@@ -7,7 +7,7 @@ export function sendMessage(TelegramID, message) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            chat_id: TelegramID,
+            chat_id: telegramID,
             text: message,
             parse_mode: 'HTML'
         })

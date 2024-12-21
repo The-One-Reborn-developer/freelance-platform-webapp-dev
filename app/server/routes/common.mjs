@@ -31,7 +31,7 @@ commonRouter.post('/check-registration', (req, res) => {
             if (checkUserTelegramResult.count > 0) {
                 return res.status(200).json({ registered: true, telegram_id: verifiedTelegramID });
             } else {
-                return res.status(200).json({ registered: false });
+                return res.status(200).json({ registered: false, telegram_id: verifiedTelegramID });
             };
         };
     } catch (error) {

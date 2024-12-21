@@ -20,14 +20,14 @@ const carHeightInput = document.getElementById('car-height-input');
 const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
 
-customerButton.addEventListener('click', chooseCustomer);
-courierButton.addEventListener('click', chooseCourier);
-hasCarInputTrue.addEventListener('click', hasCar);
-hasCarInputFalse.addEventListener('click', noCar);
-registerButton.addEventListener('click', register);
 
+function initializePage(userTelegramID) {
+    customerButton.addEventListener('click', chooseCustomer);
+    courierButton.addEventListener('click', chooseCourier(userTelegramID));
+    hasCarInputTrue.addEventListener('click', hasCar);
+    hasCarInputFalse.addEventListener('click', noCar);
+    registerButton.addEventListener('click', register);
 
-function initializePage() {
     nameInput.style.display = 'none';
     nameLabel.style.display = 'none';
     dateOfBirthInput.style.display = 'none';
@@ -44,11 +44,11 @@ function initializePage() {
 
 
 window.onload = function () {
-    initializePage();
-
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
-    checkIfUserIsRegistered(telegramData);
+    const userTelegramID = checkIfUserIsRegistered(telegramData);
+
+    initializePage(userTelegramID);
 
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
@@ -73,7 +73,7 @@ function checkIfUserIsRegistered(telegramData) {
             console.log(data);
             window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         } else {
-            console.log(data);
+            return data.telegram_id;
         };
     })
     .catch(error => {
@@ -103,7 +103,7 @@ function chooseCustomer() {
 };
 
 
-function chooseCourier() {
+function chooseCourier(userTelegramID) {
     // Show name, rate, and experience inputs and labels
     nameInput.style.display = '';
     nameLabel.style.display = '';
@@ -131,7 +131,7 @@ function chooseCourier() {
         if (file) {
             const formData = new FormData();
             formData.append('photo', file);
-            formData.append('courier_telegram_data', telegramData);
+            formData.append('courier_telegram_id', userTelegramID);
             console.log(`formData: ${formData}`);
             try {
                 fetch('/delivery/upload-courier-photo', {

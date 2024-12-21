@@ -1034,7 +1034,6 @@ async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTe
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
-                                console.log(attachmentUrl);
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',

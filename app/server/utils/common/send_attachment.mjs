@@ -1,13 +1,14 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
+
 export function sendAttachment(telegramID, filePath) {
-    const URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendDocument`;
+    const URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendPhoto`;
 
     // Use FormData to handle file uploads
     const formData = new FormData();
     formData.append('chat_id', telegramID);
-    formData.append('document', fs.createReadStream(filePath)); // Attach the file
+    formData.append('photo', fs.createReadStream(filePath)); // Attach the file
 
     fetch(URL, {
         method: 'POST',

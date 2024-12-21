@@ -384,6 +384,7 @@ servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => 
             `Исполнитель ${performerName}:\nПрислал Вам файл. Зайдите в приложение, чтобы его увидеть.`;
 
         if (attachmentPath) {
+            console.log(attachmentMessage)
             sendMessage(
                 recipientTelegramID,
                 attachmentMessage

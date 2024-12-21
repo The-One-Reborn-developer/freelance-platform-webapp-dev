@@ -1,6 +1,6 @@
 export function sendMessage(telegramID, message) {
     const URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendMessage`;
-
+    console.log(message);
     fetch(URL, {
         method: 'POST',
         headers: {

@@ -1,6 +1,7 @@
 import express from 'express';
 import multer from "multer";
 import Database from 'better-sqlite3';
+import fs from "fs";
 
 import {
     getUser,

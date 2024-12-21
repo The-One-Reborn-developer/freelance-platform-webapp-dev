@@ -25,8 +25,6 @@ export function setupWebsocketServer(server) {
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
-            console.log(`Received message from Telegram ID ${telegramID}: ${rawMessage}`);
-
             try {
                 const { 
                     recipient_telegram_id: recipientTelegramID,
@@ -37,7 +35,6 @@ export function setupWebsocketServer(server) {
                 const recipientTelegramIDString = String(recipientTelegramID);
 
                 if (!recipientTelegramID || !String(senderName).trim() || !String(message).trim()) {
-                    console.error(`Invalid message from Telegram ID ${telegramID}: ${rawMessage}`);
                     ws.send(JSON.stringify({ error: 'Invalid message format' }));
                     return;
                 } else {
@@ -74,7 +71,6 @@ export function setupWebsocketServer(server) {
         const user = users.get(recipientTelegramIDString);
         if (user) {
             user.send(JSON.stringify(message));
-            console.log(`Message sent to Telegram ID ${recipientTelegramIDString}: ${JSON.stringify(message)}`);
         } else {
             console.error(`User with Telegram ID ${recipientTelegramIDString} is not connected.`);
         };

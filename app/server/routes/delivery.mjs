@@ -249,7 +249,7 @@ deliveryRouter.get('/responded-customers', (req, res) => {
 deliveryRouter.post('/show-courier-chats-list', (req, res) => {
     try {
         const courierTelegramID = req.body.courier_telegram_id;
-
+        console.log(`Courier Telegram ID: ${courierTelegramID}`)
         // Step 1: Retrieve all responses made by the courier with chats started
         const courierResponses = getResponsesByCourierTelegramIDWithChatStarted(db, courierTelegramID);
         if (courierResponses && courierResponses.length > 0) {

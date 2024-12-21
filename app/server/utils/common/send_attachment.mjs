@@ -1,15 +1,18 @@
 import fs from 'fs';
+import path from "path";
 import fetch from 'node-fetch';
 
 
 export function sendAttachment(telegramID, filePath) {
     const URL = `https://api.telegram.org/bot${process.env.TELEGRAM_BOT_TOKEN}/sendPhoto`;
-
+    
+    const absoluteFilePath = encodeURI(path.resolve(filePath));
+    console.log(`Absolute file path: ${absoluteFilePath}`);
     // Use FormData to handle file uploads
     const formData = new FormData();
     formData.append('chat_id', telegramID);
-    formData.append('photo', fs.createReadStream(filePath)); // Attach the file
-    console.log(`file path: ${filePath}, file exists: ${fs.existsSync(filePath)}`);
+    formData.append('photo', fs.createReadStream(absoluteFilePath)); // Attach the file
+    
     fetch(URL, {
         method: 'POST',
         body: formData

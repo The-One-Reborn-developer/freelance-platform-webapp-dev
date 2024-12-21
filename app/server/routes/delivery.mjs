@@ -341,7 +341,7 @@ deliveryRouter.post('/send-message', upload.single('attachment'), (req, res) => 
         if (req.file) {
             attachmentPath = req.file.path;
         };
-        console.log(`file path: ${attachmentPath}, file exists: ${fs.existsSync(attachmentPath)}`);
+
         saveChatMessage(
             deliveryID,
             customerTelegramID,

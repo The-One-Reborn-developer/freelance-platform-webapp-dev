@@ -123,33 +123,35 @@ function chooseCourier() {
         photoInput.click();
     };
 
-    const file = photoInput.files[0];
+    photoInput.onchange = () => {
+        const file = photoInput.files[0];
 
-    if (file) {
-        const formData = new FormData();
-        formData.append('photo', file);
-        formData.append('courier_telegram_data', telegramData);
-        console.log(`formData: ${formData}`);
-        try {
-            fetch('/delivery/upload-courier-photo', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Photo upload successful
-                    showModal(data.message, true, data.telegram_id);
-                } else {
-                    // Photo upload failed
-                    showModal(data.message, false, null);
-                };
-            })
-            .catch(error => {
-                console.error(`Error in /delivery/upload-courier-photo (client-side): ${error}`);
-            });
-        } catch(error) {
-            console.error(`Error in register: ${error}`);
+        if (file) {
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('courier_telegram_data', telegramData);
+            console.log(`formData: ${formData}`);
+            try {
+                fetch('/delivery/upload-courier-photo', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Photo upload successful
+                        showModal(data.message, true, data.telegram_id);
+                    } else {
+                        // Photo upload failed
+                        showModal(data.message, false, null);
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error in /delivery/upload-courier-photo (client-side): ${error}`);
+                });
+            } catch(error) {
+                console.error(`Error in register: ${error}`);
+            };
         };
     };
 };

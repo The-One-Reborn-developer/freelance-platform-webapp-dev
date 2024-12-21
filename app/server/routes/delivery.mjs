@@ -5,8 +5,7 @@ import fs from "fs";
 
 import {
     getUser,
-    sendMessage,
-    sendAttachment
+    sendMessage
 } from "../modules/common_index.mjs"
 
 import {
@@ -368,10 +367,14 @@ deliveryRouter.post('/send-message', upload.single('attachment'), (req, res) => 
             `Заказчик ${customerName}:\n${message}` :
             `Курьер ${courierName}:\n${message}`;
 
+        const attachmentMessage = senderType === 'customer' ? 
+            `Заказчик ${customerName}:\nПрислал Вам файл. Зайдите в приложение, чтобы его увидеть.` :
+            `Курьер ${courierName}:\nПрислал Вам файл. Зайдите в приложение, чтобы его увидеть.`;
+
         if (attachmentPath) {
-            sendAttachment(
+            sendMessage(
                 recipientTelegramID,
-                attachmentPath
+                
             );
         } else {
             sendMessage(

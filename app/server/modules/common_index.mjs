@@ -11,7 +11,6 @@ import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
 import { setupWebsocketServer } from "../utils/common/setup_websocket_server.mjs";
 import { sendMessage } from "../utils/common/send_message.mjs";
-import { sendAttachment } from "../utils/common/send_attachment.mjs";
 
 export {
     checkTelegramData,
@@ -24,6 +23,5 @@ export {
     setupWebsocketServer,
     getUser,
     postUser,
-    sendMessage,
-    sendAttachment
+    sendMessage
 };

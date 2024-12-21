@@ -4,8 +4,7 @@ import Database from "better-sqlite3";
 
 import { 
     getUser,
-    sendMessage,
-    sendAttachment
+    sendMessage
 } from "../modules/common_index.mjs"
 
 import {
@@ -380,10 +379,14 @@ servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => 
             `Заказчик ${customerName}:\n${message}` :
             `Исполнитель ${performerName}:\n${message}`;
 
+        const attachmentMessage = senderType === 'customer' ? 
+            `Заказчик ${customerName}:\nПрислал Вам файл. Зайдите в приложение, чтобы его увидеть.` :
+            `Исполнитель ${performerName}:\nПрислал Вам файл. Зайдите в приложение, чтобы его увидеть.`;
+
         if (attachmentPath) {
-            sendAttachment(
+            sendMessage(
                 recipientTelegramID,
-                attachmentPath
+                attachmentMessage
             );
         } else {
             sendMessage(

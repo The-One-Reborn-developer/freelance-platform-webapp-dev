@@ -39,8 +39,7 @@ const deliveryRouter = express.Router();
 
 deliveryRouter.post('/upload-courier-photo', (req, res) => {
     try {
-        const courierTelegramData = req.body.courier_telegram_data;
-        const courierTelegramID = checkTelegramData(courierTelegramData, res);
+        const courierTelegramID = req.body.courier_telegram_id
 
         console.log(`Courier Telegram ID: ${courierTelegramID}`);
     } catch (error) {

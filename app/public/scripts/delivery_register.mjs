@@ -40,6 +40,14 @@ function initializePage() {
     carLabel.style.display = 'none';
     photoContainer.style.display = 'none';
     registerButton.style.display = 'none';
+
+    
+    const photoInput = document.getElementById('photo-input');
+    const photoButton = document.getElementById('photo-button');
+
+    photoButton.onclick = () => {
+        photoInput.click();
+    };
 };
 
 
@@ -146,9 +154,6 @@ function register() {
     const carHeight = carHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
-    const photoInput = document.getElementById('photo-input');
-    const photoButton = document.getElementById('photo-button');
-
     if (!name) {
         showModal('Пожалуйста, укажите имя.');
         return;
@@ -167,10 +172,6 @@ function register() {
         if (hasCar && (!carModel || !carWidth || !carLength || !carHeight)) {
             showModal('Пожалуйста, укажите марку автомобиля и его размеры.');
             return;
-        };
-
-        photoButton.onclick = () => {
-            photoInput.click();
         };
 
         const validatePhotoUpload = () => {

@@ -18,6 +18,7 @@ const carWidthInput = document.getElementById('car-width-input');
 const carLengthInput = document.getElementById('car-length-input');
 const carHeightInput = document.getElementById('car-height-input');
 const carLabel = document.getElementById('car-label');
+const photoContainer = document.getElementById('photo-container');
 
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
@@ -37,6 +38,7 @@ function initializePage() {
     carModelLabel.style.display = 'none';
     carContainer.style.display = 'none';
     carLabel.style.display = 'none';
+    photoContainer.style.display = 'none';
     registerButton.style.display = 'none';
 };
 
@@ -90,6 +92,7 @@ function chooseCustomer() {
     carModelLabel.style.display = 'none';
     carContainer.style.display = 'none';
     carLabel.style.display = 'none';
+    photoContainer.style.display = 'none';
     registerButton.style.display = '';
 
     // Highlight the selected button
@@ -106,6 +109,7 @@ function chooseCourier() {
     dateOfBirthLabel.style.display = '';
     hasCarContainer.style.display = '';
     hasCarLabel.style.display = '';
+    photoContainer.style.display = '';
     registerButton.style.display = '';
 
     // Highlight the selected button
@@ -142,6 +146,9 @@ function register() {
     const carHeight = carHeightInput.value.trim();
     const telegramData = window.Telegram.WebApp.initData;
 
+    const photoInput = document.getElementById('photo-input');
+    const photoButton = document.getElementById('photo-button');
+
     if (!name) {
         showModal('Пожалуйста, укажите имя.');
         return;
@@ -160,6 +167,52 @@ function register() {
         if (hasCar && (!carModel || !carWidth || !carLength || !carHeight)) {
             showModal('Пожалуйста, укажите марку автомобиля и его размеры.');
             return;
+        };
+
+        photoButton.onclick = () => {
+            photoInput.click();
+        };
+
+        const validatePhotoUpload = () => {
+            if (!photoInput.files || photoInput.files.length === 0) {
+                showModal('Пожалуйста, загрузите фотографию.');
+                return false;
+            };
+            return true;
+        };
+
+        if(!validatePhotoUpload()) {
+            return;
+        };
+
+        const file = photoInput.files[0];
+
+        if (file) {
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('telegram_data', telegramData);
+
+            try {
+                fetch('/delivery/upload-courier-photo', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Photo upload successful
+                        showModal(data.message, true, data.telegram_id);
+                    } else {
+                        // Photo upload failed
+                        showModal(data.message, false, null);
+                    };
+                })
+                .catch(error => {
+                    console.error(`Error in /delivery/upload-courier-photo (client-side): ${error}`);
+                });
+            } catch(error) {
+                console.error(`Error in register: ${error}`);
+            };
         };
     };
 

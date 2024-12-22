@@ -1308,6 +1308,8 @@ async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, reg
                     Ставка ${rate.value} (₽/час),
                     ${experience.value} (лет опыта).
                     Зарегистрирован ${registrationDate}`;
+                    rate.value = '';
+                    experience.value = '';
                     showModal('Информация о профиле успешно изменена.');
                 } else {
                     showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');

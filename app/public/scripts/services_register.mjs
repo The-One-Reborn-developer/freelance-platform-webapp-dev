@@ -11,6 +11,7 @@ const experienceInput = document.getElementById('experience-input');
 const experienceLabel = document.getElementById('experience-label');
 
 const registrationForm = document.getElementById('registration-form');
+registrationForm.style.display = 'none';
 const loadingContainer = document.getElementById('loading-container');
 
 customerButton.addEventListener('click', chooseCustomer);
@@ -26,7 +27,6 @@ function initializePage() {
     experienceInput.style.display = 'none';
     experienceLabel.style.display = 'none';
     registerButton.style.display = 'none';
-    registrationForm.style.display = 'none';
     loadingContainer.style.display = 'block';
 };
 

@@ -34,14 +34,23 @@ const upload = multer({
     }
 });
 
+const courier_photo = multer({
+    dest: 'app/photos/courier_photos',
+    limits: {
+        fileSize: 1024 * 1024 * 50 // 50MB
+    }
+})
+
 const deliveryRouter = express.Router();
 
 
-deliveryRouter.post('/upload-courier-photo', (req, res) => {
+deliveryRouter.post('/upload-courier-photo', courier_photo.single('photo'), (req, res) => {
     try {
-        const courierTelegramID = req.body.courier_telegram_id
+        const courierTelegramID = req.body.courier_telegram_id;
+        const photo = req.file;
 
         console.log(`Courier Telegram ID: ${courierTelegramID}`);
+        res.status(200).json({ success: true, message: 'Фото успешно загружено.' });
     } catch (error) {
         console.error(`Error in /delivery/upload-courier-photo: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при загрузке фото курьера.' });

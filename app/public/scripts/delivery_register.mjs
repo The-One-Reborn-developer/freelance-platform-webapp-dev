@@ -21,15 +21,13 @@ const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
 
 customerButton.addEventListener('click', chooseCustomer);
-courierButton.addEventListener('click', chooseCourier(userTelegramID));
+courierButton.addEventListener('click', chooseCourier);
+hasCarInputTrue.addEventListener('click', hasCar);
+hasCarInputFalse.addEventListener('click', noCar);
+registerButton.addEventListener('click', register);
 
 
-function initializePage(userTelegramID) {
-    
-    hasCarInputTrue.addEventListener('click', hasCar);
-    hasCarInputFalse.addEventListener('click', noCar);
-    registerButton.addEventListener('click', register);
-
+function initializePage() {
     nameInput.style.display = 'none';
     nameLabel.style.display = 'none';
     dateOfBirthInput.style.display = 'none';
@@ -46,12 +44,12 @@ function initializePage(userTelegramID) {
 
 
 window.onload = function () {
+    initializePage();
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
     console.log(telegramData);
     const userTelegramID = checkIfUserIsRegistered(telegramData);
     console.log(userTelegramID);
-    initializePage(userTelegramID);
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
         if (!event.target.closest('input, textarea, select')) {

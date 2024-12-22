@@ -21,6 +21,7 @@ const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
 
 let userTelegramID = '';
+let photoUploaded = false;
 
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
@@ -124,6 +125,13 @@ function chooseCourier() {
     const photoButton = document.getElementById('photo-button');
     const photoLabel = document.getElementById('photo-label');
 
+    if (photoUploaded) {
+        photoLabel.style.display = 'none';
+        photoButton.textContent = 'Фото загружено ✅';
+        photoButton.style.backgroundColor = 'darkgrey';
+        photoButton.disabled = true;
+    };
+
     photoButton.onclick = () => {
         photoInput.click();
     };
@@ -144,9 +152,10 @@ function chooseCourier() {
                 .then(data => {
                     if (data.success) {
                         // Photo upload successful
-                        photoButton.textContent = 'Фото загружено ✅';
-                        photoButton.style.disabled = true;
+                        photoUploaded = true;
                         photoLabel.style.display = 'none';
+                        photoButton.textContent = 'Фото загружено ✅';
+                        photoButton.style.backgroundColor = 'darkgrey';
                         showModal(data.message, false, data.telegram_id);
                     } else {
                         // Photo upload failed

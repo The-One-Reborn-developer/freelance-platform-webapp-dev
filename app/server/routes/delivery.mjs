@@ -159,7 +159,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierCarLength = courierData.car_length;
         const courierCarHeight = courierData.car_height;
         const courierRegistrationDate = courierData.delivery_registration_date;
-        const courierPhoto = `photos/courier_photos/${courierTelegramID}.jpg`;
+        const courierPhoto = `/photos/courier_photos/${courierTelegramID}.jpg`;
         
         const postResponseResult = postResponse(
             db,

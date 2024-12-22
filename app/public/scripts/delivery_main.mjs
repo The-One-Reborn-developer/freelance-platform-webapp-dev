@@ -654,7 +654,7 @@ async function showSelectedCustomerChat(deliveryID, customerTelegramID, courierT
                             } else if (msg.includes('photos/courier_photos/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('photos/courier_photos/', 'photos/courier_photos/');
+                                const attachmentUrl = `/${attachmentString.trim()}`;
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -1117,7 +1117,7 @@ async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTe
                             } else if (msg.includes('photos/courier_photos/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
+                                const attachmentUrl = `${attachmentString.trim()}`;
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',

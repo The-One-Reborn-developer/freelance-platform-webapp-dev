@@ -1101,6 +1101,7 @@ async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTe
                                             ${timestamp}
                                         </div>`
                             } else if (msg.includes('photos/courier_photos/')) {
+                                console.log(`Message: ${msg}`);
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');

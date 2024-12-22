@@ -20,10 +20,12 @@ const carHeightInput = document.getElementById('car-height-input');
 const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
 
+customerButton.addEventListener('click', chooseCustomer);
+courierButton.addEventListener('click', chooseCourier(userTelegramID));
+
 
 function initializePage(userTelegramID) {
-    customerButton.addEventListener('click', chooseCustomer);
-    courierButton.addEventListener('click', chooseCourier(userTelegramID));
+    
     hasCarInputTrue.addEventListener('click', hasCar);
     hasCarInputFalse.addEventListener('click', noCar);
     registerButton.addEventListener('click', register);

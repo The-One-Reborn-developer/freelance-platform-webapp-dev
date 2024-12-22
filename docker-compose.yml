@@ -8,6 +8,7 @@ services:
     volumes: 
       - ./app/database.db:/app/app/database.db
       - ./app/chats:/app/app/chats
+      - ./app/photos:/app/app/photos
 
   nginx:
     image: nginx:1.24.0

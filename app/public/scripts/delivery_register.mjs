@@ -20,6 +20,8 @@ const carHeightInput = document.getElementById('car-height-input');
 const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
 
+let userTelegramID = '';
+
 customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
 hasCarInputTrue.addEventListener('click', hasCar);
@@ -45,10 +47,11 @@ function initializePage() {
 
 window.onload = async function () {
     initializePage();
+
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
-    const userTelegramID = await checkIfUserIsRegistered(telegramData);
-    console.log(userTelegramID);
+    userTelegramID = await checkIfUserIsRegistered(telegramData);
+    
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
         if (!event.target.closest('input, textarea, select')) {

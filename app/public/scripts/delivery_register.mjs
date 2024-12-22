@@ -23,6 +23,9 @@ const photoInput = document.getElementById('photo-input');
 const photoButton = document.getElementById('photo-button');
 const photoLabel = document.getElementById('photo-label');
 
+const registrationForm = document.getElementById('registration-form');
+const loadingContainer = document.getElementById('loading-container');
+
 let userTelegramID = '';
 let photoUploaded = false;
 
@@ -46,6 +49,8 @@ function initializePage() {
     carLabel.style.display = 'none';
     photoContainer.style.display = 'none';
     registerButton.style.display = 'none';
+    registrationForm.style.display = 'none';
+    loadingContainer.style.display = 'block';
 };
 
 
@@ -80,6 +85,8 @@ async function checkIfUserIsRegistered(telegramData) {
         if (data.registered) {
             window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         } else {
+            loadingContainer.style.display = 'none';
+            registrationForm.style.display = 'flex';
             return data.telegram_id;
         };
     } catch (error) {

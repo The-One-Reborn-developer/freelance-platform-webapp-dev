@@ -218,7 +218,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
                 courierTelegramID,
                 customerName,
                 courierName,
-                'Фото курьера:\n',
+                null,
                 courierPhoto,
                 'courier'
             );

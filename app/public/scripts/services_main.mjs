@@ -1304,6 +1304,7 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
                 const responseData = await response.json();
                 if (responseData.success) {
                     showModal('Информация о профиле успешно изменена.');
+                    location.reload();
                 } else {
                     showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');
                 };

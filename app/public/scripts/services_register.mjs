@@ -10,6 +10,9 @@ const rateLabel = document.getElementById('rate-label');
 const experienceInput = document.getElementById('experience-input');
 const experienceLabel = document.getElementById('experience-label');
 
+const registrationForm = document.getElementById('registration-form');
+const loadingContainer = document.getElementById('loading-container');
+
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
 registerButton.addEventListener('click', register);
@@ -23,6 +26,8 @@ function initializePage() {
     experienceInput.style.display = 'none';
     experienceLabel.style.display = 'none';
     registerButton.style.display = 'none';
+    registrationForm.style.display = 'none';
+    loadingContainer.style.display = 'block';
 };
 
 
@@ -55,7 +60,10 @@ function checkIfUserIsRegistered(telegramData) {
         if (data.registered) {
             // Redirect if the user is registered
             window.location.href = `../views/services_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;
-        };
+        } else {
+            loadingContainer.style.display = 'none';
+            registrationForm.style.display = 'flex';
+        }
     })
     .catch(error => {
         console.error(`Error in checkIfUserIsRegistered: ${error}`);

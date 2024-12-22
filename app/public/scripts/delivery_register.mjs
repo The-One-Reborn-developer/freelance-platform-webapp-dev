@@ -46,8 +46,10 @@ function initializePage(userTelegramID) {
 window.onload = function () {
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
+    console.log(telegramData);
     const userTelegramID = checkIfUserIsRegistered(telegramData);
     console.log(userTelegramID);
+    initializePage(userTelegramID);
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
         if (!event.target.closest('input, textarea, select')) {

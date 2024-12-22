@@ -1036,7 +1036,7 @@ function showCourierChatsWithCustomers(courierTelegramID) {
 async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTelegramID) {
     const display = document.getElementById('display');
     display.classList.add('view-mode');
-
+    console.log(`Delivery ID: ${deliveryID}, Customer Telegram ID: ${customerTelegramID}, Courier Telegram ID: ${courierTelegramID}`);
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';
 

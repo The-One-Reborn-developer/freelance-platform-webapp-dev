@@ -4,8 +4,7 @@ import Database from 'better-sqlite3';
 
 import {
     getUser,
-    sendMessage,
-    checkTelegramData
+    sendMessage
 } from "../modules/common_index.mjs"
 
 import {
@@ -34,12 +33,28 @@ const upload = multer({
     }
 });
 
+const courier_photo_storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'app/photos/courier_photos');
+    },
+    filename: (req, file, cb) => {
+        try {
+            const courierTelegramID = req.body.courier_telegram_id;
+            const fileName = `${courierTelegramID}.jpg`;
+            cb(null, fileName);
+        } catch (error) {
+            console.error(`Error in /delivery/upload-courier-photo: ${error}`);
+            cb(error);
+        };
+    }
+});
+
 const courier_photo = multer({
-    dest: 'app/photos/courier_photos',
+    storage: courier_photo_storage,
     limits: {
         fileSize: 1024 * 1024 * 50 // 50MB
     }
-})
+});
 
 const deliveryRouter = express.Router();
 

@@ -33,10 +33,33 @@ const upload = multer({
     }
 });
 
+const courierPhotoUpload = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'app/chats/delivery/attachments');
+    },
+    filename: (req, file, cb) => {
+        try {
+            const courierTelegramID = req.body.courier_telegram_id;
+            const fileName = `${courierTelegramID}.jpg`;
+            cb(null, fileName);
+        } catch (error) {
+            console.error(`Error in /delivery/upload-courier-photo: ${error}`);
+            cb(error);
+        };
+    }
+});
+
+const courierUpload = multer({
+    storage: courierPhotoUpload,
+    limits: {
+        fileSize: 1024 * 1024 * 50 // 50MB
+    }
+});
+
 const deliveryRouter = express.Router();
 
 
-deliveryRouter.post('/upload-courier-photo', upload.single('photo'), (req, res) => {
+deliveryRouter.post('/upload-courier-photo', courierUpload.single('photo'), (req, res) => {
     try {
         res.status(200).json({ success: true, message: 'Фото успешно загружено.' });
     } catch (error) {

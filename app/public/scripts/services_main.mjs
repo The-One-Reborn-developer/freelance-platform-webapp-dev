@@ -668,7 +668,7 @@ function setupPerformerInterface(validatedTelegramID, userData, socket) {
         const changeProfileInfoForm = document.getElementById('change-profile-info-form');
         if (changeProfileInfoForm) {
             changeProfileInfoForm.addEventListener('submit', async function (event) {
-                await handleProfileInfoFormSubmit(event, validatedTelegramID);
+                await handleProfileInfoFormSubmit(name, event, validatedTelegramID, registrationDate);
             });
         };
     });
@@ -1272,7 +1272,7 @@ async function showChangeProfileInfoForm() {
 };
 
 
-async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
+async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, registrationDate) {
     event.preventDefault();
 
     const rate = document.getElementById('rate-input');
@@ -1304,7 +1304,11 @@ async function handleProfileInfoFormSubmit(event, validatedTelegramID) {
                 const responseData = await response.json();
                 if (responseData.success) {
                     showModal('Информация о профиле успешно изменена.');
-                    location.reload();
+                    const headerInfo = document.getElementById('header-info');
+                    headerInfo.innerHTML = `Исполнитель ${name}.
+                    Ставка ${rate} (₽/час),
+                    ${experience} (лет опыта).
+                    Зарегистрирован ${registrationDate}`;
                 } else {
                     showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');
                 };

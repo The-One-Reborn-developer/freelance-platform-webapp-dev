@@ -190,7 +190,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
                             'Откликнулся исполнитель ' + courierName + '. Зарегистрирован с <i>' + courierRegistrationDate + '</i>. '+
                             'Есть машина: <i>' + ((courierHasCar === 1) ? 'да' : 'нет') + '</i>, модель: <i>' +
                             courierCarModel + '</i>, габариты: <i>' + courierCarWidth + 'x' + courierCarLength + 'x' + 
-                            courierCarHeight + '</i>.\n' +
+                            courierCarHeight + '</i>.\n\n' +
                             'Фото курьера можно посмотреть в приложении.';
 
 

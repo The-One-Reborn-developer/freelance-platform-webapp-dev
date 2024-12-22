@@ -122,6 +122,7 @@ function chooseCourier() {
 
     const photoInput = document.getElementById('photo-input');
     const photoButton = document.getElementById('photo-button');
+    const photoLabel = document.getElementById('photo-label');
 
     photoButton.onclick = () => {
         photoInput.click();
@@ -143,7 +144,10 @@ function chooseCourier() {
                 .then(data => {
                     if (data.success) {
                         // Photo upload successful
-                        showModal(data.message, true, data.telegram_id);
+                        photoButton.textContent = 'Фото загружено ✅';
+                        photoButton.style.disabled = true;
+                        photoLabel.style.display = 'none';
+                        showModal(data.message, false, data.telegram_id);
                     } else {
                         // Photo upload failed
                         showModal(data.message, false, null);

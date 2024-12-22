@@ -1305,8 +1305,8 @@ async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, reg
                 if (responseData.success) {
                     const headerInfo = document.getElementById('header-user-info');
                     headerInfo.innerHTML = `Исполнитель ${name}.
-                    Ставка ${rate} (₽/час),
-                    ${experience} (лет опыта).
+                    Ставка ${rate.value} (₽/час),
+                    ${experience.value} (лет опыта).
                     Зарегистрирован ${registrationDate}`;
                     showModal('Информация о профиле успешно изменена.');
                 } else {

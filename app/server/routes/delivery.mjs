@@ -159,6 +159,7 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierCarLength = courierData.car_length;
         const courierCarHeight = courierData.car_height;
         const courierRegistrationDate = courierData.delivery_registration_date;
+        const courierPhoto = `photos/courier_photos/${courierTelegramID}.jpg`;
         
         const postResponseResult = postResponse(
             db,
@@ -191,7 +192,8 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
                             'Откликнулся исполнитель ' + courierName + '. Зарегистрирован с <i>' + courierRegistrationDate + '</i>. '+
                             'Есть машина: <i>' + ((courierHasCar === 1) ? 'да' : 'нет') + '</i>, модель: <i>' +
                             courierCarModel + '</i>, габариты: <i>' + courierCarWidth + 'x' + courierCarLength + 'x' + 
-                            courierCarHeight + '</i>';
+                            courierCarHeight + '</i>.\n' +
+                            'Фото курьера можно посмотреть в приложении.';
 
 
             sendMessage(
@@ -207,6 +209,17 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
                 courierName,
                 message,
                 null,
+                'courier'
+            );
+
+            saveChatMessage(
+                deliveryID,
+                customerTelegramID,
+                courierTelegramID,
+                customerName,
+                courierName,
+                'Фото курьера:\n',
+                courierPhoto,
                 'courier'
             );
             

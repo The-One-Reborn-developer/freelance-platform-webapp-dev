@@ -33,11 +33,14 @@ const db = new Database('./app/database.db', { verbose: console.log });
 const app = express();
 app.use(express.json());
 app.use(express.static('app/public'));
+
 const servicesAttachmentPath = path.join(__dirname, '../chats/services/attachments');
 const deliveryAttachmentPath = path.join(__dirname, '../chats/delivery/attachments');
+const courierPhotosPath = path.join(__dirname, '../photos/courier_photos');
 app.use('/services/attachments', express.static(servicesAttachmentPath));
 app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
-console.log(`Serving attachments from ${servicesAttachmentPath} and ${deliveryAttachmentPath}`);
+app.use('/photos/courier_photos', express.static(courierPhotosPath));
+console.log(`Serving attachments from ${servicesAttachmentPath}, ${deliveryAttachmentPath}, ${courierPhotosPath}`);
 console.log('Express app created');
 
 app.use('/common', commonRouter);

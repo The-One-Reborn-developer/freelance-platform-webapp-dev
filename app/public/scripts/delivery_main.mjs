@@ -651,6 +651,41 @@ async function showSelectedCustomerChat(deliveryID, customerTelegramID, courierT
                                             <br><br>
                                             ${timestamp}
                                         </div>`
+                            } else if (msg.includes('photos/courier_photos/')) {
+                                // Extract sender, attachment path, and timestamp
+                                const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                                const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
+
+                                const customerName = await fetch('/common/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: customerTelegramID })
+                                })
+                                    .then(response => response.json())
+                                    .then(data => data.userData.name);
+                                const courierName = await fetch('/common/get-user-data', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ telegram_id: courierTelegramID })
+                                })
+                                    .then(response => response.json())
+                                    .then(data => data.userData.delivery_name);
+
+                                const senderName = senderLine.includes('Заказчик')
+                                    ? `Заказчик ${customerName}:`
+                                    : `Курьер ${courierName}:`;
+
+                                // Render the message with attachment
+                                return `<div class="chat-message">
+                                            ${senderName}<br><br>
+                                            <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                            <br><br>
+                                            ${timestamp}
+                                        </div>`
                             } else {
                                 return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                             };

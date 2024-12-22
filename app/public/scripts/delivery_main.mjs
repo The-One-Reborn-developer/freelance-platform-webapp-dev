@@ -651,10 +651,10 @@ async function showSelectedCustomerChat(deliveryID, customerTelegramID, courierT
                                             <br><br>
                                             ${timestamp}
                                         </div>`
-                            } else if (msg.includes('photos/courier_photos/')) {
+                            } else if (msg.includes('app/photos/courier_photos/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = `/${attachmentString.trim()}`;
+                                const attachmentUrl = attachmentString.replace('app/photos/courier_photos/', '/photos/courier_photos/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -776,10 +776,10 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                                     <br><br>
                                     ${timestamp}
                                 </div>`
-                    } else if (msg.includes('photos/courier_photos/')) {
+                    } else if (msg.includes('app/photos/courier_photos/')) {
                         // Extract sender and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('photos/courier_photos/', 'photos/courier_photos/');
+                        const attachmentUrl = attachmentString.replace('app/photos/courier_photos/', '/photos/courier_photos/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${customer.name}:`
                             : `Курьер ${name}:`;
@@ -1114,10 +1114,10 @@ async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTe
                                             <br><br>
                                             ${timestamp}
                                         </div>`
-                            } else if (msg.includes('photos/courier_photos/')) {
+                            } else if (msg.includes('app/photos/courier_photos/')) {
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                                const attachmentUrl = `${attachmentString.trim()}`;
+                                const attachmentUrl = attachmentString.replace('app/photos/courier_photos/', '/photos/courier-photos/');
 
                                 const customerName = await fetch('/common/get-user-data', {
                                     method: 'POST',
@@ -1205,10 +1205,10 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                                     <br><br>
                                     ${timestamp}
                                 </div>`
-                    } else if (msg.includes('photos/courier_photos/')) {
+                    } else if (msg.includes('app/photos/courier_photos/')) {
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
-                        const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
+                        const attachmentUrl = attachmentString.replace('app/photos/courier_photos/', '/photos/courier_photos/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Курьер ${courier.name}:`;

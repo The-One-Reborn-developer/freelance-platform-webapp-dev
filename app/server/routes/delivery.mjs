@@ -35,7 +35,7 @@ const upload = multer({
 
 const courierPhotoUpload = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'app/chats/delivery/attachments');
+        cb(null, 'app/photos/courier_photos');
     },
     filename: (req, file, cb) => {
         try {

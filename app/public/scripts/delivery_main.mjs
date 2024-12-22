@@ -234,6 +234,8 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
     const description = document.getElementById('description-textarea');
     const deliverFrom = document.getElementById('deliver-from');
     const deliverTo = document.getElementById('deliver-to');
+    const carNecessaryTrue = document.getElementById('car-necessary-true');
+    const carNecessaryFalse = document.getElementById('car-necessary-false');
     const carNecessary = document.querySelector('input[name="car-necessary"]:checked');
 
     // Check if the fields are valid
@@ -260,7 +262,16 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
         })
             .then(response => response.json())
             .then(data => {
-                showModal(data.message)
+                if (data.success) {
+                    description.value = '';
+                    deliverFrom.value = '';
+                    deliverTo.value = '';
+                    carNecessaryTrue.checked = false;
+                    carNecessaryFalse.checked = false;
+                    showModal(data.message);
+                } else {
+                    showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);

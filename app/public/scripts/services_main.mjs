@@ -184,6 +184,8 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
     const description = document.getElementById('description-textarea');
     const deadlineFrom = document.getElementById('deadline-from');
     const deadlineTo = document.getElementById('deadline-to');
+    const instrumentProvidedTrue = document.getElementById('instrument-provided-true');
+    const instrumentProvidedFalse = document.getElementById('instrument-provided-false');
     const instrumentProvided = document.querySelector('input[name="instrument-provided"]:checked');
 
     // Check if the fields are valid
@@ -210,7 +212,16 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
         })
             .then(response => response.json())
             .then(data => {
-                showModal(data.message)
+                if (data.success) {
+                    description.value = '';
+                    deadlineFrom.value = '';
+                    deadlineTo.value = '';
+                    instrumentProvidedTrue.checked = false;
+                    instrumentProvidedFalse.checked = false;
+                    showModal(data.message);
+                } else {
+                    showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);

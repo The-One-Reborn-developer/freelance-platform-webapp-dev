@@ -1,7 +1,7 @@
 export function getOpenDeliveriesByCustomerTelegramID(db, customer_telegram_id) {
     try {
         const getDelivery = db.prepare(
-            'SELECT * FROM deliveries WHERE customer_telegram_id = ? AND closed = FALSE'
+            'SELECT * FROM deliveries WHERE customer_telegram_id = ? AND closed = 0'
         );
         const getDeliveryResult = getDelivery.all(customer_telegram_id);
         return getDeliveryResult;

@@ -59,26 +59,25 @@ window.onload = async function () {
 
 
 async function checkIfUserIsRegistered(telegramData) {
-    fetch('/common/check-registration', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ service: 'delivery', telegram_data: telegramData })  // Send the Telegram data as JSON
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('/common/check-registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ service: 'delivery', telegram_data: telegramData })  // Send the Telegram data as JSON
+        });
+        
+        const data = await response.json();
+
         if (data.registered) {
-            console.log(data);
             window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         } else {
-            console.log(data);
             return data.telegram_id;
         };
-    })
-    .catch(error => {
+    } catch (error) {
         console.error(`Error in checkIfUserIsRegistered: ${error}`);
-    });
+    };
 };
 
 

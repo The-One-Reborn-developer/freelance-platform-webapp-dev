@@ -134,6 +134,7 @@ function chooseCourier(userTelegramID) {
             const formData = new FormData();
             formData.append('photo', file);
             formData.append('courier_telegram_id', userTelegramID);
+            console.log(`photo file: ${file}`);
             console.log(`courier telegram id: ${userTelegramID}`);
             try {
                 fetch('/delivery/upload-courier-photo', {

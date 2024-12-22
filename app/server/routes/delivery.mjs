@@ -62,6 +62,7 @@ const deliveryRouter = express.Router();
 deliveryRouter.post('/upload-courier-photo', courier_photo.single('photo'), (req, res) => {
     try {
         console.log(`Body: ${JSON.stringify(req.body)}`);
+        console.log(`File: ${req.file}`);
         res.status(200).json({ success: true, message: 'Фото успешно загружено.' });
     } catch (error) {
         console.error(`Error in /delivery/upload-courier-photo: ${error}`);

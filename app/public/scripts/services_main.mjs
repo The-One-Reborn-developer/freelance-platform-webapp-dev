@@ -1303,7 +1303,7 @@ async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, reg
             } else {
                 const responseData = await response.json();
                 if (responseData.success) {
-                    const headerInfo = document.getElementById('header-info');
+                    const headerInfo = document.getElementById('header-user-info');
                     headerInfo.innerHTML = `Исполнитель ${name}.
                     Ставка ${rate} (₽/час),
                     ${experience} (лет опыта).

@@ -1303,12 +1303,12 @@ async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, reg
             } else {
                 const responseData = await response.json();
                 if (responseData.success) {
-                    showModal('Информация о профиле успешно изменена.');
                     const headerInfo = document.getElementById('header-info');
                     headerInfo.innerHTML = `Исполнитель ${name}.
                     Ставка ${rate} (₽/час),
                     ${experience} (лет опыта).
                     Зарегистрирован ${registrationDate}`;
+                    showModal('Информация о профиле успешно изменена.');
                 } else {
                     showModal('Произошла ошибка при изменении информации о профиле, попробуйте перезайти в приложение');
                 };

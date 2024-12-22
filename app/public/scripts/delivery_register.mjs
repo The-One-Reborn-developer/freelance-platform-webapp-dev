@@ -47,7 +47,6 @@ window.onload = function () {
     initializePage();
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
-    console.log(telegramData);
     const userTelegramID = checkIfUserIsRegistered(telegramData);
     console.log(userTelegramID);
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
@@ -73,6 +72,7 @@ function checkIfUserIsRegistered(telegramData) {
             console.log(data);
             window.location.href = `delivery_main.html?telegram_id=${encodeURIComponent(data.telegram_id)}`;  // Redirect if the user is registered
         } else {
+            console.log(data);
             return data.telegram_id;
         };
     })

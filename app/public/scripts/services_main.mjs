@@ -313,7 +313,7 @@ async function showMyBids(validatedTelegramID) {
                 });
                 display.appendChild(bidsContainer);
             } else {
-                display.innerHTML = `<p>У вас нет активных заказов</p>`;
+                showModal('У вас нет активных заказов.');
             };
         } catch (error) {
             console.error(`Error in showMyBids: ${error}`);

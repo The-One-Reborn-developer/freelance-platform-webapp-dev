@@ -363,7 +363,7 @@ async function showMyDeliveries(validatedTelegramID) {
                 });
                 display.appendChild(deliveriesContainer);
             } else {
-                display.innerHTML = `<p>У вас нет активных заказов</p>`;
+                showModal('У вас нет активных заказов.');
             };
         } catch (error) {
             console.error(`Error in showMyDeliveries: ${error}`);

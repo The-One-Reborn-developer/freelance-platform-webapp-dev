@@ -439,7 +439,7 @@ async function showBids(city, validatedTelegramID) {
                         const customerTelegramID = bid.customer_telegram_id
 
                         if (customerTelegramID) {
-                            await showCustomerChatsWithPerformers(customerTelegramID);
+                            showCustomerChatsWithPerformers(customerTelegramID);
                         } else {
                             showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                             console.error('Customer Telegram ID not found');

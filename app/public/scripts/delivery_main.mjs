@@ -489,7 +489,7 @@ async function showDeliveries(city, validatedTelegramID) {
                         const customerTelegramID = delivery.customer_telegram_id
 
                         if (customerTelegramID) {
-                            await showCustomerChatsWithCouriers(customerTelegramID);
+                            showCustomerChatsWithCouriers(customerTelegramID);
                         } else {
                             showModal('Произошла ошибка при загрузке переписки, попробуйте перезайти в приложение');
                             console.error('Customer Telegram ID not found');

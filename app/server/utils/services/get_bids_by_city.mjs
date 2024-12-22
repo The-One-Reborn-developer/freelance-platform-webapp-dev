@@ -10,7 +10,7 @@ export function getBidsByCity(db, city) {
                     deadline_to,
                     instrument_provided,
                     closed
-            FROM bids WHERE city = ?`
+            FROM bids WHERE city = ? AND closed = FALSE`
         );
         const getBidsByCityResult = getBidsByCity.all(city);
         return getBidsByCityResult;

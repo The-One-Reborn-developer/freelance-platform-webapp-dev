@@ -10,7 +10,7 @@ export function getDeliveriesByCity(db, city) {
                     deliver_to,
                     car_necessary,
                     closed
-            FROM deliveries WHERE city = ?`
+            FROM deliveries WHERE city = ? AND closed = FALSE`
         );
         const getDeliveriesByCityResult = getDeliveriesByCity.all(city);
         return getDeliveriesByCityResult;

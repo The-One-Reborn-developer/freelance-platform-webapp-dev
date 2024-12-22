@@ -8,7 +8,7 @@ export function saveChatMessage(
     customerName,
     courierName,
     message,
-    attachment,
+    attachmentPath,
     senderType
 ) {
     try {
@@ -23,7 +23,7 @@ export function saveChatMessage(
 
         const formattedMessage = `${senderType === 'customer' ? `Заказчик ${customerName}` :
                                  `Курьер ${courierName}`}:\n\n` +
-                                 `${attachment ? attachment : message}\n\n` +
+                                 `${attachmentPath ? attachmentPath : message}\n\n` +
                                  `${currentDate}${separator}`;
 
         fs.appendFileSync(filePath, formattedMessage, 'utf8');

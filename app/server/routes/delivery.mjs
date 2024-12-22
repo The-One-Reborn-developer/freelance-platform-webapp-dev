@@ -33,36 +33,11 @@ const upload = multer({
     }
 });
 
-const courier_photo_storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'app/photos/courier_photos');
-    },
-    filename: (req, file, cb) => {
-        try {
-            const courierTelegramID = req.body.courier_telegram_id;
-            const fileName = `${courierTelegramID}.jpg`;
-            cb(null, fileName);
-        } catch (error) {
-            console.error(`Error in /delivery/upload-courier-photo: ${error}`);
-            cb(error);
-        };
-    }
-});
-
-const courier_photo = multer({
-    storage: courier_photo_storage,
-    limits: {
-        fileSize: 1024 * 1024 * 50 // 50MB
-    }
-});
-
 const deliveryRouter = express.Router();
 
 
-deliveryRouter.post('/upload-courier-photo', courier_photo.single('photo'), (req, res) => {
+deliveryRouter.post('/upload-courier-photo', upload.single('photo'), (req, res) => {
     try {
-        console.log(`Body: ${JSON.stringify(req.body)}`);
-        console.log(`File: ${req.file}`);
         res.status(200).json({ success: true, message: 'Фото успешно загружено.' });
     } catch (error) {
         console.error(`Error in /delivery/upload-courier-photo: ${error}`);
@@ -159,8 +134,8 @@ deliveryRouter.post('/respond-to-delivery', (req, res) => {
         const courierCarLength = courierData.car_length;
         const courierCarHeight = courierData.car_height;
         const courierRegistrationDate = courierData.delivery_registration_date;
-        const courierPhoto = `/photos/courier_photos/${courierTelegramID}.jpg`;
-        
+        const courierPhoto = `chats/delivery/attachments/${courierTelegramID}.jpg`;
+ 
         const postResponseResult = postResponse(
             db,
             deliveryID,

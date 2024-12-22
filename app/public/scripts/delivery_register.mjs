@@ -134,6 +134,7 @@ function chooseCourier() {
     if (photoUploaded) {
         photoLabel.style.display = 'none';
         photoButton.textContent = 'Фото загружено ✅';
+        photoButton.style.color = 'grey';
         photoButton.style.backgroundColor = 'darkgrey';
         photoButton.disabled = true;
     };

@@ -63,7 +63,7 @@ function checkIfUserIsRegistered(telegramData) {
         } else {
             loadingContainer.style.display = 'none';
             registrationForm.style.display = 'flex';
-        }
+        };
     })
     .catch(error => {
         console.error(`Error in checkIfUserIsRegistered: ${error}`);

@@ -19,6 +19,9 @@ const carLengthInput = document.getElementById('car-length-input');
 const carHeightInput = document.getElementById('car-height-input');
 const carLabel = document.getElementById('car-label');
 const photoContainer = document.getElementById('photo-container');
+const photoInput = document.getElementById('photo-input');
+const photoButton = document.getElementById('photo-button');
+const photoLabel = document.getElementById('photo-label');
 
 let userTelegramID = '';
 let photoUploaded = false;
@@ -120,10 +123,6 @@ function chooseCourier() {
     // Highlight the selected button
     courierButton.style.backgroundColor = 'darkgrey';
     customerButton.style.backgroundColor = '';
-
-    const photoInput = document.getElementById('photo-input');
-    const photoButton = document.getElementById('photo-button');
-    const photoLabel = document.getElementById('photo-label');
 
     if (photoUploaded) {
         photoLabel.style.display = 'none';

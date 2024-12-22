@@ -818,6 +818,8 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
+        document.activeElement.blur();
+
         const messageTextArea = document.getElementById('message-input');
         const message = messageTextArea.value.trim();
 
@@ -1247,6 +1249,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
+        document.activeElement.blur();
+
         const messageTextArea = document.getElementById('message-input');
         const message = messageTextArea.value.trim();
 

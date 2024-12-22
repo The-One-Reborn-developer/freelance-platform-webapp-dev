@@ -761,6 +761,8 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
+        document.activeElement.blur();
+
         const messageTextArea = document.getElementById('message-input');
         const message = messageTextArea.value.trim();
 
@@ -1139,6 +1141,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
     sendButton.onclick = async () => {
+        document.activeElement.blur();
+
         const messageTextArea = document.getElementById('message-input');
         const message = messageTextArea.value.trim();
 
@@ -1274,6 +1278,7 @@ async function showChangeProfileInfoForm() {
 
 async function handleProfileInfoFormSubmit(name, event, validatedTelegramID, registrationDate) {
     event.preventDefault();
+    document.activeElement.blur();
 
     const rate = document.getElementById('rate-input');
     const experience = document.getElementById('experience-input');

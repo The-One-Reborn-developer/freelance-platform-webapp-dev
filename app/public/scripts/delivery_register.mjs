@@ -199,6 +199,8 @@ function hasCar() {
 
 
 function register() {
+    document.activeElement.blur();
+
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'courier';
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();

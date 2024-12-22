@@ -164,6 +164,7 @@ function chooseCourier() {
                         photoLabel.style.display = 'none';
                         photoButton.textContent = 'Фото загружено ✅';
                         photoButton.style.backgroundColor = 'darkgrey';
+                        photoButton.disabled = true;
                         showModal(data.message, false, data.telegram_id);
                     } else {
                         // Photo upload failed

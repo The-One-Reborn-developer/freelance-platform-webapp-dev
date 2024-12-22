@@ -105,7 +105,7 @@ function chooseCustomer() {
 };
 
 
-function chooseCourier(userTelegramID) {
+function chooseCourier() {
     // Show name, rate, and experience inputs and labels
     nameInput.style.display = '';
     nameLabel.style.display = '';

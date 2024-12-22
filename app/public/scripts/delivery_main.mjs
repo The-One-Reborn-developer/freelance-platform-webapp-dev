@@ -776,6 +776,21 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                                     <br><br>
                                     ${timestamp}
                                 </div>`
+                    } else if (msg.includes('photos/courier_photos/')) {
+                        // Extract sender and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик ${customer.name}:`
+                            : `Курьер ${name}:`;
+
+                        // Render the message with attachment
+                        return `<div class="chat-message">
+                                    ${senderName}<br><br>
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
+                                </div>`
                     } else {
                         return `<div class="chat-message">${msg.replace(/\n/g, '<br>')}</div>`
                     };
@@ -1036,7 +1051,6 @@ function showCourierChatsWithCustomers(courierTelegramID) {
 async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTelegramID) {
     const display = document.getElementById('display');
     display.classList.add('view-mode');
-    console.log(`Delivery ID: ${deliveryID}, Customer Telegram ID: ${customerTelegramID}, Courier Telegram ID: ${courierTelegramID}`);
     display.innerHTML = '';
     display.innerHTML = 'Загрузка...';
 
@@ -1101,7 +1115,6 @@ async function showSelectedCourierChat(deliveryID, customerTelegramID, courierTe
                                             ${timestamp}
                                         </div>`
                             } else if (msg.includes('photos/courier_photos/')) {
-                                console.log(`Message: ${msg}`);
                                 // Extract sender, attachment path, and timestamp
                                 const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                                 const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
@@ -1181,6 +1194,21 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/delivery/attachments/', '/delivery/attachments/');
+                        const senderName = senderLine.includes('Заказчик')
+                            ? `Заказчик ${name}:`
+                            : `Курьер ${courier.name}:`;
+
+                        // Render the message with attachment
+                        return `<div class="chat-message">
+                                    ${senderName}<br><br>
+                                    <img src="${attachmentUrl}" alt="Attachment" class="attachment-image">
+                                    <br><br>
+                                    ${timestamp}
+                                </div>`
+                    } else if (msg.includes('photos/courier_photos/')) {
+                        // Extract sender, attachment path, and timestamp
+                        const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
+                        const attachmentUrl = attachmentString.replace('photos/courier_photos/', '/courier_photos/');
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Курьер ${courier.name}:`;

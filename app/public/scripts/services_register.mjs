@@ -13,6 +13,7 @@ const experienceLabel = document.getElementById('experience-label');
 const registrationForm = document.getElementById('registration-form');
 registrationForm.style.display = 'none';
 const loadingContainer = document.getElementById('loading-container');
+loadingContainer.style.display = '';
 
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
@@ -27,7 +28,6 @@ function initializePage() {
     experienceInput.style.display = 'none';
     experienceLabel.style.display = 'none';
     registerButton.style.display = 'none';
-    loadingContainer.style.display = 'block';
 };
 
 

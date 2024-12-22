@@ -26,6 +26,7 @@ const photoLabel = document.getElementById('photo-label');
 const registrationForm = document.getElementById('registration-form');
 registrationForm.style.display = 'none';
 const loadingContainer = document.getElementById('loading-container');
+loadingContainer.style.display = '';
 
 let userTelegramID = '';
 let photoUploaded = false;
@@ -50,7 +51,6 @@ function initializePage() {
     carLabel.style.display = 'none';
     photoContainer.style.display = 'none';
     registerButton.style.display = 'none';
-    loadingContainer.style.display = 'block';
 };
 
 

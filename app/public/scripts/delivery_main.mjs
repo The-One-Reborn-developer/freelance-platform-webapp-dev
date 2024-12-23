@@ -828,7 +828,8 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
 
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
-    sendButton.onclick = async () => {
+    sendButton.addEventListener('touchend', async (event) => {
+        event.preventDefault();
         document.activeElement.blur();
 
         const messageTextArea = document.getElementById('message-input');
@@ -878,7 +879,7 @@ async function loadCourierChatHistory(validatedTelegramID, name, customer, socke
                 scrollToBottom(display);
             };
         };
-    };
+    });
 
     const attachmentInput = document.getElementById('attachment-input');
     const attachmentButton = document.getElementById('attachment-button');
@@ -1259,7 +1260,8 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
 
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
-    sendButton.onclick = async () => {
+    sendButton.addEventListener('touchend', async (event) => {
+        event.preventDefault();
         document.activeElement.blur();
 
         const messageTextArea = document.getElementById('message-input');
@@ -1308,7 +1310,7 @@ async function loadCustomerChatHistory(validatedTelegramID, name, courier, socke
                 scrollToBottom(display);
             };
         };
-    };
+    });
 
     const attachmentInput = document.getElementById('attachment-input');
     const attachmentButton = document.getElementById('attachment-button');

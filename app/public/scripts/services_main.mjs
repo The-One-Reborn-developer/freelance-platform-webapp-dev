@@ -58,11 +58,15 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
         const createBidForm = document.getElementById('create-bid-form');
         if (createBidForm) {
             createBidForm.addEventListener('touchend', async function (event) {
-                event.preventDefault();
-                document.activeElement.blur();
-                const isValid = await handleBidFormSubmit(validatedTelegramID, name);
-                if (isValid) {
-                    createBidForm.submit();
+                const target = event.target;
+
+                if (target && target.id === "create-bid-button") {
+                    event.preventDefault();
+                    document.activeElement.blur();
+                    const isValid = await handleBidFormSubmit(validatedTelegramID, name);
+                    if (isValid) {
+                        createBidForm.submit();
+                    };
                 };
             });
         };

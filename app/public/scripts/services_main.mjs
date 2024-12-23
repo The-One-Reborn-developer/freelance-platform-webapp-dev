@@ -772,7 +772,8 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
 
     // Attach event listener for sending messages
     const sendButton = document.getElementById('send-button');
-    sendButton.onclick = async () => {
+    sendButton.addEventListener('touchend', async (event) => {
+        event.preventDefault();
         document.activeElement.blur();
 
         const messageTextArea = document.getElementById('message-input');
@@ -822,7 +823,7 @@ async function loadPerformerChatHistory(validatedTelegramID, name, customer, soc
                 scrollToBottom(display);
             };
         };
-    };
+    });
 
     const attachmentInput = document.getElementById('attachment-input');
     const attachmentButton = document.getElementById('attachment-button');

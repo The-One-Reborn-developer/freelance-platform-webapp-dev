@@ -63,7 +63,7 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
                 if (target && target.id === "create-bid-button") {
                     event.preventDefault();
                     document.activeElement.blur();
-                    const isValid = await handleBidFormSubmit(validatedTelegramID, name);
+                    const isValid = await handleBidFormSubmit(event, validatedTelegramID, name);
                     if (isValid) {
                         createBidForm.submit();
                     };
@@ -187,7 +187,9 @@ async function showCreateBidForm() {
 };
 
 
-async function handleBidFormSubmit(validatedTelegramID, name) {
+async function handleBidFormSubmit(event, validatedTelegramID, name) {
+    event.preventDefault();
+
     const description = document.getElementById('description-textarea');
     const deadlineFrom = document.getElementById('deadline-from');
     const deadlineTo = document.getElementById('deadline-to');

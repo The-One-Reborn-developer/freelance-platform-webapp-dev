@@ -11,7 +11,7 @@ import {
     getOpenBidsByCustomerTelegramID,
     getBidsByCity,
     getChatMessages,
-    getOpenBidsByCustomerTelegramID,
+    getAllBidsByCustomerTelegramID,
     getResponses,
     getBidByBidID,
     getResponsesByBidIDWithChatStarted,

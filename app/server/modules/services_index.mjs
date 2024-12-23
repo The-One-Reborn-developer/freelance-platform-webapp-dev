@@ -3,7 +3,7 @@ import { postBid } from "../utils/services/post_bid.mjs";
 import { updateCloseBid } from "../utils/services/update_close_bid.mjs";
 import { getBidsByCity } from "../utils/services/get_bids_by_city.mjs";
 import { postResponse } from "../utils/services/post_response.mjs";
-import { getAllBidsByCustomerTelegramID } from "../utils/services/get_all_bids_by_customer_telegram_id.mjs";
+import { getAllOpenBidsByCustomerTelegramID } from "../utils/services/get_all_bids_by_customer_telegram_id.mjs";
 import { getResponsesByBidIDWithChatStarted } from "../utils/services/get_responses_by_bid_id_with_chat_started.mjs";
 import { getChatMessages } from "../utils/services/get_chat_messages.mjs";
 import { saveChatMessage } from "../utils/services/save_chat_message.mjs";
@@ -19,7 +19,7 @@ export {
     updateCloseBid,
     getBidsByCity,
     postResponse,
-    getAllBidsByCustomerTelegramID,
+    getAllOpenBidsByCustomerTelegramID,
     getResponsesByBidIDWithChatStarted,
     getChatMessages,
     saveChatMessage,

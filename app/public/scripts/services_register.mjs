@@ -17,7 +17,11 @@ loadingContainer.style.display = '';
 
 customerButton.addEventListener('click', chooseCustomer);
 performerButton.addEventListener('click', choosePerformer);
-registerButton.addEventListener('click', register);
+registerButton.addEventListener('touchend', (event) => {
+    event.preventDefault();
+    document.activeElement.blur();
+    register();
+});
 
 
 function initializePage() {
@@ -41,6 +45,7 @@ window.onload = function () {
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
         if (!event.target.closest('input, textarea, select')) {
+            event.preventDefault();
             document.activeElement.blur();
         };
     });    

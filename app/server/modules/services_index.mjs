@@ -12,6 +12,7 @@ import { getResponsesByPerformerTelegramIDWithChatStarted } from "../utils/servi
 import { getBidByBidID } from "../utils/services/get_bid_by_bid_id.mjs";
 import { getResponses } from "../utils/services/get_responses.mjs";
 import { updateProfileInfo } from "../utils/services/update_profile_info.mjs";
+import { getOpenBidByBidID } from "../utils/services/get_open_bid_by_bid_id.mjs"
 
 export {
     postBid,
@@ -27,5 +28,6 @@ export {
     getResponsesByPerformerTelegramIDWithChatStarted,
     getBidByBidID,
     getResponses,
-    updateProfileInfo
+    updateProfileInfo,
+    getOpenBidByBidID
 };

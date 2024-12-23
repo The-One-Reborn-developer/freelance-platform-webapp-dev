@@ -21,7 +21,8 @@ import {
     saveChatMessage,
     updateCloseBid,
     updateProfileInfo,
-    updateResponse
+    updateResponse,
+    getOpenBidByBidID
 } from "../modules/services_index.mjs"
 
 
@@ -224,7 +225,7 @@ servicesRouter.get('/responded-customers', (req, res) => {
 
                 // Extract customer info from bids
                 const bidsInfo = bidIDs.map((bidID) => {
-                    const bidInfo = getBidByBidID(db, bidID);
+                    const bidInfo = getOpenBidByBidID(db, bidID);
                     return bidInfo;
                 });
 

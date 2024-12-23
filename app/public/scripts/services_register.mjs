@@ -109,8 +109,6 @@ function choosePerformer() {
 
 
 function register() {
-    document.activeElement.blur();
-
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'performer';
     const name = nameInput.value.trim();
     const rate = rateInput.value.trim();

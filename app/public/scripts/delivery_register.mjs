@@ -35,7 +35,11 @@ customerButton.addEventListener('click', chooseCustomer);
 courierButton.addEventListener('click', chooseCourier);
 hasCarInputTrue.addEventListener('click', hasCar);
 hasCarInputFalse.addEventListener('click', noCar);
-registerButton.addEventListener('click', register);
+registerButton.addEventListener('touchend', (event) => {
+    event.preventDefault();
+    document.activeElement.blur();
+    register();
+});
 
 
 function initializePage() {
@@ -199,8 +203,6 @@ function hasCar() {
 
 
 function register() {
-    document.activeElement.blur();
-
     const role = customerButton.style.backgroundColor === 'darkgrey' ? 'customer' : 'courier';
     const name = nameInput.value.trim();
     const dateOfBirth = dateOfBirthInput.value.trim();

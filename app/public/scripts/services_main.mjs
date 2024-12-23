@@ -231,13 +231,12 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
                     }
                 })
                 .catch((error) => {
-                    console.error('Error:', error);
+                    console.error(`Error in handleBidFormSubmit: ${error}`);
                     showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
                 });
         } catch (error) {
-            console.error('Error:', error);
+            console.error(`Error in handleBidFormSubmit: ${error}`);
             showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
-            return false;
         };
     };
 };

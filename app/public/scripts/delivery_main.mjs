@@ -57,8 +57,14 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
         // Attach submit form event listener
         const createDeliveryForm = document.getElementById('create-delivery-form');
         if (createDeliveryForm) {
-            createDeliveryForm.addEventListener('submit', function (event) {
-                handleDeliveryFormSubmit(event, validatedTelegramID, name);
+            createDeliveryForm.addEventListener('touchend', async function (event) {
+                const target = event.target;
+
+                if (target && target.id === "create-delivery-button") {
+                    event.preventDefault();
+                    document.activeElement.blur();
+                    handleDeliveryFormSubmit(event, validatedTelegramID, name);
+                };
             });
         };
     });
@@ -253,30 +259,35 @@ function handleDeliveryFormSubmit(event, validatedTelegramID, name) {
             car_necessary: carNecessary.value
         };
 
-        fetch('/delivery/post-delivery', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    description.value = '';
-                    deliverFrom.value = '';
-                    deliverTo.value = '';
-                    carNecessaryTrue.checked = false;
-                    carNecessaryFalse.checked = false;
-                    showModal(data.message);
-                } else {
+        try {
+            fetch('/delivery/post-delivery', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        description.value = '';
+                        deliverFrom.value = '';
+                        deliverTo.value = '';
+                        carNecessaryTrue.checked = false;
+                        carNecessaryFalse.checked = false;
+                        showModal(data.message);
+                    } else {
+                        showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+                    }
+                })
+                .catch((error) => {
+                    console.error(`Error in handleDeliveryFormSubmit: ${error}`);
                     showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
-            });
+                });
+        } catch (error) {
+            console.error(`Error in handleDeliveryFormSubmit: ${error}`);
+            showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+        };
     };
 };
 

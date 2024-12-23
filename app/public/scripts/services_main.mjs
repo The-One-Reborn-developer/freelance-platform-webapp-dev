@@ -57,8 +57,13 @@ function setupCustomerInterface(validatedTelegramID, userData, socket) {
         // Attach submit form event listener
         const createBidForm = document.getElementById('create-bid-form');
         if (createBidForm) {
-            createBidForm.addEventListener('submit', function (event) {
-                handleBidFormSubmit(event, validatedTelegramID, name);
+            createBidForm.addEventListener('touchend', async function (event) {
+                event.preventDefault();
+                document.activeElement.blur();
+                const isValid = await handleBidFormSubmit(validatedTelegramID, name);
+                if (isValid) {
+                    createBidForm.submit();
+                };
             });
         };
     });
@@ -178,9 +183,7 @@ async function showCreateBidForm() {
 };
 
 
-function handleBidFormSubmit(event, validatedTelegramID, name) {
-    event.preventDefault();
-
+async function handleBidFormSubmit(validatedTelegramID, name) {
     const description = document.getElementById('description-textarea');
     const deadlineFrom = document.getElementById('deadline-from');
     const deadlineTo = document.getElementById('deadline-to');
@@ -203,30 +206,32 @@ function handleBidFormSubmit(event, validatedTelegramID, name) {
             instrument_provided: instrumentProvided.value
         };
 
-        fetch('/services/post-bid', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    description.value = '';
-                    deadlineFrom.value = '';
-                    deadlineTo.value = '';
-                    instrumentProvidedTrue.checked = false;
-                    instrumentProvidedFalse.checked = false;
-                    showModal(data.message);
-                } else {
-                    showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+        try {
+            const response = await fetch('/services/post-bid', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             });
+            const result = await response.json();
+            if (result.success) {
+                description.value = '';
+                deadlineFrom.value = '';
+                deadlineTo.value = '';
+                instrumentProvidedTrue.checked = false;
+                instrumentProvidedFalse.checked = false;
+                showModal(result.message);
+                return true;
+            } else {
+                showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+                return false;
+            };
+        } catch (error) {
+            console.error('Error:', error);
+            showModal('Произошла ошибка при создании заказа. Попробуйте позже.');
+            return false;
+        };
     };
 };
 

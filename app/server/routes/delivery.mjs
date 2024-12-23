@@ -20,7 +20,8 @@ import {
     updateResponse,
     getResponsesByCourierTelegramIDWithChatStarted,
     getResponsesByDeliveryIDWithChatStarted,
-    getAllDeliveriesByCustomerTelegramID
+    getAllDeliveriesByCustomerTelegramID,
+    getOpenDeliveryByDeliveryID
 } from "../modules/delivery_index.mjs";
 
 
@@ -277,7 +278,7 @@ deliveryRouter.get('/responded-customers', (req, res) => {
 
                 // Extract customer info from deliverys
                 const deliveriesInfo = deliveryIDs.map((deliveryID) => {
-                    const deliveryInfo = getDeliveryByDeliveryID(db, deliveryID);
+                    const deliveryInfo = getOpenDeliveryByDeliveryID(db, deliveryID);
                     return deliveryInfo;
                 });
 

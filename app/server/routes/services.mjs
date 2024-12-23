@@ -8,7 +8,7 @@ import {
 } from "../modules/common_index.mjs"
 
 import {
-    getAllOpenBidsByCustomerTelegramID,
+    getOpenBidsByCustomerTelegramID,
     getBidsByCity,
     getChatMessages,
     getOpenBidsByCustomerTelegramID,
@@ -258,13 +258,13 @@ servicesRouter.get('/get-chats', (req, res) => {
 servicesRouter.post('/show-customer-chats-list', (req, res) => {
     try {
         const customerTelegramID = req.body.customer_telegram_id;
-        console.log(`/show-customer-chats-list route`);
+
         // Step 1: Retrieve all bids created by the customer
-        const customerBids = getAllOpenBidsByCustomerTelegramID(db, customerTelegramID);
+        const customerBids = getAllBidsByCustomerTelegramID(db, customerTelegramID);
         if (!customerBids || customerBids.length === 0) {
             return res.status(200).json({ success: false });
         };
-        console.log(`customerBids: ${JSON.stringify(customerBids)}`);
+
         // Step 2: Filter all bids to include only those with matching responses
         const bidsWithResponses = customerBids.map((bid) => {
             const responses = getResponsesByBidIDWithChatStarted(db, bid.id);

@@ -17,7 +17,6 @@ export function postResponse(
         ).get(deliveryID, courierTelegramID);
 
         if (existingResponse) {
-            console.log('User already responded to this delivery.');
             return false;
         };
         const sanitizedCarModel = courierCarModel ? courierCarModel : null;

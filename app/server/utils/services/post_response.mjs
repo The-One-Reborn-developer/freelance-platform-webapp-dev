@@ -12,7 +12,6 @@ export function postResponse(
         ).get(bidID, performerTelegramID);
 
         if (existingResponse) {
-            console.log('User already responded to this bid.');
             return false;
         };
         

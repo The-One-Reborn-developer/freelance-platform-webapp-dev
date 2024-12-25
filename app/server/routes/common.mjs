@@ -92,7 +92,7 @@ commonRouter.post('/registration-attempt', (req, res) => {
 commonRouter.post('/get-user-data', (req, res) => {
     try {
         const telegramID = req.body.telegram_id;
-        console.log(`Telegram ID: ${telegramID}`)
+
         // Get user data
         const userData = getUser(db, telegramID);
         res.status(200).json({ success: true, userData });

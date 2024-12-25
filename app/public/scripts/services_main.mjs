@@ -901,7 +901,6 @@ async function showCustomerChats(validatedTelegramID, name, socket) {
             const chatInput = document.getElementById('chat-input');
 
             performers.forEach((performer) => {
-                console.log(performer);
                 const performerParagraph = document.createElement('p');
                 performerParagraph.innerHTML =
                     `${performer.name}. Зарегистрирован ${performer.registration_date}.
@@ -1125,7 +1124,6 @@ async function loadCustomerChatHistory(validatedTelegramID, name, performer, soc
                         // Extract sender, attachment path, and timestamp
                         const [senderLine, attachmentString, timestamp] = msg.split('\n').filter(line => line.trim() !== '');
                         const attachmentUrl = attachmentString.replace('app/chats/services/attachments/', '/services/attachments/');
-                        console.log(attachmentUrl);
                         const senderName = senderLine.includes('Заказчик')
                             ? `Заказчик ${name}:`
                             : `Исполнитель ${performer.name}:`;

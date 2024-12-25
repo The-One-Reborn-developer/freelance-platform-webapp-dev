@@ -26,4 +26,3 @@ services:
       context: .
       dockerfile: Dockerfile.bot
     restart: always
-    

@@ -1,6 +1,6 @@
-# Freelance Platform
+# Servis Plus
 
-A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bids and performers to respond.
+A [TG WebApp](https://t.me/servis_plus_webapp_bot) for customers to post bids and performers to respond.
 
 ## Features
 

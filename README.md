@@ -12,9 +12,14 @@ A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bid
 
 ### Delivery
 
-* Creating and searching bids by city _in progress_
-* Save chat history between customer and courier _in progress_
-* Show chat history between customer and courier to other customers and couriers when needed _in progress_
+* Creating and searching bids by city
+* Save chat history between customer and courier
+* Show chat history between customer and courier to other customers and couriers when needed
+
+### Chat
+
+* Send text messages and receive them in real time
+* Send images and receive them in real time
 
 ## Dependencies
 
@@ -29,6 +34,36 @@ A [TG WebApp](https://t.me/servis_plus_webapp_bot) bot for customers to post bid
 * [docker](https://www.docker.com/)
 * [docker-compose](https://docs.docker.com/compose/)
 
+## Setup
+
+Node.js:
+
+```bash
+# download and install Node.js (you may need to restart the terminal)
+nvm install 22
+
+# verifies the right Node.js version is in the environment
+node -v # should print "v22.12.0"
+
+# verifies the right npm version is in the environment
+npm -v # should print "10.9.0"
+```
+
+Application:
+
+```bash
+# install dependencies
+npm install
+
+# create virtual environment
+python3 -m venv .venv
+
+# activate virtual environment
+source .venv/bin/activate
+```
+
 ## Running
 
-*In progress*
+```bash
+sudo docker-compose build --no-cache && sudo docker-compose up
+```

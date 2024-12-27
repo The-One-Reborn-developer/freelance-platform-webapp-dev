@@ -10,14 +10,12 @@ def webapp_keyboard():
     load_dotenv(find_dotenv())
 
     app_instance = os.getenv('APP_INSTANCE')
-    print(app_instance)
 
     if app_instance == 'demo':
-        print(f"Returning demo keyboard")
         return InlineKeyboardMarkup(
             inline_keyboard = [
                 [
-                    InlineKeyboardButton(text='Открыть приложение 📱',
+                    InlineKeyboardButton(text=f'Открыть приложение 📱 app instance: {app_instance}',
                                         web_app=WebAppInfo(url='https://servisplus.publicvm.com/'))
                 ]
             ]
@@ -27,7 +25,7 @@ def webapp_keyboard():
         return InlineKeyboardMarkup(
             inline_keyboard = [
                 [
-                    InlineKeyboardButton(text='Открыть приложение 📱',
+                    InlineKeyboardButton(text=f'Открыть приложение 📱 app instance: {app_instance}',
                                         web_app=WebAppInfo(url='https://servisplus-development.publicvm.com/'))
                 ]
             ]

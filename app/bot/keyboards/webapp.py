@@ -15,7 +15,7 @@ def webapp_keyboard():
         return InlineKeyboardMarkup(
             inline_keyboard = [
                 [
-                    InlineKeyboardButton(text=f'Открыть приложение 📱 app instance: {app_instance}',
+                    InlineKeyboardButton(text=f'Открыть приложение 📱',
                                         web_app=WebAppInfo(url='https://servisplus.publicvm.com/'))
                 ]
             ]
@@ -25,7 +25,7 @@ def webapp_keyboard():
         return InlineKeyboardMarkup(
             inline_keyboard = [
                 [
-                    InlineKeyboardButton(text=f'Открыть приложение 📱 app instance: {app_instance}',
+                    InlineKeyboardButton(text=f'Открыть приложение 📱',
                                         web_app=WebAppInfo(url='https://servisplus-development.publicvm.com/'))
                 ]
             ]

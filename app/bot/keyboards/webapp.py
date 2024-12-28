@@ -26,7 +26,7 @@ def webapp_keyboard():
             inline_keyboard = [
                 [
                     InlineKeyboardButton(text=f'Открыть приложение 📱',
-                                        web_app=WebAppInfo(url='https://servisplus-development.publicvm.com/'))
+                                        web_app=WebAppInfo(url='https://servisplus-development.publicvm.com:8443/'))
                 ]
             ]
         )

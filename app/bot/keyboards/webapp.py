@@ -21,7 +21,6 @@ def webapp_keyboard():
             ]
         )
     elif app_instance == 'dev':
-        print(f"Returning dev keyboard")
         return InlineKeyboardMarkup(
             inline_keyboard = [
                 [
@@ -30,4 +29,12 @@ def webapp_keyboard():
                 ]
             ]
         )
-    
+    elif app_instance == 'prod':
+        return InlineKeyboardMarkup(
+            inline_keyboard = [
+                [
+                    InlineKeyboardButton(text=f'Открыть приложение 📱',
+                                        web_app=WebAppInfo(url='https://servisplus.online/'))
+                ]
+            ]
+        )

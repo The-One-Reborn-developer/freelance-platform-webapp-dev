@@ -1,6 +1,12 @@
 #!/bin/bash
 
 cd "$(dirname "$0")/.."
-sudo docker-compose -f dockerfiles/docker-compose-prod.yml down -v
-sudo docker-compose -f dockerfiles/docker-compose-prod.yml build --no-cache
-sudo docker-compose -f dockerfiles/docker-compose-prod.yml up
+
+# Bring down the existing prod environment
+sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml down -v
+
+# Build the prod images
+sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml build --no-cache
+
+# Bring up the prod environment
+sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml up

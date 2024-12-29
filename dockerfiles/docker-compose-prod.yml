@@ -1,3 +1,5 @@
+networks:
+  prod_network:
 services:
   nodejs:
     build:
@@ -9,6 +11,8 @@ services:
       - /data/servisplus_prod/database.db:/app/app/database.db
       - /data/servisplus_prod/chats:/app/app/chats
       - /data/servisplus_prod/photos:/app/app/photos
+    networks:
+      - prod_network
 
   nginx:
     image: nginx:1.24.0
@@ -20,9 +24,13 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nodejs
+    networks:
+      - prod_network
 
   bot:
     build:
       context: ..
       dockerfile: dockerfiles/Dockerfile.bot
     restart: always
+    networks:
+      - prod_network

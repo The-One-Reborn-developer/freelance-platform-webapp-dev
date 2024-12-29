@@ -61,8 +61,8 @@ export function createDeliveriesTable(db) {
                 customer_name STRING(255) NOT NULL,
                 city STRING(50) NOT NULL,
                 description TEXT NOT NULL,
-                deliver_from STRING(20) NOT NULL,
-                deliver_to STRING(20) NOT NULL,
+                deliver_from TEXT NOT NULL,
+                deliver_to TEXT NOT NULL,
                 car_necessary BOOLEAN NOT NULL,
                 closed BOOLEAN DEFAULT FALSE
             );

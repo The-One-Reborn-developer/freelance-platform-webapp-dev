@@ -27,7 +27,7 @@ dotenv.config({ path: '/app/.env' });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log('Resolved DB path:', path.resolve('./app/database.db'));
+
 const db = new Database('./app/database.db', { verbose: console.log });
 
 const app = express();

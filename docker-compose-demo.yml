@@ -16,7 +16,7 @@ services:
       - "82:80"
       - "9443:443"
     volumes:
-      - ./default-demo.conf:/etc/nginx/conf.d/default.conf
+      - ./configs/default-demo.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nodejs

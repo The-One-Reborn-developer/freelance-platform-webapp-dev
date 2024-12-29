@@ -6,9 +6,9 @@ services:
     ports:
       - "3000:3000"
     volumes: 
-      - ./app/database.db:/app/app/database.db
-      - ./app/chats:/app/app/chats
-      - ./app/photos:/app/app/photos
+      - /data/servisplus_demo/database.db:/app/app/database.db
+      - /data/servisplus_demo/chats:/app/app/chats
+      - /data/servisplus_demo/photos:/app/app/photos
 
   nginx:
     image: nginx:1.24.0

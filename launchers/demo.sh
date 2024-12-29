@@ -1,6 +1,12 @@
 #!/bin/bash
 
 cd "$(dirname "$0")/.."
-sudo docker-compose -f dockerfiles/docker-compose-demo.yml down -v
-sudo docker-compose -f dockerfiles/docker-compose-demo.yml build --no-cache
-sudo docker-compose -f dockerfiles/docker-compose-demo.yml up
+
+# Bring down the existing demo environment
+sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml down -v
+
+# Build the demo images
+sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml build --no-cache
+
+# Bring up the demo environment
+sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml up

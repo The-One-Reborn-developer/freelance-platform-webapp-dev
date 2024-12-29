@@ -13,6 +13,7 @@ services:
       - /data/servisplus_demo/photos:/app/app/photos
     networks:
       - demo_network
+    container_name: demo_nodejs
 
   nginx:
     image: nginx:1.24.0
@@ -26,6 +27,7 @@ services:
       - nodejs
     networks:
       - demo_network
+    container_name: demo_nginx
 
   bot:
     build:
@@ -34,3 +36,4 @@ services:
     restart: always
     networks:
       - demo_network
+    container_name: demo_bot

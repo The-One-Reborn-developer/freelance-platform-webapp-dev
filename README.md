@@ -1,6 +1,8 @@
 # Servis Plus
 
-A [TG WebApp](https://t.me/servis_plus_webapp_bot) for customers to post bids and performers to respond.
+A TG WebApp for customers to post bids and performers to respond.
+[Dev](https://t.me/servis_plus_dev_bot)
+[Demo](https://t.me/servis_plus_demo_bot)
 
 ## Features
 

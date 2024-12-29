@@ -1,5 +1,3 @@
-networks:
-  dev_network:
 services:
   nodejs:
     build:
@@ -11,9 +9,6 @@ services:
       - /data/servisplus_dev/database.db:/app/app/database.db
       - /data/servisplus_dev/chats:/app/app/chats
       - /data/servisplus_dev/photos:/app/app/photos
-    networks:
-      - dev_network
-    container_name: dev_nodejs
 
   nginx:
     image: nginx:1.24.0
@@ -25,15 +20,9 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nodejs
-    networks:
-      - dev_network
-    container_name: dev_nginx
 
   bot:
     build:
       context: ..
       dockerfile: dockerfiles/Dockerfile.bot
     restart: always
-    networks:
-      - dev_network
-    container_name: dev_bot

@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml down -v
 
 # Build the demo images
-sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml build --no-cache
+sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml build
 
 # Bring up the demo environment
 sudo docker-compose -p demo -f dockerfiles/docker-compose-demo.yml up

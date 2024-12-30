@@ -2,11 +2,7 @@
 
 A TG WebApp for customers to post bids and performers to respond.
 
-[Dev](https://t.me/servis_plus_dev_bot)
-
-[Demo](https://t.me/servis_plus_demo_bot)
-
-[Prod](https://t.me/app_servis_plus_bot)
+[Dev](https://t.me/servis_plus_dev_bot) | [Demo](https://t.me/servis_plus_demo_bot) | [Prod](https://t.me/app_servis_plus_bot)
 
 ## Features
 

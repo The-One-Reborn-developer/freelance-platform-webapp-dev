@@ -6,7 +6,7 @@ export function postGameSession(db, sessionDate) {
             message: 'Дата игровой сессии не предоставлена'
         };
     };
-
+    console.log(sessionDate);
     const existingGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE session_date = ?'
     ).get(sessionDate);

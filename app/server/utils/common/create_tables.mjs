@@ -11,7 +11,7 @@ export function createUsersTable(db) {
                 game_name STRING(255),
                 rate INTEGER,
                 experience INTEGER,
-                date_of_birth STRING(20),
+                date_of_birth TEXT,
                 has_car BOOLEAN,
                 car_model TEXT,
                 car_width INTEGER,
@@ -21,9 +21,9 @@ export function createUsersTable(db) {
                 registered_in_services BOOLEAN DEFAULT FALSE,
                 registered_in_delivery BOOLEAN DEFAULT FALSE,
                 registered_in_game BOOLEAN DEFAULT FALSE,
-                services_registration_date STRING(20),
-                delivery_registration_date STRING(20),
-                game_registration_date STRING(20),
+                services_registration_date TEXT,
+                delivery_registration_date TEXT,
+                game_registration_date TEXT,
                 UNIQUE(telegram_id)
             );
         `);
@@ -88,7 +88,7 @@ export function createServicesResponsesTable(db) {
                 performer_name STRING(255) NOT NULL,
                 performer_rate INTEGER NOT NULL,
                 performer_experience INTEGER NOT NULL,
-                performer_registration_date STRING(20) NOT NULL,
+                performer_registration_date TEXT NOT NULL,
                 chat_started BOOLEAN DEFAULT FALSE,
                 FOREIGN KEY(bid_id) REFERENCES bids(id) ON DELETE CASCADE,
                 UNIQUE(bid_id, performer_telegram_id)
@@ -109,13 +109,13 @@ export function createDeliveriesResponsesTable(db) {
                 delivery_id INTEGER NOT NULL,
                 courier_telegram_id BIGINT NOT NULL,
                 courier_name STRING(255) NOT NULL,
-                courier_date_of_birth STRING(20) NOT NULL,
+                courier_date_of_birth TEXT NOT NULL,
                 courier_has_car BOOLEAN NOT NULL,
                 courier_car_model STRING(255),
                 courier_car_width INTEGER,
                 courier_car_length INTEGER,
                 courier_car_height INTEGER,
-                courier_registration_date STRING(20) NOT NULL,
+                courier_registration_date TEXT NOT NULL,
                 chat_started BOOLEAN DEFAULT FALSE,
                 FOREIGN KEY(delivery_id) REFERENCES deliveries(id) ON DELETE CASCADE,
                 UNIQUE(delivery_id, courier_telegram_id)
@@ -133,7 +133,7 @@ export function createGameSessionsTable(db) {
         db.exec(`
             CREATE TABLE IF NOT EXISTS game_sessions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_date STRING(20) NOT NULL,
+                session_date TEXT NOT NULL,
                 players_amount INTEGER NOT NULL
             );
         `);

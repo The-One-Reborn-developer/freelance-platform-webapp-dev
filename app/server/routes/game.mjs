@@ -13,6 +13,7 @@ const gameRouter = express.Router();
 
 gameRouter.post('/add-player', (req, res) => {
     try {
+        console.log(req.body.player_telegram_id);
         postPlayerResult = postPlayer(db, req.body.player_telegram_id);
         
         if (postPlayerResult === 'Player already exists') {

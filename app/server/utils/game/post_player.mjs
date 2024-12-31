@@ -7,7 +7,7 @@ export function postPlayer(
         const existingPlayer = db.prepare(
             'SELECT * FROM session_players WHERE player_telegram_id = ?'
         ).get(playerTelegramID);
-
+        console.log(existingPlayer);
         if (existingPlayer) {
             return 'Player already exists';
         };
@@ -20,7 +20,7 @@ export function postPlayer(
         const postPlayerResult = postPlayer.run(
             playerTelegramID
         );
-        
+        console.log(postPlayerResult);
         const newPlayerID = postPlayerResult.lastInsertRowid;
         return newPlayerID;
     } catch (error) {

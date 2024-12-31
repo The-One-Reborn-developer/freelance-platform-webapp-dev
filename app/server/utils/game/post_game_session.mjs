@@ -6,27 +6,22 @@ export function postGameSession(db, sessionDate) {
             message: 'Дата игровой сессии не предоставлена'
         };
     };
-    
-    const sessionDateDate = sessionDate.toISOString().split('T')[0];
-    const sessionDateTime = sessionDate.toISOString().split('T')[1].split('.')[0];
-    const formattedSessionDate = `${sessionDateDate} ${sessionDateTime}`;
-
     const existingGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE session_date = ?'
-    ).get(sessionDateTime);
+    ).get(sessionDate);
 
     if (existingGameSession) {
         return {
             success: false,
             status: 409,
-            message: `Игровая сессия с датой ${sessionDateTime} уже существует`
+            message: `Игровая сессия с датой ${sessionDate} уже существует`
         }
     };
 
     const postGameSession = db.prepare(
         'INSERT INTO game_sessions (session_date) VALUES (?)'
     );
-    const postGameSessionResult = postGameSession.run(sessionDateTime);
+    const postGameSessionResult = postGameSession.run(sessionDate);
     
     const newGameSessionID = postGameSessionResult.lastInsertRowid;
     return {

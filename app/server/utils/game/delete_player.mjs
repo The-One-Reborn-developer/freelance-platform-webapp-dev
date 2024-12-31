@@ -12,7 +12,7 @@ export function deletePlayer(
             'SELECT * FROM session_players WHERE player_telegram_id = ?'
         ).get(playerTelegramID);
 
-        if (existingPlayer) {
+        if (!existingPlayer) {
             return 'Player does not exist';
         };
 

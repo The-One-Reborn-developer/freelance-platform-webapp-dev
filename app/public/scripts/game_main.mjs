@@ -172,7 +172,7 @@ async function displayTimeUntilNextGameSession() {
                 const timeDifference = nextGameSessionDate - now;
 
                 if (timeDifference <= 0) {
-                    gameDataElement.textContent = 'Следующая игровая сессия уже началась!';
+                    gameDataTimer.textContent = 'Следующая игровая сессия уже началась!';
                     clearInterval(timerInterval);
                     return;
                 }
@@ -181,7 +181,7 @@ async function displayTimeUntilNextGameSession() {
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-                gameDataElement.textContent = `Время до следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
+                gameDataTimer.textContent = `Время до следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
             };
             
             // Start timer

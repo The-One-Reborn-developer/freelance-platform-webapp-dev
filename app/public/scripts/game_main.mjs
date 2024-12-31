@@ -9,6 +9,9 @@ import {
 } from "./modules/game_index.mjs";
 
 
+const PLAYER_AMOUNT_REFRESH_INTERVAL = 10000; // 10 seconds
+
+
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
@@ -72,11 +75,21 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
 
                 // Show players amount after successful player addition
                 await displayPlayersAmount();
+                
+                // Start periodic player count update
+                startPlayerAmountRefresh();
             };
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
         };
     };
+};
+
+
+function startPlayerAmountRefresh() {
+    setInterval(() => {
+        displayPlayersAmount();
+    }, PLAYER_AMOUNT_REFRESH_INTERVAL);
 };
 
 

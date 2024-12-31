@@ -151,7 +151,7 @@ export function createSessionPlayersTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_id INTEGER NOT NULL,
                 player_telegram_id BIGINT NOT NULL,
-                player_name STRING(255) NOT NULL
+                player_name STRING(255) NOT NULL,
                 FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
             );
         `);

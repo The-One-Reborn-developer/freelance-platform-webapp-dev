@@ -23,7 +23,7 @@ gameRouter.post('/add-player', (req, res) => {
             req.body.player_telegram_id,
             req.body.player_name
         );
-        
+        console.log(`postPlayerResult: ${postPlayerResult}`);
         if (postPlayerResult === 'Player already exists') {
             res.status(409).json({
                 success: false,

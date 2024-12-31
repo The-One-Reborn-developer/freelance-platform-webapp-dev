@@ -1,7 +1,9 @@
 import { WebSocketServer } from "ws";
+import Database from 'better-sqlite3';
 
 import { deletePlayer } from "../../modules/game_index.mjs";
 
+const db = new Database('./app/database.db', { verbose: console.log });
 
 export function setupWebsocketServer(server) {
     const wss = new WebSocketServer({ server });
@@ -64,7 +66,7 @@ export function setupWebsocketServer(server) {
         ws.on('close', (code, reason) => {
             try {
                 if (service === 'game') {
-                    const deletePlayerResult = deletePlayer(telegramID);
+                    const deletePlayerResult = deletePlayer(db, telegramID);
 
                     if (deletePlayerResult === 'Player does not exist') {
                         console.error(`Player with Telegram ID ${telegramID} does not exist`);

@@ -8,6 +8,7 @@ export function createUsersTable(db) {
                 delivery_role STRING(20),
                 services_name TEXT,
                 delivery_name TEXT,
+                game_name TEXT,
                 rate INTEGER,
                 experience INTEGER,
                 date_of_birth STRING(20),
@@ -16,10 +17,13 @@ export function createUsersTable(db) {
                 car_width INTEGER,
                 car_length INTEGER,
                 car_height INTEGER,
+                game_wallet FLOAT DEFAULT 0,
                 registered_in_services BOOLEAN DEFAULT FALSE,
                 registered_in_delivery BOOLEAN DEFAULT FALSE,
+                registered_in_game BOOLEAN DEFAULT FALSE,
                 services_registration_date STRING(20),
                 delivery_registration_date STRING(20),
+                game_registration_date STRING(20),
                 UNIQUE(telegram_id)
             );
         `);

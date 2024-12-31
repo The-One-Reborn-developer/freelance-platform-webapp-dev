@@ -97,7 +97,24 @@ export function postUser(
                     message: `Пользователь ${name} успешно зарегистрирован в Сервис+Доставка.`,
                     telegram_id: telegramID,
                 });
-            };
+            } else if (service === 'game') {
+                const insertUser = db.prepare(
+                    `INSERT INTO users (telegram_id,
+                                        game_name,
+                                        registered_in_game,
+                                        game_registration_date) VALUES (?, ?, 1, ?)`
+                );
+                insertUser.run(
+                    telegramID,
+                    name,
+                    registrationDate
+                );
+                res.status(201).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Игра.`,
+                    telegram_id: telegramID,
+                });
+            }
         };
 
         // Update an existing user
@@ -175,7 +192,34 @@ export function postUser(
                     telegram_id: telegramID,
                 });
             };
-        };
+        } else if (service === 'game') {
+            if (user.registered_in_game === 1) {
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} уже зарегистрирован в Сервис+Игра.`,
+                    telegram_id: telegramID,
+                });
+                return;
+            } else {
+                const updateUser = db.prepare(
+                    `UPDATE users SET 
+                        game_name = ?,
+                        registered_in_game = 1,
+                        game_registration_date = ?
+                        WHERE telegram_id = ?`
+                );
+                updateUser.run(
+                    name,
+                    registrationDate,
+                    telegramID
+                );
+                res.status(200).json({ 
+                    success: true,
+                    message: `Пользователь ${name} успешно зарегистрирован в Сервис+Игра.`,
+                    telegram_id: telegramID,
+                });
+            };
+        }
     } catch (error) {
         console.error('Error in postUser:', error);
         res.status(500).json({ message: 'Произошла ошибка при регистрации пользователя.' });

@@ -45,22 +45,15 @@ gameRouter.post('/add-player', (req, res) => {
 
 gameRouter.get('/get-players-amount', (req, res) => {
     try {
-        const getPlayersAmountResult = getPlayersAmount(db);
+        const result = getPlayersAmount(db);
 
-        if (getPlayersAmountResult === false) {
-            res.status(500).json({
-                success: false,
-                message: 'Произошла ошибка при получении количества игроков.'
-            });
-        } else {
-            res.status(200).json({
-                success: true,
-                playersAmount: getPlayersAmountResult
-            });
-        };
+        res.status(result.status).json(result);
     } catch (error) {
         console.error(`Error in /game/get-players-amount: ${error}`);
-        res.status(500).json({ message: 'Произошла ошибка при получении количества игроков.' });
+        res.status(500).json({
+            success: false,
+            message: 'Произошла ошибка при получении количества игроков.'
+        });
     };
 });
 

@@ -113,7 +113,6 @@ h1, h2, h3, h4, h5, h6 {
 	padding-bottom: 200px;
     align-items: center;
     justify-content: flex-start;
-	position: relative;
 	overflow-y: auto; /* Enable vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal overflow */
 	max-height: 80vh;

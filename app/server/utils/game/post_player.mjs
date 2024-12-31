@@ -3,9 +3,13 @@ export function postPlayer(
     playerTelegramID,
     playerName
 ) {
-    if (!playerTelegramID) {
-        console.error('Player Telegram ID not provided');
-        return false;
+    if (!playerTelegramID || !playerName) {
+        console.error('Player Telegram ID or player name not provided');
+        return {
+            success: false,
+            status: 400,
+            message: 'Player Telegram ID or player name not provided'
+        };
     };
     // TODO: make session_id dynamic
     try {
@@ -14,7 +18,11 @@ export function postPlayer(
         ).get(playerTelegramID);
 
         if (existingPlayer) {
-            return 'Player already exists';
+            return {
+                success: false,
+                status: 409,
+                message: `Игрок с Telegram ID ${playerTelegramID} уже зарегистрирован`
+            };
         };
 
         const postPlayer = db.prepare(
@@ -29,9 +37,16 @@ export function postPlayer(
         );
 
         const newPlayerID = postPlayerResult.lastInsertRowid;
-        return newPlayerID;
+        return {
+            success: true,
+            status: 201,
+            message: `Игрок с Telegram ID ${playerTelegramID} успешно зарегистрирован. ID игрока: ${newPlayerID}`
+        };
     } catch (error) {
-        console.error('Error in postPlayer:', error);
-        return false;
+        return {
+            success: false,
+            status: 500,
+            message: `Произошла ошибка при регистрации игрока: ${error}`
+        };
     };
 };

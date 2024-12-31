@@ -3,30 +3,45 @@ export function deletePlayer(
     playerTelegramID
 ) {
     if (!playerTelegramID) {
-        console.error('Player Telegram ID not provided');
-        return false;
+        return {
+            success: false,
+            status: 400,
+            message: 'Telegram ID игрока не предоставлен'
+        };
     };
     // TODO: make session_id dynamic
-    try {
-        const existingPlayer = db.prepare(
-            'SELECT * FROM session_players WHERE player_telegram_id = ? AND session_id = 1'
-        ).get(playerTelegramID);
+    
+    const existingPlayer = db.prepare(
+        'SELECT * FROM session_players WHERE player_telegram_id = ? AND session_id = 1'
+    ).get(playerTelegramID);
 
-        if (!existingPlayer) {
-            return 'Player does not exist';
+    if (!existingPlayer) {
+        return {
+            success: false,
+            status: 404,
+            message: `Игрок с Telegram ID ${playerTelegramID} не найден`
         };
+    };
 
-        const deletePlayer = db.prepare(
-            `DELETE FROM session_players WHERE player_telegram_id = ? AND session_id = 1`
-        );
+    const deletePlayer = db.prepare(
+        `DELETE FROM session_players WHERE player_telegram_id = ? AND session_id = 1`
+    );
 
-        const deletePlayerResult = deletePlayer.run(
-            playerTelegramID
-        );
+    const deletePlayerResult = deletePlayer.run(
+        playerTelegramID
+    );
 
-        return deletePlayerResult;
-    } catch (error) {
-        console.error('Error in deletePlayer:', error);
-        return false;
+    if (!deletePlayerResult) {
+        return {
+            success: false,
+            status: 500,
+            message: `Ошибка при удалении игрока с Telegram ID ${playerTelegramID}`
+        };
+    } else {
+        return {
+            success: true,
+            status: 201,
+            message: `Игрок с Telegram ID ${playerTelegramID} успешно удален`
+        };
     };
 };

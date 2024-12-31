@@ -17,31 +17,28 @@ gameRouter.post('/add-player', (req, res) => {
     try {
         // TODO: remove temporary game session adding
         postGameSession(db, 1);
-        const postPlayerResult = postPlayer(
+
+        if (!req.body.player_telegram_id || !req.body.player_name) {
+            res.status(400).json({
+                success: false,
+                message: 'Недостаточно данных для добавления игрока в список игроков.'
+            });
+            return;
+        };
+
+        const result = postPlayer(
             db,
             req.body.player_telegram_id,
             req.body.player_name
         );
 
-        if (postPlayerResult === 'Player already exists') {
-            res.status(409).json({
-                success: false,
-                message: 'Вы уже добавлены в список игроков.'
-            })
-        } else if (postPlayerResult === false) {
-            res.status(500).json({
-                success: false,
-                message: 'Произошла ошибка при добавлении игрока в список игроков.'
-            });
-        } else {
-            res.status(201).json({
-                success: true,
-                message: `Вы успешно добавлены в список игроков.`
-            });
-        };
+        res.status(result.status).json(result);
     } catch (error) {
         console.error(`Error in /game/add-player: ${error}`);
-        res.status(500).json({ message: 'Произошла ошибка при добавлении игрока в список игроков.' });
+        res.status(500).json({
+            success: false,
+            message: 'Произошла ошибка при добавлении игрока в список игроков.'
+        });
     };
 });
 

@@ -2,6 +2,10 @@ export function postPlayer(
     db,
     playerTelegramID
 ) {
+    if (!playerTelegramID) {
+        console.error('Player Telegram ID not provided');
+        return false;
+    };
     // TODO: make session_id dynamic
     try {
         const existingPlayer = db.prepare(

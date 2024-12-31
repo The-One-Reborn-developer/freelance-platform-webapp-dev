@@ -6,7 +6,7 @@ cd "$(dirname "$0")/.."
 sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml down -v
 
 # Build the dev images
-sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml build
+sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml build --no-cache
 
 # Bring up the dev environment
 sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml up

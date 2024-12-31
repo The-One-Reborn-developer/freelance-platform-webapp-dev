@@ -118,11 +118,16 @@ async function displayPlayersAmount() {
                 return;
             }
 
-            const gameDataElement = document.createElement('div');
-            gameDataElement.id = 'game-data';
-            gameDataElement.className = 'game-data';
-            gameDataElement.textContent = `Количество игроков: ${data.playersAmount}`;
-            display.appendChild(gameDataElement);
+            let gameDataPlayersAmount = document.getElementById('game-data-players-amount');
+            if (!gameDataPlayersAmount) {
+                gameDataPlayersAmount = document.createElement('div');
+                gameDataPlayersAmount.id = 'game-data-players-amount';
+                gameDataPlayersAmount.className = 'game-data';
+                gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
+                display.appendChild(gameDataPlayersAmount);
+            }
+
+            gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
         } catch (error) {
             console.error(`Error in displayPlayersAmount: ${error}`);
             return;
@@ -154,10 +159,13 @@ async function displayTimeUntilNextGameSession() {
                 return;                
             }
 
-            const gameDataElement = document.createElement('div');
-            gameDataElement.id = 'game-data';
-            gameDataElement.className = 'game-data';
-            display.appendChild(gameDataElement);
+            let gameDataTimer = document.getElementById('game-data-timer');
+            if (!gameDataTimer) {
+                gameDataTimer = document.createElement('div');
+                gameDataTimer.id = 'game-data-timer';
+                gameDataTimer.className = 'game-data';
+                display.appendChild(gameDataTimer);
+            }
 
             const updateTimer = () => {
                 const now = new Date();

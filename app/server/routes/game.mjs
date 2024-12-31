@@ -2,6 +2,7 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 import {
+    postGameSession,
     postPlayer
 } from "../modules/game_index.mjs";
 
@@ -10,6 +11,9 @@ const db = new Database('./app/database.db', { verbose: console.log });
 
 const gameRouter = express.Router();
 
+
+// TODO: remove temporary game session adding
+postGameSession(db, 1);
 
 gameRouter.post('/add-player', (req, res) => {
     try {

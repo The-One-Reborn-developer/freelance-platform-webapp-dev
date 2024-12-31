@@ -19,7 +19,7 @@ window.onload = async function () {
 
             initializeWebSocket(validatedTelegramID);
 
-            setupInterface(validatedTelegramID, name, wallet, registrationDate);
+            await setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
@@ -34,7 +34,7 @@ window.onload = async function () {
 };
 
 
-function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
+async function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
 
@@ -46,7 +46,7 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
             headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
             // Add player to the player count server-side
-            const addPlayerResult = fetch('/game/add-player', {
+            const response = await fetch('/game/add-player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -56,12 +56,9 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
                     player_name: name
                 })
             })
-
-            if (!addPlayerResult) {
-                console.error('Failed to add player to the player count server-side');
-                showModal(addPlayerResult.message);
-                return;
-            };
+            
+            const result = await response.json();
+            console.log(result);            
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
         };

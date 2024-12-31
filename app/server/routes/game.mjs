@@ -47,7 +47,7 @@ gameRouter.post('/add-player', (req, res) => {
 });
 
 
-gameRouter.get('/get-players-amount', (res) => {
+gameRouter.get('/get-players-amount', (req, res) => {
     try {
         const result = getPlayersAmount(db);
 
@@ -62,7 +62,7 @@ gameRouter.get('/get-players-amount', (res) => {
 });
 
 
-gameRouter.get('/get-next-game-session-date', (res) => {
+gameRouter.get('/get-next-game-session-date', (req, res) => {
     try {
         const response = getNextGameSessionDate(db);
 

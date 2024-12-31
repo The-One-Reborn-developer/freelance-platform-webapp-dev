@@ -18,12 +18,12 @@ gameRouter.post('/add-player', (req, res) => {
     try {
         // TODO: remove temporary game session adding
         postGameSession(db, 1);
-        postPlayerResult = postPlayer(
+        const postPlayerResult = postPlayer(
             db,
             req.body.player_telegram_id,
             req.body.player_name
         );
-        console.log(`postPlayerResult: ${postPlayerResult}`);
+
         if (postPlayerResult === 'Player already exists') {
             res.status(409).json({
                 success: false,

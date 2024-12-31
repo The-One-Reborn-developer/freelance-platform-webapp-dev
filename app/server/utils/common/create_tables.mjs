@@ -133,7 +133,7 @@ export function createGameSessionsTable(db) {
         db.exec(`
             CREATE TABLE IF NOT EXISTS game_sessions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                game_session INTEGER NOT NULL,
+                session_id INTEGER NOT NULL,
                 players_count INTEGER DEFAULT 0
             );
         `);

@@ -123,6 +123,7 @@ async function displayPlayersAmount() {
                 gameDataPlayersAmount = document.createElement('div');
                 gameDataPlayersAmount.id = 'game-data-players-amount';
                 gameDataPlayersAmount.className = 'game-data';
+                gameDataPlayersAmount.classList.add('game-data-players-amount');
                 gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
                 display.appendChild(gameDataPlayersAmount);
             }
@@ -164,6 +165,7 @@ async function displayTimeUntilNextGameSession() {
                 gameDataTimer = document.createElement('div');
                 gameDataTimer.id = 'game-data-timer';
                 gameDataTimer.className = 'game-data';
+                gameDataTimer.classList.add('game-data-timer');
                 display.appendChild(gameDataTimer);
             }
 

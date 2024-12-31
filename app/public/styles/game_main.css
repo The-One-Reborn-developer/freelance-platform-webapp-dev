@@ -126,7 +126,16 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 10px;
     background-color: lightgrey;
     position: absolute;
-    top: 50%;
+    margin: 3%;
+    text-align: center;
+}
+
+.game-data-players-amount {
+    top: 45%;
+}
+
+.game-data-timer {
+    top: 55%;
 }
 
 .modal {

@@ -16,19 +16,10 @@ registerButton.addEventListener('touchend', (event) => {
 });
 
 
-function initializePage() {
-    nameInput.style.display = 'none';
-    nameLabel.style.display = 'none';
-    registerButton.style.display = 'none';
-};
-
-
 window.onload = function () {
     // Check if the user is already registered
     const telegramData = window.Telegram.WebApp.initData;
     checkIfUserIsRegistered(telegramData);
-
-    initializePage();
 
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {

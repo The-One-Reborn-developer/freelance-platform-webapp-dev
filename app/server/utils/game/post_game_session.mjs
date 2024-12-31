@@ -6,9 +6,7 @@ export function postGameSession(db, sessionDate) {
             message: 'Дата игровой сессии не предоставлена'
         };
     };
-    const sessionDateISO = new Date(sessionDate.toISOString());
-    console.log(sessionDateISO);
-    console.log(typeof sessionDateISO);
+    const sessionDateISO = new Date(sessionDate).toISOString();
     const existingGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE session_date = ?'
     ).get(sessionDateISO);

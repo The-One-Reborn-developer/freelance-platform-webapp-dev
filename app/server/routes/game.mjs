@@ -7,7 +7,6 @@ import {
     getPlayersAmount,
     getNextGameSessionDate
 } from "../modules/game_index.mjs";
-import { get } from 'http';
 
 
 const db = new Database('./app/database.db', { verbose: console.log });

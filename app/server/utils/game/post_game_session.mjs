@@ -7,7 +7,7 @@ export function postGameSession(db, sessionDate) {
         };
     };
     const sessionDateISO = new Date(sessionDate.toISOString());
-
+    console.log(sessionDateISO);
     const existingGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE session_date = ?'
     ).get(sessionDateISO);

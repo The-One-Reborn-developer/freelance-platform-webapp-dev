@@ -3,7 +3,8 @@ import Database from 'better-sqlite3';
 
 import {
     postGameSession,
-    postPlayer
+    postPlayer,
+    getPlayersAmount
 } from "../modules/game_index.mjs";
 
 
@@ -41,6 +42,28 @@ gameRouter.post('/add-player', (req, res) => {
     } catch (error) {
         console.error(`Error in /game/add-player: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при добавлении игрока в список игроков.' });
+    };
+});
+
+
+gameRouter.get('/get-players-amount', (req, res) => {
+    try {
+        const getPlayersAmountResult = getPlayersAmount(db);
+
+        if (getPlayersAmountResult === false) {
+            res.status(500).json({
+                success: false,
+                message: 'Произошла ошибка при получении количества игроков.'
+            });
+        } else {
+            res.status(200).json({
+                success: true,
+                playersAmount: getPlayersAmountResult
+            });
+        };
+    } catch (error) {
+        console.error(`Error in /game/get-players-amount: ${error}`);
+        res.status(500).json({ message: 'Произошла ошибка при получении количества игроков.' });
     };
 });
 

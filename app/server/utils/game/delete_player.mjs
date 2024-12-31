@@ -9,7 +9,7 @@ export function deletePlayer(
     // TODO: make session_id dynamic
     try {
         const existingPlayer = db.prepare(
-            'SELECT * FROM session_players WHERE player_telegram_id = ?'
+            'SELECT * FROM session_players WHERE player_telegram_id = ? AND session_id = 1'
         ).get(playerTelegramID);
 
         if (!existingPlayer) {
@@ -17,7 +17,7 @@ export function deletePlayer(
         };
 
         const deletePlayer = db.prepare(
-            `DELETE FROM session_players WHERE player_telegram_id = ?`
+            `DELETE FROM session_players WHERE player_telegram_id = ? AND session_id = 1`
         );
 
         const deletePlayerResult = deletePlayer.run(

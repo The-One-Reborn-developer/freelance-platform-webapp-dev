@@ -6,7 +6,6 @@ import {
     createDeliveriesTable,
     createServicesResponsesTable,
     createDeliveriesResponsesTable,
-    createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable
 } from "../utils/common/create_tables.mjs";
@@ -27,7 +26,6 @@ export {
     getUser,
     postUser,
     sendMessage,
-    createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable
 };

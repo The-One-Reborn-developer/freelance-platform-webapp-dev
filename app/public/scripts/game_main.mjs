@@ -69,9 +69,35 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
             } else {
                 console.log('Player added to the player count server-side');
                 showModal(result.message);
-            }
+
+                // Show players amount after successful player addition
+                await displayPlayersAmount();
+            };
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
+        };
+    };
+};
+
+
+async function displayPlayersAmount() {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        try {
+            const response = await fetch('/game/get-players-amount');
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                display.innerHTML = `Количество игроков: ${data.playersAmount}`;
+            } else {
+                console.error('Failed to get players amount');
+            };
+        } catch (error) {
+            console.error(`Error in displayPlayersAmount: ${error}`);
         };
     };
 };

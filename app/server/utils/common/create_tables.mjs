@@ -128,22 +128,6 @@ export function createDeliveriesResponsesTable(db) {
 };
 
 
-export function createGameSessionsTable(db) {
-    try {
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS game_sessions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id INTEGER NOT NULL,
-                players_count INTEGER DEFAULT 0
-            );
-        `);
-        console.log('Game sessions table check or creation executed successfully');
-    } catch (error) {
-        console.error('Error creating game sessions table:', error);
-    };
-};
-
-
 export function createSessionPlayersTable(db) {
     try {
         db.exec(`
@@ -151,8 +135,7 @@ export function createSessionPlayersTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_id INTEGER NOT NULL,
                 player_telegram_id BIGINT NOT NULL,
-                player_name STRING(255) NOT NULL,
-                FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
+                player_name STRING(255) NOT NULL
             );
         `);
         console.log('Session players table check or creation executed successfully');

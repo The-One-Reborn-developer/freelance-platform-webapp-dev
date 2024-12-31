@@ -49,7 +49,8 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    player_telegram_id: validatedTelegramID
+                    player_telegram_id: validatedTelegramID,
+                    player_name: name
                 })
             })
 

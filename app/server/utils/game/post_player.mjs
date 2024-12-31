@@ -1,6 +1,7 @@
 export function postPlayer(
     db,
-    playerTelegramID
+    playerTelegramID,
+    playerName
 ) {
     if (!playerTelegramID) {
         console.error('Player Telegram ID not provided');
@@ -11,20 +12,22 @@ export function postPlayer(
         const existingPlayer = db.prepare(
             'SELECT * FROM session_players WHERE player_telegram_id = ?'
         ).get(playerTelegramID);
-        console.log(`existingPlayer: ${existingPlayer}`);
+
         if (existingPlayer) {
             return 'Player already exists';
         };
-        console.log(`Preparing query to add player with Telegram ID: ${playerTelegramID}`);
+
         const postPlayer = db.prepare(
             `INSERT INTO session_players (session_id,
-                                          player_telegram_id) VALUES (1, ?)
+                                          player_telegram_id,
+                                          player_name) VALUES (1, ?, ?)
         `);
-        console.log(`Executing query to add player with Telegram ID: ${playerTelegramID}`);
+
         const postPlayerResult = postPlayer.run(
-            playerTelegramID
+            playerTelegramID,
+            playerName
         );
-        console.log(`postPlayerResult: ${postPlayerResult}`);
+
         const newPlayerID = postPlayerResult.lastInsertRowid;
         return newPlayerID;
     } catch (error) {

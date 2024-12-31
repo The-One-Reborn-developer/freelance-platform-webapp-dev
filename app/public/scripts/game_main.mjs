@@ -4,6 +4,10 @@ import {
     initializeWebSocket
 } from "./modules/common_index.mjs";
 
+import {
+    showModal
+} from "./modules/game_index.mjs";
+
 
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
@@ -58,7 +62,14 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
             })
             
             const result = await response.json();
-            console.log(result);            
+            
+            if (!result.success) {
+                console.error('Failed to add player to the player count server-side');
+                showModal(result.message);
+            } else {
+                console.log('Player added to the player count server-side');
+                showModal(result.message);
+            }
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
         };

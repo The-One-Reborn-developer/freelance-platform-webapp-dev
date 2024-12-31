@@ -119,6 +119,15 @@ h1, h2, h3, h4, h5, h6 {
 	max-height: 80vh;
 }
 
+.players-amount {
+    font-weight: bold;
+    font-size: 20px;
+    padding: 5px;
+    border: solid 2px black;
+    border-radius: 10px;
+    background-color: lightgrey;
+}
+
 .modal {
     visibility: hidden; /* Initially hidden */
     position: fixed;

@@ -92,7 +92,10 @@ async function displayPlayersAmount() {
             const data = await response.json();
             
             if (data.success) {
-                display.innerHTML = `Количество игроков: ${data.playersAmount}`;
+                const playersAmountElement = document.createElement('div');
+                playersAmountElement.classList.add('players-amount');
+                playersAmountElement.textContent = `Количество игроков: ${data.playersAmount}`;
+                display.appendChild(playersAmountElement);
             } else {
                 console.error('Failed to get players amount');
             };

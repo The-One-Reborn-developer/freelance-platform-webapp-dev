@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 
-    <link rel="stylesheet" href="../styles/delivery_main.css">
+    <link rel="stylesheet" href="../styles/game_main.css">
 
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
-    <script src="../scripts/delivery_main.mjs" type="module" defer></script>
-    
-    <title>Сервис+Доставка</title>
+    <script src="../scripts/game_main.mjs" type="module" defer></script>
+
+    <title>Сервис+Игра</title>
 </head>
 <body>
     <div class="container">
@@ -21,19 +19,18 @@
             <header class="header">
                 <p class="header-user-info" id="header-user-info"></p>
                 <nav id="header-nav" class="header-nav">
-                    <!-- Dynamic content depending on whether
-                        the user is courier or customer -->
+                    <!-- Dynamic content for game info -->
                 </nav>
             </header>
         </div>
 
         <div class="display-container">
             <div id="display" class="display">
-                <!-- Dynamic content depending on which option is selected -->
+                <!-- Dynamic content of the game -->
             </div>
         </div>
         
-        <div id="create-delivery-form-modal" class="modal">
+        <div id="game-modal" class="modal">
             <div class="modal-content">
                 <p id="modal-message" class="modal-message-text"></p>
                 <button id="modal-button" class="modal-button">OK</button>

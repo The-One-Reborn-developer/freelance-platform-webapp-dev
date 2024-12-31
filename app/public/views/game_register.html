@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+
+    <link rel="stylesheet" href="../styles/services_register.css">
+    
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <script src="../scripts/game_register.mjs" type="module" defer></script>
+    
+    <title>Сервис+Игра Регистрация</title>
+</head>
+<body>
+    <div class="container">
+        <div id="loading-container" class="loading-container">Загрузка...</div>
+        <div id="registration-form" class="registration-form">
+            <label for="name-input" id="name-label" class="register-form-label">Введите ФИО 📜</label>
+            <input type="text" id="name-input" class="register-form-input">
+
+            <button id="register-button" class="register-form-button">Зарегистрироваться ✅</button>
+        </div>
+
+        <div id="registration-modal" class="modal">
+            <div class="modal-content">
+                <p id="modal-message" class="modal-message-text"></p>
+                <button id="modal-button" class="register-form-button">OK</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

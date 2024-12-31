@@ -1,5 +1,9 @@
 import { WebSocketServer } from "ws";
+import Database from 'better-sqlite3';
 
+import { deletePlayer } from "../../modules/game_index.mjs";
+
+const db = new Database('./app/database.db', { verbose: console.log });
 
 export function setupWebsocketServer(server) {
     const wss = new WebSocketServer({ server });
@@ -9,9 +13,13 @@ export function setupWebsocketServer(server) {
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegramID'));
+        const service = String(params.get('service'));
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
+            return;
+        } else if (!service) {
+            ws.close(1008, 'Missing service');
             return;
         } else {
             if (users.has(telegramID)) {
@@ -19,7 +27,7 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
-                console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
+                console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}`);
             };
         };
 
@@ -56,8 +64,24 @@ export function setupWebsocketServer(server) {
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            users.delete(telegramID);
-            console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+            try {
+                if (service === 'game') {
+                    const deletePlayerResult = deletePlayer(db, telegramID);
+
+                    if (deletePlayerResult === 'Player does not exist') {
+                        console.error(`Player with Telegram ID ${telegramID} does not exist`);
+                    } else if (deletePlayerResult === false) {
+                        console.error(`Error deleting player with Telegram ID ${telegramID}`);
+                    } else {
+                        console.log(`Player with Telegram ID ${telegramID} deleted successfully`);
+                    };
+                };
+
+                users.delete(telegramID);
+                console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+            } catch (error) {
+                console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
+            };
         });
 
         // Handle errors

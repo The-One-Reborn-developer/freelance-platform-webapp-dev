@@ -43,7 +43,7 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
             headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
             // Add player to the player count server-side
-            const addPlayerResult = fetch('/add-player', {
+            const addPlayerResult = fetch('/game/add-player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
 
             if (!addPlayerResult) {
                 console.error('Failed to add player to the player count server-side');
-                showModal('Ошибка при добавлении в список игроков, попробуйте перезайти в приложение');
+                showModal(addPlayerResult.message);
                 return;
             };
         } catch (error) {

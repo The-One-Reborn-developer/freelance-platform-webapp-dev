@@ -9,6 +9,7 @@ import Database from "better-sqlite3";
 import servicesRouter from "./routes/services.mjs";
 import commonRouter from "./routes/common.mjs";
 import deliveryRouter from "./routes/delivery.mjs";
+import gameRouter from "./routes/game.mjs";
 
 // Import websocket server
 import { setupWebsocketServer } from "./modules/common_index.mjs";
@@ -19,7 +20,10 @@ import {
     createBidsTable,
     createDeliveriesTable,
     createServicesResponsesTable,
-    createDeliveriesResponsesTable
+    createDeliveriesResponsesTable,
+    createGameSessionsTable,
+    createSessionPlayersTable,
+    createGamesTable
 } from "./modules/common_index.mjs";
 
 
@@ -46,6 +50,7 @@ console.log('Express app created');
 app.use('/common', commonRouter);
 app.use('/services', servicesRouter);
 app.use('/delivery', deliveryRouter);
+app.user('/game', gameRouter);
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);
@@ -56,6 +61,9 @@ createBidsTable(db);
 createDeliveriesTable(db);
 createServicesResponsesTable(db);
 createDeliveriesResponsesTable(db);
+createGameSessionsTable(db);
+createSessionPlayersTable(db);
+createGamesTable(db);
 
 
 app.get('/', (req, res) => {

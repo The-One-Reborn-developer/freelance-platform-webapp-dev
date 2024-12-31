@@ -5,7 +5,10 @@ import {
     createBidsTable,
     createDeliveriesTable,
     createServicesResponsesTable,
-    createDeliveriesResponsesTable
+    createDeliveriesResponsesTable,
+    createGameSessionsTable,
+    createSessionPlayersTable,
+    createGamesTable
 } from "../utils/common/create_tables.mjs";
 import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
@@ -23,5 +26,8 @@ export {
     setupWebsocketServer,
     getUser,
     postUser,
-    sendMessage
+    sendMessage,
+    createGameSessionsTable,
+    createSessionPlayersTable,
+    createGamesTable
 };

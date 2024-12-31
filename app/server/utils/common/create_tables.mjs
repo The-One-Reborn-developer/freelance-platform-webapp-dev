@@ -126,3 +126,53 @@ export function createDeliveriesResponsesTable(db) {
         console.error('Error creating responses table:', error);
     };
 };
+
+
+export function createGameSessionsTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS game_sessions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                game_session INTEGER NOT NULL,
+                players_count INTEGER DEFAULT 0,
+            );
+        `);
+        console.log('Game sessions table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating game sessions table:', error);
+    };
+};
+
+
+export function createSessionPlayersTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS session_players (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id INTEGER NOT NULL,
+                player_telegram_id BIGINT NOT NULL,
+                FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
+            );
+        `);
+        console.log('Session players table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating session players table:', error);
+    };
+};
+
+
+export function createGamesTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS games (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                game_started BOOLEAN DEFAULT FALSE
+                game_finished BOOLEAN DEFAULT FALSE
+                winner_telegram_id BIGINT
+            );
+        `);
+        console.log('Games table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating games table:', error);
+    };
+};

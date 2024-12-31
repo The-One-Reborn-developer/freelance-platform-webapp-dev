@@ -16,11 +16,11 @@ window.onload = async function () {
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
 
-            setupInterface(validatedTelegramID, name, wallet);
+            setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
         };
-    };
+    };                      
 
     // Ensure that the keyboard is closed when the user touches the screen outside of input elements
     document.addEventListener('touchstart', (event) => {
@@ -40,9 +40,24 @@ function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
         return;
     } else {
         try {
-            headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}. Зарегистрирован ${registrationDate}.`;
+            headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
-            
+            // Add player to the player count server-side
+            const addPlayerResult = fetch('/add-player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    telegram_id: validatedTelegramID
+                })
+            })
+
+            if (!addPlayerResult) {
+                console.error('Failed to add player to the player count server-side');
+                showModal('Ошибка при добавлении в список игроков, попробуйте перезайти в приложение');
+                return;
+            };
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
         };

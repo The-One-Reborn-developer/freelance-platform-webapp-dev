@@ -64,6 +64,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
+Environment:
+
+```bash
+sudo bash launchers/git_scripts.sh
+```
+
 ## Running
 
 ```bash

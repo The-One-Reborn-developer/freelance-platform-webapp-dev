@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+case $BRANCH in
+    develop)
+        cp .env.develop .env
+        ;;
+    demo)
+        cp .env.demo .env
+        ;;
+    master)
+        cp .env.prod .env
+        ;;
+esac

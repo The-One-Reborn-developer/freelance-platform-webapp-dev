@@ -6,9 +6,9 @@ export function createUsersTable(db) {
                 telegram_id BIGINT NOT NULL,
                 services_role STRING(20),
                 delivery_role STRING(20),
-                services_name TEXT,
-                delivery_name TEXT,
-                game_name TEXT,
+                services_name STRING(255),
+                delivery_name STRING(255),
+                game_name STRING(255),
                 rate INTEGER,
                 experience INTEGER,
                 date_of_birth STRING(20),
@@ -151,6 +151,7 @@ export function createSessionPlayersTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_id INTEGER NOT NULL,
                 player_telegram_id BIGINT NOT NULL,
+                player_name STRING(255) NOT NULL,
                 FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
             );
         `);

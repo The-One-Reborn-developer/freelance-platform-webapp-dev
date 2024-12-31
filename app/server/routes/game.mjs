@@ -35,11 +35,9 @@ gameRouter.post('/add-player', (req, res) => {
                 message: 'Произошла ошибка при добавлении игрока в список игроков.'
             });
         } else {
-            const newPlayerID = postPlayerResult;
-
             res.status(201).json({
                 success: true,
-                message: `Игрок под номером №${newPlayerID} успешно добавлен.`
+                message: `Игрок под номером №${postPlayerResult} успешно добавлен.`
             });
         };
     } catch (error) {

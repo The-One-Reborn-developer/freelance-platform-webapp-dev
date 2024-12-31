@@ -12,7 +12,7 @@ export function setupWebsocketServer(server) {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegramID'));
         const service = String(params.get('service'));
-        console.log(req.url);
+
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
             return;

@@ -6,7 +6,7 @@ export function initializeWebSocket(validatedTelegramID, service) {
         console.error('Telegram ID not found, unable to initialize WebSocket');
         return;
     } else {
-        const socket = new WebSocket(`wss://${window.location.host}?telegramID=${validatedTelegramID}?service=${service}`);
+        const socket = new WebSocket(`wss://${window.location.host}?telegramID=${validatedTelegramID}&service=${service}`);
 
         socket.addEventListener('open', () => {
             console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}`);

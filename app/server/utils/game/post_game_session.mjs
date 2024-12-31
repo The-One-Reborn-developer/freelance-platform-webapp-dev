@@ -9,7 +9,7 @@ export function postGameSession(db, sessionDate) {
 
     const existingGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE session_date = ?'
-    ).get(sessionID);
+    ).get(sessionDate);
 
     if (existingGameSession) {
         return {

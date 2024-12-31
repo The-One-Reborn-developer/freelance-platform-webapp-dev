@@ -12,12 +12,12 @@ const db = new Database('./app/database.db', { verbose: console.log });
 const gameRouter = express.Router();
 
 
-// TODO: remove temporary game session adding
-postGameSession(db, 1);
+
 
 gameRouter.post('/add-player', (req, res) => {
     try {
-        console.log(req.body.player_telegram_id);
+        // TODO: remove temporary game session adding
+        postGameSession(db, 1);
         postPlayerResult = postPlayer(db, req.body.player_telegram_id);
         
         if (postPlayerResult === 'Player already exists') {

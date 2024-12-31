@@ -166,8 +166,8 @@ export function createGamesTable(db) {
         db.exec(`
             CREATE TABLE IF NOT EXISTS games (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                game_started BOOLEAN DEFAULT FALSE
-                game_finished BOOLEAN DEFAULT FALSE
+                game_started BOOLEAN DEFAULT FALSE,
+                game_finished BOOLEAN DEFAULT FALSE,
                 winner_telegram_id BIGINT
             );
         `);

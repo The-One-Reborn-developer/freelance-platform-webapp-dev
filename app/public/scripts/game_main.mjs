@@ -6,7 +6,7 @@ import {
 
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
-
+    
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
         try {
@@ -14,7 +14,7 @@ window.onload = async function () {
             const validatedTelegramID = userData.userData.telegram_id;
             const name = userData.userData.game_name;
             const wallet = userData.userData.game_wallet;
-
+            console.log(telegramID, userData)
             setupInterface(validatedTelegramID, name, wallet);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);

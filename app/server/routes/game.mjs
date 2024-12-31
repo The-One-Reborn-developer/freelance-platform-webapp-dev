@@ -20,7 +20,7 @@ gameRouter.post('/add-player', (req, res) => {
         // TODO: remove temporary game session adding
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        postGameSession(db, tomorrow);
+        postGameSession(db, tomorrow.toISOString().split('T')[0]);
 
         if (!req.body.player_telegram_id || !req.body.player_name) {
             res.status(400).json({

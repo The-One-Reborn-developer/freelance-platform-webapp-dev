@@ -4,8 +4,10 @@ import Database from 'better-sqlite3';
 import {
     postGameSession,
     postPlayer,
-    getPlayersAmount
+    getPlayersAmount,
+    getNextGameSessionDate
 } from "../modules/game_index.mjs";
+import { get } from 'http';
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
@@ -45,7 +47,7 @@ gameRouter.post('/add-player', (req, res) => {
 });
 
 
-gameRouter.get('/get-players-amount', (req, res) => {
+gameRouter.get('/get-players-amount', (res) => {
     try {
         const result = getPlayersAmount(db);
 
@@ -55,6 +57,21 @@ gameRouter.get('/get-players-amount', (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Произошла ошибка при получении количества игроков.'
+        });
+    };
+});
+
+
+gameRouter.get('/get-next-game-session-date', (res) => {
+    try {
+        const response = getNextGameSessionDate(db);
+
+        res.status(response.status).json(response);
+    } catch (error) {
+        console.error(`Error in /game/get-next-game-session-date: ${error}`);
+        res.status(500).json({
+            success: false,
+            message: 'Произошла ошибка при получении даты следующего игрового сеанса.'
         });
     };
 });

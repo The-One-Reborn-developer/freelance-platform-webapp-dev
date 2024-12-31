@@ -134,7 +134,7 @@ export function createGameSessionsTable(db) {
             CREATE TABLE IF NOT EXISTS game_sessions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_date TEXT NOT NULL,
-                players_amount INTEGER NOT NULL
+                players_amount INTEGER DEFAULT 0
             );
         `);
         console.log('Game sessions table check or creation executed successfully');

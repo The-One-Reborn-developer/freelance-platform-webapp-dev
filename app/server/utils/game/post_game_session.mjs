@@ -1,27 +1,26 @@
-export function postGameSession(db, sessionID) {
-    if (!sessionID) {
-        console.error('Session ID not provided');
+export function postGameSession(db, sessionDate) {
+    if (!sessionDate) {
         return {
             success: false,
             status: 400,
-            message: 'Session ID not provided'
-        }
+            message: 'Дата игровой сессии не предоставлена'
+        };
     };
 
     const existingGameSession = db.prepare(
-        'SELECT * FROM game_sessions WHERE session_id = ?'
+        'SELECT * FROM game_sessions WHERE session_date = ?'
     ).get(sessionID);
 
     if (existingGameSession) {
         return {
             success: false,
             status: 409,
-            message: `Сессия с ID ${sessionID} уже существует`
+            message: `Игровая сессия с датой ${sessionDate} уже существует`
         }
     };
 
     const postGameSession = db.prepare(
-        'INSERT INTO game_sessions (session_id) VALUES (?)'
+        'INSERT INTO game_sessions (session_date) VALUES (?)'
     );
     const postGameSessionResult = postGameSession.run(sessionID);
     

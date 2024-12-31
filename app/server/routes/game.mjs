@@ -16,7 +16,9 @@ const gameRouter = express.Router();
 gameRouter.post('/add-player', (req, res) => {
     try {
         // TODO: remove temporary game session adding
-        postGameSession(db, 1);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        postGameSession(db, tomorrow.toISOString().split('T')[0]);
 
         if (!req.body.player_telegram_id || !req.body.player_name) {
             res.status(400).json({

@@ -22,7 +22,7 @@ export function postGameSession(db, sessionDate) {
     const postGameSession = db.prepare(
         'INSERT INTO game_sessions (session_date) VALUES (?)'
     );
-    const postGameSessionResult = postGameSession.run(sessionID);
+    const postGameSessionResult = postGameSession.run(sessionDate);
     
     const newGameSessionID = postGameSessionResult.lastInsertRowid;
     return {

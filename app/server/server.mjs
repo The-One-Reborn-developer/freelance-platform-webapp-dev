@@ -50,7 +50,7 @@ console.log('Express app created');
 app.use('/common', commonRouter);
 app.use('/services', servicesRouter);
 app.use('/delivery', deliveryRouter);
-app.user('/game', gameRouter);
+app.use('/game', gameRouter);
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);

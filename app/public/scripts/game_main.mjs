@@ -14,7 +14,8 @@ window.onload = async function () {
             const validatedTelegramID = userData.userData.telegram_id;
             const name = userData.userData.game_name;
             const wallet = userData.userData.game_wallet;
-            console.log(telegramID, userData)
+            const registrationDate = userData.userData.game_registration_date;
+
             setupInterface(validatedTelegramID, name, wallet);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -30,9 +31,7 @@ window.onload = async function () {
 };
 
 
-function setupInterface(validatedTelegramID, name, wallet) {
-    const registrationDate = userData.userData.services_registration_date;
-
+function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
 

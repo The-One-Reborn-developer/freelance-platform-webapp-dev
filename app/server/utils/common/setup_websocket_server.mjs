@@ -1,5 +1,7 @@
 import { WebSocketServer } from "ws";
 
+import { deletePlayer } from "../../modules/game_index.mjs";
+
 
 export function setupWebsocketServer(server) {
     const wss = new WebSocketServer({ server });
@@ -9,9 +11,13 @@ export function setupWebsocketServer(server) {
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegramID'));
+        const service = String(params.get('service'));
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
+            return;
+        } else if (!service) {
+            ws.close(1008, 'Missing service');
             return;
         } else {
             if (users.has(telegramID)) {
@@ -56,8 +62,16 @@ export function setupWebsocketServer(server) {
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            users.delete(telegramID);
-            console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+            try {
+                users.delete(telegramID);
+                console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+
+                if (service === 'game') {
+                    deletePlayer(telegramID);
+                }
+            } catch (error) {
+                console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
+            };
         });
 
         // Handle errors

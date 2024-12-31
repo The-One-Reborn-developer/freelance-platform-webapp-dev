@@ -21,7 +21,7 @@ window.onload = async function () {
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
 
-            initializeWebSocket(validatedTelegramID);
+            initializeWebSocket(validatedTelegramID, 'game');
 
             await setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {

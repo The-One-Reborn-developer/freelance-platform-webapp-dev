@@ -12,8 +12,6 @@ const db = new Database('./app/database.db', { verbose: console.log });
 const gameRouter = express.Router();
 
 
-
-
 gameRouter.post('/add-player', (req, res) => {
     try {
         // TODO: remove temporary game session adding
@@ -37,7 +35,7 @@ gameRouter.post('/add-player', (req, res) => {
         } else {
             res.status(201).json({
                 success: true,
-                message: `Игрок под номером №${postPlayerResult} успешно добавлен.`
+                message: `Вы успешно добавлены в список игроков.`
             });
         };
     } catch (error) {

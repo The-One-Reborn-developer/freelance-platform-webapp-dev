@@ -25,7 +25,7 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
-                console.log(`WebSocket connection established for Telegram ID: ${telegramID}`);
+                console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}`);
             };
         };
 
@@ -67,8 +67,16 @@ export function setupWebsocketServer(server) {
                 console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
 
                 if (service === 'game') {
-                    deletePlayer(telegramID);
-                }
+                    const deletePlayerResult = deletePlayer(telegramID);
+
+                    if (deletePlayerResult === 'Player does not exist') {
+                        console.error(`Player with Telegram ID ${telegramID} does not exist`);
+                    } else if (deletePlayerResult === false) {
+                        console.error(`Error deleting player with Telegram ID ${telegramID}`);
+                    } else {
+                        console.log(`Player with Telegram ID ${telegramID} deleted successfully`);
+                    };
+                };
             } catch (error) {
                 console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
             };

@@ -69,6 +69,12 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
             if (!result.success) {
                 console.error('Failed to add player to the player count server-side');
                 showModal(result.message);
+
+                // Show players amount after failed player addition
+                await displayPlayersAmount();
+                
+                // Start periodic player count update
+                startPlayerAmountRefresh();
             } else {
                 console.log('Player added to the player count server-side');
                 showModal(result.message);

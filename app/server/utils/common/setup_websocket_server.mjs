@@ -63,9 +63,6 @@ export function setupWebsocketServer(server) {
         // Handle disconnections
         ws.on('close', (code, reason) => {
             try {
-                users.delete(telegramID);
-                console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
-
                 if (service === 'game') {
                     const deletePlayerResult = deletePlayer(telegramID);
 
@@ -77,6 +74,9 @@ export function setupWebsocketServer(server) {
                         console.log(`Player with Telegram ID ${telegramID} deleted successfully`);
                     };
                 };
+
+                users.delete(telegramID);
+                console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
             } catch (error) {
                 console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
             };

@@ -1,6 +1,7 @@
 import { 
     getQueryParameter,
-    getUserData
+    getUserData,
+    initializeWebSocket
 } from "./modules/common_index.mjs";
 
 
@@ -15,6 +16,8 @@ window.onload = async function () {
             const name = userData.userData.game_name;
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
+
+            initializeWebSocket(validatedTelegramID);
 
             setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {

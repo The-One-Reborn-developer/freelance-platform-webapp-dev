@@ -77,7 +77,6 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 // Start periodic player count update
                 startPlayerAmountRefresh();
             } else {
-                console.log('Player added to the player count server-side');
                 showModal(result.message);
 
                 // Show players amount and time until next game after successful player addition

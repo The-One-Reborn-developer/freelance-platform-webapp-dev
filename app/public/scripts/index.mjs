@@ -15,5 +15,5 @@ deliveryButton.addEventListener('click', () => {
 
 const gameButton = document.getElementById('service-game-button');
 gameButton.addEventListener('click', () => {
-    window.location.href = '../views/game.html';
+    window.location.href = '../views/game_register.html';
 });

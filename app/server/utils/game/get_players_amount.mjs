@@ -1,9 +1,7 @@
-export function getPlayersAmount(db) {
-    const getPlayersAmount = db.prepare(
-        'SELECT COUNT(*) as amount FROM session_players WHERE session_id = 1'
-    );
-
-    const getPlayersAmountResult = getPlayersAmount.get();
+export function getPlayersAmount(db, sessionID) {
+    const getPlayersAmountResult = db.prepare(
+        'SELECT COUNT(*) as amount FROM session_players WHERE session_id = ?'
+    ).get(sessionID);
 
     return {
         success: true,

@@ -43,7 +43,7 @@ gameRouter.post('/add-player', (req, res) => {
 
 gameRouter.get('/get-players-amount', (req, res) => {
     try {
-        const getPlayersAmountResult = getPlayersAmount(db);
+        const getPlayersAmountResult = getPlayersAmount(db, req.query.session_id);
 
         res.status(getPlayersAmountResult.status).json(getPlayersAmountResult);
     } catch (error) {

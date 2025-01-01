@@ -58,7 +58,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 console.error('Failed to get next game session');
                 showModal(getNextGameSessionResult.message);
             };
-
+            const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
             const nextGameSessionDate = new Date(getNextGameSessionResult.nextGameSession.session_date);
             if (isNaN(nextGameSessionDate.getTime())) {
                 console.error('Failed to parse next game session date');
@@ -66,7 +66,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 return;                
             };
 
-            initializeWebSocket(validatedTelegramID, 'game', getNextGameSessionResult.nextGameSession.id);
+            initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
 
             // Add player to the player count server-side
             const addPlayerResponse = await fetch('/game/add-player', {
@@ -87,7 +87,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 showModal(addPlayerResult.message);
 
                 // Show players amount and time until next game after failed player addition
-                await displayPlayersAmount();
+                await displayPlayersAmount(nextGameSessionID);
                 await displayTimeUntilNextGameSession();
                 
                 // Start periodic player count update
@@ -96,7 +96,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 showModal(addPlayerResult.message);
 
                 // Show players amount and time until next game after successful player addition
-                await displayPlayersAmount();
+                await displayPlayersAmount(nextGameSessionID);
                 await displayTimeUntilNextGameSession();
                 
                 // Start periodic player count update
@@ -117,21 +117,21 @@ function startPlayerAmountRefresh() {
 };
 
 
-async function displayPlayersAmount() {
+async function displayPlayersAmount(nextGameSessionID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
         return;
     } else {
         try {
-            const response = await fetch('/game/get-players-amount');
+            const response = await fetch(`/game/get-players-amount?session_id=${nextGameSessionID}`);
             const data = await response.json();
             console.log(data);
             if (!data.success) {
                 console.error('Failed to get players amount');
                 showModal(data.message);
                 return;
-            }
+            };
 
             let gameDataPlayersAmount = document.getElementById('game-data-players-amount');
             if (!gameDataPlayersAmount) {
@@ -141,7 +141,7 @@ async function displayPlayersAmount() {
                 gameDataPlayersAmount.classList.add('game-data-players-amount');
                 gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
                 display.appendChild(gameDataPlayersAmount);
-            }
+            };
 
             gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
         } catch (error) {

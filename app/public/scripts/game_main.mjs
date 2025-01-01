@@ -221,7 +221,7 @@ function displayGameCountdownTimer(countdownTimer) {
 
         const startCountdownTimer = () => {
             const now = new Date();
-            const timeDifference = now - new Date(countdownTimer);
+            const timeDifference = countdownTimer - now;
             const hours = Math.floor(timeDifference / (1000 * 60 * 60));
             const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);

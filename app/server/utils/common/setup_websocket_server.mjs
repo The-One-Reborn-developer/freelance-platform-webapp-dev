@@ -68,13 +68,8 @@ export function setupWebsocketServer(server) {
                 if (service === 'game') {
                     const deletePlayerResult = deletePlayer(db, telegramID);
 
-                    if (deletePlayerResult === 'Player does not exist') {
-                        console.error(`Player with Telegram ID ${telegramID} does not exist`);
-                    } else if (deletePlayerResult === false) {
-                        console.error(`Error deleting player with Telegram ID ${telegramID}`);
-                    } else {
-                        console.log(`Player with Telegram ID ${telegramID} deleted successfully`);
-                    };
+                    console.log(`Delete player result: ${deletePlayerResult.success},
+                                ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
                 };
 
                 users.delete(telegramID);

@@ -77,7 +77,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 body: JSON.stringify({
                     player_telegram_id: validatedTelegramID,
                     player_name: name,
-                    session_id: getNextGameSessionResult.nextGameSession.session_id
+                    session_id: getNextGameSessionResult.nextGameSession.id
                 })
             })
             const addPlayerResult = await addPlayerResponse.json();

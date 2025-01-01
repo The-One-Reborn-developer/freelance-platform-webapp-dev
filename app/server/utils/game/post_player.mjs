@@ -9,7 +9,7 @@ export function postPlayer(
         return {
             success: false,
             status: 400,
-            message: 'Player Telegram ID or player name not provided'
+            message: 'Телеграм ID игрока или имя игрока не предоставлены'
         };
     };
     

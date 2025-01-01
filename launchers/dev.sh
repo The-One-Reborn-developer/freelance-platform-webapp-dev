@@ -9,4 +9,4 @@ sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml down -v
 sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml build
 
 # Bring up the dev environment
-sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml up
+sudo docker-compose -p dev -f dockerfiles/docker-compose-dev.yml up -d

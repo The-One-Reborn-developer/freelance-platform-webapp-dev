@@ -182,10 +182,10 @@ async function displayTimeUntilNextGameSession() {
                 const timeDifference = nextGameSessionDate - now;
 
                 if (timeDifference <= 0) {
-                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
                     clearInterval(timerInterval);
+                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
                     return;
-                }
+                };
 
                 const hours = Math.floor(timeDifference / (1000 * 60 * 60));
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
@@ -216,8 +216,27 @@ function displayGameCountdownTimer(countdownTimer) {
         const gameCountdown = document.createElement('div');
         gameCountdown.id = 'game-countdown';
         gameCountdown.className = 'game-data';
-        gameCountdown.classList.add('game-countdown');
-        gameCountdown.textContent = `Таймер игрового сеанса: ${countdownTimer}`;
+        gameCountdown.classList.add('game-data-timer');
         display.appendChild(gameCountdown);
+
+        const startCountdownTimer = () => {
+            const now = new Date();
+            const timeDifference = now - new Date(countdownTimer);
+            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            if (timeDifference <= 0) {
+                clearInterval(timerInterval);
+                displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                return;
+            };
+            
+            gameCountdown.innerHTML = `Игра начнётся через: ${hours} ч. ${minutes} мин. ${seconds} с.<br>Не закрывайте приложение!`;
+        };
+        
+        // Start timer
+        startCountdownTimer(); // Initial update
+        const timerInterval = setInterval(startCountdownTimer, 1000);
     };
 };

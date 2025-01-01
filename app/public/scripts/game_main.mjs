@@ -208,18 +208,42 @@ async function displayTimeUntilNextGameSession() {
 };
 
 
-function displayGameCountdownTimer(countdownTimer) {
+function displayGameCountdownTimer(countdownTimerMinutes) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
         return;
     } else {
-        display.removeChild(document.getElementById('game-data-timer'));
+        const existingTimer = document.getElementById('game-data-timer');
+        if (existingTimer) {
+            display.removeChild(existingTimer);
+        };
+
         const gameCountdown = document.createElement('div');
         gameCountdown.id = 'game-countdown';
         gameCountdown.className = 'game-data';
         gameCountdown.classList.add('game-data-timer');
-        gameCountdown.innerHTML = `Игра начнется через ${countdownTimer} минут.`;
         display.appendChild(gameCountdown);
+
+        const endTime = new Date().getTime() + (countdownTimerMinutes * 60 * 1000);
+
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const timeRemaining = endTime - now;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                gameCountdown.innerHTML = 'Игра начинается!';
+                return;
+            };
+
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            gameCountdown.innerHTML = `Игра начинается через ${minutes} мин. ${seconds} с.`;
+        };
+
+        updateCountdown();
+        const timerInterval = setInterval(updateCountdown, 1000);
     };
 };

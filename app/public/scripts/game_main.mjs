@@ -65,8 +65,8 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
                 return;                
             };
-            console.log(getNextGameSessionResult.nextGameSession);
-            initializeWebSocket(validatedTelegramID, 'game', getNextGameSessionResult.nextGameSession.session_id);
+
+            initializeWebSocket(validatedTelegramID, 'game', getNextGameSessionResult.nextGameSession.id);
 
             // Add player to the player count server-side
             const addPlayerResponse = await fetch('/game/add-player', {

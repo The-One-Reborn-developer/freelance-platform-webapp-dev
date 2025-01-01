@@ -126,7 +126,7 @@ async function displayPlayersAmount() {
         try {
             const response = await fetch('/game/get-players-amount');
             const data = await response.json();
-            
+            console.log(data);
             if (!data.success) {
                 console.error('Failed to get players amount');
                 showModal(data.message);

@@ -232,7 +232,7 @@ function displayGameCountdownTimer(countdownTimer) {
 
             if (timeDifference <= 0) {
                 clearInterval(timerInterval);
-                displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                // TODO: Add game start logic
                 return;
             };
             

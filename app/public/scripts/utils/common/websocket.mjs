@@ -9,7 +9,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
         const socket = new WebSocket(`wss://${window.location.host}?telegram_id=${validatedTelegramID}&service=${service}&session_id=${sessionID}`);
 
         socket.addEventListener('open', () => {
-            console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}`);
+            console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}. Service: ${service}. Session ID: ${sessionID}`);
         });
 
         socket.addEventListener('close', () => {

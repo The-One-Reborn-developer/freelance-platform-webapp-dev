@@ -135,6 +135,7 @@ export function createGameSessionsTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_date TEXT NOT NULL,
                 players_amount INTEGER DEFAULT 0,
+                countdown_timer INTEGER DEFAULT 5,
                 finished BOOLEAN DEFAULT FALSE
             );
         `);

@@ -118,7 +118,7 @@ async function displayPlayersAmount(nextGameSessionID) {
         try {
             const response = await fetch(`/game/get-players-amount?session_id=${nextGameSessionID}`);
             const data = await response.json();
-            console.log(data);
+
             if (!data.success) {
                 console.error('Failed to get players amount');
                 showModal(data.message);
@@ -182,8 +182,8 @@ async function displayTimeUntilNextGameSession() {
                 const timeDifference = nextGameSessionDate - now;
 
                 if (timeDifference <= 0) {
-                    clearInterval(timerInterval);
                     displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                    clearInterval(timerInterval);
                     return;
                 };
 

@@ -152,7 +152,7 @@ async function displayTimeUntilNextGameSession() {
                 return;
             }
 
-            const nextGameSessionDate = new Date(data.nextGameSessionDate);
+            const nextGameSessionDate = new Date(data.nextGameSession.session_date);
             if (isNaN(nextGameSessionDate.getTime())) {
                 console.error('Failed to parse next game session date');
                 showModal('Произошла ошибка при получении даты следующего игрового сеанса.');

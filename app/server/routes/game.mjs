@@ -2,10 +2,9 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 import {
-    postGameSession,
     postPlayer,
     getPlayersAmount,
-    getNextGameSessionDate
+    getNextGameSession
 } from "../modules/game_index.mjs";
 
 
@@ -16,11 +15,6 @@ const gameRouter = express.Router();
 
 gameRouter.post('/add-player', (req, res) => {
     try {
-        // TODO: remove temporary game session adding
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        //postGameSession(db, tomorrow);
-
         if (!req.body.player_telegram_id || !req.body.player_name) {
             res.status(400).json({
                 success: false,
@@ -29,13 +23,20 @@ gameRouter.post('/add-player', (req, res) => {
             return;
         };
 
-        const result = postPlayer(
+        const nextGameSession = getNextGameSession(db);
+        if (!nextGameSession.success) {
+            res.status(nextGameSession.status).json(nextGameSession);
+            return;
+        };
+
+        const postPlayerResult = postPlayer(
             db,
+            nextGameSession.session_id,
             req.body.player_telegram_id,
             req.body.player_name
         );
 
-        res.status(result.status).json(result);
+        res.status(postPlayerResult.status).json(postPlayerResult);
     } catch (error) {
         console.error(`Error in /game/add-player: ${error}`);
         res.status(500).json({
@@ -48,9 +49,9 @@ gameRouter.post('/add-player', (req, res) => {
 
 gameRouter.get('/get-players-amount', (req, res) => {
     try {
-        const result = getPlayersAmount(db);
+        const getPlayersAmountResult = getPlayersAmount(db);
 
-        res.status(result.status).json(result);
+        res.status(getPlayersAmountResult.status).json(getPlayersAmountResult);
     } catch (error) {
         console.error(`Error in /game/get-players-amount: ${error}`);
         res.status(500).json({
@@ -63,9 +64,9 @@ gameRouter.get('/get-players-amount', (req, res) => {
 
 gameRouter.get('/get-next-game-session-date', (req, res) => {
     try {
-        const response = getNextGameSessionDate(db);
+        const getNextGameSessionResult = getNextGameSession(db);
 
-        res.status(response.status).json(response);
+        res.status(getNextGameSessionResult.status).json(getNextGameSessionResult);
     } catch (error) {
         console.error(`Error in /game/get-next-game-session-date: ${error}`);
         res.status(500).json({

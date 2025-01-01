@@ -5,7 +5,7 @@ import Database from "better-sqlite3";
 import { 
     getUser,
     sendMessage
-} from "../modules/common_index.mjs"
+} from "../modules/common_index.mjs";
 
 import {
     getOpenBidsByCustomerTelegramID,
@@ -23,7 +23,7 @@ import {
     updateProfileInfo,
     updateResponse,
     getOpenBidByBidID
-} from "../modules/services_index.mjs"
+} from "../modules/services_index.mjs";
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
@@ -61,7 +61,7 @@ servicesRouter.post('/post-bid', (req, res) => {
             instrumentProvided
         );
     } catch (error) {
-        console.error('Error in /post-bid:', error);
+        console.error(`Error in /services/post-bid: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при создании заказа.' });
     };
 });
@@ -75,9 +75,9 @@ servicesRouter.post('/my-bids', (req, res) => {
 
         res.status(200).json({ success: true, bids });
     } catch (error) {
-        console.error('Error in /my-bids:', error);
+        console.error(`Error in /services/my-bids: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
-    }
+    };
 });
 
 
@@ -93,7 +93,7 @@ servicesRouter.post('/close-bid', (req, res) => {
             res.status(200).json({ success: true, message: `Заказ №${bidID} успешно закрыт.` });
         };
     } catch (error) {
-        console.error('Error in /close-bid:', error);
+        console.error(`Error in /services/close-bid: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при закрытии заказа.' });
     };
 });
@@ -107,7 +107,7 @@ servicesRouter.post('/get-bids', (req, res) => {
 
         res.status(200).json({ success: true, bids });
     } catch (error) {
-        console.error('Error in /get-bids:', error);
+        console.error(`Error in /services/get-bids: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при получении списка заказов.' });
     };
 });
@@ -174,7 +174,7 @@ servicesRouter.post('/respond-to-bid', (req, res) => {
             res.status(409).json({ success: true, message: 'Вы уже откликнулись на этот заказ.' });
         };
     } catch (error) {
-        console.error('Error in /respond-to-bid:', error);
+        console.error(`Error in /services/respond-to-bid: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при отклике на заказ.' });
     };
 });
@@ -204,7 +204,7 @@ servicesRouter.get('/responded-performers', (req, res) => {
             };
         };
     } catch (error) {
-        console.error('Error in /responded-performers:', error);
+        console.error(`Error in /services/responded-performers: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся исполнителей.' });
     };    
 });
@@ -235,7 +235,7 @@ servicesRouter.get('/responded-customers', (req, res) => {
             };
         };
     } catch (error) {
-        console.error('Error in /responded-customers:', error);
+        console.error(`Error in /services/responded-customers: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при получении списка откликнувшихся заказчиков.' });
     };
 });
@@ -286,7 +286,7 @@ servicesRouter.post('/show-customer-chats-list', (req, res) => {
             return res.status(404).json({ success: false, message: 'У данного заказчика не было переписок.' });
         };
     } catch (error) {
-        console.error('Error in /show-customer-chats-list:', error);
+        console.error(`Error in /services/show-customer-chats-list: ${error}`);
         res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
     };
 });
@@ -313,7 +313,7 @@ servicesRouter.post('/show-performer-chats-list', (req, res) => {
             return res.status(404).json({ success: false });
         };
     } catch (error) {
-        console.error('Error in /show-performer-chats-list:', error);
+        console.error(`Error in /services/show-performer-chats-list: ${error}`);
         res.status(500).json({ success: false, message: 'An error occurred while fetching chat files.' });
     };
 });
@@ -333,7 +333,7 @@ servicesRouter.post('/change-profile-info', (req, res) => {
             res.status(200).json({ success: true, message: 'Информация о профиле успешно изменена.' });
         };
     } catch (error) {
-        console.error('Error in /change-profile-info:', error);
+        console.error(`Error in /services/change-profile-info: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при изменении информации о профиле.' });
     };
 });
@@ -398,7 +398,7 @@ servicesRouter.post('/send-message', upload.single('attachment'), (req, res) => 
 
         res.status(200).json({ success: true, message: 'Сообщение успешно отправлено.' });
     } catch (error) {
-        console.error('Error in /send-message:', error);
+        console.error(`Error in /services/send-message: ${error}`);
         res.status(500).json({ message: 'Произошла ошибка при отправке сообщения.' });
     };
 });

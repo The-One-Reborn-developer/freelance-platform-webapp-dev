@@ -2,10 +2,9 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 import {
-    postGameSession,
     postPlayer,
     getPlayersAmount,
-    getNextGameSessionDate
+    getNextGameSession
 } from "../modules/game_index.mjs";
 
 
@@ -16,26 +15,22 @@ const gameRouter = express.Router();
 
 gameRouter.post('/add-player', (req, res) => {
     try {
-        // TODO: remove temporary game session adding
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        //postGameSession(db, tomorrow);
-
-        if (!req.body.player_telegram_id || !req.body.player_name) {
+        if (!req.body.player_telegram_id || !req.body.player_name || !req.body.session_id) {
             res.status(400).json({
                 success: false,
                 message: 'Недостаточно данных для добавления игрока в список игроков.'
             });
             return;
         };
-
-        const result = postPlayer(
+        
+        const postPlayerResult = postPlayer(
             db,
+            req.body.session_id,
             req.body.player_telegram_id,
             req.body.player_name
         );
 
-        res.status(result.status).json(result);
+        res.status(postPlayerResult.status).json(postPlayerResult);
     } catch (error) {
         console.error(`Error in /game/add-player: ${error}`);
         res.status(500).json({
@@ -48,9 +43,9 @@ gameRouter.post('/add-player', (req, res) => {
 
 gameRouter.get('/get-players-amount', (req, res) => {
     try {
-        const result = getPlayersAmount(db);
+        const getPlayersAmountResult = getPlayersAmount(db, req.query.session_id);
 
-        res.status(result.status).json(result);
+        res.status(getPlayersAmountResult.status).json(getPlayersAmountResult);
     } catch (error) {
         console.error(`Error in /game/get-players-amount: ${error}`);
         res.status(500).json({
@@ -61,16 +56,16 @@ gameRouter.get('/get-players-amount', (req, res) => {
 });
 
 
-gameRouter.get('/get-next-game-session-date', (req, res) => {
+gameRouter.get('/get-next-game-session', (req, res) => {
     try {
-        const response = getNextGameSessionDate(db);
+        const getNextGameSessionResult = getNextGameSession(db);
 
-        res.status(response.status).json(response);
+        res.status(getNextGameSessionResult.status).json(getNextGameSessionResult);
     } catch (error) {
-        console.error(`Error in /game/get-next-game-session-date: ${error}`);
+        console.error(`Error in /game/get-next-game-session: ${error}`);
         res.status(500).json({
             success: false,
-            message: 'Произошла ошибка при получении даты следующего игрового сеанса.'
+            message: 'Произошла ошибка при получении игрового сеанса.'
         });
     };
 });

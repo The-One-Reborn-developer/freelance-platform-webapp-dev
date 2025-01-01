@@ -24,8 +24,6 @@ window.onload = async function () {
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
 
-            initializeWebSocket(validatedTelegramID, 'game');
-
             await setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -53,39 +51,49 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         try {
             headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
+            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+            const getNextGameSessionResult = await getNextGameSessionResponse.json();
+
+            if (!getNextGameSessionResult.success) {
+                console.error('Failed to get next game session');
+                showModal(getNextGameSessionResult.message);
+            };
+            const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
+            const nextGameSessionDate = new Date(getNextGameSessionResult.nextGameSession.session_date);
+            if (isNaN(nextGameSessionDate.getTime())) {
+                console.error('Failed to parse next game session date');
+                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
+                return;                
+            };
+
+            initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
+
             // Add player to the player count server-side
-            const response = await fetch('/game/add-player', {
+            const addPlayerResponse = await fetch('/game/add-player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     player_telegram_id: validatedTelegramID,
-                    player_name: name
+                    player_name: name,
+                    session_id: getNextGameSessionResult.nextGameSession.id
                 })
             })
-            const result = await response.json();
+            const addPlayerResult = await addPlayerResponse.json();
             
-            if (!result.success) {
+            if (!addPlayerResult.success) {
                 console.error('Failed to add player to the player count server-side');
-                showModal(result.message);
-
-                // Show players amount and time until next game after failed player addition
-                await displayPlayersAmount();
-                await displayTimeUntilNextGameSession();
-                
-                // Start periodic player count update
-                startPlayerAmountRefresh();
-            } else {
-                showModal(result.message);
-
-                // Show players amount and time until next game after successful player addition
-                await displayPlayersAmount();
-                await displayTimeUntilNextGameSession();
-                
-                // Start periodic player count update
-                startPlayerAmountRefresh();
             };
+            
+            showModal(addPlayerResult.message);
+
+            // Show players amount and time until next game after failed player addition
+            await displayPlayersAmount(nextGameSessionID);
+            await displayTimeUntilNextGameSession();
+            
+            // Start periodic player count update
+            startPlayerAmountRefresh(nextGameSessionID);
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
             return;
@@ -94,28 +102,28 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
 };
 
 
-function startPlayerAmountRefresh() {
+function startPlayerAmountRefresh(nextGameSessionID) {
     setInterval(() => {
-        displayPlayersAmount();
+        displayPlayersAmount(nextGameSessionID);
     }, PLAYER_AMOUNT_REFRESH_INTERVAL);
 };
 
 
-async function displayPlayersAmount() {
+async function displayPlayersAmount(nextGameSessionID) {
     const display = document.getElementById('display');
     if (!display) {
         console.error('Display element not found');
         return;
     } else {
         try {
-            const response = await fetch('/game/get-players-amount');
+            const response = await fetch(`/game/get-players-amount?session_id=${nextGameSessionID}`);
             const data = await response.json();
-            
+
             if (!data.success) {
                 console.error('Failed to get players amount');
                 showModal(data.message);
                 return;
-            }
+            };
 
             let gameDataPlayersAmount = document.getElementById('game-data-players-amount');
             if (!gameDataPlayersAmount) {
@@ -125,7 +133,7 @@ async function displayPlayersAmount() {
                 gameDataPlayersAmount.classList.add('game-data-players-amount');
                 gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
                 display.appendChild(gameDataPlayersAmount);
-            }
+            };
 
             gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
         } catch (error) {
@@ -143,7 +151,7 @@ async function displayTimeUntilNextGameSession() {
         return;
     } else {
         try {
-            const response = await fetch('/game/get-next-game-session-date');
+            const response = await fetch('/game/get-next-game-session');
             const data = await response.json();
             
             if (!data.success) {
@@ -152,7 +160,8 @@ async function displayTimeUntilNextGameSession() {
                 return;
             }
 
-            const nextGameSessionDate = new Date(data.nextGameSessionDate);
+            const nextGameSessionCountDownTimer = data.nextGameSession.countdown_timer;
+            const nextGameSessionDate = new Date(data.nextGameSession.session_date);
             if (isNaN(nextGameSessionDate.getTime())) {
                 console.error('Failed to parse next game session date');
                 showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
@@ -166,32 +175,75 @@ async function displayTimeUntilNextGameSession() {
                 gameDataTimer.className = 'game-data';
                 gameDataTimer.classList.add('game-data-timer');
                 display.appendChild(gameDataTimer);
-            }
+            };
+
+            let timerInterval;
 
             const updateTimer = () => {
                 const now = new Date();
                 const timeDifference = nextGameSessionDate - now;
 
                 if (timeDifference <= 0) {
-                    gameDataTimer.textContent = 'Следующая игровая сессия уже началась!';
+                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
                     clearInterval(timerInterval);
                     return;
-                }
+                };
 
                 const hours = Math.floor(timeDifference / (1000 * 60 * 60));
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-                gameDataTimer.textContent = `Время до следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
+                gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
             };
             
             // Start timer
             updateTimer(); // Initial update
-            const timerInterval = setInterval(updateTimer, 1000);
+            timerInterval = setInterval(updateTimer, 1000);
         } catch (error) {
             console.error(`Error in displayTimeUntilNextGameSession: ${error}`);
             showModal('Произошла ошибка при отображении таймера до следующего игрового сеанса.');
             return;
         };
+    };
+};
+
+
+function displayGameCountdownTimer(countdownTimerMinutes) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        const existingTimer = document.getElementById('game-data-timer');
+        if (existingTimer) {
+            display.removeChild(existingTimer);
+        };
+
+        const gameCountdown = document.createElement('div');
+        gameCountdown.id = 'game-countdown';
+        gameCountdown.className = 'game-data';
+        gameCountdown.classList.add('game-data-timer');
+        display.appendChild(gameCountdown);
+
+        const endTime = new Date().getTime() + (countdownTimerMinutes * 60 * 1000);
+
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const timeRemaining = endTime - now;
+
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                gameCountdown.innerHTML = 'Игра начинается!';
+                return;
+            };
+
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            gameCountdown.innerHTML = `Игра начинается через ${minutes} мин. ${seconds} с.`;
+        };
+
+        updateCountdown();
+        const timerInterval = setInterval(updateCountdown, 1000);
     };
 };

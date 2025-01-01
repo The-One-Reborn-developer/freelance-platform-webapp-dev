@@ -12,8 +12,9 @@ export function setupWebsocketServer(server) {
 
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
-        const telegramID = String(params.get('telegramID'));
+        const telegramID = String(params.get('telegram_id'));
         const service = String(params.get('service'));
+        const sessionID = String(params.get('session_id'));
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
@@ -27,7 +28,7 @@ export function setupWebsocketServer(server) {
                 users.get(telegramID).close(); // Close the previous connection
             } else {
                 users.set(telegramID, ws);
-                console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}`);
+                console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
             };
         };
 
@@ -66,15 +67,9 @@ export function setupWebsocketServer(server) {
         ws.on('close', (code, reason) => {
             try {
                 if (service === 'game') {
-                    const deletePlayerResult = deletePlayer(db, telegramID);
+                    const deletePlayerResult = deletePlayer(db, telegramID, sessionID);
 
-                    if (deletePlayerResult === 'Player does not exist') {
-                        console.error(`Player with Telegram ID ${telegramID} does not exist`);
-                    } else if (deletePlayerResult === false) {
-                        console.error(`Error deleting player with Telegram ID ${telegramID}`);
-                    } else {
-                        console.log(`Player with Telegram ID ${telegramID} deleted successfully`);
-                    };
+                    console.log(`Delete player result: ${deletePlayerResult.success}, ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
                 };
 
                 users.delete(telegramID);

@@ -160,6 +160,7 @@ async function displayTimeUntilNextGameSession() {
                 return;
             }
 
+            const nextGameSessionCountDownTimer = data.nextGameSession.countdown_timer;
             const nextGameSessionDate = new Date(data.nextGameSession.session_date);
             if (isNaN(nextGameSessionDate.getTime())) {
                 console.error('Failed to parse next game session date');
@@ -181,7 +182,7 @@ async function displayTimeUntilNextGameSession() {
                 const timeDifference = nextGameSessionDate - now;
 
                 if (timeDifference <= 0) {
-                    gameDataTimer.textContent = 'Следующая игровая сессия уже началась!';
+                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
                     clearInterval(timerInterval);
                     return;
                 }
@@ -201,5 +202,22 @@ async function displayTimeUntilNextGameSession() {
             showModal('Произошла ошибка при отображении таймера до следующего игрового сеанса.');
             return;
         };
+    };
+};
+
+
+function displayGameCountdownTimer(countdownTimer) {
+    const display = document.getElementById('display');
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    } else {
+        display.innerHTML = '';
+        const gameCountdown = document.createElement('div');
+        gameCountdown.id = 'game-countdown';
+        gameCountdown.className = 'game-data';
+        gameCountdown.classList.add('game-countdown');
+        gameCountdown.textContent = `Таймер игрового сеанса: ${countdownTimer}`;
+        display.appendChild(gameCountdown);
     };
 };

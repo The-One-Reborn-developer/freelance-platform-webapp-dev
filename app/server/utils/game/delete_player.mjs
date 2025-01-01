@@ -1,6 +1,7 @@
 export function deletePlayer(
     db,
-    playerTelegramID
+    playerTelegramID,
+    sessionID
 ) {
     if (!playerTelegramID) {
         return {
@@ -9,11 +10,10 @@ export function deletePlayer(
             message: 'Telegram ID игрока не предоставлен'
         };
     };
-    // TODO: make session_id dynamic
     
     const existingPlayer = db.prepare(
-        'SELECT * FROM session_players WHERE player_telegram_id = ? AND session_id = 1'
-    ).get(playerTelegramID);
+        'SELECT * FROM session_players WHERE player_telegram_id = ? AND session_id = ?'
+    ).get(playerTelegramID, sessionID);
 
     if (!existingPlayer) {
         return {
@@ -24,11 +24,12 @@ export function deletePlayer(
     };
 
     const deletePlayer = db.prepare(
-        `DELETE FROM session_players WHERE player_telegram_id = ? AND session_id = 1`
+        `DELETE FROM session_players WHERE player_telegram_id = ? AND session_id = ?`
     );
 
     const deletePlayerResult = deletePlayer.run(
-        playerTelegramID
+        playerTelegramID,
+        sessionID
     );
 
     if (!deletePlayerResult) {

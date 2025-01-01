@@ -24,8 +24,6 @@ window.onload = async function () {
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
 
-            initializeWebSocket(validatedTelegramID, 'game');
-
             await setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -53,22 +51,40 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         try {
             headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
+            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+            const getNextGameSessionResult = await getNextGameSessionResponse.json();
+
+            if (!getNextGameSessionResult.success) {
+                console.error('Failed to get next game session');
+                showModal(getNextGameSessionResult.message);
+            };
+
+            const nextGameSessionDate = new Date(getNextGameSessionResult.nextGameSession.session_date);
+            if (isNaN(nextGameSessionDate.getTime())) {
+                console.error('Failed to parse next game session date');
+                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
+                return;                
+            };
+
+            initializeWebSocket(validatedTelegramID, 'game', getNextGameSessionResult.nextGameSession.session_id);
+
             // Add player to the player count server-side
-            const response = await fetch('/game/add-player', {
+            const addPlayerResponse = await fetch('/game/add-player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     player_telegram_id: validatedTelegramID,
-                    player_name: name
+                    player_name: name,
+                    session_id: getNextGameSessionResult.nextGameSession.session_id
                 })
             })
-            const result = await response.json();
+            const addPlayerResult = await addPlayerResponse.json();
             
-            if (!result.success) {
+            if (!addPlayerResult.success) {
                 console.error('Failed to add player to the player count server-side');
-                showModal(result.message);
+                showModal(addPlayerResult.message);
 
                 // Show players amount and time until next game after failed player addition
                 await displayPlayersAmount();
@@ -77,7 +93,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
                 // Start periodic player count update
                 startPlayerAmountRefresh();
             } else {
-                showModal(result.message);
+                showModal(addPlayerResult.message);
 
                 // Show players amount and time until next game after successful player addition
                 await displayPlayersAmount();
@@ -143,7 +159,7 @@ async function displayTimeUntilNextGameSession() {
         return;
     } else {
         try {
-            const response = await fetch('/game/get-next-game-session-date');
+            const response = await fetch('/game/get-next-game-session');
             const data = await response.json();
             
             if (!data.success) {

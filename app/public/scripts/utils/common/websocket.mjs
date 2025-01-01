@@ -1,12 +1,12 @@
 import { scrollToBottom } from '../../modules/common_index.mjs';
 
 
-export function initializeWebSocket(validatedTelegramID, service) {
+export function initializeWebSocket(validatedTelegramID, service, sessionID) {
     if (!validatedTelegramID) {
         console.error('Telegram ID not found, unable to initialize WebSocket');
         return;
     } else {
-        const socket = new WebSocket(`wss://${window.location.host}?telegramID=${validatedTelegramID}&service=${service}`);
+        const socket = new WebSocket(`wss://${window.location.host}?telegram_id=${validatedTelegramID}&service=${service}&session_id=${sessionID}`);
 
         socket.addEventListener('open', () => {
             console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}`);

@@ -12,8 +12,9 @@ export function setupWebsocketServer(server) {
 
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
-        const telegramID = String(params.get('telegramID'));
+        const telegramID = String(params.get('telegram_id'));
         const service = String(params.get('service'));
+        const sessionID = String(params.get('session_id'));
 
         if (!telegramID) {
             ws.close(1008, 'Missing Telegram ID');
@@ -66,10 +67,9 @@ export function setupWebsocketServer(server) {
         ws.on('close', (code, reason) => {
             try {
                 if (service === 'game') {
-                    const deletePlayerResult = deletePlayer(db, telegramID);
+                    const deletePlayerResult = deletePlayer(db, telegramID, sessionID);
 
-                    console.log(`Delete player result: ${deletePlayerResult.success},
-                                ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
+                    console.log(`Delete player result: ${deletePlayerResult.success}, ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
                 };
 
                 users.delete(telegramID);

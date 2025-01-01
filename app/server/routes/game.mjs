@@ -15,23 +15,17 @@ const gameRouter = express.Router();
 
 gameRouter.post('/add-player', (req, res) => {
     try {
-        if (!req.body.player_telegram_id || !req.body.player_name) {
+        if (!req.body.player_telegram_id || !req.body.player_name || !req.body.session_id) {
             res.status(400).json({
                 success: false,
                 message: 'Недостаточно данных для добавления игрока в список игроков.'
             });
             return;
         };
-
-        const nextGameSession = getNextGameSession(db);
-        if (!nextGameSession.success) {
-            res.status(nextGameSession.status).json(nextGameSession);
-            return;
-        };
         
         const postPlayerResult = postPlayer(
             db,
-            nextGameSession.nextGameSession.id,
+            req.body.session_id,
             req.body.player_telegram_id,
             req.body.player_name
         );
@@ -62,16 +56,16 @@ gameRouter.get('/get-players-amount', (req, res) => {
 });
 
 
-gameRouter.get('/get-next-game-session-date', (req, res) => {
+gameRouter.get('/get-next-game-session', (req, res) => {
     try {
         const getNextGameSessionResult = getNextGameSession(db);
 
         res.status(getNextGameSessionResult.status).json(getNextGameSessionResult);
     } catch (error) {
-        console.error(`Error in /game/get-next-game-session-date: ${error}`);
+        console.error(`Error in /game/get-next-game-session: ${error}`);
         res.status(500).json({
             success: false,
-            message: 'Произошла ошибка при получении даты следующего игрового сеанса.'
+            message: 'Произошла ошибка при получении игрового сеанса.'
         });
     };
 });

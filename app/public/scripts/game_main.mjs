@@ -221,6 +221,8 @@ function displayGameCountdownTimer(countdownTimer) {
         gameCountdown.classList.add('game-data-timer');
         display.appendChild(gameCountdown);
 
+        let timerInterval;
+
         const startCountdownTimer = () => {
             const now = new Date();
             const timeDifference = countdownTimer - now;
@@ -239,6 +241,6 @@ function displayGameCountdownTimer(countdownTimer) {
         
         // Start timer
         startCountdownTimer(); // Initial update
-        const timerInterval = setInterval(startCountdownTimer, 1000);
+        timerInterval = setInterval(startCountdownTimer, 1000);
     };
 };

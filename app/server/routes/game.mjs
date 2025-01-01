@@ -28,10 +28,10 @@ gameRouter.post('/add-player', (req, res) => {
             res.status(nextGameSession.status).json(nextGameSession);
             return;
         };
-
+        
         const postPlayerResult = postPlayer(
             db,
-            nextGameSession.session_id,
+            nextGameSession.nextGameSession.id,
             req.body.player_telegram_id,
             req.body.player_name
         );

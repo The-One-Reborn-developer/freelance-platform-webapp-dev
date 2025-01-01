@@ -9,4 +9,4 @@ sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml down -v
 sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml build
 
 # Bring up the prod environment
-sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml up
+sudo docker-compose -p prod -f dockerfiles/docker-compose-prod.yml up -d

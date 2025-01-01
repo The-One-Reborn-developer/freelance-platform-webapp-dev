@@ -175,7 +175,9 @@ async function displayTimeUntilNextGameSession() {
                 gameDataTimer.className = 'game-data';
                 gameDataTimer.classList.add('game-data-timer');
                 display.appendChild(gameDataTimer);
-            }
+            };
+
+            let timerInterval;
 
             const updateTimer = () => {
                 const now = new Date();
@@ -196,7 +198,7 @@ async function displayTimeUntilNextGameSession() {
             
             // Start timer
             updateTimer(); // Initial update
-            const timerInterval = setInterval(updateTimer, 1000);
+            timerInterval = setInterval(updateTimer, 1000);
         } catch (error) {
             console.error(`Error in displayTimeUntilNextGameSession: ${error}`);
             showModal('Произошла ошибка при отображении таймера до следующего игрового сеанса.');

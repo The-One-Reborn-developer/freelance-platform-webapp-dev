@@ -84,24 +84,16 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
             
             if (!addPlayerResult.success) {
                 console.error('Failed to add player to the player count server-side');
-                showModal(addPlayerResult.message);
-
-                // Show players amount and time until next game after failed player addition
-                await displayPlayersAmount(nextGameSessionID);
-                await displayTimeUntilNextGameSession();
-                
-                // Start periodic player count update
-                startPlayerAmountRefresh();
-            } else {
-                showModal(addPlayerResult.message);
-
-                // Show players amount and time until next game after successful player addition
-                await displayPlayersAmount(nextGameSessionID);
-                await displayTimeUntilNextGameSession();
-                
-                // Start periodic player count update
-                startPlayerAmountRefresh();
             };
+            
+            showModal(addPlayerResult.message);
+
+            // Show players amount and time until next game after failed player addition
+            await displayPlayersAmount(nextGameSessionID);
+            await displayTimeUntilNextGameSession();
+            
+            // Start periodic player count update
+            startPlayerAmountRefresh(nextGameSessionID);
         } catch (error) {
             console.error(`Error in setupInterface: ${error}`);
             return;
@@ -110,9 +102,9 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
 };
 
 
-function startPlayerAmountRefresh() {
+function startPlayerAmountRefresh(nextGameSessionID) {
     setInterval(() => {
-        displayPlayersAmount();
+        displayPlayersAmount(nextGameSessionID);
     }, PLAYER_AMOUNT_REFRESH_INTERVAL);
 };
 

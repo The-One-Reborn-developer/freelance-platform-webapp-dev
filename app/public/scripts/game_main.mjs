@@ -214,33 +214,12 @@ function displayGameCountdownTimer(countdownTimer) {
         console.error('Display element not found');
         return;
     } else {
-        display.innerHTML = '';
+        display.removeChild(document.getElementById('game-data-timer'));
         const gameCountdown = document.createElement('div');
         gameCountdown.id = 'game-countdown';
         gameCountdown.className = 'game-data';
         gameCountdown.classList.add('game-data-timer');
+        gameCountdown.innerHTML = `Игра начнется через ${countdownTimer} минут.`;
         display.appendChild(gameCountdown);
-
-        let timerInterval;
-
-        const startCountdownTimer = () => {
-            const now = new Date();
-            const timeDifference = countdownTimer - now;
-            const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-            if (timeDifference <= 0) {
-                clearInterval(timerInterval);
-                // TODO: Add game start logic
-                return;
-            };
-            
-            gameCountdown.innerHTML = `Игра начнётся через: ${hours} ч. ${minutes} мин. ${seconds} с.<br>Не закрывайте приложение!`;
-        };
-        
-        // Start timer
-        startCountdownTimer(); // Initial update
-        timerInterval = setInterval(startCountdownTimer, 1000);
     };
 };

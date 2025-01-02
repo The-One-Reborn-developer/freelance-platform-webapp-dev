@@ -151,22 +151,35 @@ async function displayTimeUntilNextGameSession() {
         return;
     } else {
         try {
-            const response = await fetch('/game/get-next-game-session');
-            const data = await response.json();
+            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+            const nextGameSessionData = await getNextGameSessionResponse.json();
             
             if (!data.success) {
                 console.error('Failed to get time until next game session');
                 showModal(data.message);
                 return;
-            }
+            };
+            const nextGameSessionCountDownTimer = nextGameSessionData.nextGameSession.countdown_timer;
+            const nextGameSessionID = nextGameSessionData.nextGameSession.id;
 
-            const nextGameSessionCountDownTimer = data.nextGameSession.countdown_timer;
-            const nextGameSessionDate = new Date(data.nextGameSession.session_date);
-            if (isNaN(nextGameSessionDate.getTime())) {
-                console.error('Failed to parse next game session date');
-                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
-                return;                
-            }
+            const getGameSessionByIDResponse = await fetch(`/game/get-game-session-by-id?session_id=${nextGameSessionID}`);
+            const getGameSessionByIDData = await getGameSessionByIDResponse.json();
+
+            if (!getGameSessionByIDData.success) {
+                console.error('Failed to get game session by ID');
+                showModal(getGameSessionByIDData.message);
+                return;
+            };
+
+            const endTime = new Date(getGameSessionByIDData.end_time);
+            const totalRemainingTime = endTime - new Date();
+
+            if (totalRemainingTime <= 0) {
+                displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                return;
+            };
+
+            let remainingTime = totalRemainingTime;
 
             let gameDataTimer = document.getElementById('game-data-timer');
             if (!gameDataTimer) {
@@ -180,20 +193,19 @@ async function displayTimeUntilNextGameSession() {
             let timerInterval;
 
             const updateTimer = () => {
-                const now = new Date();
-                const timeDifference = nextGameSessionDate - now;
-
-                if (timeDifference <= 0) {
+                if (remainingTime <= 0) {
                     displayGameCountdownTimer(nextGameSessionCountDownTimer);
                     clearInterval(timerInterval);
                     return;
                 };
 
-                const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
 
                 gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
+
+                remainingTime -= 1000;
             };
             
             // Start timer

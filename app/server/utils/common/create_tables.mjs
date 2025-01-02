@@ -172,11 +172,33 @@ export function createGamesTable(db) {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 game_started BOOLEAN DEFAULT FALSE,
                 game_finished BOOLEAN DEFAULT FALSE,
-                winner_telegram_id BIGINT
+                round_number INTEGER DEFAULT 1,
+                winner_telegram_id BIGINT,
+                session_id INTEGER NOT NULL,
+                FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
             );
         `);
         console.log('Games table check or creation executed successfully');
     } catch (error) {
         console.error('Error creating games table:', error);
+    };
+};
+
+
+export function createGamePairsTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS game_pairs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                game_id INTEGER NOT NULL,
+                player1_telegram_id BIGINT NOT NULL,
+                player2_telegram_id BIGINT NOT NULL,
+                winner_telegram_id BIGINT,
+                FOREIGN KEY(winner_telegram_id) REFERENCES session_players(player_telegram_id),
+                FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE
+            );
+        `);
+    } catch (error) {
+        console.error('Error creating game pairs table:', error);
     };
 };

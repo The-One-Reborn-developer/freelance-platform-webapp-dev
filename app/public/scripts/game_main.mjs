@@ -151,24 +151,43 @@ async function displayTimeUntilNextGameSession() {
         return;
     } else {
         try {
-            const response = await fetch('/game/get-next-game-session');
-            const data = await response.json();
+            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+            const nextGameSessionData = await getNextGameSessionResponse.json();
             
-            if (!data.success) {
+            if (!nextGameSessionData.success) {
                 console.error('Failed to get time until next game session');
-                showModal(data.message);
+                showModal(nextGameSessionData.message);
                 return;
-            }
+            };
 
-            const nextGameSessionCountDownTimer = data.nextGameSession.countdown_timer;
-            const nextGameSessionDate = new Date(data.nextGameSession.session_date);
-            if (isNaN(nextGameSessionDate.getTime())) {
-                console.error('Failed to parse next game session date');
-                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
-                return;                
-            }
+            const nextGameSessionID = nextGameSessionData.nextGameSession.id;
+
+            const getGameSessionTimerResponse = await fetch(`/game/get-game-session-timer?session_id=${nextGameSessionID}`);
+            const getGameSessionTimerData = await getGameSessionTimerResponse.json();
+
+            if (!getGameSessionTimerData.success) {
+                console.error('Failed to get game session by ID');
+                showModal(getGameSessionTimerData.message);
+                return;
+            };
+
+            console.log(getGameSessionTimerData);
+            let {
+                remaining_time: remainingTime,
+                start_time: sessionDate,
+                end_time: endTime
+            } = getGameSessionTimerData;
+
+            const now = new Date();
+            console.log(nextGameSessionData);
+            console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
+            console.log(`Next game session start time: ${sessionDate}`);
+            console.log(`Next game session end time: ${endTime}`);
+            console.log(`Current time: ${now}`);
+            console.log(`Remaining time: ${remainingTime}`);
 
             let gameDataTimer = document.getElementById('game-data-timer');
+
             if (!gameDataTimer) {
                 gameDataTimer = document.createElement('div');
                 gameDataTimer.id = 'game-data-timer';
@@ -177,23 +196,26 @@ async function displayTimeUntilNextGameSession() {
                 display.appendChild(gameDataTimer);
             };
 
+            if (remainingTime <= 0) {
+                gameDataTimer.innerHTML = 'Игра начинается!';
+                return;
+            };
+
             let timerInterval;
-
             const updateTimer = () => {
-                const now = new Date();
-                const timeDifference = nextGameSessionDate - now;
-
-                if (timeDifference <= 0) {
-                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                if (remainingTime <= 0) {
+                    displayGameCountdownTimer(nextGameSessionData.nextGameSession.countdown_timer);
                     clearInterval(timerInterval);
                     return;
                 };
 
-                const hours = Math.floor(timeDifference / (1000 * 60 * 60));
-                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = Math.floor(remainingTime % 60);
 
                 gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
+
+                remainingTime--;
             };
             
             // Start timer

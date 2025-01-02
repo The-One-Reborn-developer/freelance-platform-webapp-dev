@@ -10,7 +10,6 @@ import {
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
-
 const commonRouter = express.Router();
 
 

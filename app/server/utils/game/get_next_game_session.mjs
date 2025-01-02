@@ -1,4 +1,6 @@
-export function getNextGameSession(db) {
+export function getNextGameSession(
+    db
+) {
     const getNextGameSession = db.prepare(
         'SELECT * FROM game_sessions WHERE finished = FALSE ORDER BY session_date ASC LIMIT 1'
     );

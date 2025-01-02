@@ -173,7 +173,7 @@ async function displayTimeUntilNextGameSession() {
 
             console.log(getGameSessionTimerData);
             // logs: {success: true, session_id: 11, remaining_time: 10880, start_time: '02.01.2025, 18:07:00', end_time: '2025-02-01T18:08:00.000Z'}
-            const {
+            let {
                 remaining_time: remainingTime,
                 start_time: sessionDate,
                 end_time: endTime

@@ -181,7 +181,7 @@ async function displayTimeUntilNextGameSession() {
             const now = new Date();
             const formattedStartTime = new Date(sessionDate);
             const formattedEndTime = new Date(endTime);
-            
+
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
             console.log(`Next game session start time: ${formattedStartTime}`);
             console.log(`Next game session end time: ${formattedEndTime}`);

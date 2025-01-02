@@ -87,8 +87,8 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             return res.status(gameSession.status).json(gameSession);
         };
 
-        const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
-        const sessionDate = new Date(gameSession.gameSession.session_date)
+        const now = new Date();
+        const sessionDate = new Date(gameSession.gameSession.session_date);
         const countdownMinutes = gameSession.gameSession.countdown_timer || 0;
         
         const endTime = new Date(sessionDate);
@@ -98,10 +98,10 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
         let status = 'finished';
 
         if (!gameSession.gameSession.started) {
-            remainingTime = Math.max((new Date(sessionDate) - new Date(now)) / 1000, 0);
+            remainingTime = Math.max((sessionDate - now) / 1000, 0);
             status = 'pending';
         } else if (gameSession.gameSession.started && !gameSession.gameSession.finished) {
-            remainingTime = Math.max((endTime - new Date(now)) / 1000, 0);
+            remainingTime = Math.max((endTime - now) / 1000, 0);
             status = 'ongoing';
         };
 

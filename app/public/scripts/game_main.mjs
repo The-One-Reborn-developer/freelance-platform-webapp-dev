@@ -154,9 +154,9 @@ async function displayTimeUntilNextGameSession() {
             const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
             const nextGameSessionData = await getNextGameSessionResponse.json();
             
-            if (!data.success) {
+            if (!nextGameSessionData.success) {
                 console.error('Failed to get time until next game session');
-                showModal(data.message);
+                showModal(nextGameSessionData.message);
                 return;
             };
             const nextGameSessionCountDownTimer = nextGameSessionData.nextGameSession.countdown_timer;

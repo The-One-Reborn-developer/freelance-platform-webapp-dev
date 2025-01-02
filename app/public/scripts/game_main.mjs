@@ -172,18 +172,19 @@ async function displayTimeUntilNextGameSession() {
             };
 
             console.log(getGameSessionTimerData);
-
-            const endTime = new Date(getGameSessionTimerData.end_time);
+            // logs: {success: true, session_id: 11, remaining_time: 10880, start_time: '02.01.2025, 18:07:00', end_time: '2025-02-01T18:08:00.000Z'}
+            const {
+                remaining_time: remainingTime,
+                start_time: sessionDate,
+                end_time: endTime
+            } = getGameSessionTimerData;
 
             const now = new Date();
-            const totalRemainingTime = endTime - now;
 
-            if (totalRemainingTime <= 0) {
+            if (remainingTime <= 0) {
                 gameDataTimer.innerHTML = 'Игра начинается!';
                 return;
             };
-
-            let remainingTime = totalRemainingTime;
 
             let gameDataTimer = document.getElementById('game-data-timer');
             if (!gameDataTimer) {
@@ -198,7 +199,6 @@ async function displayTimeUntilNextGameSession() {
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
             console.log(`Next game session end time: ${endTime}`);
             console.log(`Current time: ${now}`);
-            console.log(`Total remaining time: ${totalRemainingTime}`);
             console.log(`Remaining time: ${remainingTime}`);
             const updateTimer = () => {
                 if (remainingTime <= 0) {

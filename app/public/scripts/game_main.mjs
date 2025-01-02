@@ -204,7 +204,7 @@ async function displayTimeUntilNextGameSession() {
             let timerInterval;
             const updateTimer = () => {
                 if (remainingTime <= 0) {
-                    displayGameCountdownTimer(nextGameSessionData.countdown_timer);
+                    displayGameCountdownTimer(nextGameSessionData.nextGameSession.countdown_timer);
                     clearInterval(timerInterval);
                     return;
                 };

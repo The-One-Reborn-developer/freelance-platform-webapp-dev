@@ -1,5 +1,6 @@
 import express from 'express';
 import Database from 'better-sqlite3';
+import { utcToZoneTime } from 'date-fns-tz';
 
 import {
     postPlayer,
@@ -10,7 +11,6 @@ import {
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
-const { utcToZoneTime } = require('date-fns-tz');
 const MOSCOW_TIMEZONE = 'Europe/Moscow';
 const gameRouter = express.Router();
 

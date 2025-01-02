@@ -88,7 +88,7 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
         };
 
         const now = new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
-        const sessionDate = new Date(gameSession.gameSession.session_date).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+        const sessionDate = new Date(gameSession.gameSession.session_date)
         const countdownMinutes = gameSession.gameSession.countdown_timer || 0;
         
         const endTime = new Date(sessionDate);
@@ -109,8 +109,8 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             'success': true,
             'session_id': gameSession.gameSession.id,
             'remaining_time': Math.round(remainingTime),
-            'start_time': sessionDate,
-            'end_time': endTime,
+            'start_time': sessionDate.toISOString(),
+            'end_time': endTime.toISOString(),
         })
     } catch (error) {
         console.error(`Error in /game/get-game-session-by-id: ${error}`);

@@ -174,12 +174,13 @@ async function displayTimeUntilNextGameSession() {
             console.log(getGameSessionTimerData);
             // logs: {success: true, session_id: 11, remaining_time: 10880, start_time: '02.01.2025, 18:07:00', end_time: '2025-02-01T18:08:00.000Z'}
             let {
-                remaining_time: remainingTime,
+                remaining_time: totalRemainingTime,
                 start_time: sessionDate,
                 end_time: endTime
             } = getGameSessionTimerData;
 
             const now = new Date();
+            const formattedEndTime = new Date(endTime);
 
             if (remainingTime <= 0) {
                 gameDataTimer.innerHTML = 'Игра начинается!';
@@ -197,7 +198,7 @@ async function displayTimeUntilNextGameSession() {
 
             let timerInterval;
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
-            console.log(`Next game session end time: ${endTime}`);
+            console.log(`Next game session end time: ${formattedEndTime}`);
             console.log(`Current time: ${now}`);
             console.log(`Remaining time: ${remainingTime}`);
             const updateTimer = () => {

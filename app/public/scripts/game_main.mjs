@@ -162,16 +162,16 @@ async function displayTimeUntilNextGameSession() {
 
             const nextGameSessionID = nextGameSessionData.nextGameSession.id;
 
-            const getGameSessionByIDResponse = await fetch(`/game/get-game-session-timer?session_id=${nextGameSessionID}`);
-            const getGameSessionByIDData = await getGameSessionByIDResponse.json();
+            const getGameSessionTimerResponse = await fetch(`/game/get-game-session-timer?session_id=${nextGameSessionID}`);
+            const getGameSessionTimerData = await getGameSessionTimerResponse.json();
 
-            if (!getGameSessionByIDData.success) {
+            if (!getGameSessionTimerData.success) {
                 console.error('Failed to get game session by ID');
-                showModal(getGameSessionByIDData.message);
+                showModal(getGameSessionTimerData.message);
                 return;
             };
 
-            const endTime = new Date(getGameSessionByIDData.end_time).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
+            const endTime = new Date(getGameSessionTimerData.end_time).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
 
             const now = new Date();
             const totalRemainingTime = endTime - now;
@@ -193,14 +193,14 @@ async function displayTimeUntilNextGameSession() {
             };
 
             let timerInterval;
-            console.log(`Next game session timer: ${getGameSessionByIDData.countdown_timer} minutes`);
+            console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
             console.log(`Next game session end time: ${endTime}`);
             console.log(`Current time: ${now}`);
             console.log(`Total remaining time: ${totalRemainingTime}`);
             console.log(`Remaining time: ${remainingTime}`);
             const updateTimer = () => {
                 if (remainingTime <= 0) {
-                    displayGameCountdownTimer(getGameSessionByIDData.countdown_timer);
+                    displayGameCountdownTimer(nextGameSessionData.countdown_timer);
                     clearInterval(timerInterval);
                     return;
                 };

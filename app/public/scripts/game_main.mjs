@@ -182,7 +182,7 @@ async function displayTimeUntilNextGameSession() {
             const formattedStartTime = new Date(sessionDate);
             const formattedEndTime = new Date(endTime);
 
-            const gameDataTimer = document.getElementById('game-data-timer');
+            let gameDataTimer = document.getElementById('game-data-timer');
 
             if (!gameDataTimer) {
                 gameDataTimer = document.createElement('div');

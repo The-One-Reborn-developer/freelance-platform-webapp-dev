@@ -96,7 +96,11 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
 
         let remainingTime = 0;
         let status = 'finished';
-
+        console.log('now:', now.toISOString());
+        console.log('sessionDate:', sessionDate.toISOString());
+        console.log('countdownMinutes:', countdownMinutes);
+        console.log('endTime:', endTime.toISOString());
+        console.log('calculated remainingTime (in seconds):', Math.max((endTime - now) / 1000, 0));
         if (!gameSession.gameSession.started) {
             remainingTime = Math.max((sessionDate - now) / 1000, 0);
             status = 'pending';

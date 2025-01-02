@@ -171,7 +171,7 @@ async function displayTimeUntilNextGameSession() {
                 return;
             };
 
-            const endTime = new Date(getGameSessionByIDData.end_time);
+            const endTime = new Date(getGameSessionByIDData.end_time).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' });
 
             const now = new Date();
             const totalRemainingTime = endTime - now;

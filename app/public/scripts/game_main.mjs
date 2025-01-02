@@ -8,6 +8,8 @@ import {
     showModal
 } from "./modules/game_index.mjs";
 
+import { toZonedTime } from "date-fns-tz";
+
 
 const PLAYER_AMOUNT_REFRESH_INTERVAL = 10000; // 10 seconds
 
@@ -178,9 +180,9 @@ async function displayTimeUntilNextGameSession() {
                 end_time: endTime
             } = getGameSessionTimerData;
 
-            const now = new Date();
-            const formattedStartTime = new Date(sessionDate);
-            const formattedEndTime = new Date(endTime);
+            const now = toZonedTime(new Date(), MOSCOW_TIMEZONE);
+            const formattedStartTime = toZonedTime(new Date(sessionDate), MOSCOW_TIMEZONE);
+            const formattedEndTime = toZonedTime(new Date(endTime), MOSCOW_TIMEZONE);
 
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
             console.log(`Next game session start time: ${formattedStartTime}`);
@@ -211,13 +213,13 @@ async function displayTimeUntilNextGameSession() {
                     return;
                 };
 
-                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                const hours = Math.floor(remainingTime / 3600);
+                const minutes = Math.floor((remainingTime % 3600) / 60);
+                const seconds = Math.floor(remainingTime % 60);
 
                 gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
 
-                remainingTime -= 1000;
+                remainingTime--;
             };
             
             // Start timer

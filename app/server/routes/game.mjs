@@ -1,6 +1,6 @@
 import express from 'express';
 import Database from 'better-sqlite3';
-import { utcToZoneTime } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 
 import {
     postPlayer,
@@ -89,7 +89,7 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             return res.status(gameSession.status).json(gameSession);
         };
 
-        const now = utcToZoneTime(new Date(), MOSCOW_TIMEZONE);
+        const now = utcToZonedTime(new Date(), MOSCOW_TIMEZONE);
         const sessionDate = new Date(gameSession.gameSession.session_date);
         const countdownMinutes = gameSession.gameSession.countdown_timer || 0;
         

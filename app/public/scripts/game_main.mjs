@@ -159,10 +159,10 @@ async function displayTimeUntilNextGameSession() {
                 showModal(nextGameSessionData.message);
                 return;
             };
-            const nextGameSessionCountDownTimer = nextGameSessionData.nextGameSession.countdown_timer;
+
             const nextGameSessionID = nextGameSessionData.nextGameSession.id;
 
-            const getGameSessionByIDResponse = await fetch(`/game/get-game-session-by-id?session_id=${nextGameSessionID}`);
+            const getGameSessionByIDResponse = await fetch(`/game/get-game-session-timer?session_id=${nextGameSessionID}`);
             const getGameSessionByIDData = await getGameSessionByIDResponse.json();
 
             if (!getGameSessionByIDData.success) {
@@ -172,10 +172,12 @@ async function displayTimeUntilNextGameSession() {
             };
 
             const endTime = new Date(getGameSessionByIDData.end_time);
-            const totalRemainingTime = endTime - new Date();
+
+            const now = new Date();
+            const totalRemainingTime = endTime - now;
 
             if (totalRemainingTime <= 0) {
-                displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                gameDataTimer.innerHTML = 'Игра начинается!';
                 return;
             };
 
@@ -191,10 +193,14 @@ async function displayTimeUntilNextGameSession() {
             };
 
             let timerInterval;
-
+            console.log(`Next game session timer: ${getGameSessionByIDData.countdown_timer} minutes`);
+            console.log(`Next game session end time: ${endTime}`);
+            console.log(`Current time: ${now}`);
+            console.log(`Total remaining time: ${totalRemainingTime}`);
+            console.log(`Remaining time: ${remainingTime}`);
             const updateTimer = () => {
                 if (remainingTime <= 0) {
-                    displayGameCountdownTimer(nextGameSessionCountDownTimer);
+                    displayGameCountdownTimer(getGameSessionByIDData.countdown_timer);
                     clearInterval(timerInterval);
                     return;
                 };

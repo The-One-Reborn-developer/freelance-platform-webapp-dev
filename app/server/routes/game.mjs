@@ -71,7 +71,7 @@ gameRouter.get('/get-next-game-session', (req, res) => {
 });
 
 
-gameRouter.get('/get-game-session-by-id', (req, res) => {
+gameRouter.get('/get-game-session-timer', (req, res) => {
     try {
         const sessionID = parseInt(req.query.session_id, 10);
         if (isNaN(sessionID)) {

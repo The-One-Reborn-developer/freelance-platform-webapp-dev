@@ -87,7 +87,9 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             return res.status(gameSession.status).json(gameSession);
         };
 
-        const now = new Date();
+        const now = new Date(
+            new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Moscow' }).format()
+        );
         const sessionDate = new Date(gameSession.gameSession.session_date);
         const countdownMinutes = gameSession.gameSession.countdown_timer || 0;
         

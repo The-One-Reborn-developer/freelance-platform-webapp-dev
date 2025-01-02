@@ -182,7 +182,7 @@ async function displayTimeUntilNextGameSession() {
             const now = new Date();
             const formattedEndTime = new Date(endTime);
 
-            if (remainingTime <= 0) {
+            if (totalRemainingTime <= 0) {
                 gameDataTimer.innerHTML = 'Игра начинается!';
                 return;
             };
@@ -200,21 +200,21 @@ async function displayTimeUntilNextGameSession() {
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
             console.log(`Next game session end time: ${formattedEndTime}`);
             console.log(`Current time: ${now}`);
-            console.log(`Remaining time: ${remainingTime}`);
+            console.log(`Remaining time: ${totalRemainingTime}`);
             const updateTimer = () => {
-                if (remainingTime <= 0) {
+                if (totalRemainingTime <= 0) {
                     displayGameCountdownTimer(nextGameSessionData.countdown_timer);
                     clearInterval(timerInterval);
                     return;
                 };
 
-                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
-                const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+                const hours = Math.floor(totalRemainingTime / (1000 * 60 * 60));
+                const minutes = Math.floor((totalRemainingTime % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((totalRemainingTime % (1000 * 60)) / 1000);
 
                 gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
 
-                remainingTime -= 1000;
+                totalRemainingTime -= 1000;
             };
             
             // Start timer

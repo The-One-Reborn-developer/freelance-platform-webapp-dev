@@ -8,8 +8,6 @@ import {
     showModal
 } from "./modules/game_index.mjs";
 
-import { toZonedTime } from "date-fns-tz";
-
 
 const PLAYER_AMOUNT_REFRESH_INTERVAL = 10000; // 10 seconds
 
@@ -180,13 +178,11 @@ async function displayTimeUntilNextGameSession() {
                 end_time: endTime
             } = getGameSessionTimerData;
 
-            const now = toZonedTime(new Date(), MOSCOW_TIMEZONE);
-            const formattedStartTime = toZonedTime(new Date(sessionDate), MOSCOW_TIMEZONE);
-            const formattedEndTime = toZonedTime(new Date(endTime), MOSCOW_TIMEZONE);
-
+            const now = new Date();
+            console.log(nextGameSessionData);
             console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
-            console.log(`Next game session start time: ${formattedStartTime}`);
-            console.log(`Next game session end time: ${formattedEndTime}`);
+            console.log(`Next game session start time: ${sessionDate}`);
+            console.log(`Next game session end time: ${endTime}`);
             console.log(`Current time: ${now}`);
             console.log(`Remaining time: ${remainingTime}`);
 

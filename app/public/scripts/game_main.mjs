@@ -184,17 +184,17 @@ async function displayTimeUntilNextGameSession() {
 
             const gameDataTimer = document.getElementById('game-data-timer');
 
-            if (totalRemainingTime <= 0) {
-                gameDataTimer.innerHTML = 'Игра начинается!';
-                return;
-            };
-
             if (!gameDataTimer) {
                 gameDataTimer = document.createElement('div');
                 gameDataTimer.id = 'game-data-timer';
                 gameDataTimer.className = 'game-data';
                 gameDataTimer.classList.add('game-data-timer');
                 display.appendChild(gameDataTimer);
+            };
+
+            if (totalRemainingTime <= 0) {
+                gameDataTimer.innerHTML = 'Игра начинается!';
+                return;
             };
 
             let timerInterval;

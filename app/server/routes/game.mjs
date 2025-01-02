@@ -110,7 +110,7 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             'session_id': gameSession.gameSession.id,
             'remaining_time': Math.round(remainingTime),
             'start_time': sessionDate,
-            'end_time': endTime.toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }),
+            'end_time': endTime,
         })
     } catch (error) {
         console.error(`Error in /game/get-game-session-by-id: ${error}`);

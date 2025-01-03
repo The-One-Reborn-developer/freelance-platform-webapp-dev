@@ -193,9 +193,7 @@ export function createGamePairsTable(db) {
                 game_id INTEGER NOT NULL,
                 player1_telegram_id BIGINT NOT NULL,
                 player2_telegram_id BIGINT NOT NULL,
-                winner_telegram_id BIGINT,
-                FOREIGN KEY(winner_telegram_id) REFERENCES session_players(player_telegram_id),
-                FOREIGN KEY(game_id) REFERENCES games(id) ON DELETE CASCADE
+                winner_telegram_id BIGINT
             );
         `);
     } catch (error) {

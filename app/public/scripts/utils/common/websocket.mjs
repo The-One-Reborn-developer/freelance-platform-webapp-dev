@@ -77,7 +77,7 @@ function constructWebSocketURL(telegramID, service, sessionID) {
 
 
 function handlePlayersAmountUpdate(messageData) {
-    const playersAmountElement = document.getElementById('game-data-players-amount');
+    let playersAmountElement = document.getElementById('game-data-players-amount');
 
     if (!playersAmountElement) {
         console.warn('Players amount element not found, creating a new one');

@@ -9,9 +9,6 @@ import {
 } from "./modules/game_index.mjs";
 
 
-const PLAYER_AMOUNT_REFRESH_INTERVAL = 10000; // 10 seconds
-
-
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
@@ -83,53 +80,8 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         };
         
         showModal(addPlayerResult.message);
-
-        // Start periodic player count update
-        //startPlayerAmountRefresh(nextGameSessionID);
     } catch (error) {
         console.error(`Error in setupInterface: ${error}`);
         return;
-    };
-};
-
-
-function startPlayerAmountRefresh(nextGameSessionID) {
-    setInterval(() => {
-        displayPlayersAmount(nextGameSessionID);
-    }, PLAYER_AMOUNT_REFRESH_INTERVAL);
-};
-
-
-async function displayPlayersAmount(nextGameSessionID) {
-    const display = document.getElementById('display');
-    if (!display) {
-        console.error('Display element not found');
-        return;
-    } else {
-        try {
-            const response = await fetch(`/game/get-players-amount?session_id=${nextGameSessionID}`);
-            const data = await response.json();
-
-            if (!data.success) {
-                console.error('Failed to get players amount');
-                showModal(data.message);
-                return;
-            };
-
-            let gameDataPlayersAmount = document.getElementById('game-data-players-amount');
-            if (!gameDataPlayersAmount) {
-                gameDataPlayersAmount = document.createElement('div');
-                gameDataPlayersAmount.id = 'game-data-players-amount';
-                gameDataPlayersAmount.className = 'game-data';
-                gameDataPlayersAmount.classList.add('game-data-players-amount');
-                gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
-                display.appendChild(gameDataPlayersAmount);
-            };
-
-            gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
-        } catch (error) {
-            console.error(`Error in displayPlayersAmount: ${error}`);
-            return;
-        };
     };
 };

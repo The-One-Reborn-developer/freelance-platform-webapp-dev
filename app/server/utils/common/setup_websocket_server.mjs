@@ -33,7 +33,7 @@ export function setupWebsocketServer(server) {
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            handleDisconnection(users, telegramID, sessionID, service, code, reason);
+            handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason);
         });
 
         // Handle errors
@@ -171,7 +171,7 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
 };
 
 
-function handleDisconnection(users, telegramID, sessionID, service, code, reason) {
+function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason) {
     users.delete(telegramID);
     try {
         if (service === 'game' && sessionID) {

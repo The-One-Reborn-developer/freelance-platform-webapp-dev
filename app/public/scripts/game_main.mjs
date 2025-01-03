@@ -47,57 +47,48 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
     if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;
-    } else {
-        try {
-            headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
+    };
+        
+    try {
+        headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
-            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
-            const getNextGameSessionResult = await getNextGameSessionResponse.json();
+        const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+        const getNextGameSessionResult = await getNextGameSessionResponse.json();
 
-            if (!getNextGameSessionResult.success) {
-                console.error('Failed to get next game session');
-                showModal(getNextGameSessionResult.message);
-            };
-            const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
-            const nextGameSessionDate = new Date(getNextGameSessionResult.nextGameSession.session_date);
-            if (isNaN(nextGameSessionDate.getTime())) {
-                console.error('Failed to parse next game session date');
-                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
-                return;                
-            };
-
-            initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
-
-            // Add player to the player count server-side
-            const addPlayerResponse = await fetch('/game/add-player', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    player_telegram_id: validatedTelegramID,
-                    player_name: name,
-                    session_id: getNextGameSessionResult.nextGameSession.id
-                })
-            })
-            const addPlayerResult = await addPlayerResponse.json();
-            
-            if (!addPlayerResult.success) {
-                console.error('Failed to add player to the player count server-side');
-            };
-            
-            showModal(addPlayerResult.message);
-
-            // Show players amount and time until next game after failed player addition
-            await displayPlayersAmount(nextGameSessionID);
-            await displayTimeUntilNextGameSession();
-            
-            // Start periodic player count update
-            startPlayerAmountRefresh(nextGameSessionID);
-        } catch (error) {
-            console.error(`Error in setupInterface: ${error}`);
-            return;
+        if (!getNextGameSessionResult.success) {
+            console.error('Failed to get next game session');
+            showModal(getNextGameSessionResult.message);
         };
+
+        const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
+
+        initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
+
+        // Add player to the player count server-side
+        const addPlayerResponse = await fetch('/game/add-player', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                player_telegram_id: validatedTelegramID,
+                player_name: name,
+                session_id: nextGameSessionID
+            })
+        });
+        const addPlayerResult = await addPlayerResponse.json();
+        
+        if (!addPlayerResult.success) {
+            console.error('Failed to add player to the player count server-side');
+        };
+        
+        showModal(addPlayerResult.message);
+        
+        // Start periodic player count update
+        startPlayerAmountRefresh(nextGameSessionID);
+    } catch (error) {
+        console.error(`Error in setupInterface: ${error}`);
+        return;
     };
 };
 

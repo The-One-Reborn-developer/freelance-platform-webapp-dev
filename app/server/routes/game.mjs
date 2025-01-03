@@ -117,7 +117,7 @@ gameRouter.get('/get-game-session-timer', (req, res) => {
             'remaining_time': Math.round(remainingTime),
             'start_time': sessionDate.toISOString(),
             'end_time': endTime.toISOString(),
-        })
+        });
     } catch (error) {
         console.error(`Error in /game/get-game-session-by-id: ${error}`);
         res.status(500).json({

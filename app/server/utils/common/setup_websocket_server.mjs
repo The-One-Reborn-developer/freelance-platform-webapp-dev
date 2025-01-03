@@ -1,9 +1,13 @@
 import { WebSocketServer } from "ws";
 import Database from 'better-sqlite3';
-
-import { deletePlayer, getGameSessionByID } from "../../modules/game_index.mjs";
 import { toZonedTime } from 'date-fns-tz';
 import { WebSocket } from "ws";
+
+import { 
+    deletePlayer,
+    getGameSessionByID,
+    getPlayersAmount
+} from "../../modules/game_index.mjs";
 
 const db = new Database('./app/database.db', { verbose: console.log });
 const MOSCOW_TIMEZONE = 'Europe/Moscow';

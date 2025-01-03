@@ -41,7 +41,7 @@ export function deletePlayer(
     } else {
         return {
             success: true,
-            status: 201,
+            status: 200,
             message: `Player with Telegram ID ${playerTelegramID} successfully deleted`
         };
     };

@@ -123,6 +123,15 @@ function handleConnection(ws, telegramID, service, sessionID) {
 
         users.set(telegramID, ws);
         console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
+
+        if (service === 'game' && sessionID) {
+            if (!gameSessionSubscriptions.has(sessionID)) {
+                gameSessionSubscriptions.set(sessionID, new Set());
+            };
+
+            gameSessionSubscriptions.get(sessionID).add(telegramID);
+            console.log(`User ${telegramID} subscribed to game session ${sessionID}`);
+        }
     } catch (error) {
         console.error(`Error establishing WebSocket connection for Telegram ID ${telegramID}: ${error}`);
     };
@@ -164,20 +173,19 @@ function handleDisconnection(telegramID, sessionID, service, code, reason) {
     users.delete(telegramID);
     try {
         if (service === 'game' && sessionID) {
-            const subscribers = gameSessionSubscriptions.get(sessionID) || new Set();
-            subscribers.delete(telegramID);
-
-            if (subscribers.size === 0) {
-                gameSessionSubscriptions.delete(sessionID);
-            } else {
-                gameSessionSubscriptions.set(sessionID, subscribers);
+            const subscribers = gameSessionSubscriptions.get(sessionID);
+            
+            if (subscribers) {
+                subscribers.delete(telegramID);
+            
+                if (subscribers.size === 0) {
+                    gameSessionSubscriptions.delete(sessionID);
+                };
             };
 
             const deletePlayerResult = deletePlayer(db, telegramID, sessionID);
-
             console.log(`Delete player result: ${deletePlayerResult.success}, ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
         };
-
         console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);

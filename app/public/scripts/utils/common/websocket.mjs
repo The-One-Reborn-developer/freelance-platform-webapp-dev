@@ -74,7 +74,7 @@ function constructWebSocketURL(telegramID, service, sessionID) {
 
 
 function handleTimerUpdate(messageData) {
-    let timerElement = document.getElementById('timer');
+    let timerElement = document.getElementById('game-data-timer');
 
     if (!timerElement) {
         console.warn('Timer element not found, creating a new one');

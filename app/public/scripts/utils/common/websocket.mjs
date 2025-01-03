@@ -80,7 +80,8 @@ function handleTimerUpdate(messageData) {
         console.warn('Timer element not found, creating a new one');
         timerElement = document.createElement('div');
         timerElement.id = 'game-data-timer';
-        timerElement.className = 'game-data-timer';
+        timerElement.className = 'game-data';
+        timerElement.classList.add('game-data-timer');
         document.getElementById('display').appendChild(timerElement);
     };
 

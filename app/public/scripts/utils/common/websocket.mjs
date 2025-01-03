@@ -39,6 +39,9 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                 const messageData = JSON.parse(event.data);
 
                 switch (messageData.type) {
+                    case 'players_amount_update':
+                        handlePlayersAmountUpdate(messageData);
+                        break;
                     case 'timer_update':
                         handleTimerUpdate(messageData);
                         break;
@@ -70,6 +73,22 @@ function constructWebSocketURL(telegramID, service, sessionID) {
     };
 
     return `wss://${window.location.host}?${queryParameters.toString()}`;
+};
+
+
+function handlePlayersAmountUpdate(messageData) {
+    const playersAmountElement = document.getElementById('game-data-players-amount');
+
+    if (!playersAmountElement) {
+        console.warn('Players amount element not found, creating a new one');
+        playersAmountElement = document.createElement('div');
+        playersAmountElement.id = 'game-data-players-amount';
+        playersAmountElement.className = 'game-data';
+        playersAmountElement.classList.add('game-data-players-amount');
+        document.getElementById('display').appendChild(playersAmountElement);
+    };
+
+    playersAmountElement.textContent = `Количество игроков: ${messageData.players_amount}`;
 };
 
 

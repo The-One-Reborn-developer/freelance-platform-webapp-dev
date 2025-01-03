@@ -85,7 +85,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         showModal(addPlayerResult.message);
 
         // Start periodic player count update
-        startPlayerAmountRefresh(nextGameSessionID);
+        //startPlayerAmountRefresh(nextGameSessionID);
     } catch (error) {
         console.error(`Error in setupInterface: ${error}`);
         return;

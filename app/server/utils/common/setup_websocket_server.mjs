@@ -16,6 +16,7 @@ export function setupWebsocketServer(server) {
     const gameSessionSubscriptions = new Map();
 
     setInterval(() => broadcastTimers(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
+    setInterval(() => broadcastPlayersAmount(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
 
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
@@ -53,6 +54,37 @@ export function setupWebsocketServer(server) {
     };
 
     return { sendMessageToUser };
+};
+
+
+function broadcastPlayersAmount(db, gameSessionSubscriptions, users) {
+    for (const [sessionID, subscribers] of gameSessionSubscriptions.entries()) {
+        if (!subscribers || subscribers.size === 0) {
+            gameSessionSubscriptions.delete(sessionID);
+            continue;
+        };
+
+        const getPlayersAmountResult = getPlayersAmount(db, sessionID);
+
+        if (!getPlayersAmountResult.success) {
+            console.error(`Error getting players amount for game session ${sessionID}: ${getPlayersAmountResult.message}`);
+            continue;
+        };
+
+        const playersAmount = getPlayersAmountResult.playersAmount;
+
+        for (const telegramID of subscribers) {
+            const user = users.get(telegramID);
+            if (user && user.readyState === WebSocket.OPEN) {
+                user.send(JSON.stringify({
+                    success: true,
+                    type: 'players_amount_update',
+                    session_id: sessionID,
+                    players_amount: playersAmount
+                }));
+            };
+        };
+    };
 };
 
 

@@ -92,6 +92,7 @@ function broadcastTimers(db, gameSessionSubscriptions, users) {
             if (user && user.readyState === WebSocket.OPEN) {
                 user.send(JSON.stringify({
                     success: true,
+                    type: 'timer_update',
                     status: status,
                     session_id: sessionID,
                     remaining_time: Math.round(remainingTime),

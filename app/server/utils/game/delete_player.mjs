@@ -7,7 +7,7 @@ export function deletePlayer(
         return {
             success: false,
             status: 400,
-            message: 'Telegram ID игрока не предоставлен'
+            message: 'Player Telegram ID not provided'
         };
     };
     
@@ -19,7 +19,7 @@ export function deletePlayer(
         return {
             success: false,
             status: 404,
-            message: `Игрок с Telegram ID ${playerTelegramID} не найден`
+            message: `Player with Telegram ID ${playerTelegramID} not found`
         };
     };
 
@@ -36,13 +36,13 @@ export function deletePlayer(
         return {
             success: false,
             status: 500,
-            message: `Ошибка при удалении игрока с Telegram ID ${playerTelegramID}`
+            message: `Error deleting player with Telegram ID ${playerTelegramID}`
         };
     } else {
         return {
             success: true,
-            status: 201,
-            message: `Игрок с Telegram ID ${playerTelegramID} успешно удален`
+            status: 200,
+            message: `Player with Telegram ID ${playerTelegramID} successfully deleted`
         };
     };
 };

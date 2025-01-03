@@ -9,9 +9,6 @@ import {
 } from "./modules/game_index.mjs";
 
 
-const PLAYER_AMOUNT_REFRESH_INTERVAL = 10000; // 10 seconds
-
-
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
     
@@ -47,225 +44,44 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
     if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;
-    } else {
-        try {
-            headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
+    };
+        
+    try {
+        headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
-            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
-            const getNextGameSessionResult = await getNextGameSessionResponse.json();
+        const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
+        const getNextGameSessionResult = await getNextGameSessionResponse.json();
 
-            if (!getNextGameSessionResult.success) {
-                console.error('Failed to get next game session');
-                showModal(getNextGameSessionResult.message);
-            };
-            const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
-            const nextGameSessionDate = new Date(getNextGameSessionResult.nextGameSession.session_date);
-            if (isNaN(nextGameSessionDate.getTime())) {
-                console.error('Failed to parse next game session date');
-                showModal('Произошла ошибка при получении даты следующего игрового сеанса.');
-                return;                
-            };
+        if (!getNextGameSessionResult.success) {
+            console.error('Failed to get next game session');
+            showModal(getNextGameSessionResult.message);
+        };
 
-            initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
+        const nextGameSessionID = getNextGameSessionResult.nextGameSession.id;
 
-            // Add player to the player count server-side
-            const addPlayerResponse = await fetch('/game/add-player', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    player_telegram_id: validatedTelegramID,
-                    player_name: name,
-                    session_id: getNextGameSessionResult.nextGameSession.id
-                })
+        initializeWebSocket(validatedTelegramID, 'game', nextGameSessionID);
+
+        // Add player to the player count server-side
+        const addPlayerResponse = await fetch('/game/add-player', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                player_telegram_id: validatedTelegramID,
+                player_name: name,
+                session_id: nextGameSessionID
             })
-            const addPlayerResult = await addPlayerResponse.json();
-            
-            if (!addPlayerResult.success) {
-                console.error('Failed to add player to the player count server-side');
-            };
-            
-            showModal(addPlayerResult.message);
-
-            // Show players amount and time until next game after failed player addition
-            await displayPlayersAmount(nextGameSessionID);
-            await displayTimeUntilNextGameSession();
-            
-            // Start periodic player count update
-            startPlayerAmountRefresh(nextGameSessionID);
-        } catch (error) {
-            console.error(`Error in setupInterface: ${error}`);
-            return;
+        });
+        const addPlayerResult = await addPlayerResponse.json();
+        
+        if (!addPlayerResult.success) {
+            console.error('Failed to add player to the player count server-side');
         };
-    };
-};
-
-
-function startPlayerAmountRefresh(nextGameSessionID) {
-    setInterval(() => {
-        displayPlayersAmount(nextGameSessionID);
-    }, PLAYER_AMOUNT_REFRESH_INTERVAL);
-};
-
-
-async function displayPlayersAmount(nextGameSessionID) {
-    const display = document.getElementById('display');
-    if (!display) {
-        console.error('Display element not found');
+        
+        showModal(addPlayerResult.message);
+    } catch (error) {
+        console.error(`Error in setupInterface: ${error}`);
         return;
-    } else {
-        try {
-            const response = await fetch(`/game/get-players-amount?session_id=${nextGameSessionID}`);
-            const data = await response.json();
-
-            if (!data.success) {
-                console.error('Failed to get players amount');
-                showModal(data.message);
-                return;
-            };
-
-            let gameDataPlayersAmount = document.getElementById('game-data-players-amount');
-            if (!gameDataPlayersAmount) {
-                gameDataPlayersAmount = document.createElement('div');
-                gameDataPlayersAmount.id = 'game-data-players-amount';
-                gameDataPlayersAmount.className = 'game-data';
-                gameDataPlayersAmount.classList.add('game-data-players-amount');
-                gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
-                display.appendChild(gameDataPlayersAmount);
-            };
-
-            gameDataPlayersAmount.textContent = `Количество игроков: ${data.playersAmount}`;
-        } catch (error) {
-            console.error(`Error in displayPlayersAmount: ${error}`);
-            return;
-        };
-    };
-};
-
-
-async function displayTimeUntilNextGameSession() {
-    const display = document.getElementById('display');
-    if (!display) {
-        console.error('Display element not found');
-        return;
-    } else {
-        try {
-            const getNextGameSessionResponse = await fetch('/game/get-next-game-session');
-            const nextGameSessionData = await getNextGameSessionResponse.json();
-            
-            if (!nextGameSessionData.success) {
-                console.error('Failed to get time until next game session');
-                showModal(nextGameSessionData.message);
-                return;
-            };
-
-            const nextGameSessionID = nextGameSessionData.nextGameSession.id;
-
-            const getGameSessionTimerResponse = await fetch(`/game/get-game-session-timer?session_id=${nextGameSessionID}`);
-            const getGameSessionTimerData = await getGameSessionTimerResponse.json();
-
-            if (!getGameSessionTimerData.success) {
-                console.error('Failed to get game session by ID');
-                showModal(getGameSessionTimerData.message);
-                return;
-            };
-
-            console.log(getGameSessionTimerData);
-            let {
-                remaining_time: remainingTime,
-                start_time: sessionDate,
-                end_time: endTime
-            } = getGameSessionTimerData;
-
-            const now = new Date();
-            console.log(nextGameSessionData);
-            console.log(`Next game session timer: ${nextGameSessionData.countdown_timer} minutes`);
-            console.log(`Next game session start time: ${sessionDate}`);
-            console.log(`Next game session end time: ${endTime}`);
-            console.log(`Current time: ${now}`);
-            console.log(`Remaining time: ${remainingTime}`);
-
-            let gameDataTimer = document.getElementById('game-data-timer');
-
-            if (!gameDataTimer) {
-                gameDataTimer = document.createElement('div');
-                gameDataTimer.id = 'game-data-timer';
-                gameDataTimer.className = 'game-data';
-                gameDataTimer.classList.add('game-data-timer');
-                display.appendChild(gameDataTimer);
-            };
-
-            if (remainingTime <= 0) {
-                gameDataTimer.innerHTML = 'Игра начинается!';
-                return;
-            };
-
-            let timerInterval;
-            const updateTimer = () => {
-                if (remainingTime <= 0) {
-                    displayGameCountdownTimer(nextGameSessionData.nextGameSession.countdown_timer);
-                    clearInterval(timerInterval);
-                    return;
-                };
-
-                const hours = Math.floor(remainingTime / 3600);
-                const minutes = Math.floor((remainingTime % 3600) / 60);
-                const seconds = Math.floor(remainingTime % 60);
-
-                gameDataTimer.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
-
-                remainingTime--;
-            };
-            
-            // Start timer
-            updateTimer(); // Initial update
-            timerInterval = setInterval(updateTimer, 1000);
-        } catch (error) {
-            console.error(`Error in displayTimeUntilNextGameSession: ${error}`);
-            showModal('Произошла ошибка при отображении таймера до следующего игрового сеанса.');
-            return;
-        };
-    };
-};
-
-
-function displayGameCountdownTimer(countdownTimerMinutes) {
-    const display = document.getElementById('display');
-    if (!display) {
-        console.error('Display element not found');
-        return;
-    } else {
-        const existingTimer = document.getElementById('game-data-timer');
-        if (existingTimer) {
-            display.removeChild(existingTimer);
-        };
-
-        const gameCountdown = document.createElement('div');
-        gameCountdown.id = 'game-countdown';
-        gameCountdown.className = 'game-data';
-        gameCountdown.classList.add('game-data-timer');
-        display.appendChild(gameCountdown);
-
-        const endTime = new Date().getTime() + (countdownTimerMinutes * 60 * 1000);
-
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const timeRemaining = endTime - now;
-
-            if (timeRemaining <= 0) {
-                clearInterval(timerInterval);
-                gameCountdown.innerHTML = 'Игра начинается!';
-                return;
-            };
-
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-            gameCountdown.innerHTML = `Игра начинается через ${minutes} мин. ${seconds} с.`;
-        };
-
-        updateCountdown();
-        const timerInterval = setInterval(updateCountdown, 1000);
     };
 };

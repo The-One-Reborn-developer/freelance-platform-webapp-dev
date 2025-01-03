@@ -23,7 +23,7 @@ export function setupWebsocketServer(server) {
         const sessionID = service === 'game' ? String(params.get('session_id')) : null;
         
         // Establish connection
-        handleConnection(ws, telegramID, service, sessionID);
+        handleConnection(ws, users, telegramID, service, sessionID);
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
@@ -32,7 +32,7 @@ export function setupWebsocketServer(server) {
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            handleDisconnection(telegramID, sessionID, service, code, reason);
+            handleDisconnection(users, telegramID, sessionID, service, code, reason);
         });
 
         // Handle errors
@@ -103,7 +103,7 @@ function broadcastTimers(db, gameSessionSubscriptions, users) {
 };
 
 
-function handleConnection(ws, telegramID, service, sessionID) {
+function handleConnection(ws, users, telegramID, service, sessionID) {
     try {
         if (!telegramID || !service) {
             ws.close(1008, `Missing ${telegramID ? 'service' : 'telegram_id'} parameter`);
@@ -169,7 +169,7 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
 };
 
 
-function handleDisconnection(telegramID, sessionID, service, code, reason) {
+function handleDisconnection(users, telegramID, sessionID, service, code, reason) {
     users.delete(telegramID);
     try {
         if (service === 'game' && sessionID) {

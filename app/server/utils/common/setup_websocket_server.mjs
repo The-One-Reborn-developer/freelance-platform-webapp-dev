@@ -178,27 +178,51 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
 
 function handleIncomingMessage(ws, telegramID, rawMessage) {
     try {
-        const {
-            recipient_telegram_id: recipientTelegramID,
-            sender_name: senderName,
-            message: messageContent,
-            attachment
-        } = JSON.parse(rawMessage);
-        const recipientTelegramIDString = String(recipientTelegramID);
+        const messageData = JSON.parse(rawMessage);
 
-        if (!recipientTelegramID || !String(senderName).trim() || !String(messageContent).trim()) {
-            ws.send(JSON.stringify({ error: 'Invalid message format' }));
-            return;
-        } else {
-            sendMessageToUser(
-                recipientTelegramIDString,
-                {
-                    sender_telegram_id: telegramID,
-                    sender_name: senderName,
-                    message: messageContent,
-                    attachment
-                }
-            );
+        if (messageData.type === 'game_session_start') {
+            const { session_id, session_date } = messageData;
+
+            if (!session_id || !session_date) {
+                ws.send(JSON.stringify({ error: 'Invalid game session start format' }));
+                return;
+            };
+
+            console.log(`Game session started for session ID: ${session_id}. Date: ${session_date}`);
+
+            // Broadcast the game start to all subscribers of the given session
+            const subscribers = gameSessionSubscriptions.get(session_id);
+            if (subscribers) {
+                subscribers.forEach(subscriberTelegramID => {
+                    const subscriber = users.get(subscriberTelegramID);
+                    if (subscriber && subscriber.readyState === WebSocket.OPEN) {
+                        subscriber.send(JSON.stringify({
+                            success: true,
+                            type: 'game_session_start',
+                            session_id: session_id,
+                        }));
+                    };
+                })
+            }
+        } else if (messageData.type === 'message') {
+            const recipientTelegramIDString = String(messageData.recipient_telegram_id);
+            const senderName = String(messageData.sender_name);
+            const messageContent = String(messageData.message);
+            const attachment = messageData.attachment;
+            if (!recipientTelegramIDString || !senderName || !messageContent) {
+                ws.send(JSON.stringify({ error: 'Invalid message format' }));
+                return;
+            } else {
+                sendMessageToUser(
+                    recipientTelegramIDString,
+                    {
+                        sender_telegram_id: telegramID,
+                        sender_name: senderName,
+                        message: messageContent,
+                        attachment
+                    }
+                );
+            };
         };
     } catch (error) {
         console.error(`Error parsing message from Telegram ID ${telegramID}: ${error}`);

@@ -9,6 +9,7 @@ services:
       - /data/servisplus_dev/database.db:/app/app/database.db
       - /data/servisplus_dev/chats:/app/app/chats
       - /data/servisplus_dev/photos:/app/app/photos
+      - /data/servisplus_dev/videos:/app/app/videos
 
   nginx:
     image: nginx:1.24.0

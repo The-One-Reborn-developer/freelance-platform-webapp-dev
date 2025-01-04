@@ -200,3 +200,20 @@ export function createGamePairsTable(db) {
         console.error('Error creating game pairs table:', error);
     };
 };
+
+
+export function createGameSessionsAdsTable(db) {
+    try {
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS game_sessions_ads (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id INTEGER NOT NULL,
+                material_path TEXT NOT NULL,
+                FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
+            );
+        `);
+        console.log('Game sessions ads table check or creation executed successfully');
+    } catch (error) {
+        console.error('Error creating game sessions ads table:', error);
+    };
+};

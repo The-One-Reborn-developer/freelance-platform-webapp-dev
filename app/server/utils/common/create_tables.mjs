@@ -202,10 +202,10 @@ export function createGamePairsTable(db) {
 };
 
 
-export function createGameSessionsAdsTable(db) {
+export function createGameSessionAdsTable(db) {
     try {
         db.exec(`
-            CREATE TABLE IF NOT EXISTS game_sessions_ads (
+            CREATE TABLE IF NOT EXISTS game_session_ads (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_id INTEGER NOT NULL,
                 material_path TEXT NOT NULL,

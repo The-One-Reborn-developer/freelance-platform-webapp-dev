@@ -24,7 +24,8 @@ import {
     createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable,
-    createGamePairsTable
+    createGamePairsTable,
+    createGameSessionAdsTable
 } from "./modules/common_index.mjs";
 
 
@@ -68,6 +69,7 @@ createGameSessionsTable(db);
 createSessionPlayersTable(db);
 createGamesTable(db);
 createGamePairsTable(db);
+createGameSessionAdsTable(db);
 
 
 app.get('/', (req, res) => {

@@ -208,7 +208,7 @@ export function createGameSessionAdsTable(db) {
             CREATE TABLE IF NOT EXISTS game_session_ads (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 session_id INTEGER NOT NULL,
-                material_path TEXT NOT NULL,
+                ad_path TEXT NOT NULL,
                 FOREIGN KEY(session_id) REFERENCES game_sessions(id) ON DELETE CASCADE
             );
         `);

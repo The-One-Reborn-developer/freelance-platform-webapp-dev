@@ -9,7 +9,8 @@ import {
     createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable,
-    createGamePairsTable
+    createGamePairsTable,
+    createGameSessionAdsTable
 } from "../utils/common/create_tables.mjs";
 import { getUser } from "../utils/common/get_user.mjs";
 import { postUser } from "../utils/common/post_user.mjs";
@@ -31,5 +32,6 @@ export {
     createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable,
-    createGamePairsTable
+    createGamePairsTable,
+    createGameSessionAdsTable
 };

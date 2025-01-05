@@ -28,7 +28,7 @@ export function setupWebsocketServer(server) {
         const telegramID = String(params.get('telegram_id'));
         const service = String(params.get('service'));
         const type = String(params.get('type'));
-        const sessionID = service === 'game' ? String(params.get('session_id')) : null;
+        const sessionID = String(params.get('session_id'));
 
         // Establish connection
         handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID);
@@ -181,7 +181,7 @@ function broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID) 
 function handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID) {
     try {
         if (!service) {
-            ws.close(1008, `Missing ${telegramID ? 'service' : 'telegram_id'} parameter`);
+            ws.close(1008, `Missing service parameter`);
             return;
         };
 

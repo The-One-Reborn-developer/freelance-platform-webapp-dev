@@ -202,9 +202,12 @@ function handleGameSessionAd(messageData) {
 
 
 function startGame() {
-    gameDataPlayersAmount = document.getElementById('game-data-players-amount');
-    gameDataTimer = document.getElementById('game-data-timer');
+    display = document.getElementById('display');
 
-    gameDataPlayersAmount.style.display = 'none';
-    gameDataTimer.style.display = 'none';
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    };
+
+    display.innerHTML = '';
 };

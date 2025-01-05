@@ -31,7 +31,7 @@ export function setupWebsocketServer(server) {
             type = String(params.get('type'));
         };
         const sessionID = service === 'game' ? String(params.get('session_id')) : null;
-        console.log(`Service: ${service}. Type: ${type}. Session ID: ${sessionID}`);
+
         // Establish connection
         handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID);
 
@@ -151,7 +151,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             ws.close(1008, `Missing ${telegramID ? 'service' : 'telegram_id'} parameter`);
             return;
         };
-        console.log(`Received WebSocket connection for Telegram ID: ${telegramID}. Service: ${service}. Type: ${type}`);
+
         if (users.has(telegramID)) {
             const existingSocket = users.get(telegramID);
 
@@ -166,7 +166,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
         users.set(telegramID, ws);
 
         if (service ==='runner') {
-            console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Type: ${type}`);
+            console.log(`WebSocket connection established for ${service} service. Type: ${type}`);
         }
 
         if (service === 'game' && sessionID) {

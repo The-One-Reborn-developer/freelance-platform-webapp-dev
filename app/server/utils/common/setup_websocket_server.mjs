@@ -151,7 +151,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             ws.close(1008, `Missing ${telegramID ? 'service' : 'telegram_id'} parameter`);
             return;
         };
-
+        console.log(`Received WebSocket connection for Telegram ID: ${telegramID}. Service: ${service}. Type: ${type}`);
         if (users.has(telegramID)) {
             const existingSocket = users.get(telegramID);
 

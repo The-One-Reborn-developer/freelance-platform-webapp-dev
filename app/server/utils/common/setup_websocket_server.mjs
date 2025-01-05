@@ -31,9 +31,9 @@ export function setupWebsocketServer(server) {
             type = String(params.get('type'));
         };
         const sessionID = service === 'game' ? String(params.get('session_id')) : null;
-        console.log(`params: ${params.toString()}`);
+        console.log(`Service: ${service}. Type: ${type}. Session ID: ${sessionID}`);
         // Establish connection
-        handleConnection(ws, users, gameSessionSubscriptions, telegramID, type, service, sessionID);
+        handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID);
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {

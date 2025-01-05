@@ -193,4 +193,18 @@ function handleGameSessionAd(messageData) {
     sourceElement.src = videoPath;
     videoElement.load();
     videoElement.play();
+
+    videoElement.onended = () => {
+        videoContainer.style.visibility = 'hidden';
+        startGame();
+    };
+};
+
+
+function startGame() {
+    gameDataPlayersAmount = document.getElementById('game-data-players-amount');
+    gameDataTimer = document.getElementById('game-data-timer');
+
+    gameDataPlayersAmount.style.display = 'none';
+    gameDataTimer.style.display = 'none';
 };

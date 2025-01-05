@@ -189,7 +189,11 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             console.log(`WebSocket connection established for ${service} service. Type: ${type}`);
 
             if (type === 'game-session-start') {
-                broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID);
+                if (!sessionID) {
+                    console.error(`Attempt to start game session without session ID`);
+                } else {
+                    broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID);
+                };
             };
 
             return;
@@ -222,7 +226,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
         };
     } catch (error) {
-        console.error(`Error establishing WebSocket connection for Telegram ID ${telegramID}: ${error}`);
+        console.error(`Error establishing WebSocket connection.`);
     };
 };
 

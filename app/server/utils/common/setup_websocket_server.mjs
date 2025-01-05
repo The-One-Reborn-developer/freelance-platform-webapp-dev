@@ -6,7 +6,8 @@ import { WebSocket } from "ws";
 import { 
     deletePlayer,
     getGameSessionByID,
-    getPlayersAmount
+    getPlayersAmount,
+    getGameSessionAd
 } from "../../modules/game_index.mjs";
 
 const db = new Database('./app/database.db', { verbose: console.log });
@@ -142,6 +143,41 @@ function broadcastTimers(db, gameSessionSubscriptions, users) {
 };
 
 
+function broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID) {
+    try {
+        const gameSessionAd = getGameSessionAd(db, sessionID);
+
+        if (!gameSessionAd.success) {
+            console.error(`Error getting game session ad for session ID ${sessionID}: ${gameSessionAd.message}`);
+            return;
+        };
+
+        const sessionSuscribers = gameSessionSubscriptions.get(sessionID);
+        if (!sessionSuscribers || sessionSuscribers.size === 0) {
+            console.warn(`No subscribers for session ID ${sessionID}`);
+            return;
+        };
+        
+        for (const telegramID of sessionSuscribers) {
+            const user = users.get(telegramID);
+            if (user && user.readyState === WebSocket.OPEN) {
+                user.send(JSON.stringify({
+                    success: true,
+                    type: 'game_session_ad',
+                    ad: gameSessionAd.ad
+                }));
+            };
+        };
+
+        console.log(`Game session ad for session ID ${sessionID} broadcasted successfully`);
+        return true;
+    } catch (error) {
+        console.error(`Error broadcasting game session ad for session ${sessionID}: ${error}`);
+        return false;
+    };
+};
+
+
 function handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID) {
     try {
         if (!service) {
@@ -151,6 +187,11 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
 
         if (service ==='runner') {
             console.log(`WebSocket connection established for ${service} service. Type: ${type}`);
+
+            if (type === 'game-session-start') {
+                broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID);
+            };
+
             return;
         };
 

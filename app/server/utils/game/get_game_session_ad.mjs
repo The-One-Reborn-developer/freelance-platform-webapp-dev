@@ -3,7 +3,7 @@ export function getGameSessionAd(
     sessionID
 ) {
     const getGameSessionAdResult = db.prepare(
-        'SELECT * FROM game_session_ads WHERE id = ?'
+        'SELECT * FROM game_session_ads WHERE session_id = ?'
     ).get(sessionID);
 
     if (!getGameSessionAdResult) {

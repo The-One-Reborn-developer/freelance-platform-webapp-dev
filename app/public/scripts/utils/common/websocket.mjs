@@ -48,6 +48,9 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                     case 'message_update':
                         handleMessageUpdate(messageData);
                         break;
+                    case 'game_session_ad':
+                        handleGameSessionAd(messageData);
+                        break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
                         break;
@@ -174,4 +177,20 @@ function handleMessageUpdate(messageData) {
 
     const display = document.getElementById('display');
     scrollToBottom(display);
+};
+
+
+function handleGameSessionAd(messageData) {
+    console.log(`Received game session ad`);
+    console.log(messageData);
+    const videoPath = messageData.ad.ad_path;
+
+    const videoContainer = document.getElementById('video-container');
+    videoContainer.style.visibility = 'visible';
+
+    const videoElement = document.getElementById('ad-video');
+    const sourceElement = document.getElementById('ad-video-source');
+    sourceElement.src = videoPath;
+    videoElement.load();
+    videoElement.play();
 };

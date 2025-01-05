@@ -24,7 +24,8 @@ import {
     createGameSessionsTable,
     createSessionPlayersTable,
     createGamesTable,
-    createGamePairsTable
+    createGamePairsTable,
+    createGameSessionAdsTable
 } from "./modules/common_index.mjs";
 
 
@@ -42,10 +43,15 @@ app.use(express.static('app/public'));
 const servicesAttachmentPath = path.join(__dirname, '../chats/services/attachments');
 const deliveryAttachmentPath = path.join(__dirname, '../chats/delivery/attachments');
 const courierPhotos = path.join(__dirname, '../photos/courier_photos');
+const adVideos = path.join(__dirname, '../videos/ads');
 app.use('/services/attachments', express.static(servicesAttachmentPath));
 app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
 app.use('/photos/courier_photos', express.static(courierPhotos));
-console.log(`Serving attachments from ${servicesAttachmentPath}, ${deliveryAttachmentPath}`);
+app.use('/videos/ads', express.static(adVideos));
+console.log(`Services attachments path: ${servicesAttachmentPath}`);
+console.log(`Delivery attachments path: ${deliveryAttachmentPath}`);
+console.log(`Courier photos path: ${courierPhotos}`);
+console.log(`Ad videos path: ${adVideos}`);
 console.log('Express app created');
 
 app.use('/common', commonRouter);
@@ -66,6 +72,7 @@ createGameSessionsTable(db);
 createSessionPlayersTable(db);
 createGamesTable(db);
 createGamePairsTable(db);
+createGameSessionAdsTable(db);
 
 
 app.get('/', (req, res) => {

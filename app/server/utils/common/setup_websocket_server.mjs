@@ -6,7 +6,8 @@ import { WebSocket } from "ws";
 import { 
     deletePlayer,
     getGameSessionByID,
-    getPlayersAmount
+    getPlayersAmount,
+    getGameSessionAd
 } from "../../modules/game_index.mjs";
 
 const db = new Database('./app/database.db', { verbose: console.log });
@@ -26,10 +27,11 @@ export function setupWebsocketServer(server) {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegram_id'));
         const service = String(params.get('service'));
-        const sessionID = service === 'game' ? String(params.get('session_id')) : null;
-        
+        const type = String(params.get('type'));
+        const sessionID = String(params.get('session_id'));
+
         // Establish connection
-        handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, sessionID);
+        handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID);
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
@@ -141,10 +143,64 @@ function broadcastTimers(db, gameSessionSubscriptions, users) {
 };
 
 
-function handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, sessionID) {
+function broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID) {
     try {
-        if (!telegramID || !service) {
-            ws.close(1008, `Missing ${telegramID ? 'service' : 'telegram_id'} parameter`);
+        const gameSessionAd = getGameSessionAd(db, sessionID);
+
+        if (!gameSessionAd.success) {
+            console.error(`Error getting game session ad for session ID ${sessionID}: ${gameSessionAd.message}`);
+            return;
+        };
+
+        const sessionSuscribers = gameSessionSubscriptions.get(sessionID);
+        if (!sessionSuscribers || sessionSuscribers.size === 0) {
+            console.warn(`No subscribers for session ID ${sessionID}`);
+            return;
+        };
+        
+        for (const telegramID of sessionSuscribers) {
+            const user = users.get(telegramID);
+            if (user && user.readyState === WebSocket.OPEN) {
+                user.send(JSON.stringify({
+                    success: true,
+                    type: 'game_session_ad',
+                    ad: gameSessionAd.ad
+                }));
+            };
+        };
+
+        console.log(`Game session ad for session ID ${sessionID} broadcasted successfully`);
+        return true;
+    } catch (error) {
+        console.error(`Error broadcasting game session ad for session ${sessionID}: ${error}`);
+        return false;
+    };
+};
+
+
+function handleConnection(ws, users, gameSessionSubscriptions, telegramID, service, type, sessionID) {
+    try {
+        if (!service) {
+            ws.close(1008, `Missing service parameter`);
+            return;
+        };
+
+        if (service ==='runner') {
+            console.log(`WebSocket connection established for ${service} service. Type: ${type}`);
+
+            if (type === 'game-session-start') {
+                if (!sessionID) {
+                    console.error(`Attempt to start game session without session ID`);
+                } else {
+                    broadcastGameSessionAd(db, gameSessionSubscriptions, users, sessionID);
+                };
+            };
+
+            return;
+        };
+
+        if (!telegramID) {
+            ws.close(1008, 'Missing telegram_id parameter');
             return;
         };
 
@@ -160,7 +216,6 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
         };
 
         users.set(telegramID, ws);
-        console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
 
         if (service === 'game' && sessionID) {
             if (!gameSessionSubscriptions.has(sessionID)) {
@@ -168,37 +223,61 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             };
 
             gameSessionSubscriptions.get(sessionID).add(telegramID);
-            console.log(`User ${telegramID} subscribed to game session ${sessionID}`);
-        }
+            console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
+        };
     } catch (error) {
-        console.error(`Error establishing WebSocket connection for Telegram ID ${telegramID}: ${error}`);
+        console.error(`Error establishing WebSocket connection.`);
     };
 };
 
 
 function handleIncomingMessage(ws, telegramID, rawMessage) {
     try {
-        const {
-            recipient_telegram_id: recipientTelegramID,
-            sender_name: senderName,
-            message: messageContent,
-            attachment
-        } = JSON.parse(rawMessage);
-        const recipientTelegramIDString = String(recipientTelegramID);
+        const messageData = JSON.parse(rawMessage);
 
-        if (!recipientTelegramID || !String(senderName).trim() || !String(messageContent).trim()) {
-            ws.send(JSON.stringify({ error: 'Invalid message format' }));
-            return;
-        } else {
-            sendMessageToUser(
-                recipientTelegramIDString,
-                {
-                    sender_telegram_id: telegramID,
-                    sender_name: senderName,
-                    message: messageContent,
-                    attachment
-                }
-            );
+        if (messageData.type === 'game_session_start') {
+            const { session_id, session_date } = messageData;
+
+            if (!session_id || !session_date) {
+                ws.send(JSON.stringify({ error: 'Invalid game session start format' }));
+                return;
+            };
+
+            console.log(`Game session started for session ID: ${session_id}. Date: ${session_date}`);
+
+            // Broadcast the game start to all subscribers of the given session
+            const subscribers = gameSessionSubscriptions.get(session_id);
+            if (subscribers) {
+                subscribers.forEach(subscriberTelegramID => {
+                    const subscriber = users.get(subscriberTelegramID);
+                    if (subscriber && subscriber.readyState === WebSocket.OPEN) {
+                        subscriber.send(JSON.stringify({
+                            success: true,
+                            type: 'game_session_start',
+                            session_id: session_id,
+                        }));
+                    };
+                })
+            }
+        } else if (messageData.type === 'message') {
+            const recipientTelegramIDString = String(messageData.recipient_telegram_id);
+            const senderName = String(messageData.sender_name);
+            const messageContent = String(messageData.message);
+            const attachment = messageData.attachment;
+            if (!recipientTelegramIDString || !senderName || !messageContent) {
+                ws.send(JSON.stringify({ error: 'Invalid message format' }));
+                return;
+            } else {
+                sendMessageToUser(
+                    recipientTelegramIDString,
+                    {
+                        sender_telegram_id: telegramID,
+                        sender_name: senderName,
+                        message: messageContent,
+                        attachment
+                    }
+                );
+            };
         };
     } catch (error) {
         console.error(`Error parsing message from Telegram ID ${telegramID}: ${error}`);

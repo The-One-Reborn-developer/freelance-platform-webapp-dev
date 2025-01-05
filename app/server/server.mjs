@@ -48,7 +48,7 @@ app.use('/services/attachments', express.static(servicesAttachmentPath));
 app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
 app.use('/photos/courier_photos', express.static(courierPhotos));
 app.use('/videos/ads', express.static(adVideos));
-console.log(`Serving attachments from ${servicesAttachmentPath}, ${deliveryAttachmentPath}`);
+console.log(`Serving attachments from ${servicesAttachmentPath}, ${deliveryAttachmentPath}, ${courierPhotos}, ${adVideos}`);
 console.log('Express app created');
 
 app.use('/common', commonRouter);

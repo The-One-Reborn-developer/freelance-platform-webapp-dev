@@ -183,4 +183,10 @@ function handleMessageUpdate(messageData) {
 function handleGameSessionAd(messageData) {
     console.log(`Received game session ad`);
     console.log(messageData);
+    const videoPath = messageData.ad;
+    const videoElement = document.getElementById('ad-video');
+    const sourceElement = document.getElementById('ad-video-source');
+    sourceElement.src = videoPath;
+    videoElement.load();
+    videoElement.play();
 };

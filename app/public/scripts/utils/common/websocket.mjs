@@ -50,7 +50,6 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         break;
                     case 'game_session_ad':
                         handleGameSessionAd(messageData);
-                        console.log(`Game session ad ${messageData.ad} for session ID ${messageData.session_id} received`);
                         break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
@@ -178,4 +177,9 @@ function handleMessageUpdate(messageData) {
 
     const display = document.getElementById('display');
     scrollToBottom(display);
+};
+
+
+function handleGameSessionAd(messageData) {
+    console.log(`Received game session ad: ${messageData}`);
 };

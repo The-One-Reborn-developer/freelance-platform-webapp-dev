@@ -85,3 +85,15 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         return;
     };
 };
+
+
+export function startGame() {
+    display = document.getElementById('display');
+
+    if (!display) {
+        console.error('Display element not found');
+        return;
+    };
+
+    display.innerHTML = '';
+};

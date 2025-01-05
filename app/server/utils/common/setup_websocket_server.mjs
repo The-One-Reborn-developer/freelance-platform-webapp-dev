@@ -10,6 +10,7 @@ import {
     getGameSessionAd
 } from "../../modules/game_index.mjs";
 
+
 const db = new Database('./app/database.db', { verbose: console.log });
 const MOSCOW_TIMEZONE = 'Europe/Moscow';
 const TIMER_UPDATE_INTERVAL = 1000; // 1 second

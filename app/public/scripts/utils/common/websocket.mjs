@@ -1,4 +1,5 @@
 import { scrollToBottom } from '../../modules/common_index.mjs';
+import { startGame } from '../../game_main.mjs';
 
 
 let reconnectAttempts = 0;
@@ -198,16 +199,4 @@ function handleGameSessionAd(messageData) {
         videoContainer.style.visibility = 'hidden';
         startGame();
     };
-};
-
-
-function startGame() {
-    display = document.getElementById('display');
-
-    if (!display) {
-        console.error('Display element not found');
-        return;
-    };
-
-    display.innerHTML = '';
 };

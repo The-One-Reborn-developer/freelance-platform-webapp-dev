@@ -181,5 +181,6 @@ function handleMessageUpdate(messageData) {
 
 
 function handleGameSessionAd(messageData) {
-    console.log(`Received game session ad: ${messageData}`);
+    console.log(`Received game session ad`);
+    console.log(messageData);
 };

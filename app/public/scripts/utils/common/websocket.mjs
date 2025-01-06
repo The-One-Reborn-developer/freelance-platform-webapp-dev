@@ -207,4 +207,20 @@ function startGame() {
 
     gameDataPlayersAmount.style.display = 'none';
     gameDataTimer.style.display = 'none';
+
+    const display = document.getElementById('display');
+    const firstChoice = document.getElementById('first-choice');
+    const secondChoice = document.getElementById('second-choice');
+    
+    if (!firstChoice || !secondChoice) {
+        console.warn('First or second choice elements not found, creating new ones');
+        firstChoice = document.createElement('button');
+        firstChoice.id = 'first-choice';
+        firstChoice.className = 'game-button';
+        secondChoice = document.createElement('button');
+        secondChoice.id = 'second-choice';
+        secondChoice.className = 'game-button';
+        display.appendChild(firstChoice);
+        display.appendChild(secondChoice);
+    };
 };

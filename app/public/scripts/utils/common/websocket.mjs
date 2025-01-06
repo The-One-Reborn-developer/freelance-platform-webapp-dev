@@ -1,5 +1,4 @@
 import { scrollToBottom } from '../../modules/common_index.mjs';
-import { startGame } from '../../game_main.mjs';
 
 
 let reconnectAttempts = 0;

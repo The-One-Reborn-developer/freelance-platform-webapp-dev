@@ -8,7 +8,7 @@ export function insertGameChoice(
     if (
         !sessionID ||
         !playerTelegramID ||
-        !playerChoice
+        playerChoice === undefined
     ) {
         return {
             success: false,
@@ -17,17 +17,17 @@ export function insertGameChoice(
         };
     };
 
-    sessionID = parseInt(sessionID);
-    round = parseInt(round);
-
-    const gamePair = db.prepare(`
+    sessionID = parseInt(sessionID, 10);
+    round = parseInt(round, 10);
+    console.log(`Session ID: ${sessionID}. Round: ${round}. Player Telegram ID: ${playerTelegramID}. Player Choice: ${playerChoice}`);
+    const gamePairResult = db.prepare(`
         SELECT id, player1_telegram_id, player2_telegram_id
         FROM game_pairs
         WHERE session_id = ? AND round = ?
         AND (player1_telegram_id = ? OR player2_telegram_id = ?)
-    `).run(sessionID, round, playerTelegramID, playerTelegramID);
-
-    if (!gamePair) {
+    `).get(sessionID, round, playerTelegramID, playerTelegramID);
+    console.log(`Game pair result: ${JSON.stringify(gamePairResult)}`);
+    if (!gamePairResult) {
         return {
             success: false,
             status: 404,
@@ -36,13 +36,13 @@ export function insertGameChoice(
     };
 
     let updateQuery = '';
-    if (gamePair.player1_telegram_id === playerTelegramID) {
+    if (gamePairResult.player1_telegram_id === playerTelegramID) {
         updateQuery = `
             UPDATE game_pairs
             SET player1_choice = ?
             WHERE id = ?
         `;
-    } else if (gamePair.player2_telegram_id === playerTelegramID) {
+    } else if (gamePairResult.player2_telegram_id === playerTelegramID) {
         updateQuery = `
             UPDATE game_pairs
             SET player2_choice = ?
@@ -55,8 +55,8 @@ export function insertGameChoice(
             message: 'Игрок не найден в игровой паре'
         };
     };
-
-    const result = db.prepare(updateQuery).run(playerChoice, gamePair.id);
+    console.log(`Update result: ${updateQuery}`);
+    const result = db.prepare(updateQuery).run(playerChoice, gamePairResult.id);
 
     if (!result) {
         return {

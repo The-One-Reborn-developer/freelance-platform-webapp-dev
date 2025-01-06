@@ -295,12 +295,35 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
             console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
             
             const playersGameChoicesResult = getPlayersGameChoices(db, sessionID, 1);
-            console.log(`Get players game choices result: ${playersGameChoicesResult.success}, ${playersGameChoicesResult.status}. ${playersGameChoicesResult.playersGameChoices}`);
-            ws.send(JSON.stringify({
-                success: true,
-                type: 'players_game_choices',
-                playersGameChoices: playersGameChoicesResult.playersGameChoices
-            }))
+            if (!playersGameChoicesResult.success) {
+                console.error(`Error getting players game choices: ${playersGameChoicesResult.message}`);
+                return;
+            };
+
+            if (
+                playersGameChoicesResult &&
+                playersGameChoicesResult.playersGameChoices &&
+                playersGameChoicesResult.playersGameChoices.length > 0
+            ) {
+                const gameChoice = playersGameChoicesResult.playersGameChoices[0];
+
+                const firstPlayerChoice = gameChoice.player1_choice;
+                const secondPlayerChoice = gameChoice.player2_choice;
+
+                console.log(`First player choice: ${firstPlayerChoice}. Second player choice: ${secondPlayerChoice}`);
+
+                if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
+                    if (firstPlayerChoice === secondPlayerChoice) {
+                        console.log("It's a draw!");
+                    } else if (firstPlayerChoice > secondPlayerChoice) {
+                        console.log("Player 1 wins!");
+                    } else {
+                        console.log("Player 2 wins!");
+                    }
+                } else {
+                    console.log("Not all players have made their choices yet.");
+                };
+            };
         };
     } catch (error) {
         console.error(`Error parsing message: ${error}`);

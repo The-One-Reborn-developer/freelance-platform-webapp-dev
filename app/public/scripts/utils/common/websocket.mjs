@@ -209,16 +209,36 @@ function startGame() {
     gameDataTimer.style.display = 'none';
 
     const display = document.getElementById('display');
-    let choiceContainer = document.getElementById('choice-container')
+    let gameContainer = document.getElementById('game-container');
+    let choiceLabel = document.getElementById('choice-label');
+    let choiceContainer = document.getElementById('choice-container');
     let firstChoice = document.getElementById('first-choice');
     let secondChoice = document.getElementById('second-choice');
     
-    if (!choiceContainer || !firstChoice || !secondChoice) {
-        console.warn('Choice container, first or second choice elements not found, creating new ones');
+    if (
+        !gameContainer ||
+        !choiceLabel ||
+        !choiceContainer ||
+        !firstChoice ||
+        !secondChoice
+    ) {
+        console.warn('Game elements elements not found, creating new ones');
+
+        gameContainer = document.createElement('div');
+        gameContainer.id = 'game-container';
+        gameContainer.className = 'game-container';
+        display.appendChild(gameContainer);
+
+        choiceLabel = document.createElement('label');
+        choiceLabel.id = 'choice-label';
+        choiceLabel.className = 'choice-label';
+        choiceLabel.textContent = 'Выберите вариант';
+        gameContainer.appendChild(choiceLabel);
+
         choiceContainer = document.createElement('div');
         choiceContainer.id = 'choice-container';
         choiceContainer.className = 'choice-container';
-        display.appendChild(choiceContainer);
+        gameContainer.appendChild(choiceContainer);
 
         firstChoice = document.createElement('button');
         firstChoice.id = 'first-choice';
@@ -228,7 +248,7 @@ function startGame() {
         secondChoice.id = 'second-choice';
         secondChoice.className = 'game-button';
         secondChoice.textContent = '2';
-        choiceContainer.appendChild(firstChoice);
-        choiceContainer.appendChild(secondChoice);
+        gameContainer.appendChild(firstChoice);
+        gameContainer.appendChild(secondChoice);
     };
 };

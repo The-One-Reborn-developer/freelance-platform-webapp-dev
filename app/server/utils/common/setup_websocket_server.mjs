@@ -303,8 +303,10 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 
             const deletePlayerResult = deletePlayer(db, telegramID, sessionID);
             console.log(`Delete player result: ${deletePlayerResult.success}, ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
+            console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+        } else if (service === 'runner') {
+            console.log(`WebSocket closed for runner service. Code: ${code}, Reason: ${reason}`);
         };
-        console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
     };

@@ -296,6 +296,11 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
             
             const playersGameChoicesResult = getPlayersGameChoices(db, sessionID, 1);
             console.log(`Get players game choices result: ${playersGameChoicesResult.success}, ${playersGameChoicesResult.status}. ${playersGameChoicesResult.playersGameChoices}`);
+            ws.send(JSON.stringify({
+                success: true,
+                type: 'players_game_choices',
+                playersGameChoices: playersGameChoicesResult.playersGameChoices
+            }))
         };
     } catch (error) {
         console.error(`Error parsing message: ${error}`);

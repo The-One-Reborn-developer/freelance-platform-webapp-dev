@@ -34,6 +34,11 @@ window.onload = async function () {
             document.activeElement.blur();
         };
     });
+
+    document.addEventListener('startGame', (event) => {
+        console.log('Starting game');
+        startGame();
+    })
 };
 
 
@@ -87,7 +92,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
 };
 
 
-export function startGame() {
+function startGame() {
     display = document.getElementById('display');
 
     if (!display) {

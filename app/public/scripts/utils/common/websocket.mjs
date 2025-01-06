@@ -197,6 +197,7 @@ function handleGameSessionAd(messageData) {
 
     videoElement.onended = () => {
         videoContainer.style.visibility = 'hidden';
-        startGame();
+        const startGameEvent = new CustomEvent('startGame');
+        document.dispatchEvent(startGameEvent);
     };
 };

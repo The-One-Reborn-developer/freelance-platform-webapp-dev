@@ -209,8 +209,8 @@ function startGame() {
     gameDataTimer.style.display = 'none';
 
     const display = document.getElementById('display');
-    const firstChoice = document.getElementById('first-choice');
-    const secondChoice = document.getElementById('second-choice');
+    let firstChoice = document.getElementById('first-choice');
+    let secondChoice = document.getElementById('second-choice');
     
     if (!firstChoice || !secondChoice) {
         console.warn('First or second choice elements not found, creating new ones');

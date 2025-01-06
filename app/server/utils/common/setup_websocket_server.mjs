@@ -294,7 +294,7 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
             const insertGameChoiceResult = insertGameChoice(db, sessionID, 1, playerTelegramID, playerChoice);
             console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
             
-            const playersGameChoicesResult = getPlayersGameChoices(db, sessionID);
+            const playersGameChoicesResult = getPlayersGameChoices(db, sessionID, 1);
             console.log(`Get players game choices result: ${playersGameChoicesResult.success}, ${playersGameChoicesResult.status}. ${playersGameChoicesResult.playersGameChoices}`);
         };
     } catch (error) {

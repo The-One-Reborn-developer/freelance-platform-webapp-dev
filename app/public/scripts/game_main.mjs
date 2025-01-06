@@ -11,7 +11,7 @@ import {
 
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
-    
+
     const telegramID = getQueryParameter('telegram_id');
     if (telegramID) {
         try {
@@ -34,6 +34,11 @@ window.onload = async function () {
             document.activeElement.blur();
         };
     });
+
+    document.addEventListener('startGame', (event) => {
+        console.log('Starting game');
+        startGame();
+    });
 };
 
 
@@ -45,7 +50,7 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
         console.error('Header navigation element not found');
         return;
     };
-        
+
     try {
         headerInfo.innerHTML = `Игрок ${name}. Баланс: ${wallet}₽. Зарегистрирован ${registrationDate}.`;
 
@@ -74,11 +79,11 @@ async function setupInterface(validatedTelegramID, name, wallet, registrationDat
             })
         });
         const addPlayerResult = await addPlayerResponse.json();
-        
+
         if (!addPlayerResult.success) {
             console.error('Failed to add player to the player count server-side');
         };
-        
+
         showModal(addPlayerResult.message);
     } catch (error) {
         console.error(`Error in setupInterface: ${error}`);

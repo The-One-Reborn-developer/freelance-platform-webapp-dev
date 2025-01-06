@@ -49,8 +49,10 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         handleMessageUpdate(messageData);
                         break;
                     case 'game_session_ad':
-                        handleGameSessionAd(messageData);
+                        handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
                         break;
+                    case 'players_game_choices':
+                        console.log(messageData);
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
                         break;
@@ -142,7 +144,7 @@ function handleMessageUpdate(messageData) {
         senderName: messageData.sender_name,
         message: messageData.message,
         attachment: messageData.attachment
-    }
+    };
 
     if (!normalizedData.senderName || !normalizedData.message) {
         console.error('Invalid message data received');
@@ -180,7 +182,7 @@ function handleMessageUpdate(messageData) {
 };
 
 
-function handleGameSessionAd(messageData) {
+function handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket) {
     console.log(`Received game session ad`);
     console.log(messageData);
     const videoPath = messageData.ad.ad_path;
@@ -193,4 +195,86 @@ function handleGameSessionAd(messageData) {
     sourceElement.src = videoPath;
     videoElement.load();
     videoElement.play();
+
+    videoElement.onended = () => {
+        videoContainer.style.visibility = 'hidden';
+        startGame(validatedTelegramID, sessionID, socket);
+    };
+};
+
+
+function startGame(validatedTelegramID, sessionID, socket) {
+    const gameDataPlayersAmount = document.getElementById('game-data-players-amount');
+    const gameDataTimer = document.getElementById('game-data-timer');
+
+    gameDataPlayersAmount.style.display = 'none';
+    gameDataTimer.style.display = 'none';
+
+    const display = document.getElementById('display');
+    let gameContainer = document.getElementById('game-container');
+    let choiceLabel = document.getElementById('choice-label');
+    let choiceContainer = document.getElementById('choice-container');
+    let firstChoice = document.getElementById('first-choice');
+    let secondChoice = document.getElementById('second-choice');
+    
+    if (
+        !gameContainer ||
+        !choiceLabel ||
+        !choiceContainer ||
+        !firstChoice ||
+        !secondChoice
+    ) {
+        console.warn('Game elements elements not found, creating new ones');
+
+        gameContainer = document.createElement('div');
+        gameContainer.id = 'game-container';
+        gameContainer.className = 'game-container';
+        display.appendChild(gameContainer);
+
+        choiceLabel = document.createElement('label');
+        choiceLabel.id = 'choice-label';
+        choiceLabel.className = 'choice-label';
+        choiceLabel.textContent = 'Выберите вариант';
+        gameContainer.appendChild(choiceLabel);
+
+        choiceContainer = document.createElement('div');
+        choiceContainer.id = 'choice-container';
+        choiceContainer.className = 'choice-container';
+        gameContainer.appendChild(choiceContainer);
+
+        firstChoice = document.createElement('button');
+        firstChoice.id = 'first-choice';
+        firstChoice.className = 'game-button';
+        firstChoice.setAttribute('value', '1');
+        firstChoice.textContent = '1';
+        secondChoice = document.createElement('button');
+        secondChoice.id = 'second-choice';
+        secondChoice.className = 'game-button';
+        secondChoice.setAttribute('value', '2');
+        secondChoice.textContent = '2';
+        choiceContainer.appendChild(firstChoice);
+        choiceContainer.appendChild(secondChoice);
+    };
+
+    firstChoice.addEventListener('click', () => {
+        const playerChoice = firstChoice.getAttribute('value');
+        handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
+    });
+
+    secondChoice.addEventListener('click', () => {
+        const playerChoice = secondChoice.getAttribute('value');
+        handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
+    });
+};
+
+
+function handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket) {
+    const payload = JSON.stringify({
+        type: 'player_choice',
+        session_id: sessionID,
+        player_choice: playerChoice,
+        player_telegram_id: validatedTelegramID
+    });
+
+    socket.send(payload);
 };

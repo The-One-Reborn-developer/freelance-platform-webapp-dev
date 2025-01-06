@@ -7,8 +7,12 @@ import {
     deletePlayer,
     getGameSessionByID,
     getPlayersAmount,
-    getGameSessionAd
+    getGameSessionAd,
+    insertGameChoice,
+    getPlayersGameChoices,
+    decideRandomWin
 } from "../../modules/game_index.mjs";
+
 
 const db = new Database('./app/database.db', { verbose: console.log });
 const MOSCOW_TIMEZONE = 'Europe/Moscow';
@@ -278,9 +282,51 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                     }
                 );
             };
+        } else if (messageData.type === 'player_choice') {
+            const sessionID = String(messageData.session_id);
+            const playerChoice = String(messageData.player_choice);
+            const playerTelegramID = String(messageData.player_telegram_id);
+
+            if (!sessionID || !playerChoice || !playerTelegramID) {
+                ws.send(JSON.stringify({ error: 'Invalid player choice format' }));
+                return;
+            };
+            console.log(`Player ${playerTelegramID} from session ${sessionID} made a choice: ${playerChoice}`);
+            const insertGameChoiceResult = insertGameChoice(db, sessionID, 1, playerTelegramID, playerChoice);
+            console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
+            
+            const playersGameChoicesResult = getPlayersGameChoices(db, sessionID, 1);
+            if (!playersGameChoicesResult.success) {
+                console.error(`Error getting players game choices: ${playersGameChoicesResult.message}`);
+                return;
+            };
+
+            if (
+                playersGameChoicesResult &&
+                playersGameChoicesResult.playersGameChoices &&
+                playersGameChoicesResult.playersGameChoices.length > 0
+            ) {
+                const gameChoice = playersGameChoicesResult.playersGameChoices[0];
+
+                const firstPlayerChoice = gameChoice.player1_choice;
+                const secondPlayerChoice = gameChoice.player2_choice;
+
+                console.log(`First player choice: ${firstPlayerChoice}. Second player choice: ${secondPlayerChoice}`);
+
+                if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
+                    if (firstPlayerChoice === secondPlayerChoice) {
+                        console.log('Draw!');
+                    };
+
+                    const winningChoice = decideRandomWin(firstPlayerChoice, secondPlayerChoice);
+                    console.log(`Winning choice: ${winningChoice}`);
+                } else {
+                    console.log("Not all players have made their choices yet.");
+                };
+            };
         };
     } catch (error) {
-        console.error(`Error parsing message from Telegram ID ${telegramID}: ${error}`);
+        console.error(`Error parsing message: ${error}`);
         ws.send(JSON.stringify({ error: 'Failed to parse message' }));
     };
 };
@@ -302,8 +348,10 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 
             const deletePlayerResult = deletePlayer(db, telegramID, sessionID);
             console.log(`Delete player result: ${deletePlayerResult.success}, ${deletePlayerResult.status}. ${deletePlayerResult.message}`);
+            console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
+        } else if (service === 'runner') {
+            console.log(`WebSocket closed for runner service. Code: ${code}, Reason: ${reason}`);
         };
-        console.log(`WebSocket closed for Telegram ID ${telegramID}. Code: ${code}, Reason: ${reason}`);
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
     };

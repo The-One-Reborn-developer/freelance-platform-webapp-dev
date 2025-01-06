@@ -2,7 +2,7 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 import {
-    postPlayer,
+    insertPlayer,
     getPlayersAmount,
     getNextGameSession
 } from "../modules/game_index.mjs";
@@ -22,14 +22,14 @@ gameRouter.post('/add-player', (req, res) => {
             return;
         };
         
-        const postPlayerResult = postPlayer(
+        const insertPlayerResult = insertPlayer(
             db,
             req.body.session_id,
             req.body.player_telegram_id,
             req.body.player_name
         );
 
-        res.status(postPlayerResult.status).json(postPlayerResult);
+        res.status(insertPlayerResult.status).json(insertPlayerResult);
     } catch (error) {
         console.error(`Error in /game/add-player: ${error}`);
         res.status(500).json({

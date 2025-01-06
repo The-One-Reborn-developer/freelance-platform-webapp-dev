@@ -8,7 +8,8 @@ import {
     getGameSessionByID,
     getPlayersAmount,
     getGameSessionAd,
-    insertGameChoice
+    insertGameChoice,
+    getPlayersGameChoices
 } from "../../modules/game_index.mjs";
 
 
@@ -293,7 +294,8 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
             const insertGameChoiceResult = insertGameChoice(db, sessionID, 1, playerTelegramID, playerChoice);
             console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
             
-            //const playersGameChoice = getPlayersGameChoice(db, sessionID);
+            const playersGameChoicesResult = getPlayersGameChoices(db, sessionID);
+            console.log(`Get players game choices result: ${playersGameChoicesResult.success}, ${playersGameChoicesResult.status}. ${playersGameChoicesResult.playersGameChoices}`);
         };
     } catch (error) {
         console.error(`Error parsing message: ${error}`);

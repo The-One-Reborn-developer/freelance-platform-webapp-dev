@@ -248,7 +248,7 @@ function startGame() {
         secondChoice.id = 'second-choice';
         secondChoice.className = 'game-button';
         secondChoice.textContent = '2';
-        gameContainer.appendChild(firstChoice);
-        gameContainer.appendChild(secondChoice);
+        choiceContainer.appendChild(firstChoice);
+        choiceContainer.appendChild(secondChoice);
     };
 };

@@ -1,6 +1,7 @@
 export function insertGameChoice(
     db,
     sessionID,
+    round,
     playerTelegramID,
     playerChoice
 ) {
@@ -17,9 +18,13 @@ export function insertGameChoice(
     };
 
     const insertGameChoiceResult = db.prepare(
-        'INSERT INTO game_choices (session_id, player_telegram_id, player_choice) VALUES (?, ?, ?)'
-    ).run(sessionID, playerTelegramID, playerChoice);
+        'INSERT INTO game_pairs (session_id, round, player_telegram_id, player_choice) VALUES (?, ?, ?, ?)'
+    ).run(sessionID, round, playerTelegramID, playerChoice);
 
 
-    
+    return {
+        success: true,
+        status: 200,
+        message: 'Выбор игрока добавлен'
+    };
 };

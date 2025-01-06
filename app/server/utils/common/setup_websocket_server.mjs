@@ -290,13 +290,13 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                 return;
             };
             console.log(`Player ${playerTelegramID} from session ${sessionID} made a choice: ${playerChoice}`);
-            const insertGameChoiceResult = insertGameChoice(db, sessionID, playerTelegramID, playerChoice);
+            const insertGameChoiceResult = insertGameChoice(db, sessionID, 1, playerTelegramID, playerChoice);
             console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
             
             //const playersGameChoice = getPlayersGameChoice(db, sessionID);
         };
     } catch (error) {
-        console.error(`Error parsing message from Telegram ID ${telegramID}: ${error}`);
+        console.error(`Error parsing message: ${error}`);
         ws.send(JSON.stringify({ error: 'Failed to parse message' }));
     };
 };

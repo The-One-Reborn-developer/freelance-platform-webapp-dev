@@ -7,7 +7,8 @@ import {
     deletePlayer,
     getGameSessionByID,
     getPlayersAmount,
-    getGameSessionAd
+    getGameSessionAd,
+    insertGameChoice
 } from "../../modules/game_index.mjs";
 
 
@@ -279,6 +280,20 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                     }
                 );
             };
+        } else if (messageData.type === 'player_choice') {
+            const sessionID = String(messageData.session_id);
+            const playerChoice = String(messageData.player_choice);
+            const playerTelegramID = String(messageData.player_telegram_id);
+
+            if (!sessionID || !playerChoice || !playerTelegramID) {
+                ws.send(JSON.stringify({ error: 'Invalid player choice format' }));
+                return;
+            };
+            console.log(`Player ${playerTelegramID} from session ${sessionID} made a choice: ${playerChoice}`);
+            const insertGameChoiceResult = insertGameChoice(db, sessionID, playerTelegramID, playerChoice);
+            console.log(`Insert game choice result: ${insertGameChoiceResult.success}, ${insertGameChoiceResult.status}. ${insertGameChoiceResult.message}`);
+            
+            //const playersGameChoice = getPlayersGameChoice(db, sessionID);
         };
     } catch (error) {
         console.error(`Error parsing message from Telegram ID ${telegramID}: ${error}`);

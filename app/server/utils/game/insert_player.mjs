@@ -1,4 +1,4 @@
-export function postPlayer(
+export function insertPlayer(
     db,
     sessionID,
     playerTelegramID,
@@ -25,19 +25,19 @@ export function postPlayer(
         };
     };
 
-    const postPlayer = db.prepare(
+    const insertPlayer = db.prepare(
         `INSERT INTO session_players (session_id,
                                       player_telegram_id,
                                       player_name) VALUES (?, ?, ?)
     `);
 
-    const postPlayerResult = postPlayer.run(
+    const insertPlayerResult = insertPlayer.run(
         sessionID,
         playerTelegramID,
         playerName
     );
 
-    const newPlayerID = postPlayerResult.lastInsertRowid;
+    const newPlayerID = insertPlayerResult.lastInsertRowid;
     return {
         success: true,
         status: 201,

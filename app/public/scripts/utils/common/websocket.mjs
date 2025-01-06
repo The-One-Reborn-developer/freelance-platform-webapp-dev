@@ -217,9 +217,11 @@ function startGame() {
         firstChoice = document.createElement('button');
         firstChoice.id = 'first-choice';
         firstChoice.className = 'game-button';
+        firstChoice.textContent = '1';
         secondChoice = document.createElement('button');
         secondChoice.id = 'second-choice';
         secondChoice.className = 'game-button';
+        secondChoice.textContent = '2';
         display.appendChild(firstChoice);
         display.appendChild(secondChoice);
     };

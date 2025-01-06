@@ -80,7 +80,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header-button,
-.modal-button {
+.modal-button,
+.game-button {
     width: 100%;
 	height: 100%;
 	border-radius: 10px;
@@ -92,12 +93,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .header-button:hover,
-.modal-button:hover {
+.modal-button:hover,
+.game-button:hover {
     background-color: lightgrey;
 }
 
 .header-button:active,
-.modal-button:active {
+.modal-button:active,
+.game-button:active {
     background-color: darkgrey;
 }
 

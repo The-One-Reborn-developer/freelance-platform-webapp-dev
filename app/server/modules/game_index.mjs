@@ -6,6 +6,7 @@ import { getGameSessionByID } from "../utils/game/get_game_session_by_id.mjs";
 import { getGameSessionAd } from "../utils/game/get_game_session_ad.mjs";
 import { insertGameChoice } from "../utils/game/insert_game_choice.mjs";
 import { getPlayersGameChoices } from "../utils/game/get_players_game_choices.mjs"
+import { decideRandomWin } from "../utils/game/decide_random_win.mjs";
 
 export {
     insertPlayer,
@@ -15,5 +16,6 @@ export {
     getGameSessionByID,
     getGameSessionAd,
     insertGameChoice,
-    getPlayersGameChoices
+    getPlayersGameChoices,
+    decideRandomWin
 };

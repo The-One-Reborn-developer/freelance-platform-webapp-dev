@@ -9,7 +9,8 @@ import {
     getPlayersAmount,
     getGameSessionAd,
     insertGameChoice,
-    getPlayersGameChoices
+    getPlayersGameChoices,
+    decideRandomWin
 } from "../../modules/game_index.mjs";
 
 
@@ -314,12 +315,11 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
 
                 if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
                     if (firstPlayerChoice === secondPlayerChoice) {
-                        console.log("It's a draw!");
-                    } else if (firstPlayerChoice > secondPlayerChoice) {
-                        console.log("Player 1 wins!");
-                    } else {
-                        console.log("Player 2 wins!");
-                    }
+                        console.log('Draw!');
+                    };
+
+                    const winningChoice = decideRandomWin(firstPlayerChoice, secondPlayerChoice);
+                    console.log(`Winning choice: ${winningChoice}`);
                 } else {
                     console.log("Not all players have made their choices yet.");
                 };

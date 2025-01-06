@@ -22,7 +22,7 @@ export function insertGameChoice(
         FROM game_pairs
         WHERE session_id = ? AND round = ?
         AND (player1_telegram_id = ? OR player2_telegram_id = ?)
-    `).run(sessionID, round, playerTelegramID);
+    `).run(sessionID, round, playerTelegramID, playerTelegramID);
 
     if (!gamePair) {
         return {

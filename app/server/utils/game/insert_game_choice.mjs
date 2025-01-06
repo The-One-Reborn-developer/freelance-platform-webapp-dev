@@ -17,6 +17,9 @@ export function insertGameChoice(
         };
     };
 
+    sessionID = parseInt(sessionID);
+    round = parseInt(round);
+
     const gamePair = db.prepare(`
         SELECT id, player1_telegram_id, player2_telegram_id
         FROM game_pairs
@@ -53,7 +56,15 @@ export function insertGameChoice(
         };
     };
 
-    db.prepare(updateQuery).run(playerChoice, gamePair.id);
+    const result = db.prepare(updateQuery).run(playerChoice, gamePair.id);
+
+    if (!result) {
+        return {
+            success: false,
+            status: 500,
+            message: 'Ошибка при добавлении выбора игрока'
+        };
+    };
 
     return {
         success: true,

@@ -23,7 +23,6 @@ import {
     createDeliveriesResponsesTable,
     createGameSessionsTable,
     createSessionPlayersTable,
-    createGamesTable,
     createGamePairsTable,
     createGameSessionAdsTable
 } from "./modules/common_index.mjs";
@@ -70,7 +69,6 @@ createServicesResponsesTable(db);
 createDeliveriesResponsesTable(db);
 createGameSessionsTable(db);
 createSessionPlayersTable(db);
-createGamesTable(db);
 createGamePairsTable(db);
 createGameSessionAdsTable(db);
 

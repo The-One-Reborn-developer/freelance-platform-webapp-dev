@@ -184,10 +184,12 @@ h1, h2, h3, h4, h5, h6 {
 .choice-container {
     display: flex;
     flex-direction: column;
+    position: absolute;
+    top: 50%;
 }
 
 .game-button {
-    margin: 1%;
+    margin: 20%;
     height: 100%;
     width: 100%;
     border-radius: 10px;

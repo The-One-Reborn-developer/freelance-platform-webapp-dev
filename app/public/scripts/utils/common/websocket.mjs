@@ -209,11 +209,17 @@ function startGame() {
     gameDataTimer.style.display = 'none';
 
     const display = document.getElementById('display');
+    let choiceContainer = document.getElementById('choice-container')
     let firstChoice = document.getElementById('first-choice');
     let secondChoice = document.getElementById('second-choice');
     
-    if (!firstChoice || !secondChoice) {
-        console.warn('First or second choice elements not found, creating new ones');
+    if (!choiceContainer || !firstChoice || !secondChoice) {
+        console.warn('Choice container, first or second choice elements not found, creating new ones');
+        choiceContainer = document.createElement('div');
+        choiceContainer.id = 'choice-container';
+        choiceContainer.className = 'choice-container';
+        display.appendChild(choiceContainer);
+
         firstChoice = document.createElement('button');
         firstChoice.id = 'first-choice';
         firstChoice.className = 'game-button';
@@ -222,7 +228,7 @@ function startGame() {
         secondChoice.id = 'second-choice';
         secondChoice.className = 'game-button';
         secondChoice.textContent = '2';
-        display.appendChild(firstChoice);
-        display.appendChild(secondChoice);
+        choiceContainer.appendChild(firstChoice);
+        choiceContainer.appendChild(secondChoice);
     };
 };

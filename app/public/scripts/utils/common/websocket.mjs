@@ -196,7 +196,15 @@ function handleGameSessionAd(messageData) {
 
     videoElement.onended = () => {
         videoContainer.style.visibility = 'hidden';
-        const startGameEvent = new CustomEvent('startGame');
-        document.dispatchEvent(startGameEvent);
+        startGame();
     };
+};
+
+
+function startGame() {
+    const gameDataPlayersAmount = document.getElementById('game-data-players-amount');
+    const gameDataTimer = document.getElementById('game-data-timer');
+
+    gameDataPlayersAmount.style.display = 'none';
+    gameDataTimer.style.display = 'none';
 };

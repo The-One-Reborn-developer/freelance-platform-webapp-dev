@@ -19,6 +19,7 @@ export function insertGameChoice(
 
     sessionID = parseInt(sessionID, 10);
     round = parseInt(round, 10);
+    playerTelegramID = parseInt(playerTelegramID, 10);
     console.log(`Session ID: ${sessionID}. Round: ${round}. Player Telegram ID: ${playerTelegramID}. Player Choice: ${playerChoice}`);
     const gamePairResult = db.prepare(`
         SELECT id, player1_telegram_id, player2_telegram_id

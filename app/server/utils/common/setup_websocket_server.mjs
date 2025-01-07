@@ -399,7 +399,10 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 
 
 function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID, message) {
-    const user = users.get(recipientTelegramID);
+    console.log(`Type of recipientTelegramID: ${typeof recipientTelegramID}`);
+    console.log(`recipientTelegramID: ${recipientTelegramID}`);
+    console.log(`Keys in users map: ${Array.from(users.keys())}`);
+    const user = users.get(String(recipientTelegramID));
     console.log(user);
     console.log(`Users map before sending message: ${JSON.stringify(Object.fromEntries(users))}`);
     console.log(

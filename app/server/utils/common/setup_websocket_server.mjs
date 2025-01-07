@@ -68,8 +68,6 @@ export function setupWebsocketServer(server) {
             console.error(`WebSocket error for Telegram ID ${telegramID}: ${error.message}`);
         });
     });
-    console.log(`Users map now: ${JSON.stringify(users)}`);
-    console.log(`Game session subscriptions map now: ${JSON.stringify(gameSessionSubscriptions)}`);
     // Send message to a specific user
     function sendMessageToUser (recipientTelegramIDString, message) {
         const user = users.get(recipientTelegramIDString);
@@ -246,6 +244,9 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             gameSessionSubscriptions.get(sessionID).add(telegramID);
             console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
         };
+
+        console.log(`Users map now: ${JSON.stringify(users)}`);
+        console.log(`Game session subscriptions map now: ${JSON.stringify(gameSessionSubscriptions)}`);
     } catch (error) {
         console.error(`Error establishing WebSocket connection.`);
     };

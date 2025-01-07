@@ -415,6 +415,7 @@ function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID
             )
         )}`
     );
+    console.log(`WebSocket status: ${user.readyState}`);
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {

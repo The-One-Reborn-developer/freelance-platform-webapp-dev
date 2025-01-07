@@ -51,8 +51,11 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                     case 'game_session_ad':
                         handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
                         break;
-                    case 'players_game_choices':
-                        console.log(messageData);
+                    case 'game_rematch':
+                        startGame(validatedTelegramID, sessionID, socket);
+                        break;
+                    case 'game_result':
+                        console.log(`Game result: ${JSON.stringify(messageData)}`);
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
                         break;

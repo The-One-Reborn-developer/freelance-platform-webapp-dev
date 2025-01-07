@@ -307,19 +307,41 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                 playersGameChoicesResult.playersGameChoices.length > 0
             ) {
                 const gameChoice = playersGameChoicesResult.playersGameChoices[0];
-
                 const firstPlayerChoice = gameChoice.player1_choice;
                 const secondPlayerChoice = gameChoice.player2_choice;
+                const firstPlayerTelegramID = gameChoice.player1_telegram_id;
+                const secondPlayerTelegramID = gameChoice.player2_telegram_id;
 
                 console.log(`First player choice: ${firstPlayerChoice}. Second player choice: ${secondPlayerChoice}`);
 
                 if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
                     if (firstPlayerChoice === secondPlayerChoice) {
-                        console.log('Draw!');
+                        const rematchPayload = {
+                            success: true,
+                            type: 'game_rematch',
+                            session_id: sessionID,
+                        };
+
+                        sendMessageToUser(firstPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(secondPlayerTelegramID, rematchPayload);
+
+                        console.log(`Rematch triggered for session ${sessionID}`);
+                        return;
                     };
 
                     const winningChoice = decideRandomWin(firstPlayerChoice, secondPlayerChoice);
                     console.log(`Winning choice: ${winningChoice}`);
+
+                    const resultPayload = {
+                        success: true,
+                        type: 'game_result',
+                        session_id: sessionID,
+                        winner_telegram_id: winningChoice === firstPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
+                        looser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
+                    };
+
+                    sendMessageToUser(firstPlayerTelegramID, resultPayload);
+                    sendMessageToUser(secondPlayerTelegramID, resultPayload);
                 } else {
                     console.log("Not all players have made their choices yet.");
                 };
@@ -330,6 +352,7 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
         ws.send(JSON.stringify({ error: 'Failed to parse message' }));
     };
 };
+
 
 
 function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason) {
@@ -355,4 +378,9 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
     };
+};
+
+
+function sendMessageToUser (recipientTelegramIDString, message) {
+    
 };

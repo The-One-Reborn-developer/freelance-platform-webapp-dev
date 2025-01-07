@@ -39,7 +39,7 @@ export function setupWebsocketServer(server) {
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
-            handleIncomingMessage(ws, telegramID, rawMessage);
+            handleIncomingMessage(ws, users, telegramID, rawMessage);
         });
 
         // Handle disconnections
@@ -235,7 +235,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
 };
 
 
-function handleIncomingMessage(ws, telegramID, rawMessage) {
+function handleIncomingMessage(ws, users, telegramID, rawMessage) {
     try {
         const messageData = JSON.parse(rawMessage);
 
@@ -322,8 +322,8 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                             session_id: sessionID,
                         };
 
-                        sendMessageToUser(firstPlayerTelegramID, rematchPayload);
-                        sendMessageToUser(secondPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, firstPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, secondPlayerTelegramID, rematchPayload);
 
                         console.log(`Rematch triggered for session ${sessionID}`);
                         return;
@@ -340,8 +340,8 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                         looser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
                     };
 
-                    sendMessageToUser(firstPlayerTelegramID, resultPayload);
-                    sendMessageToUser(secondPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, firstPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, secondPlayerTelegramID, resultPayload);
                 } else {
                     console.log("Not all players have made their choices yet.");
                 };
@@ -381,6 +381,11 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 };
 
 
-function sendMessageToUser (recipientTelegramIDString, message) {
-    
+function sendMessageToUser (users, recipientTelegramIDString, message) {
+    const user = users.get(recipientTelegramIDString);
+    if (user) {
+        user.send(JSON.stringify(message));
+    } else {
+        console.error(`User with Telegram ID ${recipientTelegramIDString} is not connected.`);
+    };
 };

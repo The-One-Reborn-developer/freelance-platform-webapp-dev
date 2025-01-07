@@ -52,6 +52,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_rematch':
+                        console.log(`Game rematch: ${JSON.stringify(messageData)}`);
                         startGame(validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_result':

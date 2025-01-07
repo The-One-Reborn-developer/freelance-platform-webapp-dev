@@ -39,7 +39,7 @@ export function setupWebsocketServer(server) {
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
-            handleIncomingMessage(ws, users, telegramID, rawMessage);
+            handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, rawMessage);
         });
 
         // Handle disconnections
@@ -235,7 +235,7 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
 };
 
 
-function handleIncomingMessage(ws, users, telegramID, rawMessage) {
+function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, rawMessage) {
     try {
         const messageData = JSON.parse(rawMessage);
 
@@ -322,8 +322,8 @@ function handleIncomingMessage(ws, users, telegramID, rawMessage) {
                             session_id: sessionID,
                         };
 
-                        sendMessageToUser(users, firstPlayerTelegramID, rematchPayload);
-                        sendMessageToUser(users, secondPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, rematchPayload);
 
                         console.log(`Rematch triggered for session ${sessionID}`);
                         return;
@@ -340,8 +340,8 @@ function handleIncomingMessage(ws, users, telegramID, rawMessage) {
                         looser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
                     };
 
-                    sendMessageToUser(users, firstPlayerTelegramID, resultPayload);
-                    sendMessageToUser(users, secondPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, resultPayload);
                 } else {
                     console.log("Not all players have made their choices yet.");
                 };
@@ -352,7 +352,6 @@ function handleIncomingMessage(ws, users, telegramID, rawMessage) {
         ws.send(JSON.stringify({ error: 'Failed to parse message' }));
     };
 };
-
 
 
 function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason) {
@@ -381,9 +380,12 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 };
 
 
-function sendMessageToUser (users, recipientTelegramIDString, message) {
+function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramIDString, message) {
     const user = users.get(recipientTelegramIDString);
-    if (user) {
+    console.log(`Sending message to user ${recipientTelegramIDString}: ${JSON.stringify(message)}`);
+    console.log(`Current users map: ${JSON.stringify(users)}`);
+    console.log(`Current session subscriptions map: ${JSON.stringify(gameSessionSubscriptions)}`);
+    if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {
         console.error(`User with Telegram ID ${recipientTelegramIDString} is not connected.`);

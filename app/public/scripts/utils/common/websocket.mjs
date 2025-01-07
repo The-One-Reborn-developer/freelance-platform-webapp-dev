@@ -50,7 +50,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_rematch':
-                        startGame('rematch', validatedTelegramID, sessionID, socket);
+                        startGame(validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_result':
                         // TODO: Implement game result
@@ -200,12 +200,12 @@ function handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket
 
     videoElement.onended = () => {
         videoContainer.style.visibility = 'hidden';
-        startGame('normal', validatedTelegramID, sessionID, socket);
+        startGame(validatedTelegramID, sessionID, socket);
     };
 };
 
 
-function startGame(type, validatedTelegramID, sessionID, socket) {
+function startGame(validatedTelegramID, sessionID, socket) {
     const gameDataPlayersAmount = document.getElementById('game-data-players-amount');
     const gameDataTimer = document.getElementById('game-data-timer');
 
@@ -236,11 +236,7 @@ function startGame(type, validatedTelegramID, sessionID, socket) {
         choiceLabel = document.createElement('label');
         choiceLabel.id = 'choice-label';
         choiceLabel.className = 'choice-label';
-        if (type === 'rematch') {
-            choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выберите ещё раз!';
-        } else {
-            choiceLabel.textContent = 'Выберите вариант';
-        };
+        choiceLabel.textContent = 'Выберите вариант';
         gameContainer.appendChild(choiceLabel);
 
         choiceContainer = document.createElement('div');
@@ -260,6 +256,8 @@ function startGame(type, validatedTelegramID, sessionID, socket) {
         secondChoice.textContent = '2';
         choiceContainer.appendChild(firstChoice);
         choiceContainer.appendChild(secondChoice);
+    } else {
+        choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выбирайте ещё раз!';
     };
 
     firstChoice.addEventListener('click', () => {

@@ -400,7 +400,7 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 
 function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID, message) {
     const user = users.get(recipientTelegramID);
-    console.log(`Sending message to user ${recipientTelegramID}: ${JSON.stringify(message)}`);
+    console.log(user);
     console.log(`Users map before sending message: ${JSON.stringify(Object.fromEntries(users))}`);
     console.log(
         `Game session subscriptions map before sending message: ${JSON.stringify(
@@ -409,7 +409,6 @@ function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID
             )
         )}`
     );
-    console.log(`WebSocket status: ${user.readyState}`);
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {

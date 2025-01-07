@@ -50,11 +50,10 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_rematch':
-                        console.log(`Game rematch: ${JSON.stringify(messageData)}`);
-                        startGame(validatedTelegramID, sessionID, socket);
+                        startGame('rematch', validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_result':
-                        console.log(`Game result: ${JSON.stringify(messageData)}`);
+                        // TODO: Implement game result
                         break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
@@ -201,12 +200,12 @@ function handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket
 
     videoElement.onended = () => {
         videoContainer.style.visibility = 'hidden';
-        startGame(validatedTelegramID, sessionID, socket);
+        startGame('normal', validatedTelegramID, sessionID, socket);
     };
 };
 
 
-function startGame(validatedTelegramID, sessionID, socket) {
+function startGame(type, validatedTelegramID, sessionID, socket) {
     const gameDataPlayersAmount = document.getElementById('game-data-players-amount');
     const gameDataTimer = document.getElementById('game-data-timer');
 
@@ -237,7 +236,11 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceLabel = document.createElement('label');
         choiceLabel.id = 'choice-label';
         choiceLabel.className = 'choice-label';
-        choiceLabel.textContent = 'Выберите вариант';
+        if (type === 'rematch') {
+            choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выберите ещё раз!';
+        } else {
+            choiceLabel.textContent = 'Выберите вариант';
+        };
         gameContainer.appendChild(choiceLabel);
 
         choiceContainer = document.createElement('div');

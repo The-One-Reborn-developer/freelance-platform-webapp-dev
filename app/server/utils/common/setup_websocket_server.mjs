@@ -27,6 +27,22 @@ export function setupWebsocketServer(server) {
     setInterval(() => broadcastTimers(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
     setInterval(() => broadcastPlayersAmount(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
 
+    // Heartbeat mechanism to remove stale connections
+    setInterval(() => {
+        users.forEach((socket, telegramID) => {
+            if (socket.readyState !== WebSocket.OPEN) {
+                console.log(`Removing stale connection: ${telegramID}`);
+                users.delete(telegramID);
+            } else {
+                try {
+                    socket.ping(); // Keep connection alive
+                } catch (error) {
+                    console.error(`Error during ping for ${telegramID}: ${error.message}`);
+                }
+            }
+        });
+    }, 30000); // Every 30 seconds
+
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegram_id'));
@@ -52,7 +68,8 @@ export function setupWebsocketServer(server) {
             console.error(`WebSocket error for Telegram ID ${telegramID}: ${error.message}`);
         });
     });
-
+    console.log(`Users map now: ${JSON.stringify(users)}`);
+    console.log(`Game session subscriptions map now: ${JSON.stringify(gameSessionSubscriptions)}`);
     // Send message to a specific user
     function sendMessageToUser (recipientTelegramIDString, message) {
         const user = users.get(recipientTelegramIDString);

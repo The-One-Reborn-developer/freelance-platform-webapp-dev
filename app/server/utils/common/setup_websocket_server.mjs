@@ -27,22 +27,6 @@ export function setupWebsocketServer(server) {
     setInterval(() => broadcastTimers(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
     setInterval(() => broadcastPlayersAmount(db, gameSessionSubscriptions, users), TIMER_UPDATE_INTERVAL);
 
-    // Heartbeat mechanism to remove stale connections
-    setInterval(() => {
-        users.forEach((socket, telegramID) => {
-            if (socket.readyState !== WebSocket.OPEN) {
-                console.log(`Removing stale connection: ${telegramID}`);
-                users.delete(telegramID);
-            } else {
-                try {
-                    socket.ping(); // Keep connection alive
-                } catch (error) {
-                    console.error(`Error during ping for ${telegramID}: ${error.message}`);
-                }
-            }
-        });
-    }, 30000); // Every 30 seconds
-
     wss.on('connection', (ws, req) => {
         const params = new URLSearchParams(req.url.split('?')[1]);
         const telegramID = String(params.get('telegram_id'));
@@ -60,7 +44,9 @@ export function setupWebsocketServer(server) {
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason);
+            handleDisconnection(
+                users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason
+            );
         });
 
         // Handle errors
@@ -381,6 +367,13 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
 function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason) {
     users.delete(telegramID);
     try {
+        if (users.has(telegramID)) {
+            users.delete(telegramID);
+            console.log(`Removed user with Telegram ID: ${telegramID} from users map.`);
+        } else {
+            console.warn(`Attempted to remove non-existent Telegram ID: ${telegramID}`);
+        }
+
         if (service === 'game' && sessionID) {
             const subscribers = gameSessionSubscriptions.get(sessionID);
             
@@ -398,15 +391,16 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
         } else if (service === 'runner') {
             console.log(`WebSocket closed for runner service. Code: ${code}, Reason: ${reason}`);
         };
+        return { userDeleted: true, sessionCleaned: true };
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
     };
 };
 
 
-function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramIDString, message) {
-    const user = users.get(recipientTelegramIDString);
-    console.log(`Sending message to user ${recipientTelegramIDString}: ${JSON.stringify(message)}`);
+function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID, message) {
+    const user = users.get(recipientTelegramID);
+    console.log(`Sending message to user ${recipientTelegramID}: ${JSON.stringify(message)}`);
     console.log(`Users map before sending message: ${JSON.stringify(Object.fromEntries(users))}`);
     console.log(
         `Game session subscriptions map before sending message: ${JSON.stringify(
@@ -419,6 +413,6 @@ function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {
-        console.error(`User with Telegram ID ${recipientTelegramIDString} is not connected.`);
+        console.error(`User with Telegram ID ${recipientTelegramID} is not connected.`);
     };
 };

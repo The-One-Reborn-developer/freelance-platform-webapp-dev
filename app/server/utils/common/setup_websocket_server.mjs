@@ -245,8 +245,14 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
         };
 
-        console.log(`Users map now: ${JSON.stringify(users)}`);
-        console.log(`Game session subscriptions map now: ${JSON.stringify(gameSessionSubscriptions)}`);
+        console.log(`Users map after establishing connection: ${JSON.stringify(Object.fromEntries(users))}`);
+        console.log(
+            `Game session subscriptions map after establishing connection: ${JSON.stringify(
+                Object.fromEntries(
+                    Array.from(gameSessionSubscriptions, ([key, value]) => [key, Array.from(value)])
+                )
+            )}`
+        );
     } catch (error) {
         console.error(`Error establishing WebSocket connection.`);
     };
@@ -401,8 +407,14 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramIDString, message) {
     const user = users.get(recipientTelegramIDString);
     console.log(`Sending message to user ${recipientTelegramIDString}: ${JSON.stringify(message)}`);
-    console.log(`Current users map: ${JSON.stringify(users)}`);
-    console.log(`Current session subscriptions map: ${JSON.stringify(gameSessionSubscriptions)}`);
+    console.log(`Users map before sending message: ${JSON.stringify(Object.fromEntries(users))}`);
+    console.log(
+        `Game session subscriptions map before sending message: ${JSON.stringify(
+            Object.fromEntries(
+                Array.from(gameSessionSubscriptions, ([key, value]) => [key, Array.from(value)])
+            )
+        )}`
+    );
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {

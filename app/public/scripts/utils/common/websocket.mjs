@@ -33,11 +33,9 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
         });
 
         socket.addEventListener('message', (event) => {
-            console.log(`Received message from Telegram ID ${validatedTelegramID}: ${event.data}`);
-
             try {
                 const messageData = JSON.parse(event.data);
-
+                console.log(`Received message: ${JSON.stringify(messageData)}`);
                 switch (messageData.type) {
                     case 'players_amount_update':
                         handlePlayersAmountUpdate(messageData);

@@ -347,7 +347,7 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                         type: 'game_result',
                         session_id: sessionID,
                         winner_telegram_id: winningChoice === firstPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
-                        looser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
+                        loser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
                     };
 
                     sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, resultPayload);
@@ -399,19 +399,7 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 
 
 function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID, message) {
-    console.log(`Type of recipientTelegramID: ${typeof recipientTelegramID}`);
-    console.log(`recipientTelegramID: ${recipientTelegramID}`);
-    console.log(`Keys in users map: ${Array.from(users.keys())}`);
     const user = users.get(String(recipientTelegramID));
-    console.log(user);
-    console.log(`Users map before sending message: ${JSON.stringify(Object.fromEntries(users))}`);
-    console.log(
-        `Game session subscriptions map before sending message: ${JSON.stringify(
-            Object.fromEntries(
-                Array.from(gameSessionSubscriptions, ([key, value]) => [key, Array.from(value)])
-            )
-        )}`
-    );
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));
     } else {

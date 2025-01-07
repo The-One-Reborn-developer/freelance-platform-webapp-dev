@@ -55,6 +55,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         break;
                     case 'game_result':
                         console.log(`Game result: ${JSON.stringify(messageData)}`);
+                        break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
                         break;

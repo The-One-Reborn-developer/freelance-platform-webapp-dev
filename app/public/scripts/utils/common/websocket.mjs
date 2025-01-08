@@ -282,6 +282,8 @@ function startGame(validatedTelegramID, sessionID, socket) {
 
     const choiceTimer = setTimeout(() => {
         clearInterval(timerInterval);
+        shouldReconnect = false;
+        socket.close();
         finishGame('timeout');
     }, CHOICE_TIMEOUT);
 

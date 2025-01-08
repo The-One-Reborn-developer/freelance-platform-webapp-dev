@@ -269,6 +269,8 @@ function startGame(validatedTelegramID, sessionID, socket) {
     };
 
     let timeRemaining = CHOICE_TIMEOUT / 1000;
+    gameDataTimer.textContent = '';
+    gameDataTimer.style.top = '60%';
     gameDataTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
 
     const timerInterval = setInterval(() => {

@@ -26,67 +26,71 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
         console.error('Maximum reconnect attempts reached, unable to initialize WebSocket');
         return;        
     } else {
-        const socket = new WebSocket(constructWebSocketURL(validatedTelegramID, service, sessionID));
+        try {
+            const socket = new WebSocket(constructWebSocketURL(validatedTelegramID, service, sessionID));
 
-        socket.addEventListener('open', () => {
-            console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}. Service: ${service}. Session ID: ${sessionID}`);
-            RECONNECT_ATTEMPTS = 0;
-        });
+            socket.addEventListener('open', () => {
+                console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}. Service: ${service}. Session ID: ${sessionID}`);
+                RECONNECT_ATTEMPTS = 0;
+            });
 
-        socket.addEventListener('close', () => {
-            if (SHOULD_RECONNECT) {
-                RECONNECT_ATTEMPTS++;
-                const delay = RECONNECT_BASE_DELAY * Math.pow(2, RECONNECT_ATTEMPTS - 1); // Exponential backoff
-                setTimeout(() => initializeWebSocket(validatedTelegramID, service, sessionID), Math.min(delay, 60000)); // Limit to 1 minute    
-            };
-        });
-
-        socket.addEventListener('error', (error) => {
-            console.error(`WebSocket error for Telegram ID ${validatedTelegramID}: ${error}`);
-        });
-
-        socket.addEventListener('message', (event) => {
-            try {
-                const messageData = JSON.parse(event.data);
-                console.log(`Received message: ${JSON.stringify(messageData)}`);
-                switch (messageData.type) {
-                    case 'players_amount_update':
-                        handlePlayersAmountUpdate(messageData);
-                        break;
-                    case 'timer_update':
-                        handleTimerUpdate(messageData);
-                        break;
-                    case 'message_update':
-                        handleMessageUpdate(messageData);
-                        break;
-                    case 'game_session_ad':
-                        handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
-                        break;
-                    case 'game_rematch':
-                        startGame(validatedTelegramID, sessionID, socket);
-                        break;
-                    case 'game_result':
-                        if (messageData.winner_telegram_id === validatedTelegramID) {
-                            finishGame('winner');
-                        } else {
-                            SHOULD_RECONNECT = false;
-                            socket.close();
-                            finishGame('loser');
-                        };
-                        break;
-                    case 'game_await':
-                        gameAwait(socket);
-                        break;
-                    default:
-                        console.warn(`Unknown message type: ${messageData.type}`);
-                        break;
+            socket.addEventListener('close', () => {
+                if (SHOULD_RECONNECT) {
+                    RECONNECT_ATTEMPTS++;
+                    const delay = RECONNECT_BASE_DELAY * Math.pow(2, RECONNECT_ATTEMPTS - 1); // Exponential backoff
+                    setTimeout(() => initializeWebSocket(validatedTelegramID, service, sessionID), Math.min(delay, 60000)); // Limit to 1 minute    
                 };
-            } catch (error) {
-                console.error(`Error parsing message data: ${error}`);
-            };
-        });
+            });
 
-        return socket;
+            socket.addEventListener('error', (error) => {
+                console.error(`WebSocket error for Telegram ID ${validatedTelegramID}: ${error}`);
+            });
+
+            socket.addEventListener('message', (event) => {
+                try {
+                    const messageData = JSON.parse(event.data);
+                    console.log(`Received message: ${JSON.stringify(messageData)}`);
+                    switch (messageData.type) {
+                        case 'players_amount_update':
+                            handlePlayersAmountUpdate(messageData);
+                            break;
+                        case 'timer_update':
+                            handleTimerUpdate(messageData);
+                            break;
+                        case 'message_update':
+                            handleMessageUpdate(messageData);
+                            break;
+                        case 'game_session_ad':
+                            handleGameSessionAd(messageData, validatedTelegramID, sessionID, socket);
+                            break;
+                        case 'game_rematch':
+                            startGame(validatedTelegramID, sessionID, socket);
+                            break;
+                        case 'game_result':
+                            if (messageData.winner_telegram_id === validatedTelegramID) {
+                                finishGame('winner');
+                            } else {
+                                SHOULD_RECONNECT = false;
+                                socket.close();
+                                finishGame('loser');
+                            };
+                            break;
+                        case 'game_await':
+                            gameAwait(socket);
+                            break;
+                        default:
+                            console.warn(`Unknown message type: ${messageData.type}`);
+                            break;
+                    };
+                } catch (error) {
+                    console.error(`Error parsing message data: ${error}`);
+                };
+            });
+
+            return socket;
+        } catch (error) {
+            console.error(`Error initializing WebSocket: ${error}`);
+        };
     };
 };
 
@@ -235,7 +239,7 @@ function finishGame(gameResult) {
     if (gameResult === 'loser') {
         gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии.';
     } else if (gameResult === 'winner') {
-        //console.log('You win');
+        console.log('You win');
         gameResultContainer.textContent = 'Вы выиграли! Ожидайте прохождения в следующий раунд.';
     } else if (gameResult === 'timeout') {
         gameResultContainer.textContent = 'Вы не сделали выбор вовремя. Попробуйте ещё раз в следующей игровой сессии.';
@@ -262,7 +266,7 @@ function gameAwait(socket) {
         choiceCountdownTimer = document.createElement('div');
         choiceCountdownTimer.id = 'choice-countdown-timer';
         choiceCountdownTimer.className = 'game-data';
-        //choiceCountdownTimer.classList.add('choice-countdown-timer');
+        choiceCountdownTimer.classList.add('choice-countdown-timer');
         display.appendChild(choiceCountdownTimer);
     };
 

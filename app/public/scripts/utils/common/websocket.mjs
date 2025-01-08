@@ -219,7 +219,6 @@ function startGame(validatedTelegramID, sessionID, socket) {
     const gameDataTimer = document.getElementById('game-data-timer');
 
     gameDataPlayersAmount.style.display = 'none';
-    gameDataTimer.style.display = 'none';
 
     const display = document.getElementById('display');
     let gameContainer = document.getElementById('game-container');

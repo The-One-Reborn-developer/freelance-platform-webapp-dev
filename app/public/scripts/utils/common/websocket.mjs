@@ -64,6 +64,9 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                             finishGame('loser');
                         };
                         break;
+                    case 'game_await':
+                        gameAwait();
+                        break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
                         break;
@@ -341,3 +344,16 @@ function finishGame(gameResult) {
     };
     display.appendChild(gameResultContainer);
 };
+
+
+function gameAwait() {
+    const display = document.getElementById('display');
+    const gameContainer = document.getElementById('game-container');
+    gameContainer.style.display = 'none';
+
+    const gameAwaitContainer = document.createElement('div');
+    gameAwaitContainer.id = 'game-await-container';
+    gameAwaitContainer.className = 'game-data';
+    gameAwaitContainer.textContent = 'Второй игрок ещё не сделал выбор, ожидайте...';
+    display.appendChild(gameAwaitContainer);
+}

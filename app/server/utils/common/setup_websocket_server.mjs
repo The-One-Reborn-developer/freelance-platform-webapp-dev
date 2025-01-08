@@ -323,20 +323,15 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                 const firstPlayerTelegramID = gameChoice.player1_telegram_id;
                 const secondPlayerTelegramID = gameChoice.player2_telegram_id;
 
-                console.log(`First player choice: ${firstPlayerChoice}. Second player choice: ${secondPlayerChoice}`);
-
                 if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
                     if (firstPlayerChoice === secondPlayerChoice) {
                         const rematchPayload = {
-                            success: true,
                             type: 'game_rematch',
                             session_id: sessionID,
                         };
 
                         sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, rematchPayload);
                         sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, rematchPayload);
-
-                        console.log(`Rematch triggered for session ${sessionID}`);
                         return;
                     };
 
@@ -345,7 +340,6 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                     const loserTelegramID = winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID;
 
                     const resultPayload = {
-                        success: true,
                         type: 'game_result',
                         session_id: sessionID,
                         winner_telegram_id: winnerTelegramID,
@@ -356,8 +350,20 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
 
                     sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, resultPayload);
                     sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, resultPayload);
-                } else {
-                    console.log("Not all players have made their choices yet.");
+                } else if (firstPlayerChoice === null || secondPlayerChoice === null) {
+                    if (firstPlayerChoice === null) {
+                        const awaitPayload = {
+                            type: 'game_await'
+                        };
+
+                        sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, awaitPayload);
+                    } else {
+                        const awaitPayload = {
+                            type: 'game_await'
+                        };
+
+                        sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, awaitPayload);
+                    };
                 };
             };
         };

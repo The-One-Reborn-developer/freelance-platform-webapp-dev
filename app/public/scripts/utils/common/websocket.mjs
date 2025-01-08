@@ -1,8 +1,18 @@
-import { scrollToBottom } from '../../modules/common_index.mjs';
+import {
+    constructWebSocketURL
+} from '../../modules/common_index.mjs';
+
+import {
+    handlePlayersAmountUpdate,
+    handleTimerUpdate,
+    handleMessageUpdate
+} from "../../modules/game_index.mjs"
 
 
-let shouldReconnect = true;
-let reconnectAttempts = 0;
+let SHOULD_RECONNECT = true;
+let RECONNECT_ATTEMPTS = 0;
+let CHOICE_REMAINING_TIME = CHOICE_TIMEOUT / 1000;
+let TIMER_INTERVAL = null;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_BASE_DELAY = 5000; // 5 seconds
 const CHOICE_TIMEOUT = 60000; // 1 minute
@@ -12,7 +22,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
     if (!validatedTelegramID) {
         console.error('Telegram ID not found, unable to initialize WebSocket');
         return;
-    } else if (reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+    } else if (RECONNECT_ATTEMPTS >= MAX_RECONNECT_ATTEMPTS) {
         console.error('Maximum reconnect attempts reached, unable to initialize WebSocket');
         return;        
     } else {
@@ -20,13 +30,13 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
 
         socket.addEventListener('open', () => {
             console.log(`WebSocket connection established for Telegram ID: ${validatedTelegramID}. Service: ${service}. Session ID: ${sessionID}`);
-            reconnectAttempts = 0;
+            RECONNECT_ATTEMPTS = 0;
         });
 
         socket.addEventListener('close', () => {
-            if (shouldReconnect) {
-                reconnectAttempts++;
-                const delay = RECONNECT_BASE_DELAY * Math.pow(2, reconnectAttempts - 1); // Exponential backoff
+            if (SHOULD_RECONNECT) {
+                RECONNECT_ATTEMPTS++;
+                const delay = RECONNECT_BASE_DELAY * Math.pow(2, RECONNECT_ATTEMPTS - 1); // Exponential backoff
                 setTimeout(() => initializeWebSocket(validatedTelegramID, service, sessionID), Math.min(delay, 60000)); // Limit to 1 minute    
             };
         });
@@ -59,13 +69,13 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         if (messageData.winner_telegram_id === validatedTelegramID) {
                             finishGame('winner');
                         } else {
-                            shouldReconnect = false;
+                            SHOULD_RECONNECT = false;
                             socket.close();
                             finishGame('loser');
                         };
                         break;
                     case 'game_await':
-                        gameAwait();
+                        gameAwait(socket);
                         break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
@@ -78,121 +88,6 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
 
         return socket;
     };
-};
-
-
-function constructWebSocketURL(telegramID, service, sessionID) {
-    const queryParameters = new URLSearchParams({
-        'telegram_id': telegramID,
-        'service': service,
-    });
-
-    if (service === 'game') {
-        queryParameters.append('session_id', sessionID);
-    };
-
-    return `wss://${window.location.host}?${queryParameters.toString()}`;
-};
-
-
-function handlePlayersAmountUpdate(messageData) {
-    let playersAmountElement = document.getElementById('game-data-players-amount');
-
-    if (!playersAmountElement) {
-        console.warn('Players amount element not found, creating a new one');
-        playersAmountElement = document.createElement('div');
-        playersAmountElement.id = 'game-data-players-amount';
-        playersAmountElement.className = 'game-data';
-        playersAmountElement.classList.add('game-data-players-amount');
-        document.getElementById('display').appendChild(playersAmountElement);
-    };
-
-    playersAmountElement.textContent = `Количество игроков: ${messageData.players_amount}`;
-};
-
-
-function handleTimerUpdate(messageData) {
-    let timerElement = document.getElementById('game-data-timer');
-
-    if (!timerElement) {
-        console.warn('Timer element not found, creating a new one');
-        timerElement = document.createElement('div');
-        timerElement.id = 'game-data-timer';
-        timerElement.className = 'game-data';
-        timerElement.classList.add('game-data-timer');
-        document.getElementById('display').appendChild(timerElement);
-    };
-
-    const { hours, minutes, seconds } = formatRemainingTime(messageData.remaining_time);
-
-    switch (messageData.status) {
-        case 'pending':
-            timerElement.textContent = `До следующего игрового сеанса: ${hours} ч. ${minutes} мин. ${seconds} с.`;
-            break;
-        case 'ongoing':
-            timerElement.textContent = `Игра начинается через ${minutes} мин. ${seconds} с.`;
-            break;
-        case 'finished':
-            timerElement.textContent = 'Игра окончена';
-            break;
-    };
-};
-
-
-function formatRemainingTime(remainingTime) {
-    const hours = Math.floor(remainingTime / 3600);
-    const minutes = Math.floor((remainingTime % 3600) / 60);
-    const seconds = Math.floor(remainingTime % 60);
-
-    return {
-        hours,
-        minutes,
-        seconds
-    };
-};
-
-
-function handleMessageUpdate(messageData) {
-    const normalizedData = {
-        senderTelegramID: messageData.sender_telegram_id,
-        senderName: messageData.sender_name,
-        message: messageData.message,
-        attachment: messageData.attachment
-    };
-
-    if (!normalizedData.senderName || !normalizedData.message) {
-        console.error('Invalid message data received');
-        return;
-    } else if (
-        !messageData ||
-        typeof messageData.sender_name !== 'string' ||
-        typeof messageData.message !== 'string' ||
-        messageData.sender_name.trim() === '' ||
-        messageData.message.trim() === ''
-    ) {
-        console.error('Invalid message data received');
-        return;
-    };
-
-    console.log(`Valid message received from ${messageData.sender_name.trim()}: ${messageData.message.trim()}`);
-
-    const chatHistory = document.getElementById('chat-history');
-    if (normalizedData.attachment) {
-        chatHistory.innerHTML += `<div class="chat-message">
-                                    ${normalizedData.senderName}
-                                    <br><br><img src="${normalizedData.attachment}" alt="Файл" class="attachment-image">
-                                    <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
-                                </div>`;
-    } else {
-        chatHistory.innerHTML += `<div class="chat-message">
-                                    ${normalizedData.senderName}
-                                    <br><br>${normalizedData.message}
-                                    <br><br>${new Date().toLocaleString('ru-RU', { timezone: 'Europe/Moscow' })}
-                                </div>`;
-    };
-
-    const display = document.getElementById('display');
-    scrollToBottom(display);
 };
 
 
@@ -280,34 +175,29 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выбирайте ещё раз!';
     };
 
-    let timeRemaining = CHOICE_TIMEOUT / 1000;
     choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
 
-    const timerInterval = setInterval(() => {
-        timeRemaining--;
+    TIMER_INTERVAL = setInterval(() => {
+        CHOICE_REMAINING_TIME--;
         choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
+        if (CHOICE_REMAINING_TIME <= 0) {
+            clearInterval(TIMER_INTERVAL);
+            SHOULD_RECONNECT = false;
+            socket.close();
+            finishGame('timeout');
         };
     }, 1000);
 
-    const choiceTimer = setTimeout(() => {
-        clearInterval(timerInterval);
-        shouldReconnect = false;
-        socket.close();
-        finishGame('timeout');
-    }, CHOICE_TIMEOUT);
-
     firstChoice.addEventListener('click', () => {
         clearTimeout(choiceTimer);
-        clearInterval(timerInterval);
+        clearInterval(TIMER_INTERVAL);
         const playerChoice = firstChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
     });
 
     secondChoice.addEventListener('click', () => {
         clearTimeout(choiceTimer);
-        clearInterval(timerInterval);
+        clearInterval(TIMER_INTERVAL);
         const playerChoice = secondChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
     });
@@ -329,11 +219,18 @@ function handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket) 
 function finishGame(gameResult) {
     const display = document.getElementById('display');
     const gameContainer = document.getElementById('game-container');
+    const choiceCountdownTimer = document.getElementById('choice-countdown-timer');
+    const gameAwaitContainer = document.getElementById('game-await-container');
     gameContainer.style.display = 'none';
+    choiceCountdownTimer.style.display = 'none';
+    gameAwaitContainer.style.display = 'none';
 
-    const gameResultContainer = document.createElement('div');
-    gameResultContainer.id = 'game-container';
-    gameResultContainer.className = 'game-container';
+    let gameResultContainer = document.getElementById('game-result-container');
+    if (!gameResultContainer) {
+        gameResultContainer = document.createElement('div');
+        gameResultContainer.id = 'game-container';
+        gameResultContainer.className = 'game-container';
+    };
 
     if (gameResult === 'loser') {
         gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии.';
@@ -342,11 +239,12 @@ function finishGame(gameResult) {
     } else if (gameResult === 'timeout') {
         gameResultContainer.textContent = 'Вы не сделали выбор вовремя. Попробуйте ещё раз в следующей игровой сессии.';
     };
+
     display.appendChild(gameResultContainer);
 };
 
 
-function gameAwait() {
+function gameAwait(socket) {
     const display = document.getElementById('display');
     const gameContainer = document.getElementById('game-container');
     gameContainer.style.display = 'none';
@@ -357,4 +255,24 @@ function gameAwait() {
     gameAwaitContainer.classList.add = 'game-await-container';
     gameAwaitContainer.textContent = 'Второй игрок ещё не сделал выбор, ожидайте...';
     display.appendChild(gameAwaitContainer);
+
+    let choiceCountdownTimer = document.getElementById('choice-countdown-timer');
+    if (!choiceCountdownTimer) {
+        choiceCountdownTimer = document.createElement('div');
+        choiceCountdownTimer.id = 'choice-countdown-timer';
+        choiceCountdownTimer.className = 'game-data';
+        choiceCountdownTimer.classList.add('choice-countdown-timer');
+        display.appendChild(choiceCountdownTimer);
+    };
+
+    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+
+    TIMER_INTERVAL = setInterval(() => {
+        CHOICE_REMAINING_TIME--;
+        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+        if (CHOICE_REMAINING_TIME <= 0) {
+            clearInterval(TIMER_INTERVAL);
+            finishGame('winner');
+        };
+    }, 1000);
 };

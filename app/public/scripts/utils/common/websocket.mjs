@@ -9,13 +9,13 @@ import {
 } from "../../modules/game_index.mjs"
 
 
+const MAX_RECONNECT_ATTEMPTS = 5;
+const RECONNECT_BASE_DELAY = 5000; // 5 seconds
+const CHOICE_TIMEOUT = 60000; // 1 minute
 let SHOULD_RECONNECT = true;
 let RECONNECT_ATTEMPTS = 0;
 let CHOICE_REMAINING_TIME = CHOICE_TIMEOUT / 1000;
 let TIMER_INTERVAL = null;
-const MAX_RECONNECT_ATTEMPTS = 5;
-const RECONNECT_BASE_DELAY = 5000; // 5 seconds
-const CHOICE_TIMEOUT = 60000; // 1 minute
 
 
 export function initializeWebSocket(validatedTelegramID, service, sessionID) {

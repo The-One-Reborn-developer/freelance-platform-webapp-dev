@@ -8,7 +8,7 @@ import {
     showModal
 } from "./modules/game_index.mjs";
 
-console.log('Game main started');
+
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
 
@@ -35,8 +35,7 @@ window.onload = async function () {
         };
     });
 
-    document.addEventListener('startGame', (event) => {
-        console.log('Starting game');
+    document.addEventListener('startGame', () => {
         startGame();
     });
 };
@@ -45,7 +44,6 @@ window.onload = async function () {
 async function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
-    console.log('setting up interface')
     if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;

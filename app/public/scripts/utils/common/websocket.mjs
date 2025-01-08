@@ -235,7 +235,7 @@ function finishGame(gameResult) {
     if (gameResult === 'loser') {
         gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии.';
     } else if (gameResult === 'winner') {
-        console.log('You win')
+        //console.log('You win');
         gameResultContainer.textContent = 'Вы выиграли! Ожидайте прохождения в следующий раунд.';
     } else if (gameResult === 'timeout') {
         gameResultContainer.textContent = 'Вы не сделали выбор вовремя. Попробуйте ещё раз в следующей игровой сессии.';
@@ -262,7 +262,7 @@ function gameAwait(socket) {
         choiceCountdownTimer = document.createElement('div');
         choiceCountdownTimer.id = 'choice-countdown-timer';
         choiceCountdownTimer.className = 'game-data';
-        choiceCountdownTimer.classList.add('choice-countdown-timer');
+        //choiceCountdownTimer.classList.add('choice-countdown-timer');
         display.appendChild(choiceCountdownTimer);
     };
 

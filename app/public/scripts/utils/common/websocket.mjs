@@ -221,6 +221,7 @@ function startGame(validatedTelegramID, sessionID, socket) {
     gameDataPlayersAmount.style.display = 'none';
     gameDataTimer.style.display = 'none';
 
+    const display = document.getElementById('display');
     let choiceCountdownTimer = document.getElementById('choice-countdown-timer');
     if (!choiceCountdownTimer) {
         choiceCountdownTimer = document.createElement('div');
@@ -228,13 +229,12 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceCountdownTimer.className = 'game-data';
         choiceCountdownTimer.classList.add('choice-countdown-timer');
     };
-
-    const display = document.getElementById('display');
     let gameContainer = document.getElementById('game-container');
     let choiceLabel = document.getElementById('choice-label');
     let choiceContainer = document.getElementById('choice-container');
     let firstChoice = document.getElementById('first-choice');
     let secondChoice = document.getElementById('second-choice');
+    display.appendChild(choiceCountdownTimer);
     
     if (
         !gameContainer ||

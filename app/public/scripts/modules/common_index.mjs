@@ -3,6 +3,7 @@ import { scrollToBottom, scrollInputsIntoView } from '../utils/common/scrolls.mj
 import { initializeWebSocket } from '../utils/common/websocket.mjs';
 import { getQueryParameter } from "../utils/common/parsing.mjs"
 import { getUserData } from "../utils/common/requests.mjs"
+import { constructWebSocketURL } from  "../utils/common/construct_websocket_url.mjs"
 
 export {
     fileToBase64,
@@ -10,5 +11,6 @@ export {
     scrollInputsIntoView,
     initializeWebSocket,
     getQueryParameter,
-    getUserData
+    getUserData,
+    constructWebSocketURL
 };

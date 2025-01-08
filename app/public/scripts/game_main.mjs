@@ -20,7 +20,7 @@ window.onload = async function () {
             const name = userData.userData.game_name;
             const wallet = userData.userData.game_wallet;
             const registrationDate = userData.userData.game_registration_date;
-
+            console.log(telegramID, name, wallet, registrationDate);
             await setupInterface(validatedTelegramID, name, wallet, registrationDate);
         } catch (error) {
             console.error(`Error in window.onload: ${error}`);
@@ -35,8 +35,7 @@ window.onload = async function () {
         };
     });
 
-    document.addEventListener('startGame', (event) => {
-        console.log('Starting game');
+    document.addEventListener('startGame', () => {
         startGame();
     });
 };
@@ -45,7 +44,6 @@ window.onload = async function () {
 async function setupInterface(validatedTelegramID, name, wallet, registrationDate) {
     const headerNav = document.getElementById('header-nav');
     const headerInfo = document.getElementById('header-user-info');
-
     if (!headerNav || !headerInfo) {
         console.error('Header navigation element not found');
         return;

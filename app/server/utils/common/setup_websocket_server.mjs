@@ -10,7 +10,8 @@ import {
     getGameSessionAd,
     insertGameChoice,
     getPlayersGameChoices,
-    decideRandomWin
+    decideRandomWin,
+    updateGamePair
 } from "../../modules/game_index.mjs";
 
 
@@ -39,12 +40,14 @@ export function setupWebsocketServer(server) {
 
         // Handle incoming messages
         ws.on('message', (rawMessage) => {
-            handleIncomingMessage(ws, telegramID, rawMessage);
+            handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, rawMessage);
         });
 
         // Handle disconnections
         ws.on('close', (code, reason) => {
-            handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason);
+            handleDisconnection(
+                users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason
+            );
         });
 
         // Handle errors
@@ -52,7 +55,6 @@ export function setupWebsocketServer(server) {
             console.error(`WebSocket error for Telegram ID ${telegramID}: ${error.message}`);
         });
     });
-
     // Send message to a specific user
     function sendMessageToUser (recipientTelegramIDString, message) {
         const user = users.get(recipientTelegramIDString);
@@ -229,13 +231,22 @@ function handleConnection(ws, users, gameSessionSubscriptions, telegramID, servi
             gameSessionSubscriptions.get(sessionID).add(telegramID);
             console.log(`WebSocket connection established for Telegram ID: ${telegramID}. Service: ${service}. Session ID: ${sessionID}`);
         };
+
+        console.log(`Users map after establishing connection: ${JSON.stringify(Object.fromEntries(users))}`);
+        console.log(
+            `Game session subscriptions map after establishing connection: ${JSON.stringify(
+                Object.fromEntries(
+                    Array.from(gameSessionSubscriptions, ([key, value]) => [key, Array.from(value)])
+                )
+            )}`
+        );
     } catch (error) {
         console.error(`Error establishing WebSocket connection.`);
     };
 };
 
 
-function handleIncomingMessage(ws, telegramID, rawMessage) {
+function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, rawMessage) {
     try {
         const messageData = JSON.parse(rawMessage);
 
@@ -261,8 +272,8 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                             session_id: session_id,
                         }));
                     };
-                })
-            }
+                });
+            };
         } else if (messageData.type === 'message') {
             const recipientTelegramIDString = String(messageData.recipient_telegram_id);
             const senderName = String(messageData.sender_name);
@@ -307,21 +318,52 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
                 playersGameChoicesResult.playersGameChoices.length > 0
             ) {
                 const gameChoice = playersGameChoicesResult.playersGameChoices[0];
-
                 const firstPlayerChoice = gameChoice.player1_choice;
                 const secondPlayerChoice = gameChoice.player2_choice;
-
-                console.log(`First player choice: ${firstPlayerChoice}. Second player choice: ${secondPlayerChoice}`);
+                const firstPlayerTelegramID = gameChoice.player1_telegram_id;
+                const secondPlayerTelegramID = gameChoice.player2_telegram_id;
 
                 if (firstPlayerChoice !== null && secondPlayerChoice !== null) {
                     if (firstPlayerChoice === secondPlayerChoice) {
-                        console.log('Draw!');
+                        const rematchPayload = {
+                            type: 'game_rematch',
+                            session_id: sessionID,
+                        };
+
+                        sendMessageToUser(users, firstPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, secondPlayerTelegramID, rematchPayload);
+                        return;
                     };
 
                     const winningChoice = decideRandomWin(firstPlayerChoice, secondPlayerChoice);
-                    console.log(`Winning choice: ${winningChoice}`);
-                } else {
-                    console.log("Not all players have made their choices yet.");
+                    const winnerTelegramID = winningChoice === firstPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID;
+                    const loserTelegramID = winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID;
+
+                    const resultPayload = {
+                        type: 'game_result',
+                        session_id: sessionID,
+                        winner_telegram_id: winnerTelegramID,
+                        loser_telegram_id: loserTelegramID
+                    };
+
+                    updateGamePair(db, sessionID, 1, winnerTelegramID, loserTelegramID);
+
+                    sendMessageToUser(users, firstPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, secondPlayerTelegramID, resultPayload);
+                } else if (firstPlayerChoice === null || secondPlayerChoice === null) {
+                    if (firstPlayerChoice === null) {
+                        const awaitPayload = {
+                            type: 'game_await'
+                        };
+
+                        sendMessageToUser(users, secondPlayerTelegramID, awaitPayload);
+                    } else {
+                        const awaitPayload = {
+                            type: 'game_await'
+                        };
+
+                        sendMessageToUser(users, firstPlayerTelegramID, awaitPayload);
+                    };
                 };
             };
         };
@@ -335,6 +377,13 @@ function handleIncomingMessage(ws, telegramID, rawMessage) {
 function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessionID, service, code, reason) {
     users.delete(telegramID);
     try {
+        if (users.has(telegramID)) {
+            users.delete(telegramID);
+            console.log(`Removed user with Telegram ID: ${telegramID} from users map.`);
+        } else {
+            console.warn(`Attempted to remove non-existent Telegram ID: ${telegramID}`);
+        }
+
         if (service === 'game' && sessionID) {
             const subscribers = gameSessionSubscriptions.get(sessionID);
             
@@ -352,7 +401,18 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
         } else if (service === 'runner') {
             console.log(`WebSocket closed for runner service. Code: ${code}, Reason: ${reason}`);
         };
+        return { userDeleted: true, sessionCleaned: true };
     } catch (error) {
         console.error(`Error closing WebSocket for Telegram ID ${telegramID}: ${error}`);
+    };
+};
+
+
+function sendMessageToUser (users, recipientTelegramID, message) {
+    const user = users.get(String(recipientTelegramID));
+    if (user && user.readyState === WebSocket.OPEN) {
+        user.send(JSON.stringify(message));
+    } else {
+        console.error(`User with Telegram ID ${recipientTelegramID} is not connected.`);
     };
 };

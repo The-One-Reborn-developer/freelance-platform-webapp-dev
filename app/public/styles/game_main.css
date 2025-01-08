@@ -138,6 +138,14 @@ h1, h2, h3, h4, h5, h6 {
     top: 55%;
 }
 
+.choice-countdown-timer {
+    top: 65%;
+}
+
+.game-await-container {
+    top: 45%;
+}
+
 .modal {
     visibility: hidden; /* Initially hidden */
     position: fixed;

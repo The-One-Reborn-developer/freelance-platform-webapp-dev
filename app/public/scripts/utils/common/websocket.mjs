@@ -193,14 +193,12 @@ function startGame(validatedTelegramID, sessionID, socket) {
     }, 1000);
 
     firstChoice.addEventListener('click', () => {
-        clearTimeout(choiceTimer);
         clearInterval(TIMER_INTERVAL);
         const playerChoice = firstChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
     });
 
     secondChoice.addEventListener('click', () => {
-        clearTimeout(choiceTimer);
         clearInterval(TIMER_INTERVAL);
         const playerChoice = secondChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
@@ -225,9 +223,15 @@ function finishGame(gameResult) {
     const gameContainer = document.getElementById('game-container');
     const choiceCountdownTimer = document.getElementById('choice-countdown-timer');
     const gameAwaitContainer = document.getElementById('game-await-container');
-    gameContainer.style.display = 'none';
-    choiceCountdownTimer.style.display = 'none';
-    gameAwaitContainer.style.display = 'none';
+    if (gameContainer) {
+        gameContainer.style.display = 'none';
+    };
+    if (choiceCountdownTimer) {
+        choiceCountdownTimer.style.display = 'none';    
+    };
+    if (gameAwaitContainer) {
+        gameAwaitContainer.style.display = 'none';   
+    };
 
     let gameResultContainer = document.getElementById('game-result-container');
     if (!gameResultContainer) {

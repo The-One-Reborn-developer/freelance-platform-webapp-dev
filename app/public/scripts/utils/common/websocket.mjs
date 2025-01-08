@@ -219,6 +219,15 @@ function startGame(validatedTelegramID, sessionID, socket) {
     const gameDataTimer = document.getElementById('game-data-timer');
 
     gameDataPlayersAmount.style.display = 'none';
+    gameDataTimer.style.display = 'none';
+
+    let choiceCountdownTimer = document.getElementById('choice-countdown-timer');
+    if (!choiceCountdownTimer) {
+        choiceCountdownTimer = document.createElement('div');
+        choiceCountdownTimer.id = 'choice-countdown-timer';
+        choiceCountdownTimer.className = 'game-data';
+        choiceCountdownTimer.classList.add('choice-countdown-timer');
+    };
 
     const display = document.getElementById('display');
     let gameContainer = document.getElementById('game-container');
@@ -269,13 +278,11 @@ function startGame(validatedTelegramID, sessionID, socket) {
     };
 
     let timeRemaining = CHOICE_TIMEOUT / 1000;
-    gameDataTimer.textContent = '';
-    gameDataTimer.style.top = '60%';
-    gameDataTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
 
     const timerInterval = setInterval(() => {
         timeRemaining--;
-        gameDataTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
         };

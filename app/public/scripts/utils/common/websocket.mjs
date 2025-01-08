@@ -179,11 +179,11 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выбирайте ещё раз!';
     };
 
-    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${CHOICE_REMAINING_TIME} с.`;
 
     TIMER_INTERVAL = setInterval(() => {
         CHOICE_REMAINING_TIME--;
-        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${CHOICE_REMAINING_TIME} с.`;
         if (CHOICE_REMAINING_TIME <= 0) {
             clearInterval(TIMER_INTERVAL);
             SHOULD_RECONNECT = false;
@@ -270,11 +270,11 @@ function gameAwait(socket) {
         display.appendChild(choiceCountdownTimer);
     };
 
-    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+    choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${CHOICE_REMAINING_TIME} с.`;
 
     TIMER_INTERVAL = setInterval(() => {
         CHOICE_REMAINING_TIME--;
-        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+        choiceCountdownTimer.textContent = `Оставшееся время для выбора: ${CHOICE_REMAINING_TIME} с.`;
         if (CHOICE_REMAINING_TIME <= 0) {
             clearInterval(TIMER_INTERVAL);
             finishGame('winner');

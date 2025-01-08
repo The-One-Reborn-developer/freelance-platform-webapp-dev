@@ -235,6 +235,7 @@ function finishGame(gameResult) {
     if (gameResult === 'loser') {
         gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии.';
     } else if (gameResult === 'winner') {
+        console.log('You win')
         gameResultContainer.textContent = 'Вы выиграли! Ожидайте прохождения в следующий раунд.';
     } else if (gameResult === 'timeout') {
         gameResultContainer.textContent = 'Вы не сделали выбор вовремя. Попробуйте ещё раз в следующей игровой сессии.';
@@ -252,7 +253,7 @@ function gameAwait(socket) {
     const gameAwaitContainer = document.createElement('div');
     gameAwaitContainer.id = 'game-await-container';
     gameAwaitContainer.className = 'game-data';
-    gameAwaitContainer.classList.add = 'game-await-container';
+    gameAwaitContainer.classList.add('game-await-container');
     gameAwaitContainer.textContent = 'Второй игрок ещё не сделал выбор, ожидайте...';
     display.appendChild(gameAwaitContainer);
 

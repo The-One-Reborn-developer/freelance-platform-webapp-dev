@@ -8,7 +8,7 @@ import {
     showModal
 } from "./modules/game_index.mjs";
 
-
+console.log('Game main started');
 window.onload = async function () {
     window.Telegram.WebApp.disableVerticalSwipes()
 

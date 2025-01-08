@@ -176,6 +176,7 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceContainer.appendChild(firstChoice);
         choiceContainer.appendChild(secondChoice);
     } else {
+        CHOICE_REMAINING_TIME = CHOICE_TIMEOUT / 1000;
         choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выбирайте ещё раз!';
     };
 

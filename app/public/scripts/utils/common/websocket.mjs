@@ -5,6 +5,7 @@ let shouldReconnect = true;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_BASE_DELAY = 5000; // 5 seconds
+const CHOICE_TIMEOUT = 60000; // 1 minute
 
 
 export function initializeWebSocket(validatedTelegramID, service, sessionID) {
@@ -268,12 +269,32 @@ function startGame(validatedTelegramID, sessionID, socket) {
         choiceLabel.textContent = 'Оба игрока выбрали один и тот же вариант. Выбирайте ещё раз!';
     };
 
+    let timeRemaining = CHOICE_TIMEOUT / 1000;
+    gameDataTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+
+    const timerInterval = setInterval(() => {
+        timeRemaining--;
+        gameDataTimer.textContent = `Оставшееся время для выбора: ${timeRemaining} с.`;
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+        };
+    }, 1000);
+
+    const choiceTimer = setTimeout(() => {
+        clearInterval(timerInterval);
+        finishGame('timeout');
+    }, CHOICE_TIMEOUT);
+
     firstChoice.addEventListener('click', () => {
+        clearTimeout(choiceTimer);
+        clearInterval(timerInterval);
         const playerChoice = firstChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
     });
 
     secondChoice.addEventListener('click', () => {
+        clearTimeout(choiceTimer);
+        clearInterval(timerInterval);
         const playerChoice = secondChoice.getAttribute('value');
         handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket);
     });
@@ -293,25 +314,20 @@ function handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket) 
 
 
 function finishGame(gameResult) {
+    const display = document.getElementById('display');
+    const gameContainer = document.getElementById('game-container');
+    gameContainer.style.display = 'none';
+
+    const gameResultContainer = document.createElement('div');
+    gameResultContainer.id = 'game-container';
+    gameResultContainer.className = 'game-container';
+
     if (gameResult === 'loser') {
-        const display = document.getElementById('display');
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.style.display = 'none';
-
-        const gameResultContainer = document.createElement('div');
-        gameResultContainer.id = 'game-container';
-        gameResultContainer.className = 'game-container';
         gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии.';
-        display.appendChild(gameResultContainer);
-    } else {
-        const display = document.getElementById('display');
-        const gameContainer = document.getElementById('game-container');
-        gameContainer.style.display = 'none';
-
-        const gameResultContainer = document.createElement('div');
-        gameResultContainer.id = 'game-container';
-        gameResultContainer.className = 'game-container';
+    } else if (gameResult === 'winner') {
         gameResultContainer.textContent = 'Вы выиграли! Ожидайте прохождения в следующий раунд.';
-        display.appendChild(gameResultContainer);
+    } else if (gameResult === 'timeout') {
+        gameResultContainer.textContent = 'Вы не сделали выбор вовремя. Попробуйте ещё раз в следующей игровой сессии.';
     };
+    display.appendChild(gameResultContainer);
 };

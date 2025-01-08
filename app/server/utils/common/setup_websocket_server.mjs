@@ -272,8 +272,8 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                             session_id: session_id,
                         }));
                     };
-                })
-            }
+                });
+            };
         } else if (messageData.type === 'message') {
             const recipientTelegramIDString = String(messageData.recipient_telegram_id);
             const senderName = String(messageData.sender_name);

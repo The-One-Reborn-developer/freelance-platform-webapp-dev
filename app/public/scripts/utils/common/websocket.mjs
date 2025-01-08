@@ -354,6 +354,7 @@ function gameAwait() {
     const gameAwaitContainer = document.createElement('div');
     gameAwaitContainer.id = 'game-await-container';
     gameAwaitContainer.className = 'game-data';
+    gameAwaitContainer.classList.add = 'game-await-container';
     gameAwaitContainer.textContent = 'Второй игрок ещё не сделал выбор, ожидайте...';
     display.appendChild(gameAwaitContainer);
-}
+};

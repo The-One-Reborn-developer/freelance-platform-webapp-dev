@@ -330,8 +330,8 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                             session_id: sessionID,
                         };
 
-                        sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, rematchPayload);
-                        sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, firstPlayerTelegramID, rematchPayload);
+                        sendMessageToUser(users, secondPlayerTelegramID, rematchPayload);
                         return;
                     };
 
@@ -348,21 +348,21 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
 
                     updateGamePair(db, sessionID, 1, winnerTelegramID, loserTelegramID);
 
-                    sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, resultPayload);
-                    sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, firstPlayerTelegramID, resultPayload);
+                    sendMessageToUser(users, secondPlayerTelegramID, resultPayload);
                 } else if (firstPlayerChoice === null || secondPlayerChoice === null) {
                     if (firstPlayerChoice === null) {
                         const awaitPayload = {
                             type: 'game_await'
                         };
 
-                        sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, awaitPayload);
+                        sendMessageToUser(users, secondPlayerTelegramID, awaitPayload);
                     } else {
                         const awaitPayload = {
                             type: 'game_await'
                         };
 
-                        sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, awaitPayload);
+                        sendMessageToUser(users, firstPlayerTelegramID, awaitPayload);
                     };
                 };
             };
@@ -408,7 +408,7 @@ function handleDisconnection(users, gameSessionSubscriptions, telegramID, sessio
 };
 
 
-function sendMessageToUser (users, gameSessionSubscriptions, recipientTelegramID, message) {
+function sendMessageToUser (users, recipientTelegramID, message) {
     const user = users.get(String(recipientTelegramID));
     if (user && user.readyState === WebSocket.OPEN) {
         user.send(JSON.stringify(message));

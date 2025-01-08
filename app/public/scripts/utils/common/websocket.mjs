@@ -53,7 +53,12 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         startGame(validatedTelegramID, sessionID, socket);
                         break;
                     case 'game_result':
-                        // TODO: Implement game result
+                        if (messageData.winner_telegram_id === validatedTelegramID) {
+                            finishGame('winner', sessionID, socket);
+                        } else {
+                            socket.close();
+                            finishGame('loser');
+                        };
                         break;
                     default:
                         console.warn(`Unknown message type: ${messageData.type}`);
@@ -281,4 +286,19 @@ function handleGameChoice(validatedTelegramID, playerChoice, sessionID, socket) 
     });
 
     socket.send(payload);
+};
+
+
+function finishGame(gameResult) {
+    if (gameResult === 'loser') {
+        const display = document.getElementById('display');
+        const gameContainer = document.getElementById('game-container');
+        gameContainer.style.display = 'none';
+
+        const gameResultContainer = document.createElement('div');
+        gameResultContainer.id = 'game-container';
+        gameResultContainer.className = 'game-container';
+        gameResultContainer.textContent = 'Вы проиграли! Попробуйте ещё раз в следующей игровой сессии';
+        display.appendChild(gameResultContainer);
+    };
 };

@@ -10,7 +10,8 @@ import {
     getGameSessionAd,
     insertGameChoice,
     getPlayersGameChoices,
-    decideRandomWin
+    decideRandomWin,
+    updateGamePair
 } from "../../modules/game_index.mjs";
 
 
@@ -340,15 +341,18 @@ function handleIncomingMessage(ws, users, gameSessionSubscriptions, telegramID, 
                     };
 
                     const winningChoice = decideRandomWin(firstPlayerChoice, secondPlayerChoice);
-                    console.log(`Winning choice: ${winningChoice}`);
+                    const winnerTelegramID = winningChoice === firstPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID;
+                    const loserTelegramID = winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID;
 
                     const resultPayload = {
                         success: true,
                         type: 'game_result',
                         session_id: sessionID,
-                        winner_telegram_id: winningChoice === firstPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
-                        loser_telegram_id: winningChoice === secondPlayerChoice ? firstPlayerTelegramID : secondPlayerTelegramID,
+                        winner_telegram_id: winnerTelegramID,
+                        loser_telegram_id: loserTelegramID
                     };
+
+                    updateGamePair(db, sessionID, 1, winnerTelegramID, loserTelegramID);
 
                     sendMessageToUser(users, gameSessionSubscriptions, firstPlayerTelegramID, resultPayload);
                     sendMessageToUser(users, gameSessionSubscriptions, secondPlayerTelegramID, resultPayload);

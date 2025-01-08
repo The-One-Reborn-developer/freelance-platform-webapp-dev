@@ -1,6 +1,7 @@
 import { scrollToBottom } from '../../modules/common_index.mjs';
 
 
+let shouldReconnect = true;
 let reconnectAttempts = 0;
 const MAX_RECONNECT_ATTEMPTS = 5;
 const RECONNECT_BASE_DELAY = 5000; // 5 seconds
@@ -22,10 +23,11 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
         });
 
         socket.addEventListener('close', () => {
-            console.log(`WebSocket connection closed for Telegram ID: ${validatedTelegramID}. Reconnecting...`);
-            reconnectAttempts++;
-            const delay = RECONNECT_BASE_DELAY * Math.pow(2, reconnectAttempts - 1); // Exponential backoff
-            setTimeout(() => initializeWebSocket(validatedTelegramID, service, sessionID), Math.min(delay, 60000)); // Limit to 1 minute
+            if (shouldReconnect) {
+                reconnectAttempts++;
+                const delay = RECONNECT_BASE_DELAY * Math.pow(2, reconnectAttempts - 1); // Exponential backoff
+                setTimeout(() => initializeWebSocket(validatedTelegramID, service, sessionID), Math.min(delay, 60000)); // Limit to 1 minute    
+            };
         });
 
         socket.addEventListener('error', (error) => {
@@ -56,6 +58,7 @@ export function initializeWebSocket(validatedTelegramID, service, sessionID) {
                         if (messageData.winner_telegram_id === validatedTelegramID) {
                             finishGame('winner', sessionID, socket);
                         } else {
+                            shouldReconnect = false;
                             socket.close();
                             finishGame('loser');
                         };

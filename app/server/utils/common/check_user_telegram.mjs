@@ -12,7 +12,13 @@ export function checkUserTelegram(db, telegramID, service) {
             );
             const checkUserTelegramResult = checkUserTelegram.get(telegramID);
             return checkUserTelegramResult;
-        }
+        } else if (service === 'game') {
+            const checkUserTelegram = db.prepare(
+                'SELECT COUNT(*) as count FROM users WHERE telegram_id = ? AND registered_in_game = 1'
+            );
+            const checkUserTelegramResult = checkUserTelegram.get(telegramID);
+            return checkUserTelegramResult;
+        };
     } catch (error) {
         console.error('Error in checkUserTelegram:', error);
     };

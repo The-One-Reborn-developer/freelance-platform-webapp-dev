@@ -9,6 +9,7 @@ import Database from "better-sqlite3";
 import servicesRouter from "./routes/services.mjs";
 import commonRouter from "./routes/common.mjs";
 import deliveryRouter from "./routes/delivery.mjs";
+import gameRouter from "./routes/game.mjs";
 
 // Import websocket server
 import { setupWebsocketServer } from "./modules/common_index.mjs";
@@ -19,7 +20,11 @@ import {
     createBidsTable,
     createDeliveriesTable,
     createServicesResponsesTable,
-    createDeliveriesResponsesTable
+    createDeliveriesResponsesTable,
+    createGameSessionsTable,
+    createSessionPlayersTable,
+    createGamePairsTable,
+    createGameSessionAdsTable
 } from "./modules/common_index.mjs";
 
 
@@ -37,15 +42,21 @@ app.use(express.static('app/public'));
 const servicesAttachmentPath = path.join(__dirname, '../chats/services/attachments');
 const deliveryAttachmentPath = path.join(__dirname, '../chats/delivery/attachments');
 const courierPhotos = path.join(__dirname, '../photos/courier_photos');
+const adVideos = path.join(__dirname, '../videos/ads');
 app.use('/services/attachments', express.static(servicesAttachmentPath));
 app.use('/delivery/attachments', express.static(deliveryAttachmentPath));
 app.use('/photos/courier_photos', express.static(courierPhotos));
-console.log(`Serving attachments from ${servicesAttachmentPath}, ${deliveryAttachmentPath}`);
+app.use('/videos/ads', express.static(adVideos));
+console.log(`Services attachments path: ${servicesAttachmentPath}`);
+console.log(`Delivery attachments path: ${deliveryAttachmentPath}`);
+console.log(`Courier photos path: ${courierPhotos}`);
+console.log(`Ad videos path: ${adVideos}`);
 console.log('Express app created');
 
 app.use('/common', commonRouter);
 app.use('/services', servicesRouter);
 app.use('/delivery', deliveryRouter);
+app.use('/game', gameRouter);
 
 const httpServer = createServer(app);
 const { sendMessageToUser } = setupWebsocketServer(httpServer);
@@ -56,6 +67,10 @@ createBidsTable(db);
 createDeliveriesTable(db);
 createServicesResponsesTable(db);
 createDeliveriesResponsesTable(db);
+createGameSessionsTable(db);
+createSessionPlayersTable(db);
+createGamePairsTable(db);
+createGameSessionAdsTable(db);
 
 
 app.get('/', (req, res) => {

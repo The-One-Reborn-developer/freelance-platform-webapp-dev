@@ -10,16 +10,16 @@ import {
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
-
 const commonRouter = express.Router();
 
 
 commonRouter.post('/check-registration', (req, res) => {
     try {
         const telegramData = req.body.telegram_data;
+        console.log(`Telegram data: ${telegramData}`);
         // Check telegram data
         const verifiedTelegramID = checkTelegramData(telegramData, res);
-
+        console.log(`Verified Telegram ID: ${verifiedTelegramID}`);
         if (!verifiedTelegramID) {
             return;
         } else {

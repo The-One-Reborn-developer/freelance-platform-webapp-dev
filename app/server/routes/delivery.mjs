@@ -26,14 +26,12 @@ import {
 
 
 const db = new Database('./app/database.db', { verbose: console.log });
-
 const upload = multer({ 
     dest: 'app/chats/delivery/attachments',
     limits: {
         fileSize: 1024 * 1024 * 50 // 50MB
     }
 });
-
 const courierPhotoUpload = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'app/photos/courier_photos');
@@ -49,14 +47,12 @@ const courierPhotoUpload = multer.diskStorage({
         };
     }
 });
-
 const courierUpload = multer({
     storage: courierPhotoUpload,
     limits: {
         fileSize: 1024 * 1024 * 50 // 50MB
     }
 });
-
 const deliveryRouter = express.Router();
 
 
